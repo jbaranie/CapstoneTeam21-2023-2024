@@ -52,6 +52,10 @@
   <key>UIStatusBarStyle</key>
   <string>UIStatusBarStyleDefault</string>
   <key>CADisableMinimumFrameDurationOnPhone</key>
+  <key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location for...</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need your location for...</string>
   <true/>
 </dict>
 </plist>

@@ -1,10 +1,31 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Dimensions, Button } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Dimensions, Button, Platform } from 'react-native';
+import MapView, { Marker, Polyline} from 'react-native-maps';
+import * as Location from 'expo-location';
+
 
 export default function App() {
   const [markers, setMarkers] = useState([]);
   const [currentCenter, setCurrentCenter] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      // Request permission first
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.error('Permission to access location was denied');
+        return;
+      }
+  
+      // Get current location
+      let location = await Location.getCurrentPositionAsync({});
+      setUserLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+    })();
+  }, []);
 
   const handleRegionChangeComplete = (region) => {
     setCurrentCenter({
@@ -29,10 +50,33 @@ export default function App() {
       <MapView 
         style={styles.map} 
         onRegionChangeComplete={(region) => handleRegionChangeComplete(region)}
+        
+        initialRegion={userLocation ? {
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        } : undefined}
       >
+        {userLocation && (
+          <Marker 
+            coordinate={userLocation}
+            title="Your Location"
+          />
+        )}
+
+
         {markers.map((marker, index) => (
           <Marker key={index} coordinate={marker} />
         ))}
+
+        {markers.length === 2 && (
+          <Polyline 
+            coordinates={markers}
+            strokeColor="#000" // black color for the line
+            strokeWidth={2}
+          />
+        )}
       </MapView>
 
       {/* Crosshair */}
