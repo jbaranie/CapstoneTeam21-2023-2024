@@ -15,7 +15,12 @@ export default function App() {
 
   const handleAddMarker = () => {
     if (currentCenter) {
-      setMarkers([...markers, currentCenter]);
+      setMarkers((prevMarkers) => {
+        if (prevMarkers.length === 2) {
+          return [prevMarkers[1], currentCenter];
+        }
+        return [...prevMarkers, currentCenter];
+      });
     }
   };
 
