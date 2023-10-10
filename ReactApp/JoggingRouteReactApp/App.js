@@ -9,7 +9,7 @@ export default function App() {
   const [currentCenter, setCurrentCenter] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [mapRegion, setMapRegion] = useState(null);
-  
+
   useEffect(() => {
     (async () => {
       // Request permission first
@@ -52,16 +52,11 @@ export default function App() {
   return (
     <View style={styles.container}>
       <MapView 
+        showsUserLocation={true}
         style={styles.map} 
         onRegionChangeComplete={(region) => handleRegionChangeComplete(region)}
         region={mapRegion}
       >
-        {userLocation && (
-          <Marker 
-            coordinate={userLocation}
-            title="Your Location"
-          />
-        )}
 
 
         {markers.map((marker, index) => (
