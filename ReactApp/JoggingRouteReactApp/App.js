@@ -8,7 +8,8 @@ export default function App() {
   const [markers, setMarkers] = useState([]);
   const [currentCenter, setCurrentCenter] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
-
+  const [mapRegion, setMapRegion] = useState(null);
+  
   useEffect(() => {
     (async () => {
       // Request permission first
@@ -18,12 +19,15 @@ export default function App() {
         return;
       }
   
-      // Get current location
       let location = await Location.getCurrentPositionAsync({});
-      setUserLocation({
+      const userLoc = {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-      });
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      };
+      setUserLocation(userLoc);
+      setMapRegion(userLoc);
     })();
   }, []);
 
@@ -50,13 +54,7 @@ export default function App() {
       <MapView 
         style={styles.map} 
         onRegionChangeComplete={(region) => handleRegionChangeComplete(region)}
-        
-        initialRegion={userLocation ? {
-          latitude: userLocation.latitude,
-          longitude: userLocation.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        } : undefined}
+        region={mapRegion}
       >
         {userLocation && (
           <Marker 
