@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:paddingLeft="16.0dip" android:paddingTop="10.0dip" android:paddingRight="16.0dip" android:paddingBottom="10.0dip" android:focusable="false" android:clickable="false" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.makeramen.roundedimageview.RoundedImageView android:id="@id/image" android:layout_width="@dimen/avatar_36" android:layout_height="@dimen/avatar_36" app:riv_oval="true" />
+    <de.komoot.android.widget.UsernameTextView android:textSize="18.0sp" android:id="@id/user_text_view" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:drawableEnd="@drawable/ic_check_green" android:fontFamily="?fontRegular" android:layout_marginStart="20.0dip" />
+</LinearLayout>

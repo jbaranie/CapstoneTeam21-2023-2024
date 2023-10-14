@@ -1,0 +1,166 @@
+.class public final Lde/komoot/android/ui/tour/TourInformationActivity$showTourOnMap$1;
+.super Ljava/lang/Object;
+.source "SourceFile"
+
+# interfaces
+.implements Lde/komoot/android/mapbox/OnStyleLoaded2;
+
+
+# annotations
+.annotation system Ldalvik/annotation/EnclosingMethod;
+    value = Lde/komoot/android/ui/tour/TourInformationActivity;->ua(Lde/komoot/android/services/api/nativemodel/InterfaceRecordedTour;)V
+.end annotation
+
+.annotation system Ldalvik/annotation/InnerClass;
+    accessFlags = 0x19
+    name = null
+.end annotation
+
+.annotation runtime Lkotlin/Metadata;
+    d1 = {
+        "\u0000#\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u0002\n\u0002\u0008\u0002*\u0001\u0000\u0008\n\u0018\u00002\u00020\u0001J \u0010\t\u001a\u00020\u00082\u0006\u0010\u0003\u001a\u00020\u00022\u0006\u0010\u0005\u001a\u00020\u00042\u0006\u0010\u0007\u001a\u00020\u0006H\u0016\u00a8\u0006\n"
+    }
+    d2 = {
+        "de/komoot/android/ui/tour/TourInformationActivity$showTourOnMap$1",
+        "Lde/komoot/android/mapbox/OnStyleLoaded2;",
+        "Lcom/mapbox/mapboxsdk/maps/MapboxMap;",
+        "mapBoxMap",
+        "Lde/komoot/android/view/LocalisedMapView;",
+        "mapView",
+        "Lcom/mapbox/mapboxsdk/maps/Style;",
+        "style",
+        "",
+        "a",
+        "komoot_googleplaystoreLiveRelease"
+    }
+    k = 0x1
+    mv = {
+        0x1,
+        0x9,
+        0x0
+    }
+.end annotation
+
+
+# instance fields
+.field final synthetic a:Lde/komoot/android/ui/tour/TourInformationActivity;
+
+.field final synthetic b:Lde/komoot/android/services/api/nativemodel/InterfaceRecordedTour;
+
+
+# direct methods
+.method constructor <init>(Lde/komoot/android/ui/tour/TourInformationActivity;Lde/komoot/android/services/api/nativemodel/InterfaceRecordedTour;)V
+    .locals 0
+
+    iput-object p1, p0, Lde/komoot/android/ui/tour/TourInformationActivity$showTourOnMap$1;->a:Lde/komoot/android/ui/tour/TourInformationActivity;
+
+    iput-object p2, p0, Lde/komoot/android/ui/tour/TourInformationActivity$showTourOnMap$1;->b:Lde/komoot/android/services/api/nativemodel/InterfaceRecordedTour;
+
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public a(Lcom/mapbox/mapboxsdk/maps/MapboxMap;Lde/komoot/android/view/LocalisedMapView;Lcom/mapbox/mapboxsdk/maps/Style;)V
+    .locals 12
+
+    const-string v0, "mapBoxMap"
+
+    invoke-static {p1, v0}, Lkotlin/jvm/internal/Intrinsics;->i(Ljava/lang/Object;Ljava/lang/String;)V
+
+    const-string v0, "mapView"
+
+    invoke-static {p2, v0}, Lkotlin/jvm/internal/Intrinsics;->i(Ljava/lang/Object;Ljava/lang/String;)V
+
+    const-string v0, "style"
+
+    invoke-static {p3, v0}, Lkotlin/jvm/internal/Intrinsics;->i(Ljava/lang/Object;Ljava/lang/String;)V
+
+    sget-object v0, Lde/komoot/android/geo/MapHelper;->INSTANCE:Lde/komoot/android/geo/MapHelper;
+
+    iget-object v1, p0, Lde/komoot/android/ui/tour/TourInformationActivity$showTourOnMap$1;->a:Lde/komoot/android/ui/tour/TourInformationActivity;
+
+    sget-object v2, Lde/komoot/android/geo/MapHelper$OverStretchFactor;->Medium:Lde/komoot/android/geo/MapHelper$OverStretchFactor;
+
+    invoke-virtual {v0, v1, v2}, Lde/komoot/android/geo/MapHelper;->e(Landroid/content/Context;Lde/komoot/android/geo/MapHelper$OverStretchFactor;)I
+
+    move-result v0
+
+    sget-object v11, Lde/komoot/android/mapbox/MapBoxHelper;->Companion:Lde/komoot/android/mapbox/MapBoxHelper$Companion;
+
+    iget-object v4, p0, Lde/komoot/android/ui/tour/TourInformationActivity$showTourOnMap$1;->b:Lde/komoot/android/services/api/nativemodel/InterfaceRecordedTour;
+
+    sget-object v5, Lde/komoot/android/mapbox/WaypointMarkerConf;->START_END:Lde/komoot/android/mapbox/WaypointMarkerConf;
+
+    const/4 v6, 0x0
+
+    const/4 v7, 0x0
+
+    const/4 v8, 0x0
+
+    const/16 v9, 0x40
+
+    const/4 v10, 0x0
+
+    move-object v1, v11
+
+    move-object v2, p2
+
+    move-object v3, p3
+
+    invoke-static/range {v1 .. v10}, Lde/komoot/android/mapbox/MapBoxHelper$Companion;->a0(Lde/komoot/android/mapbox/MapBoxHelper$Companion;Lde/komoot/android/view/LocalisedMapView;Lcom/mapbox/mapboxsdk/maps/Style;Lde/komoot/android/services/api/nativemodel/GenericTour;Lde/komoot/android/mapbox/WaypointMarkerConf;ZZLde/komoot/android/geo/MatchingUpdate;ILjava/lang/Object;)Lde/komoot/android/mapbox/TourLineData;
+
+    move-result-object p2
+
+    const/4 v4, 0x0
+
+    const/4 v5, 0x0
+
+    const/16 v6, 0xc
+
+    const/4 v7, 0x0
+
+    move-object v2, p3
+
+    move-object v3, p2
+
+    invoke-static/range {v1 .. v7}, Lde/komoot/android/mapbox/MapBoxHelper$Companion;->T(Lde/komoot/android/mapbox/MapBoxHelper$Companion;Lcom/mapbox/mapboxsdk/maps/Style;Lde/komoot/android/mapbox/TourLineData;Lde/komoot/android/mapbox/TourLineStyle;Lcom/mapbox/geojson/Feature;ILjava/lang/Object;)V
+
+    invoke-virtual {p2}, Lde/komoot/android/mapbox/TourLineData;->a()Lcom/mapbox/geojson/BoundingBox;
+
+    move-result-object p2
+
+    sget-object v1, Lcom/mapbox/mapboxsdk/geometry/LatLngBounds;->Companion:Lcom/mapbox/mapboxsdk/geometry/LatLngBounds$Companion;
+
+    invoke-static {p2}, Lkotlin/jvm/internal/Intrinsics;->f(Ljava/lang/Object;)V
+
+    invoke-virtual {p2}, Lcom/mapbox/geojson/BoundingBox;->north()D
+
+    move-result-wide v2
+
+    invoke-virtual {p2}, Lcom/mapbox/geojson/BoundingBox;->east()D
+
+    move-result-wide v4
+
+    invoke-virtual {p2}, Lcom/mapbox/geojson/BoundingBox;->south()D
+
+    move-result-wide v6
+
+    invoke-virtual {p2}, Lcom/mapbox/geojson/BoundingBox;->west()D
+
+    move-result-wide v8
+
+    invoke-virtual/range {v1 .. v9}, Lcom/mapbox/mapboxsdk/geometry/LatLngBounds$Companion;->from(DDDD)Lcom/mapbox/mapboxsdk/geometry/LatLngBounds;
+
+    move-result-object p2
+
+    invoke-static {p2, v0}, Lcom/mapbox/mapboxsdk/camera/CameraUpdateFactory;->newLatLngBounds(Lcom/mapbox/mapboxsdk/geometry/LatLngBounds;I)Lcom/mapbox/mapboxsdk/camera/CameraUpdate;
+
+    move-result-object p2
+
+    invoke-virtual {p1, p2}, Lcom/mapbox/mapboxsdk/maps/MapboxMap;->moveCamera(Lcom/mapbox/mapboxsdk/camera/CameraUpdate;)V
+
+    return-void
+.end method

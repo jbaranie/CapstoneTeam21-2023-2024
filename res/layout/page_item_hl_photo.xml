@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/page_item_photo" android:paddingBottom="8.0dip" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView android:id="@id/tour_photo" android:layout_width="fill_parent" android:layout_height="0.0dip" android:scaleType="centerCrop" android:layout_weight="1.0" />
+    <de.komoot.android.view.AutofitTextView android:textSize="16.0sp" android:textColor="@color/white" android:gravity="center" android:id="@id/create_hl_from_photo" android:background="@drawable/btn_primary" android:layout_width="fill_parent" android:layout_height="36.0dip" android:layout_marginTop="8.0dip" android:text="@string/hl_create_hl_from_photo_cta" android:maxLines="1" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_regular" android:elevation="3.0dip" />
+</LinearLayout>

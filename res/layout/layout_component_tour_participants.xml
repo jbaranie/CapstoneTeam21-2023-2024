@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_horizontal" android:orientation="vertical" android:background="@color/canvas" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ProgressBar android:layout_gravity="left" android:id="@id/progressbar_loading_participants" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_marginLeft="@dimen/std_border_left" android:layout_marginTop="10.0dip" android:layout_marginBottom="10.0dip" android:indeterminate="true" android:layout_marginStart="@dimen/std_border_left" />
+    <include android:id="@id/layout_participant_join" android:layout_width="fill_parent" android:layout_height="wrap_content" layout="@layout/layout_social_participant_join" />
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/layout_participants_holder" android:background="@drawable/bg_green_grey_light_states" android:paddingLeft="16.0dip" android:paddingRight="16.0dip" android:layout_width="fill_parent" android:layout_height="56.0dip">
+        <com.makeramen.roundedimageview.RoundedImageView android:id="@id/imageview_creator" android:layout_width="24.0dip" android:layout_height="24.0dip" android:scaleType="centerInside" app:riv_oval="true" />
+    </LinearLayout>
+    <RelativeLayout android:id="@id/layout_invite" android:background="@drawable/bg_green_grey_light_states" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="56.0dip">
+        <ImageView android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_marginLeft="16.0dip" android:src="@drawable/ic_group_add" android:layout_alignParentLeft="true" android:layout_centerVertical="true" android:layout_marginStart="16.0dip" android:layout_alignParentStart="true" />
+        <TextView android:textSize="16.0sp" android:textColor="@color/text_primary" android:gravity="center_vertical" android:id="@id/textview_invite" android:clickable="false" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginLeft="72.0dip" android:text="@string/tour_information_invite_participants" android:layout_alignParentLeft="true" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="72.0dip" android:layout_alignParentStart="true" />
+    </RelativeLayout>
+    <include layout="@layout/divider_item" />
+</LinearLayout>

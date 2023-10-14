@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/layout_static_navigation_item" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:id="@id/nil_small_container_rl" android:background="@drawable/background_navigation_item_states" android:layout_width="fill_parent" android:layout_height="96.0dip" android:minHeight="96.0dip">
+        <ImageView android:id="@id/nil_direction_arrow_small_iv" android:layout_width="50.0dip" android:layout_height="50.0dip" android:scaleType="centerInside" android:layout_centerVertical="true" android:layout_marginStart="48.0dip" android:layout_marginEnd="22.0dip" android:layout_alignParentStart="true" />
+        <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_toEndOf="@id/nil_direction_arrow_small_iv">
+            <de.komoot.android.view.AutofitTextView android:textSize="26.0sp" android:textColor="@android:color/white" android:gravity="start" android:id="@id/nil_header_text_small_ttv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="1" android:singleLine="true" android:fontFamily="@font/source_sans_pro_bold" />
+            <de.komoot.android.view.AutofitTextView android:textSize="18.0sp" android:textColor="@android:color/white" android:gravity="start" android:id="@id/nil_sub_text_small_ttv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="2.0dip" android:maxLines="1" android:singleLine="true" android:drawablePadding="6.0dip" android:fontFamily="@font/source_sans_pro_regular" />
+        </LinearLayout>
+    </RelativeLayout>
+    <include android:layout_width="fill_parent" android:layout_height="192.0dip" layout="@layout/layout_navigation_item_large" />
+</LinearLayout>

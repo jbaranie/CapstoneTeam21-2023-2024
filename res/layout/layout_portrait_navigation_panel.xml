@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:background="@color/routing_panel" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageButton android:id="@id/tnp_arrow_left_ib" android:background="#00000000" android:layout_width="28.0dip" android:layout_height="@dimen/map_portrait_navigation_item_small" android:src="@drawable/btn_arrow_left" android:scaleType="centerInside" android:minWidth="28.0dip" android:layout_weight="0.0" />
+    <androidx.viewpager2.widget.ViewPager2 android:orientation="horizontal" android:id="@id/viewpager_navigation_instructions" android:layout_width="fill_parent" android:layout_height="@dimen/map_portrait_navigation_item_small" android:layout_weight="1.0" />
+    <ImageButton android:id="@id/tnp_arrow_right_ib" android:background="#00000000" android:layout_width="28.0dip" android:layout_height="@dimen/map_portrait_navigation_item_small" android:src="@drawable/btn_arrow_right" android:scaleType="centerInside" android:minWidth="28.0dip" android:layout_weight="0.0" />
+</LinearLayout>

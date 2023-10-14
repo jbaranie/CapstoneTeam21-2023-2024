@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:id="@id/scrollView" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:background="@color/white" android:paddingLeft="@dimen/list_item_side_padding" android:paddingRight="@dimen/list_item_side_padding" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <LinearLayout android:gravity="center_vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="32.0dip">
+            <de.komoot.android.view.AutofitTextView android:textSize="23.0sp" android:textColor="@color/black" android:id="@id/textViewHeadingRegions" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/data_usage_region_heading" android:layout_weight="1.0" android:fontFamily="@font/source_sans_pro_regular" />
+            <Button android:textSize="16.0sp" android:id="@id/buttonClearRegionData" android:layout_width="wrap_content" android:layout_height="40.0dip" android:minWidth="80.0dip" android:text="@string/data_usage_dialog_button_clear" android:fontFamily="@font/source_sans_pro_regular" />
+        </LinearLayout>
+        <TextView android:textSize="16.0sp" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:text="@string/data_usage_region_description" android:fontFamily="@font/source_sans_pro_light" />
+        <LinearLayout android:gravity="center_vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="32.0dip">
+            <TextView android:textSize="23.0sp" android:textColor="@color/black" android:id="@id/textViewHeadingTours" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/data_usage_tours_heading" android:layout_weight="1.0" android:fontFamily="@font/source_sans_pro_regular" />
+            <Button android:textSize="16.0sp" android:id="@id/buttonClearTourData" android:layout_width="wrap_content" android:layout_height="40.0dip" android:minWidth="80.0dip" android:text="@string/data_usage_dialog_button_clear" android:fontFamily="@font/source_sans_pro_regular" />
+        </LinearLayout>
+        <TextView android:textSize="16.0sp" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:text="@string/data_usage_tours_description" android:fontFamily="@font/source_sans_pro_light" />
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_horizontal" android:orientation="vertical" android:background="@color/white" android:paddingLeft="@dimen/default_margin_and_padding" android:paddingRight="@dimen/default_margin_and_padding" android:paddingBottom="64.0dip" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:textSize="24.0sp" android:textColor="@color/style1_text_primary" android:gravity="center_horizontal" android:id="@id/textview_error_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24.0dip" android:text="@string/discover_load_error" android:fontFamily="@font/source_sans_pro_regular" />
+    <Button android:textSize="16.0sp" android:textColor="@color/secondary" android:id="@id/textview_retry" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24.0dip" android:text="@string/aif_try_again_action" android:fontFamily="@font/source_sans_pro_regular" style="@style/Base.Widget.AppCompat.Button.Borderless" />
+</LinearLayout>

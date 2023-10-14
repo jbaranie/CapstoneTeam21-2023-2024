@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:id="@id/base_row_container" android:background="@drawable/bg_white_with_disabled_grey_effect_states" android:layout_width="fill_parent" android:layout_height="64.0dip">
+        <ImageView android:id="@id/sport_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_calendar" android:layout_centerVertical="true" android:layout_marginStart="@dimen/default_margin_and_padding" app:tint="@color/text_whisper" />
+        <TextView android:textSize="18.0sp" android:textColor="@color/text_underline" android:id="@id/title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/multi_day_collection_filter_duration_header" android:layout_centerVertical="true" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="24.0dip" android:layout_toEndOf="@id/sport_icon" />
+        <View android:id="@id/divider" android:background="@color/divider" android:layout_width="50.0dip" android:layout_height="1.0dip" android:layout_alignParentBottom="true" android:layout_alignStart="@id/title" />
+        <TextView android:textSize="16.0sp" android:id="@id/selected_bike" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginEnd="@dimen/default_margin_and_padding" android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <RadioGroup android:theme="@style/ThemeOverlay.KmtTheme.Dark" android:id="@id/expanend_row_container" android:background="@color/theme_control_normal" android:paddingLeft="12.0dip" android:paddingTop="16.0dip" android:paddingRight="12.0dip" android:paddingBottom="16.0dip" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <RadioButton android:id="@id/duration_any" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/multi_day_collection_filter_duration_any" android:fontFamily="?fontRegular" />
+        <RadioButton android:id="@id/duration_daytrip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/multi_day_collection_filter_duration_daytrip" android:fontFamily="?fontRegular" />
+        <RadioButton android:id="@id/duration_days" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/multi_day_collection_filter_duration_days" android:fontFamily="?fontRegular" />
+        <RadioButton android:id="@id/duration_week" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/multi_day_collection_filter_duration_week" android:fontFamily="?fontRegular" />
+        <RadioButton android:id="@id/duration_long" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/multi_day_collection_filter_duration_long" android:fontFamily="?fontRegular" />
+    </RadioGroup>
+</LinearLayout>

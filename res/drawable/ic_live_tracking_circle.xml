@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <size android:height="28.0dip" android:width="28.0dip" />
+            <solid android:width="4.0dip" android:color="@color/secondary" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/ic_live_tracking" android:left="2.0dip" android:top="2.0dip" android:right="2.0dip" android:bottom="2.0dip" />
+</layer-list>

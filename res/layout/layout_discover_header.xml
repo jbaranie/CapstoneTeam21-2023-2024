@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <de.komoot.android.ui.inspiration.discoverV2.view.DiscoverTabsFilterHeaderView android:id="@id/discover_filter" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    <View android:id="@id/discover_results_summary_separator" android:background="@color/divider" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="@dimen/divider_height" />
+    <TextView android:textSize="14.0sp" android:gravity="center_vertical" android:id="@id/discover_results_summary" android:background="@drawable/bg_canvas_ripple" android:paddingLeft="16.0dip" android:paddingRight="16.0dip" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="@dimen/discover_results_summary_height" android:fontFamily="?fontRegular" />
+</LinearLayout>

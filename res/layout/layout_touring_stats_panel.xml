@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/layout_touring_stats_panel" android:layout_width="fill_parent" android:layout_height="96.0dip" android:minHeight="96.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.viewpager.widget.ViewPager android:id="@id/view_pager" android:layout_width="fill_parent" android:layout_height="96.0dip" android:minHeight="96.0dip" android:layout_alignParentTop="true" />
+    <de.komoot.android.view.CirclePageIndicator android:id="@id/circle_indicator" android:layout_width="fill_parent" android:layout_height="22.0dip" android:layout_alignParentBottom="true" app:radius="4.0dip" />
+</RelativeLayout>

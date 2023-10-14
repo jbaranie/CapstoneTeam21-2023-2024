@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:paddingBottom="@dimen/map_bottom_bar_menu" android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingStart="80.0dip" android:paddingEnd="16.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="horizontal" android:id="@id/layout_frame" android:background="@drawable/hint_left_top" android:paddingTop="16.0dip" android:paddingBottom="32.0dip" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingStart="16.0dip" android:paddingEnd="16.0dip">
+        <TextView android:textSize="16.0sp" android:textColor="@color/text_primary" android:id="@id/textview_text" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/map_rating_btn_tooltip" android:layout_weight="1.0" android:fontFamily="@font/source_sans_pro_regular" />
+        <Button android:id="@id/button_close" android:background="@drawable/ic_close" android:layout_width="24.0dip" android:layout_height="24.0dip" />
+    </LinearLayout>
+</FrameLayout>

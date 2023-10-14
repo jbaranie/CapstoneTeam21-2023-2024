@@ -1,0 +1,34 @@
+.class public final synthetic Lde/komoot/android/net/task/t;
+.super Ljava/lang/Object;
+.source "SourceFile"
+
+# interfaces
+.implements Lde/komoot/android/io/TaskDoneControll;
+
+
+# instance fields
+.field public final synthetic a:Lde/komoot/android/net/task/HttpJoinTask;
+
+
+# direct methods
+.method public synthetic constructor <init>(Lde/komoot/android/net/task/HttpJoinTask;)V
+    .locals 0
+
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    iput-object p1, p0, Lde/komoot/android/net/task/t;->a:Lde/komoot/android/net/task/HttpJoinTask;
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public final a()V
+    .locals 1
+
+    iget-object v0, p0, Lde/komoot/android/net/task/t;->a:Lde/komoot/android/net/task/HttpJoinTask;
+
+    invoke-static {v0}, Lde/komoot/android/net/task/HttpJoinTask;->X(Lde/komoot/android/net/task/HttpJoinTask;)V
+
+    return-void
+.end method

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Space android:layout_width="36.0dip" android:layout_height="0.0dip" android:layout_weight="1.0" />
+    <TextView android:textSize="18.0sp" android:textColor="@color/white" android:padding="6.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/live_tracking_share_link_floating_button" android:drawablePadding="10.0dip" android:fontFamily="@font/source_sans_pro_bold" app:drawableStartCompat="@drawable/ic_live_tracking" />
+    <Space android:layout_width="0.0dip" android:layout_height="0.0dip" android:layout_weight="1.0" />
+    <ImageView android:layout_gravity="end|center" android:id="@id/close_button" android:layout_width="36.0dip" android:layout_height="36.0dip" android:src="@drawable/ic_close" android:scaleType="center" app:tint="@color/white" />
+</merge>

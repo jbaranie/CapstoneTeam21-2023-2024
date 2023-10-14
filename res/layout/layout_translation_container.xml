@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="horizontal" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="24.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:textSize="12.0sp" android:textColor="@color/text_secondary" android:gravity="center_vertical" android:id="@id/showing_original_note_ttv" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/uhtli_showing_original" android:maxLines="1" android:fontFamily="@font/source_sans_pro_regular" />
+    <LinearLayout android:orientation="horizontal" android:id="@id/translation_attribution_container_ll" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="fill_parent">
+        <TextView android:textSize="12.0sp" android:textColor="@color/text_secondary" android:gravity="center_vertical" android:id="@id/translation_attribution_text_ttv" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/uhtli_translated_by" android:maxLines="1" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginEnd="5.0dip" />
+        <ImageView android:id="@id/translation_attribution_icon_iv" android:layout_width="wrap_content" android:layout_height="fill_parent" />
+    </LinearLayout>
+    <View android:layout_gravity="center_vertical" android:background="@color/divider" android:layout_width="1.0dip" android:layout_height="14.0dip" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+    <TextView android:textSize="12.0sp" android:textColor="@color/text_secondary" android:gravity="center_vertical" android:id="@id/toggle_original_translation_button_ttv" android:background="@drawable/bg_transparent_with_pressable_text_states" android:layout_width="wrap_content" android:layout_height="fill_parent" android:maxLines="1" android:fontFamily="@font/source_sans_pro_regular" />
+</LinearLayout>

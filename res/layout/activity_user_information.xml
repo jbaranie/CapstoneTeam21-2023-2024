@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_weight="1.0">
+        <LinearLayout android:gravity="center_horizontal" android:orientation="horizontal" android:id="@id/layout_user_information" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <View android:background="@color/muted" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" />
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:id="@id/layout_swipe_to_refresh" android:layout_width="fill_parent" android:layout_height="fill_parent">
+                <de.komoot.android.widget.KmtRecyclerView android:scrollbarStyle="outsideOverlay" android:id="@id/recyclerview" android:background="@color/canvas" android:visibility="visible" android:layout_width="fill_parent" android:layout_height="fill_parent" android:divider="@null" android:dividerHeight="0.0dip" android:nestedScrollingEnabled="true" android:elevation="3.0dip" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <View android:background="@color/muted" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" />
+        </LinearLayout>
+        <androidx.fragment.app.FragmentContainerView android:theme="@style/ThemeOverlay.KmtTheme.Dark" android:layout_gravity="bottom" android:id="@id/popup_banner_container" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    </FrameLayout>
+    <androidx.fragment.app.FragmentContainerView android:theme="@style/ThemeOverlay.KmtTheme.Dark" android:id="@id/navigation_bar_container" android:layout_width="fill_parent" android:layout_height="@dimen/kmt_main_bottom_navigation_bar_height" android:layout_weight="0.0" />
+    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation android:theme="@style/ThemeOverlay.KmtTheme.Dark" android:id="@id/navigation_bar" android:layout_width="fill_parent" android:layout_height="@dimen/kmt_main_bottom_navigation_bar_height" android:layout_weight="0.0" />
+</LinearLayout>

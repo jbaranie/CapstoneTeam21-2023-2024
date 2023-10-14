@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ScrollView android:orientation="vertical" android:background="@drawable/white_round_corners_background" android:paddingTop="32.0dip" android:scrollbars="none" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="32.0dip" android:overScrollMode="never">
+        <LinearLayout android:gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginStart="16.0dip" android:layout_marginEnd="16.0dip">
+            <TextView android:textSize="28.0sp" android:textColor="@color/golden_dark" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" android:text="@string/hl_create_power_title" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:text="@string/hl_create_power_msg" android:fontFamily="@font/source_sans_pro_regular" />
+            <Button android:textSize="16.0sp" android:textColor="@color/white" android:id="@id/activate_the_power" android:background="@drawable/btn_golden_dark_states" android:layout_width="wrap_content" android:layout_height="36.0dip" android:layout_marginTop="16.0dip" android:layout_marginBottom="16.0dip" android:text="@string/hl_create_power_cta" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_regular" android:elevation="0.0dip" />
+        </LinearLayout>
+    </ScrollView>
+    <ImageView android:layout_gravity="center_horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_highlight_badge_golden" />
+</FrameLayout>

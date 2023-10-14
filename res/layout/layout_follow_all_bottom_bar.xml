@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/fab_follow_all_button_container_ll" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <View android:background="@drawable/gradient_top_transparent_to_bottom_light_grey_transparent" android:layout_width="fill_parent" android:layout_height="8.0dip" />
+    <FrameLayout android:background="@color/white" android:paddingLeft="@dimen/default_margin_and_padding" android:paddingRight="@dimen/default_margin_and_padding" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="56.0dip">
+        <Button android:textSize="16.0sp" android:textColor="@color/white" android:layout_gravity="center_vertical" android:id="@id/fab_follow_all_tb" android:background="@drawable/btn_primary" android:layout_width="fill_parent" android:layout_height="36.0dip" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_regular" android:elevation="3.0dip" />
+    </FrameLayout>
+</LinearLayout>

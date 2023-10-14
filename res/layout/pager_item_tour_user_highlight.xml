@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/layout_pager_item_user_highlight" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingStart="10.0dip" android:paddingEnd="0.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="3.0dip" app:cardCornerRadius="@dimen/corner_rounding_default" app:cardElevation="3.0dip" app:contentPadding="0.0dip">
+        <RelativeLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <ImageView android:id="@id/highlight_image_iv" android:layout_width="288.0dip" android:layout_height="162.0dip" android:src="@drawable/placeholder_highlight" android:scaleType="centerCrop" />
+            <androidx.appcompat.widget.AppCompatImageView android:id="@id/highlight_sport_icon_iv" android:layout_width="wrap_content" android:layout_height="48.0dip" android:layout_below="@id/highlight_image_iv" android:layout_marginStart="8.0dip" android:layout_marginEnd="8.0dip" />
+            <TextView android:textSize="18.0sp" android:textColor="@color/text_primary" android:ellipsize="end" android:gravity="center_vertical" android:id="@id/textview_title" android:background="@drawable/background_button_white_rounded_bottom" android:layout_width="wrap_content" android:layout_height="48.0dip" android:maxLines="1" android:singleLine="true" android:layout_below="@id/highlight_image_iv" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="0.0dip" android:paddingEnd="@dimen/default_margin_and_padding" android:layout_toEndOf="@id/highlight_sport_icon_iv" android:layout_alignEnd="@id/highlight_image_iv" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

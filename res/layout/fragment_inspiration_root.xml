@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.fragment.app.FragmentContainerView android:name="de.komoot.android.ui.inspiration.InspirationFeedFragment" android:id="@id/fragment_container_view" android:tag="tag_inspiration_feed_fragment" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    <androidx.compose.ui.platform.ComposeView android:layout_gravity="top" android:id="@id/compose_view" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+</RelativeLayout>

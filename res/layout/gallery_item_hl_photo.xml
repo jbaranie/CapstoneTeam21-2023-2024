@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/hl_page_container" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ProgressBar android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:indeterminate="true" android:indeterminateTint="@color/white" />
+    <ImageView android:id="@id/hl_page_photo" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="center" />
+    <LinearLayout android:gravity="center_vertical" android:layout_gravity="start|bottom|center" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <ImageView android:id="@id/hl_page_check" android:padding="16.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <TextView android:textSize="16.0sp" android:textColor="@color/white" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/hl_create_wizard_add_to_highlight" android:layout_weight="1.0" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginEnd="4.0dip" />
+        <TextView android:textSize="16.0sp" android:textColor="@color/white" android:id="@id/hl_page_number" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginEnd="16.0dip" />
+    </LinearLayout>
+</FrameLayout>

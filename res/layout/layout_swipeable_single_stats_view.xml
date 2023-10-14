@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/layout_touring_stats_panel" android:background="@color/transparent" android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:id="@id/layout_shadow_holder" android:background="@drawable/bg_white_white_grey_with_grey_effect_states" android:layout_width="150.0dip" android:layout_height="83.0dip" android:layout_marginBottom="3.0dip" android:elevation="3.0dip">
+        <androidx.viewpager.widget.ViewPager android:id="@id/view_pager" android:layout_width="fill_parent" android:layout_height="80.0dip" android:layout_alignParentTop="true" />
+        <de.komoot.android.view.CirclePageIndicator android:id="@id/circle_indicator" android:layout_width="fill_parent" android:layout_height="16.0dip" android:layout_alignParentBottom="true" app:radius="3.0dip" />
+    </RelativeLayout>
+</FrameLayout>

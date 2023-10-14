@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/bg_container" android:background="@color/background_dark" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_weight="1.0">
+        <androidx.recyclerview.widget.RecyclerView android:layout_gravity="center" android:id="@id/recycler_view" android:paddingTop="4.0dip" android:layout_width="@dimen/phone_match_parent_tablet_600dp" android:layout_height="fill_parent" android:paddingStart="4.0dip" android:paddingEnd="4.0dip" />
+        <ProgressBar android:layout_gravity="center" android:id="@id/loading" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    </FrameLayout>
+    <androidx.fragment.app.FragmentContainerView android:theme="@style/ThemeOverlay.KmtTheme.Dark" android:id="@id/navigation_bar_container" android:layout_width="fill_parent" android:layout_height="@dimen/kmt_main_bottom_navigation_bar_height" />
+    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation android:theme="@style/ThemeOverlay.KmtTheme.Dark" android:id="@id/navigation_bar" android:layout_width="fill_parent" android:layout_height="@dimen/kmt_main_bottom_navigation_bar_height" />
+</LinearLayout>

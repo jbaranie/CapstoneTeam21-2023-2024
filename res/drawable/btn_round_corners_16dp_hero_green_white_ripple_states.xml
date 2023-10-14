@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple android:color="@color/white"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <selector>
+            <item android:state_enabled="false">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/btn_green_disabled" />
+                    <corners android:radius="16.0dip" />
+                    <padding android:left="12.0dip" android:right="12.0dip" />
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/primary" />
+                    <corners android:radius="16.0dip" />
+                    <padding android:left="12.0dip" android:right="12.0dip" />
+                </shape>
+            </item>
+        </selector>
+    </item>
+</ripple>

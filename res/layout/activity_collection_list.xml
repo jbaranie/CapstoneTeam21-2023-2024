@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/layout_user_information" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:gravity="center_horizontal" android:id="@id/layout_list" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <LinearLayout android:orientation="horizontal" android:id="@id/layout_tabbar" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:elevation="3.0dip">
+            <de.komoot.android.view.composition.TabBarTextTab android:id="@id/tab_saved" android:background="@drawable/bg_dark_tab_bar_states" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" app:tabActive="false" app:tabActiveTextColor="@color/primary_on_dark" app:tabDefaultTextColor="@color/white" app:tabTitle="@string/cla_tab_bookmared" />
+            <de.komoot.android.view.composition.TabBarTextTab android:id="@id/tab_created" android:background="@drawable/bg_dark_tab_bar_states" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" app:tabActive="true" app:tabActiveTextColor="@color/primary_on_dark" app:tabDefaultTextColor="@color/white" app:tabTitle="@string/cla_tab_your_collections" />
+        </LinearLayout>
+        <ImageView android:id="@id/view_shadow" android:layout_width="fill_parent" android:layout_height="6.0dip" android:src="@drawable/gradient_top_grey_transparent_to_bottom_transparent" android:layout_alignParentTop="true" android:elevation="3.0dip" />
+        <androidx.viewpager.widget.ViewPager android:id="@id/hla_viewpager_vp" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_below="@id/layout_tabbar" />
+        <ImageButton android:id="@id/button_search" android:background="@drawable/btn_round_blue_states" android:visibility="gone" android:layout_width="56.0dip" android:layout_height="56.0dip" android:layout_margin="16.0dip" android:src="@drawable/ic_btn_search_white" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:elevation="3.0dip" />
+    </RelativeLayout>
+</FrameLayout>

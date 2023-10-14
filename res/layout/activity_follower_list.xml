@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_horizontal" android:orientation="horizontal" android:id="@id/layout_follower_list" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View android:background="@color/muted" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" />
+    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <LinearLayout android:gravity="center_horizontal" android:orientation="vertical" android:id="@id/fla_no_people_header_container_ll" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/list_item_side_padding" android:layout_marginTop="10.0dip" android:layout_marginRight="@dimen/list_item_side_padding">
+            <TextView android:textSize="14.0sp" android:id="@id/fla_no_people_header_text_ttv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="15.0dip" android:layout_marginBottom="15.0dip" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="5.0dip" android:layout_marginEnd="5.0dip" />
+            <Button android:textSize="18.0sp" android:textColor="@color/white" android:layout_gravity="center" android:id="@id/fla_no_people_header_find_people_cta_tb" android:background="@drawable/btn_blue_states" android:layout_width="fill_parent" android:layout_height="48.0dip" android:layout_marginTop="3.0dip" android:layout_marginBottom="15.0dip" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="5.0dip" android:layout_marginEnd="5.0dip" android:elevation="3.0dip" />
+        </LinearLayout>
+        <TextView android:textSize="16.0sp" android:textColor="@color/secondary" android:gravity="center_vertical" android:id="@id/requests_header" android:background="@drawable/list_item_background_states" android:paddingLeft="16.0dip" android:paddingRight="16.0dip" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="56.0dip" android:fontFamily="@font/source_sans_pro_bold" />
+        <View android:id="@id/requests_header_divider" android:background="@color/divider" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="1.0dip" />
+        <ProgressBar android:layout_gravity="center_horizontal" android:id="@id/progress_bar" android:visibility="visible" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="70.0dip" android:layout_marginBottom="40.0dip" android:elevation="3.0dip" />
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:id="@id/swipe_refresh_layout" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <ListView android:scrollbarStyle="outsideOverlay" android:id="@android:id/list" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent" style="@style/KomootList" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <TextView android:textSize="14.0sp" android:gravity="center" android:id="@android:id/empty" android:padding="60.0dip" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent" android:fontFamily="@font/source_sans_pro_regular" />
+    </LinearLayout>
+    <View android:background="@color/muted" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" />
+</LinearLayout>

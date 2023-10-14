@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.komoot.android.view.ScrimInsetsFrameLayout android:id="@id/container" android:fitsSystemWindows="true" android:layout_width="fill_parent" android:layout_height="fill_parent" app:insetForeground="#00000000"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout android:orientation="vertical" android:id="@id/layoutLoadingContent" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <RelativeLayout android:layout_gravity="start|bottom|center" android:id="@id/layoutLoading" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <ProgressBar android:id="@id/progress_bar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" />
+        </RelativeLayout>
+        <ImageView android:id="@id/imageViewPhoto" android:layout_width="fill_parent" android:layout_height="211.0dip" android:src="@drawable/placeholder_highlight" android:scaleType="centerCrop" />
+        <de.komoot.android.widget.NotifyingScrollView android:scrollbarStyle="outsideOverlay" android:id="@id/scrollview" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+                <RelativeLayout android:id="@id/layoutPhoto" android:visibility="visible" android:clipChildren="false" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <View android:id="@id/imageViewPhotoSpacer" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="211.0dip" />
+                    <RelativeLayout android:gravity="center" android:id="@id/layoutPhotoCount" android:background="@drawable/bg_dark_transparent" android:layout_width="50.0dip" android:layout_height="22.0dip" android:layout_marginBottom="16.0dip" android:layout_alignBottom="@id/imageViewPhotoSpacer" android:layout_marginEnd="16.0dip" android:layout_alignEnd="@id/imageViewPhotoSpacer" android:elevation="1.0dip">
+                        <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:clickable="false" android:duplicateParentState="true" android:layout_width="wrap_content" android:layout_height="wrap_content">
+                            <TextView android:textSize="14.0sp" android:textColor="@color/white" android:id="@id/textViewPhotoCount" android:clickable="false" android:duplicateParentState="true" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                            <ImageView android:clickable="false" android:duplicateParentState="true" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_pictures_highlight" android:layout_marginStart="6.0dip" />
+                        </LinearLayout>
+                    </RelativeLayout>
+                    <LinearLayout android:orientation="horizontal" android:clipChildren="false" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_below="@id/imageViewPhotoSpacer">
+                        <View android:background="@color/muted" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" />
+                        <RelativeLayout android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                            <RelativeLayout android:gravity="center_vertical" android:id="@id/layout_generic_tour_stats" android:paddingLeft="@dimen/list_item_side_padding" android:paddingTop="@dimen/list_item_side_padding" android:paddingRight="@dimen/list_item_side_padding" android:paddingBottom="@dimen/list_item_side_padding" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                                <TextView android:textSize="@dimen/text_size_route_name" android:textColor="@color/black" android:ellipsize="end" android:id="@id/header_text1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="14.0dip" android:maxLines="2" android:layout_alignParentTop="true" android:fontFamily="@font/source_sans_pro_bold" android:layout_alignParentStart="true" />
+                                <androidx.appcompat.widget.AppCompatImageView android:id="@id/sport_icon" android:layout_width="24.0dip" android:layout_height="24.0dip" android:src="@drawable/ic_sport_hike_24" android:scaleType="centerInside" android:layout_below="@id/header_text1" android:layout_alignParentStart="true" app:tint="@color/black" />
+                                <TextView android:textSize="16.0sp" android:textColor="@color/text_underline" android:ellipsize="end" android:id="@id/textview_uh_type" android:layout_width="wrap_content" android:layout_height="24.0dip" android:text="@string/highlight_type_point_title" android:maxLines="1" android:lines="1" android:layout_below="@id/header_text1" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="16.0dip" android:layout_toEndOf="@id/sport_icon" />
+                                <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/layout_segment_info" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="14.0dip" android:layout_below="@id/sport_icon" android:layout_alignParentStart="true">
+                                    <ImageView android:id="@id/imageview_stats_distance" android:layout_width="11.0dip" android:layout_height="11.0dip" android:src="@drawable/ic_toursummary_distance" android:layout_marginEnd="@dimen/tour_stat_icon_margin_right" />
+                                    <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:id="@id/textview_stats_distance" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginEnd="2.0dip" />
+                                    <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:id="@id/textview_stats_distance_unit" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginEnd="@dimen/tour_stat_item_margin_right" />
+                                    <ImageView android:id="@id/imageview_stats_up" android:layout_width="11.0dip" android:layout_height="11.0dip" android:src="@drawable/ic_toursummary_up" android:layout_marginEnd="@dimen/tour_stat_icon_margin_right" />
+                                    <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:id="@id/textview_stats_up" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginEnd="2.0dip" />
+                                    <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:id="@id/textview_stats_up_unit" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginEnd="@dimen/tour_stat_item_margin_right" />
+                                    <ImageView android:id="@id/imageview_stats_down" android:layout_width="11.0dip" android:layout_height="11.0dip" android:src="@drawable/ic_toursummary_down" android:layout_marginEnd="@dimen/tour_stat_icon_margin_right" />
+                                    <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:id="@id/textview_stats_down" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginEnd="2.0dip" />
+                                    <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:id="@id/textview_stats_down_unit" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginEnd="@dimen/tour_stat_item_margin_right" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                            <androidx.fragment.app.FragmentContainerView android:id="@id/compose_toolbar" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_below="@id/layout_generic_tour_stats" android:layout_alignParentStart="true" android:layout_alignParentEnd="true" />
+                            <LinearLayout android:orientation="vertical" android:id="@id/layout_highlight_warnings_container" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_below="@id/compose_toolbar" />
+                        </RelativeLayout>
+                        <View android:background="@color/muted" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" />
+                    </LinearLayout>
+                </RelativeLayout>
+                <LinearLayout android:gravity="center_horizontal" android:orientation="horizontal" android:visibility="visible" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <View android:background="@color/muted" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" />
+                    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                        <ViewStub android:id="@id/view_stub_user_highlight_actions" android:inflatedId="@id/view_layout_actions" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+                        <ViewStub android:id="@id/view_stub_user_highlight_rating" android:inflatedId="@id/view_layout_rating" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+                        <include layout="@layout/divider_item" />
+                        <de.komoot.android.ui.highlight.UserHighlightRecommendersView android:id="@id/recommenders_section" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+                        <include layout="@layout/divider_item" />
+                        <FrameLayout android:layout_gravity="bottom" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="56.0dip">
+                            <TextView android:textSize="18.0sp" android:textColor="@color/black" android:gravity="bottom" android:paddingLeft="@dimen/list_item_side_padding" android:paddingRight="@dimen/list_item_side_padding" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginBottom="8.0dip" android:text="@string/highlight_info_hl_location" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_light" android:paddingStart="@dimen/list_item_side_padding" android:paddingEnd="@dimen/list_item_side_padding" />
+                        </FrameLayout>
+                        <RelativeLayout android:paddingLeft="@dimen/list_item_side_padding" android:paddingRight="@dimen/list_item_side_padding" android:visibility="visible" android:layout_width="fill_parent" android:layout_height="@dimen/highlight_screen_map_height" android:paddingStart="@dimen/list_item_side_padding" android:paddingEnd="@dimen/list_item_side_padding">
+                            <ViewStub android:id="@id/map_stub" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+                            <ImageView android:background="@color/white" android:layout_width="32.0dip" android:layout_height="32.0dip" android:layout_margin="0.0dip" android:src="@drawable/ic_action_expand" android:layout_alignParentTop="true" android:alpha="0.5" android:layout_alignParentStart="true" />
+                            <View android:layout_gravity="center" android:id="@id/viewTouchIntercept" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+                        </RelativeLayout>
+                        <TextView android:textSize="13.0sp" android:textColor="@color/text_secondary" android:gravity="bottom" android:id="@id/textview_distance_away" android:paddingLeft="@dimen/list_item_side_padding" android:paddingRight="@dimen/list_item_side_padding" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" android:layout_marginBottom="8.0dip" android:text="@string/highlight_info_dist_away" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="@dimen/list_item_side_padding" android:paddingEnd="@dimen/list_item_side_padding" />
+                        <ViewStub android:id="@id/view_stub_user_highlight_smart_tours" android:inflatedId="@id/view_layout_smart_tours" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+                        <ViewStub android:id="@id/view_stub_user_highlight_tips" android:inflatedId="@id/view_layout_tips" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+                        <ViewStub android:id="@id/view_stub_user_highlight_seasonality" android:inflatedId="@id/view_layout_seasonality" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+                        <ViewStub android:id="@id/view_stub_user_highlight_other_recommended" android:inflatedId="@id/view_layout_other_recommended" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+                        <View android:layout_width="fill_parent" android:layout_height="10.0dip" />
+                    </LinearLayout>
+                    <View android:background="@color/muted" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" />
+                </LinearLayout>
+            </LinearLayout>
+        </de.komoot.android.widget.NotifyingScrollView>
+        <View android:id="@id/view_statusbar_underlay" android:layout_width="fill_parent" android:layout_height="2.0dip" />
+    </FrameLayout>
+</de.komoot.android.view.ScrimInsetsFrameLayout>

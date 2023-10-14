@@ -1,0 +1,77 @@
+.class final Lde/komoot/android/ui/region/DevMapDownloaderActivityKt$DevMapItem$1$snap$1$2;
+.super Ljava/lang/Object;
+.source "SourceFile"
+
+# interfaces
+.implements Lcom/mapbox/mapboxsdk/snapshotter/MapSnapshotter$ErrorHandler;
+
+
+# annotations
+.annotation system Ldalvik/annotation/EnclosingMethod;
+    value = Lde/komoot/android/ui/region/DevMapDownloaderActivityKt$DevMapItem$1$snap$1;->invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
+.end annotation
+
+.annotation system Ldalvik/annotation/InnerClass;
+    accessFlags = 0x18
+    name = null
+.end annotation
+
+.annotation runtime Lkotlin/Metadata;
+    d1 = {
+        "\u0000\u000c\n\u0002\u0010\u000e\n\u0000\n\u0002\u0010\u0002\n\u0000\u0010\u0003\u001a\u00020\u00022\u0006\u0010\u0001\u001a\u00020\u0000H\n"
+    }
+    d2 = {
+        "",
+        "error",
+        "",
+        "<anonymous>"
+    }
+    k = 0x3
+    mv = {
+        0x1,
+        0x9,
+        0x0
+    }
+.end annotation
+
+
+# static fields
+.field public static final INSTANCE:Lde/komoot/android/ui/region/DevMapDownloaderActivityKt$DevMapItem$1$snap$1$2;
+
+
+# direct methods
+.method static constructor <clinit>()V
+    .locals 1
+
+    new-instance v0, Lde/komoot/android/ui/region/DevMapDownloaderActivityKt$DevMapItem$1$snap$1$2;
+
+    invoke-direct {v0}, Lde/komoot/android/ui/region/DevMapDownloaderActivityKt$DevMapItem$1$snap$1$2;-><init>()V
+
+    sput-object v0, Lde/komoot/android/ui/region/DevMapDownloaderActivityKt$DevMapItem$1$snap$1$2;->INSTANCE:Lde/komoot/android/ui/region/DevMapDownloaderActivityKt$DevMapItem$1$snap$1$2;
+
+    return-void
+.end method
+
+.method constructor <init>()V
+    .locals 0
+
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public final onError(Ljava/lang/String;)V
+    .locals 1
+
+    const-string v0, "error"
+
+    invoke-static {p1, v0}, Lkotlin/jvm/internal/Intrinsics;->i(Ljava/lang/Object;Ljava/lang/String;)V
+
+    const-string v0, "MapDownloader"
+
+    invoke-static {v0, p1}, Lde/komoot/android/log/LogWrapper;->z(Ljava/lang/String;Ljava/lang/String;)V
+
+    return-void
+.end method

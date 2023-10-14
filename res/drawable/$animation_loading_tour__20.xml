@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set android:ordering="together"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
+    <objectAnimator android:interpolator="@drawable/$animation_loading_tour__21" android:duration="133" android:startOffset="0" android:valueFrom="0.1" android:valueTo="0.1" android:valueType="floatType" android:propertyName="scaleX" />
+    <objectAnimator android:interpolator="@drawable/$animation_loading_tour__22" android:duration="133" android:startOffset="0" android:valueFrom="0.1" android:valueTo="0.1" android:valueType="floatType" android:propertyName="scaleY" />
+    <objectAnimator android:interpolator="@drawable/$animation_loading_tour__23" android:duration="408" android:startOffset="133" android:valueFrom="0.1" android:valueTo="0.8" android:valueType="floatType" android:propertyName="scaleX" />
+    <objectAnimator android:interpolator="@drawable/$animation_loading_tour__24" android:duration="408" android:startOffset="133" android:valueFrom="0.1" android:valueTo="0.8" android:valueType="floatType" android:propertyName="scaleY" />
+    <objectAnimator android:interpolator="@drawable/$animation_loading_tour__25" android:duration="326" android:startOffset="541" android:valueFrom="0.8" android:valueTo="0.1" android:valueType="floatType" android:propertyName="scaleX" />
+    <objectAnimator android:interpolator="@drawable/$animation_loading_tour__26" android:duration="326" android:startOffset="541" android:valueFrom="0.8" android:valueTo="0.1" android:valueType="floatType" android:propertyName="scaleY" />
+</set>

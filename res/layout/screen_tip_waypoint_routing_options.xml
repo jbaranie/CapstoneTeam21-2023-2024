@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:orientation="vertical" android:background="@color/black_70p" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.Guideline android:orientation="vertical" android:id="@id/verticalGuideline" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintGuide_percent="0.875" />
+    <androidx.constraintlayout.widget.Guideline android:orientation="horizontal" android:id="@id/horizontalGuideline" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintGuide_end="24.0dip" />
+    <de.komoot.android.ui.onboarding.tips.ScreenTipView android:id="@id/screen_tip_view" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="80.0dip" app:buttonText="@string/onboarding_tips_done_button" app:layout_constraintBottom_toTopOf="@id/hole" app:subtitle="@string/planning_waypoint_screen_tip_description" app:title="@string/planning_waypoint_screen_tip_title" />
+    <de.komoot.android.ui.onboarding.tips.ScreenTipHole android:id="@id/hole" android:layout_width="240.0dip" android:layout_height="240.0dip" android:layout_marginBottom="100.0dip" android:layout_marginStart="30.0dip" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

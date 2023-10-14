@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_gravity="center" android:id="@id/layout_landscape_navigation_item" android:background="@drawable/background_navigation_item_states" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <ImageView android:id="@id/imageview_direction" android:layout_width="75.0dip" android:layout_height="75.0dip" android:scaleType="fitXY" android:layout_marginStart="24.0dip" android:layout_marginEnd="21.0dip" android:layout_alignParentStart="false" />
+        <de.komoot.android.view.AutofitTextView android:textSize="48.0sp" android:textColor="@android:color/white" android:gravity="start" android:id="@id/textview_header" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="1" android:singleLine="true" android:layout_alignTop="@id/imageview_direction" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginEnd="8.0dip" android:layout_toEndOf="@id/imageview_direction" />
+        <de.komoot.android.view.AutofitTextView android:textSize="24.0sp" android:textColor="@android:color/white" android:gravity="start" android:id="@id/textview_sub" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:maxLines="1" android:singleLine="true" android:drawablePadding="6.0dip" android:layout_below="@id/textview_header" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginEnd="8.0dip" android:layout_toEndOf="@id/imageview_direction" />
+    </RelativeLayout>
+</FrameLayout>

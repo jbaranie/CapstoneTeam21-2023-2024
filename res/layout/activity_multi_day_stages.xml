@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="@color/white" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginBottom="60.0dip" android:layout_alignParentTop="true">
+        <include layout="@layout/inc_map_new" />
+    </FrameLayout>
+    <RelativeLayout android:gravity="center_vertical" android:id="@id/layout_top_bar" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="32.0dip">
+        <ImageButton android:id="@id/imagebutton_exit" android:background="@drawable/bg_circle_black" android:layout_width="32.0dip" android:layout_height="32.0dip" android:src="@drawable/ic_close" android:alpha="0.6" android:layout_marginStart="16.0dip" android:layout_marginEnd="16.0dip" android:layout_alignParentStart="true" app:tint="@color/white" />
+        <ImageButton android:id="@id/imagebutton_more" android:background="@null" android:layout_width="32.0dip" android:layout_height="32.0dip" android:src="@drawable/btn_more_menu_states" android:layout_marginStart="16.0dip" android:layout_marginEnd="16.0dip" android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/recyclerview_stages" android:layout_width="fill_parent" android:layout_height="45.0dip" android:layout_marginTop="16.0dip" android:layout_below="@id/layout_top_bar" />
+    <de.komoot.android.view.composition.DraggableBottomUpView android:id="@id/draggable_view" android:layout_width="fill_parent" android:layout_height="fill_parent" app:dragDown="146.0dip" app:dragHalf="260.0dip" app:dragInit="half" app:dragUp="40.0dip">
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <View android:background="@color/white" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="16.0dip" />
+            <androidx.recyclerview.widget.RecyclerView android:id="@id/recyclerview" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginBottom="60.0dip" />
+        </RelativeLayout>
+    </de.komoot.android.view.composition.DraggableBottomUpView>
+    <RelativeLayout android:id="@id/layout_bottom" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true">
+        <View android:id="@id/view_shadow" android:background="@drawable/gradient_top_transparent_to_bottom_light_grey_transparent" android:layout_width="fill_parent" android:layout_height="8.0dip" android:layout_above="@id/layout_cta" />
+        <FrameLayout android:id="@id/layout_cta" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="60.0dip" android:baselineAligned="false" android:layout_alignParentBottom="true">
+            <Button android:textSize="16.0sp" android:textColor="@color/white" android:gravity="center" android:id="@id/button_save" android:background="@drawable/btn_primary" android:layout_width="fill_parent" android:layout_height="36.0dip" android:layout_marginTop="12.0dip" android:layout_marginBottom="12.0dip" android:text="@string/multiday_stages_save_cta" android:lines="1" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="16.0dip" android:layout_marginEnd="16.0dip" android:elevation="2.0dip" />
+        </FrameLayout>
+    </RelativeLayout>
+</RelativeLayout>

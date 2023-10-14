@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/fvpv_image_iv" android:layout_width="fill_parent" android:layout_height="180.0dip" android:src="@drawable/placeholder_highlight" android:scaleType="centerCrop" android:layout_centerInParent="true" />
+    <ImageView android:id="@id/fvpv_play_ib" android:background="@color/transparent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_play_video" android:layout_centerInParent="true" />
+    <View android:background="@drawable/bg_ripple_on_dark" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_alignTop="@id/fvpv_image_iv" android:layout_alignBottom="@id/fvpv_image_iv" />
+</RelativeLayout>

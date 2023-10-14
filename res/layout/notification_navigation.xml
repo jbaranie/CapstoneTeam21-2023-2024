@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:paddingTop="3.0dip" android:paddingBottom="3.0dip" android:layout_width="fill_parent" android:layout_height="64.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/imageview_direction" android:layout_width="40.0dip" android:layout_height="40.0dip" android:layout_marginLeft="12.0dip" android:layout_marginRight="12.0dip" android:src="@drawable/ic_stat_notify_nav_keep_straight" android:scaleType="centerInside" android:layout_centerVertical="true" android:layout_alignParentStart="true" />
+    <LinearLayout android:gravity="center_vertical" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="48.0dip" android:layout_centerVertical="true" android:layout_toEndOf="@id/imageview_direction">
+        <TextView android:textAppearance="@style/NotificationTitle" android:textSize="16.0sp" android:gravity="center_vertical" android:id="@id/textview_title" android:layout_width="wrap_content" android:layout_height="24.0dip" android:singleLine="true" />
+        <TextView android:textAppearance="@style/NotificationText" android:textSize="14.0sp" android:gravity="center_vertical" android:id="@id/textview_subText" android:visibility="visible" android:layout_width="wrap_content" android:layout_height="24.0dip" android:singleLine="true" />
+    </LinearLayout>
+</RelativeLayout>

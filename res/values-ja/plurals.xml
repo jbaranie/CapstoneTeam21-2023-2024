@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="atlas_carrousel_hikes_pagination">
+        <item quantity="other">ハイキング%1$d～%2$d（全%3$d個）</item>
+    </plurals>
+    <plurals name="atlas_carrousel_rides_pagination">
+        <item quantity="other">ライド%1$d～%2$d（全%3$d個）</item>
+    </plurals>
+    <plurals name="atlas_carrousel_runs_pagination">
+        <item quantity="other">ランニング%1$d～%2$d（全%3$d個）</item>
+    </plurals>
+    <plurals name="atlas_filter_hikes_show_button">
+        <item quantity="other">%s件を表示</item>
+    </plurals>
+    <plurals name="atlas_filter_rides_show_button">
+        <item quantity="other">%s件を表示</item>
+    </plurals>
+    <plurals name="atlas_filter_runs_show_button">
+        <item quantity="other">%s件を表示</item>
+    </plurals>
+    <plurals name="atlas_highlight_header">
+        <item quantity="other">%1$d個のハイライト</item>
+    </plurals>
+    <plurals name="atlas_highlight_hikes_social_proof">
+        <item quantity="other">%1$d人のハイキング愛好家がおすすめしました（全%2$d‬人中）</item>
+    </plurals>
+    <plurals name="atlas_highlight_mtb_social_proof">
+        <item quantity="other">%1$d人のMTB愛好家がおすすめしました（全%2$d‬人中）</item>
+    </plurals>
+    <plurals name="atlas_highlight_rides_social_proof">
+        <item quantity="other">%1$d人のツーリング愛好家がおすすめしました（全%2$d‬人中）</item>
+    </plurals>
+    <plurals name="atlas_highlight_road_social_proof">
+        <item quantity="other">%1$d人のロードバイク愛好家がおすすめしました（全%2$d‬人中）</item>
+    </plurals>
+    <plurals name="atlas_highlight_runs_social_proof">
+        <item quantity="other">%1$d人のランニング愛好家がおすすめしました（全%2$d‬人中）</item>
+    </plurals>
+    <plurals name="atlas_list_header_hikes">
+        <item quantity="other">%1$d個のハイキング</item>
+    </plurals>
+    <plurals name="atlas_list_header_rides">
+        <item quantity="other">%1$d個のライド</item>
+    </plurals>
+    <plurals name="atlas_list_header_runs">
+        <item quantity="other">%1$d個のランニング</item>
+    </plurals>
+    <plurals name="atw_highlight_recommend_photo_contributions_plural">
+        <item quantity="other">この場所で撮った新しい写真（%s枚）を追加しましょう。</item>
+    </plurals>
+    <plurals name="cfa_highlights">
+        <item quantity="other">ハイライト</item>
+    </plurals>
+    <plurals name="collection_summary_highlights_count">
+        <item quantity="other">%1$d個のハイライト</item>
+    </plurals>
+    <plurals name="collection_summary_tours_count">
+        <item quantity="other">%1$d個のツアー</item>
+    </plurals>
+    <plurals name="exo_controls_fastforward_by_amount_description">
+        <item quantity="other">%d 秒早送り</item>
+        <item quantity="one">%d 秒早送り</item>
+    </plurals>
+    <plurals name="exo_controls_rewind_by_amount_description">
+        <item quantity="other">%d 秒巻き戻し</item>
+        <item quantity="one">%d 秒巻き戻し</item>
+    </plurals>
+    <plurals name="expire_in_days">
+        <item quantity="other">%s日</item>
+    </plurals>
+    <plurals name="expire_in_hours_plural">
+        <item quantity="other">%s時間</item>
+    </plurals>
+    <plurals name="expire_in_minutes_plural">
+        <item quantity="other">%s分</item>
+    </plurals>
+    <plurals name="fca_follow_all_friends_button">
+        <item quantity="other">%d人全員をフォローする</item>
+    </plurals>
+    <plurals name="fcca_items">
+        <item quantity="other">項目</item>
+    </plurals>
+    <plurals name="ffa_follow_n_contact_friends">
+        <item quantity="other">%d件の連絡先を見る</item>
+    </plurals>
+    <plurals name="ffa_follow_n_facebook_friends">
+        <item quantity="other">%d人のFacebookの友達を見る</item>
+    </plurals>
+    <plurals name="garmin_history_import_loading_progress_plural">
+        <item quantity="other">%1$d個のツアー</item>
+    </plurals>
+    <plurals name="instabug_feature_rq_str_days_ago">
+        <item quantity="other">%d日前</item>
+    </plurals>
+    <plurals name="instabug_feature_rq_str_hours_ago">
+        <item quantity="other">%d時間前</item>
+    </plurals>
+    <plurals name="instabug_feature_rq_str_minutes_ago">
+        <item quantity="other">%d分前</item>
+    </plurals>
+    <plurals name="lang_sport_count_cycling">
+        <item quantity="other">%1$d人のサイクリング愛好家（全%2$d人中）</item>
+    </plurals>
+    <plurals name="lang_sport_count_hiking">
+        <item quantity="other">%1$d人のハイキング愛好家（全%2$d人中）</item>
+    </plurals>
+    <plurals name="lang_sport_count_mountain_biking">
+        <item quantity="other">%1$d人のMTB愛好家（全%2$d人中）</item>
+    </plurals>
+    <plurals name="lang_sport_count_mountaineering">
+        <item quantity="other">%1$d人の登山愛好家（全%2$d人中）</item>
+    </plurals>
+    <plurals name="lang_sport_count_other">
+        <item quantity="other">%1$d人（全%2$d人中）</item>
+    </plurals>
+    <plurals name="lang_sport_count_road_cycling">
+        <item quantity="other">%1$d人のロードバイク愛好家（全%2$d人中）</item>
+    </plurals>
+    <plurals name="lang_sport_count_running">
+        <item quantity="other">%1$d人のランニング愛好家（全%2$d人中）</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_cycling">
+        <item quantity="other">%1$d人のサイクリング愛好家がおすすめしました（全%2$d‬人中）</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_hiking">
+        <item quantity="other">%1$d人のハイキング愛好家がおすすめしました（全%2$d‬人中）</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_mountain_biking">
+        <item quantity="other">%1$d人のMTB愛好家がおすすめしました（全%2$d‬人中）</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_mountaineering">
+        <item quantity="other">%1$d人の登山愛好家がおすすめしました（全%2$d‬人中）</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_other">
+        <item quantity="other">%1$d人のユーザーがおすすめしました（全%2$d‬人中）</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_road_cycling">
+        <item quantity="other">%1$d人のロードバイク愛好家がおすすめしました（全%2$d‬人中）</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_running">
+        <item quantity="other">%1$d人のランニング愛好家がおすすめしました（全%2$d‬人中）</item>
+    </plurals>
+    <plurals name="mtrl_badge_content_description">
+        <item quantity="other">%d 件の新しい通知</item>
+        <item quantity="one">%d 件の新しい通知</item>
+    </plurals>
+    <plurals name="multiday_travel_time_per_day_hours_plural">
+        <item quantity="other">‪%s‬時間</item>
+    </plurals>
+    <plurals name="notification_deleting">
+        <item quantity="other">%d個のマップを削除中</item>
+    </plurals>
+    <plurals name="notification_downloading">
+        <item quantity="other">%d個のマップをダウンロード中</item>
+    </plurals>
+    <plurals name="notification_requests_header">
+        <item quantity="other">%s件の新規リクエスト</item>
+    </plurals>
+    <plurals name="offer_ends_in_hours_plural">
+        <item quantity="other">特典終了まであと%s時間</item>
+    </plurals>
+    <plurals name="offer_ends_in_minutes_plural">
+        <item quantity="other">‪特典終了まであと%s分</item>
+    </plurals>
+    <plurals name="onboarding_sport_selection_greetingfavorite_inspiration_4_more">
+        <item quantity="other">%1$s、%2$s、%3$s、その他%4$s個のアクティビティを選択しました。好きなスポーツの選択は[設定]でいつでも変更することができます。</item>
+    </plurals>
+    <plurals name="place_info_reviews_tripadvisor_count">
+        <item quantity="other">%d件の口コミ</item>
+    </plurals>
+    <plurals name="place_info_reviews_yelp_count">
+        <item quantity="other">%d件のレビューに基づいています</item>
+    </plurals>
+    <plurals name="premium_buy_welcome_months_offer_plural">
+        <item quantity="other">%sか月の無料期間</item>
+    </plurals>
+    <plurals name="premium_buy_welcome_months_text_plural">
+        <item quantity="other">1年間の冒険を特別価格で：今ならプレミアムが%1$sか月間無料 — %2$s年はもっとアウトドアを満喫しましょう。</item>
+    </plurals>
+    <plurals name="pwa_hide_waypoints">
+        <item quantity="other">ウェイポイントを非表示</item>
+    </plurals>
+    <plurals name="pwa_n_more_waypoints">
+        <item quantity="other">他%d個のウェイポイント</item>
+    </plurals>
+    <plurals name="route_extra_tip_cycling_dismount_msg">
+        <item quantity="other">降車し、押して歩く必要があります。</item>
+    </plurals>
+    <plurals name="route_extra_tip_cycling_dismount_title">
+        <item quantity="other">このルートの一部で自転車走行が禁止されています。</item>
+    </plurals>
+    <plurals name="route_extra_tip_ferry_msg">
+        <item quantity="other">フェリーの時刻表を確認してください。</item>
+    </plurals>
+    <plurals name="route_extra_tip_ferry_title">
+        <item quantity="other">フェリー航路あり</item>
+    </plurals>
+    <plurals name="route_extra_tip_heavy_traffic_msg">
+        <item quantity="other">交通量の多い道は注意して走行してください。</item>
+    </plurals>
+    <plurals name="route_extra_tip_heavy_traffic_title">
+        <item quantity="other">交通量の多い道を利用</item>
+    </plurals>
+    <plurals name="route_extra_tip_high_danger_msg">
+        <item quantity="other">ルートの一部に、技術的難易度が非常に高い箇所、通行が難しい箇所、危険な地形などがあります。専用装備と経験が必要です。</item>
+    </plurals>
+    <plurals name="route_extra_tip_high_danger_title">
+        <item quantity="other">非常に危険なセクションあり</item>
+    </plurals>
+    <plurals name="route_extra_tip_moderate_danger_msg">
+        <item quantity="other">ルートの一部に、技術的難易度が高い箇所、通行が難しい箇所、危険な地形などがあります。専用装備と経験が必要になるかもしれません。</item>
+    </plurals>
+    <plurals name="route_extra_tip_moderate_danger_title">
+        <item quantity="other">危険なセクションあり</item>
+    </plurals>
+    <plurals name="route_extra_tip_moveable_bridge_msg">
+        <item quantity="other">開閉時刻を確認してください。</item>
+    </plurals>
+    <plurals name="route_extra_tip_moveable_bridge_title">
+        <item quantity="other">可動橋あり</item>
+    </plurals>
+    <plurals name="route_extra_tip_offgrid_msg">
+        <item quantity="other">ナビの指示が制限される可能性があります。</item>
+    </plurals>
+    <plurals name="route_extra_tip_offgrid_title">
+        <item quantity="other">既知の道から外れたセクションあり</item>
+    </plurals>
+    <plurals name="route_extra_tip_restricted_msg">
+        <item quantity="other">規制セクションの通行が可能か事前に確認してください。</item>
+    </plurals>
+    <plurals name="route_extra_tip_restricted_title">
+        <item quantity="other">進入禁止の臨時規制セクションあり</item>
+    </plurals>
+    <plurals name="route_extra_tip_unsuitable_msg">
+        <item quantity="other">道の舗装状態が指定のスポーツに適していないセクションがあります。</item>
+    </plurals>
+    <plurals name="route_extra_tip_unsuitable_title">
+        <item quantity="other">舗装状態が最適でないセクションあり</item>
+    </plurals>
+    <plurals name="route_info_timeline_more">
+        <item quantity="other">他%s箇所</item>
+    </plurals>
+    <plurals name="route_information_show_more">
+        <item quantity="other">役立つ情報をさらに%s件表示</item>
+    </plurals>
+    <plurals name="shop_premium_welcome_months_text_plural">
+        <item quantity="other">komootプレミアムに入会すると、アウトドアライフがさらに便利になります。1年間のプレミアム会員に登録して、冒険を楽しみましょう。今なら初年度が%sか月間無料。</item>
+    </plurals>
+    <plurals name="shop_premium_welcome_months_title_plural">
+        <item quantity="other">もっと冒険を！プレミアムが%sか月間無料</item>
+    </plurals>
+    <plurals name="som_imperial_feet_dative">
+        <item quantity="other">フィート</item>
+    </plurals>
+    <plurals name="som_imperial_feet_nominative">
+        <item quantity="other">フィート</item>
+    </plurals>
+    <plurals name="som_imperial_mile_dative">
+        <item quantity="other">マイル</item>
+    </plurals>
+    <plurals name="som_imperial_mile_nominative">
+        <item quantity="other">マイル</item>
+    </plurals>
+    <plurals name="som_imperial_yard_dative">
+        <item quantity="other">ヤード</item>
+    </plurals>
+    <plurals name="som_imperial_yard_nominative">
+        <item quantity="other">ヤード</item>
+    </plurals>
+    <plurals name="som_metric_kilometer_dative">
+        <item quantity="other">キロメートル</item>
+    </plurals>
+    <plurals name="som_metric_kilometer_nominative">
+        <item quantity="other">キロメートル</item>
+    </plurals>
+    <plurals name="som_metric_meter_dative">
+        <item quantity="other">メートル</item>
+    </plurals>
+    <plurals name="som_metric_meter_nominative">
+        <item quantity="other">メートル</item>
+    </plurals>
+    <plurals name="tour_list_filter_result_count_plural">
+        <item quantity="other">‪%s‬個のツアーが見つかりました</item>
+    </plurals>
+    <plurals name="tour_list_tour_count">
+        <item quantity="other">%d件のツアー</item>
+    </plurals>
+    <plurals name="tour_upload_image_upload_successful_msg_plural">
+        <item quantity="other">‪%s‬枚の写真をシェアするにはここをタップします。</item>
+    </plurals>
+    <plurals name="unit_hour">
+        <item quantity="other">時間</item>
+    </plurals>
+    <plurals name="unit_name_hour">
+        <item quantity="other">時間</item>
+    </plurals>
+    <plurals name="unit_name_minutes">
+        <item quantity="other">分</item>
+    </plurals>
+    <plurals name="user_activity_feed_more_comments">
+        <item quantity="other">他%d件のコメントを見る</item>
+    </plurals>
+    <plurals name="user_highlight_contribute_photos_plural">
+        <item quantity="other">この場所で撮った新しい写真（‪%s‬枚）を追加してみんなに見せましょう。</item>
+    </plurals>
+    <plurals name="user_info_followers_count">
+        <item quantity="other">%1$d人のフォロワー</item>
+    </plurals>
+    <plurals name="voiceNavigation_kilometer">
+        <item quantity="other">キロ</item>
+    </plurals>
+    <plurals name="voiceNavigation_kilometer_accusative">
+        <item quantity="other">キロ</item>
+    </plurals>
+    <plurals name="voiceNavigation_meter">
+        <item quantity="other">メートル</item>
+    </plurals>
+    <plurals name="voiceNavigation_meter_accusative">
+        <item quantity="other">メートル</item>
+    </plurals>
+    <plurals name="world_pack_first_unlocked">
+        <item quantity="other">取得済みマップ</item>
+    </plurals>
+</resources>

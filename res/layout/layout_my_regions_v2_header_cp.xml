@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/my_regions_v2_header_cp_container" android:background="@color/tertiary" android:paddingTop="@dimen/default_margin_and_padding" android:layout_width="fill_parent" android:layout_height="fill_parent" android:paddingStart="@dimen/default_margin_and_padding" android:paddingEnd="@dimen/default_margin_and_padding"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:textSize="28.0sp" android:textColor="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/myregion_complete_package_header_unlocked_title" android:fontFamily="@font/source_sans_pro_bold" />
+    <TextView android:textSize="16.0sp" android:textColor="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" android:text="@string/myregion_complete_package_header_unlocked_subtitle" android:fontFamily="@font/source_sans_pro_regular" />
+    <ImageView android:layout_gravity="center_horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" android:src="@drawable/illustration_world_unlocked" />
+</LinearLayout>

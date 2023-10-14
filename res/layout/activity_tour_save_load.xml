@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="@dimen/tssca_header_text_size" android:textColor="@color/btn_white_normal" android:gravity="center" android:layout_gravity="center_horizontal" android:id="@id/tssca_congratulations_tv" android:background="@color/primary" android:layout_width="fill_parent" android:layout_height="@dimen/tssca_header_height" android:text="@string/tssca_congratulations_variants" android:fontFamily="@font/source_sans_pro_light" />
+    <TextView android:gravity="center" android:background="@color/canvas" android:layout_width="fill_parent" android:layout_height="0.0dip" android:text="@string/msg_loading" android:layout_weight="1.0" />
+</LinearLayout>

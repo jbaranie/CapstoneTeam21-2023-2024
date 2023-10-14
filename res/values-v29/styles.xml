@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BaseSupportTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/black</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:scrollbarThumbHorizontal">@drawable/scroll_bar_black_30p</item>
+        <item name="android:scrollbarThumbVertical">@drawable/scroll_bar_black_30p</item>
+        <item name="android:spinnerDropDownItemStyle">@style/CustomDropDownItemStyle</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:textColorTertiary">@color/black</item>
+        <item name="android:editTextColor">@android:color/black</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="actionBarStyle">@style/KmtActionBarStyle</item>
+        <item name="actionMenuTextColor">@color/primary_on_dark</item>
+        <item name="colorAccent">@color/secondary</item>
+        <item name="colorControlActivated">@color/primary</item>
+        <item name="colorControlNormal">@color/text_whisper</item>
+        <item name="fontBold">@font/source_sans_pro_bold</item>
+        <item name="fontItalic">@font/source_sans_pro_italic</item>
+        <item name="fontLight">@font/source_sans_pro_light</item>
+        <item name="fontRegular">@font/source_sans_pro_regular</item>
+    </style>
+    <style name="KmtSupportThemeWithMaterialComponents" parent="@style/Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/black</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:scrollbarThumbHorizontal">@drawable/scroll_bar_black_30p</item>
+        <item name="android:scrollbarThumbVertical">@drawable/scroll_bar_black_30p</item>
+        <item name="android:spinnerDropDownItemStyle">@style/CustomDropDownItemStyle</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:textColorTertiary">@color/black</item>
+        <item name="android:editTextColor">@android:color/black</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="actionBarStyle">@style/KmtActionBarStyle</item>
+        <item name="actionMenuTextColor">@color/primary_on_dark</item>
+        <item name="colorAccent">@color/secondary</item>
+        <item name="colorControlActivated">@color/primary</item>
+        <item name="colorControlNormal">@color/text_whisper</item>
+        <item name="fontBold">@font/source_sans_pro_bold</item>
+        <item name="fontItalic">@font/source_sans_pro_italic</item>
+        <item name="fontLight">@font/source_sans_pro_light</item>
+        <item name="fontRegular">@font/source_sans_pro_regular</item>
+    </style>
+</resources>

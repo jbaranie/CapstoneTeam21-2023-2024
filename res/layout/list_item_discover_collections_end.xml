@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:background="@color/canvas" android:paddingLeft="@dimen/default_margin_and_padding" android:paddingTop="@dimen/default_margin_and_padding" android:paddingRight="@dimen/default_margin_and_padding" android:paddingBottom="120.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:background="@drawable/bg_card_large_corner_radius" android:padding="@dimen/default_margin_and_padding" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView android:textSize="20.0sp" android:textColor="@color/text_primary" android:id="@id/textview_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/discover_collection_end_title" android:fontFamily="@font/source_sans_pro_bold" />
+        <TextView android:textSize="16.0sp" android:textColor="@color/text_primary" android:id="@id/textview_text" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:text="@string/discover_collection_end_text" android:fontFamily="@font/source_sans_pro_regular" />
+        <Button android:textSize="16.0sp" android:textColor="@color/text_on_dark" android:id="@id/button_expand" android:paddingLeft="16.0dip" android:paddingRight="16.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:text="@string/discover_no_results_expand" android:textAllCaps="false" android:fontFamily="?fontBold" android:elevation="0.0dip" android:stateListAnimator="@null" android:backgroundTint="@color/primary" />
+    </LinearLayout>
+</FrameLayout>

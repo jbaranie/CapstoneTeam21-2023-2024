@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/root_layout" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <androidx.appcompat.widget.Toolbar android:theme="@style/KmtCustomSupportActionBarStyle" android:id="@id/activity_invite_peers_toolbar" android:layout_width="fill_parent" android:layout_height="wrap_content" android:elevation="4.0dip">
+            <EditText android:typeface="sans" android:textColor="@color/white" android:id="@id/activity_invite_search_edittext" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="@string/ffa_search_hint" />
+        </androidx.appcompat.widget.Toolbar>
+        <de.komoot.android.ui.invitation.view.ParticipantsPanelView android:theme="@style/KmtCustomSupportActionBarStyle" android:gravity="center_vertical" android:id="@id/activity_invite_peers_participants_panel" android:paddingLeft="16.0dip" android:paddingRight="16.0dip" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="56.0dip" android:elevation="4.0dip" />
+        <androidx.recyclerview.widget.RecyclerView android:id="@id/activity_invite_people_recycler" android:visibility="visible" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    </LinearLayout>
+</FrameLayout>

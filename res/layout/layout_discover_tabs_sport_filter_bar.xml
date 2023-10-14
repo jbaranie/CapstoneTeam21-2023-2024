@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:id="@id/dtsfbv_base_row_container_ll" android:background="@drawable/bg_white_with_disabled_grey_effect_states" android:layout_width="fill_parent" android:layout_height="64.0dip">
+        <ImageView android:id="@id/dtsfbv_selected_sport_icon_iv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_marginStart="@dimen/default_margin_and_padding" />
+        <TextView android:textSize="18.0sp" android:textColor="@color/text_underline" android:id="@id/dtsfbv_sport_title_ttv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dtsfbv_sport_type" android:layout_centerVertical="true" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="24.0dip" android:layout_toEndOf="@id/dtsfbv_selected_sport_icon_iv" />
+        <View android:id="@id/dtsfbv_short_divider_v" android:background="@color/divider" android:layout_width="50.0dip" android:layout_height="1.0dip" android:layout_alignParentBottom="true" android:layout_alignStart="@id/dtsfbv_sport_title_ttv" />
+        <TextView android:textSize="16.0sp" android:id="@id/dtsfbv_selected_sport_name_tv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginEnd="@dimen/default_margin_and_padding" android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <FrameLayout android:id="@id/dtsfbv_expanend_row_container_fl" android:background="@color/theme_control_normal" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <de.komoot.android.ui.planning.view.SportChooserView android:id="@id/dtsfbv_sport_selection_scv" android:layout_width="fill_parent" android:layout_height="wrap_content" app:activeSportIconTint="@color/black" app:activeSportItemBackground="@drawable/bg_circle_white" app:inactiveSportIconTint="@color/white" app:inactiveSportItemBackground="@drawable/btn_theme_control_circle_states" />
+    </FrameLayout>
+</LinearLayout>

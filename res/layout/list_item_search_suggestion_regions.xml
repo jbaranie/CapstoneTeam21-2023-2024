@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:id="@id/layout_list_item_search_suggestion_regions" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="1.0px" android:layout_alignParentTop="true" />
+    <TextView android:textSize="18.0sp" android:textColor="@color/text_primary" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/default_margin_and_padding" android:layout_marginRight="@dimen/default_margin_and_padding" android:layout_marginBottom="-48.0dip" android:text="@string/ssrli_title" android:layout_above="@id/ssrli_recylcerview" android:layout_alignParentLeft="false" android:layout_alignParentTop="false" android:layout_alignParentRight="false" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_light" android:layout_alignParentEnd="false" />
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/ssrli_recylcerview" android:layout_width="fill_parent" android:layout_height="130.0dip" android:layout_marginTop="56.0dip" android:layout_marginBottom="@dimen/default_margin_and_padding" android:layout_alignParentLeft="true" android:layout_alignParentTop="true" />
+</RelativeLayout>

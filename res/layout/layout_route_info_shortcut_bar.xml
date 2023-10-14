@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="horizontal" android:id="@id/risbv_tab_container" android:layout_width="fill_parent" android:layout_height="wrap_content" android:baselineAligned="false">
+        <RelativeLayout android:id="@id/risbv_waypoints_container" android:layout_width="0.0dip" android:layout_height="60.0dip" android:layout_weight="1.0">
+            <ImageView android:id="@id/risbv_waypoints_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:src="@drawable/ic_tourdetails_navigation_waypoints" android:layout_centerHorizontal="true" />
+            <TextView android:textSize="13.0sp" android:gravity="center_horizontal" android:layout_gravity="center_horizontal" android:id="@id/risbv_waypoints_text" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="3.0dip" android:text="@string/risbv_waypoints" android:layout_below="@id/risbv_waypoints_icon" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="1.0dip" android:paddingEnd="1.0dip" app:autoSizeMaxTextSize="13.0sp" app:autoSizeMinTextSize="7.0sp" app:autoSizeStepGranularity="1.0sp" app:autoSizeTextType="uniform" />
+            <View android:id="@id/risbv_waypoints_vertical_divider" android:background="@color/divider" android:layout_width="1.0dip" android:layout_height="fill_parent" android:layout_marginTop="12.0dip" android:layout_marginBottom="12.0dip" android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+        <RelativeLayout android:orientation="vertical" android:id="@id/risbv_stats_container" android:layout_width="0.0dip" android:layout_height="60.0dip" android:layout_weight="1.0">
+            <ImageView android:id="@id/risbv_stats_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:src="@drawable/ic_tourdetails_navigation_stats" android:layout_centerHorizontal="true" />
+            <TextView android:textSize="13.0sp" android:gravity="center_horizontal" android:id="@id/risbv_stats_text" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="3.0dip" android:text="@string/risbv_stats" android:layout_below="@id/risbv_stats_icon" android:layout_centerHorizontal="true" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="1.0dip" android:paddingEnd="1.0dip" app:autoSizeMaxTextSize="13.0sp" app:autoSizeMinTextSize="7.0sp" app:autoSizeStepGranularity="1.0sp" app:autoSizeTextType="uniform" />
+            <View android:id="@id/risbv_stats_vertical_divider" android:background="@color/divider" android:layout_width="1.0dip" android:layout_height="fill_parent" android:layout_marginTop="12.0dip" android:layout_marginBottom="12.0dip" android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+        <RelativeLayout android:orientation="vertical" android:id="@id/risbv_weather_container" android:layout_width="0.0dip" android:layout_height="60.0dip" android:layout_weight="1.0">
+            <ImageView android:id="@id/risbv_weather_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:src="@drawable/ic_tourdetails_navigation_weather" android:layout_centerHorizontal="true" />
+            <TextView android:textSize="13.0sp" android:gravity="center_horizontal" android:id="@id/risbv_weather_text" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="3.0dip" android:text="@string/risbv_weather" android:layout_below="@id/risbv_weather_icon" android:layout_centerHorizontal="true" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="1.0dip" android:paddingEnd="1.0dip" app:autoSizeMaxTextSize="13.0sp" app:autoSizeMinTextSize="7.0sp" app:autoSizeStepGranularity="1.0sp" app:autoSizeTextType="uniform" />
+            <View android:id="@id/risbv_weather_vertical_divider" android:background="@color/divider" android:layout_width="1.0dip" android:layout_height="fill_parent" android:layout_marginTop="12.0dip" android:layout_marginBottom="12.0dip" android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+        <LinearLayout android:orientation="vertical" android:id="@id/risbv_comments_container" android:layout_width="0.0dip" android:layout_height="60.0dip" android:layout_weight="1.0">
+            <ImageView android:layout_gravity="center_horizontal" android:id="@id/risbv_comments_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:src="@drawable/ic_tourdetails_navigation_comments" />
+            <TextView android:textSize="13.0sp" android:gravity="center_horizontal" android:id="@id/risbv_comments_text" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="3.0dip" android:text="@string/risbv_comments" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="1.0dip" android:paddingEnd="1.0dip" app:autoSizeMaxTextSize="13.0sp" app:autoSizeMinTextSize="7.0sp" app:autoSizeStepGranularity="1.0sp" app:autoSizeTextType="uniform" />
+        </LinearLayout>
+    </LinearLayout>
+    <View android:background="@drawable/route_info_shortcut_bar_shadow" android:layout_width="fill_parent" android:layout_height="20.0dip" android:layout_below="@id/risbv_tab_container" />
+    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:baselineAligned="false" android:layout_below="@id/risbv_tab_container">
+        <FrameLayout android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <ImageView android:layout_gravity="center_horizontal" android:id="@id/risbv_waypoints_nib" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_navigation_nib_down" app:tint="@color/tertiary" />
+        </FrameLayout>
+        <FrameLayout android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <ImageView android:layout_gravity="center_horizontal" android:id="@id/risbv_stats_nib" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_navigation_nib_down" app:tint="@color/tertiary" />
+        </FrameLayout>
+        <FrameLayout android:id="@id/risbv_weather_nib_container" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <ImageView android:layout_gravity="center_horizontal" android:id="@id/risbv_weather_nib" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_navigation_nib_down" app:tint="@color/tertiary" />
+        </FrameLayout>
+        <FrameLayout android:id="@id/risbv_comments_nib_container" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <ImageView android:layout_gravity="center_horizontal" android:id="@id/risbv_comments_nib" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_navigation_nib_down" app:tint="@color/tertiary" />
+        </FrameLayout>
+    </LinearLayout>
+</RelativeLayout>

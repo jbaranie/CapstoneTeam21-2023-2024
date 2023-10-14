@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View android:id="@id/uhia_layout_tips_divider_top_v" android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="@dimen/divider_height" />
+    <TextView android:textSize="18.0sp" android:textColor="@color/text_primary" android:gravity="bottom" android:id="@id/textview_header_tips" android:paddingLeft="@dimen/list_item_side_padding" android:paddingRight="@dimen/list_item_side_padding" android:layout_width="fill_parent" android:layout_height="48.0dip" android:layout_marginBottom="8.0dip" android:text="@string/highlight_info_section_title_tips" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_light" android:paddingStart="@dimen/list_item_side_padding" android:paddingEnd="@dimen/list_item_side_padding" />
+    <FrameLayout android:id="@id/progressbar_tips_loading" android:layout_width="fill_parent" android:layout_height="88.0dip">
+        <ProgressBar android:layout_gravity="center" android:layout_width="48.0dip" android:layout_height="48.0dip" android:indeterminate="true" />
+    </FrameLayout>
+    <LinearLayout android:orientation="vertical" android:id="@id/layout_tips" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    <LinearLayout android:orientation="vertical" android:id="@id/layout_add_comment" android:layout_width="fill_parent" android:layout_height="56.0dip">
+        <View android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="@dimen/divider_height" android:layout_marginLeft="72.0dip" android:layout_marginStart="72.0dip" />
+        <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:paddingLeft="@dimen/list_item_side_padding" android:paddingRight="@dimen/list_item_side_padding" android:addStatesFromChildren="true" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <ImageView android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_marginRight="32.0dip" android:src="@drawable/ic_tourdetails_navigation_comments" android:layout_marginEnd="32.0dip" app:tint="@color/secondary" />
+            <TextView android:textSize="16.0sp" android:textColor="@color/secondary" android:gravity="center_vertical" android:id="@id/editTextCompose" android:background="@drawable/bg_white_shape_with_grey_effect_states" android:layout_width="0.0dip" android:layout_height="56.0dip" android:text="@string/highlight_info_write_tip" android:layout_weight="1.0" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_regular" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

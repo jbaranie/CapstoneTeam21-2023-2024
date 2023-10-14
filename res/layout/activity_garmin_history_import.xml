@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ProgressBar android:layout_gravity="center_horizontal" android:id="@id/progress_bar" android:padding="16.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <de.komoot.android.view.AlertView android:id="@id/loading_error" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="16.0dip" app:message="@string/garmin_history_import_load_error_message" app:tone="warning" />
+    <de.komoot.android.view.AlertView android:id="@id/empty_message" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="16.0dip" app:message="@string/garmin_history_import_empty_message" app:tone="info" />
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/recycler_view" android:background="@color/white" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_weight="1.0" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="56.0dip" android:elevation="8.0dip">
+        <Button android:id="@id/selection_button" android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/BorderlessButton" />
+        <TextView android:textSize="16.0sp" android:textColor="@color/text_whisper" android:gravity="center_horizontal" android:id="@id/summary_text" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:fontFamily="?fontRegular" />
+        <Button android:id="@id/delete_button" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/btn_delete" style="@style/BorderlessButton" />
+    </LinearLayout>
+</LinearLayout>

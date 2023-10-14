@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.flexbox.FlexboxLayout android:id="@id/layout_generic_tour_stats" android:layout_width="fill_parent" android:layout_height="wrap_content" app:flexWrap="wrap"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <ImageView android:id="@id/imageview_stats_time" android:layout_width="16.0dip" android:layout_height="16.0dip" android:src="@drawable/ic_toursummary_collections_time" android:layout_marginEnd="4.0dip" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:id="@id/textview_stats_time" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginEnd="10.0dip" />
+    </LinearLayout>
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <ImageView android:id="@id/imageview_stats_distance" android:layout_width="16.0dip" android:layout_height="16.0dip" android:src="@drawable/ic_toursummary_collections_distance" android:layout_marginEnd="4.0dip" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:id="@id/textview_stats_distance" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginEnd="10.0dip" />
+    </LinearLayout>
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/rsl_avg_speed_stats_container_ll" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <ImageView android:id="@id/imageview_stats_average_speed" android:layout_width="16.0dip" android:layout_height="16.0dip" android:src="@drawable/ic_toursummary_collections_speed" android:layout_marginEnd="4.0dip" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:id="@id/textview_stats_average_speed" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginEnd="10.0dip" />
+    </LinearLayout>
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <ImageView android:id="@id/imageview_stats_uphill" android:layout_width="16.0dip" android:layout_height="16.0dip" android:src="@drawable/ic_toursummary_collections_up" android:layout_marginEnd="4.0dip" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:id="@id/textview_stats_uphill" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginEnd="10.0dip" />
+    </LinearLayout>
+</com.google.android.flexbox.FlexboxLayout>

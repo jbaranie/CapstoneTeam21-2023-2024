@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector android:constantSize="true"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="true">
+        <ripple android:color="@color/white">
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/negative" />
+                    <corners android:radius="2.0dip" />
+                    <padding android:left="8.0dip" android:right="8.0dip" />
+                </shape>
+            </item>
+        </ripple>
+    </item>
+    <item>
+        <ripple android:color="@color/background_green_grey_dark">
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/canvas" />
+                    <corners android:radius="2.0dip" />
+                    <stroke android:width="1.0dip" android:color="@color/background_green_grey_dark" />
+                    <padding android:left="8.0dip" android:right="8.0dip" />
+                </shape>
+            </item>
+        </ripple>
+    </item>
+</selector>

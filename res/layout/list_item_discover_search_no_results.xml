@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center" android:orientation="vertical" android:padding="16.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:background="@drawable/bg_circle_muted" android:layout_width="48.0dip" android:layout_height="48.0dip" android:src="@drawable/ic_search" android:scaleType="center" />
+    <TextView android:textSize="24.0sp" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24.0dip" android:text="@string/discover_search_no_results_title" android:fontFamily="?fontBold" />
+    <TextView android:textSize="18.0sp" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6.0dip" android:text="@string/discover_search_no_results_message" android:fontFamily="?fontRegular" />
+</LinearLayout>

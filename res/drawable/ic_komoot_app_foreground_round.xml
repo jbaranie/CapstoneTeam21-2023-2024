@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="108.0dip" android:width="108.0dip" android:viewportWidth="48.0" android:viewportHeight="48.0"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
+    <group android:scaleX="0.67833334" android:scaleY="0.67833334" android:translateX="7.72" android:translateY="7.72">
+        <path android:fillColor="#ffffffff" android:pathData="M47.329,29.612C50.428,16.728 42.496,3.771 29.612,0.671C16.728,-2.428 3.771,5.504 0.671,18.388C-2.428,31.272 5.504,44.229 18.388,47.329C31.272,50.428 44.229,42.496 47.329,29.612Z" />
+        <path android:fillColor="@drawable/$ic_komoot_app_foreground_round__0" android:pathData="M3.46,23.997C3.46,12.674 12.676,3.457 23.999,3.457C35.329,3.457 44.539,12.674 44.539,23.997C44.539,28.555 43.076,32.855 40.313,36.465L30.013,26.164C30.27,25.46 30.399,24.729 30.399,23.99C30.399,20.462 27.528,17.591 23.999,17.591C20.471,17.591 17.6,20.462 17.6,23.99C17.6,24.729 17.728,25.46 17.986,26.164L7.685,36.465C4.922,32.862 3.46,28.555 3.46,23.997Z" />
+        <path android:fillColor="@drawable/$ic_komoot_app_foreground_round__1" android:pathData="M20.234,28.846L23.999,22.975L27.765,28.839L37.97,39.045C34.158,42.587 29.207,44.537 23.999,44.537C18.792,44.537 13.841,42.587 10.028,39.045L20.234,28.846Z" />
+    </group>
+</vector>

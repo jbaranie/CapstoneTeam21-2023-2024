@@ -1,0 +1,242 @@
+.class final Lde/komoot/android/net/NetworkMasterFactory$init$1;
+.super Lkotlin/coroutines/jvm/internal/SuspendLambda;
+.source "SourceFile"
+
+# interfaces
+.implements Lkotlin/jvm/functions/Function2;
+
+
+# annotations
+.annotation system Ldalvik/annotation/EnclosingMethod;
+    value = Lde/komoot/android/net/NetworkMasterFactory;->a(Landroid/content/Context;)Lde/komoot/android/net/NetworkMaster;
+.end annotation
+
+.annotation system Ldalvik/annotation/InnerClass;
+    accessFlags = 0x18
+    name = null
+.end annotation
+
+.annotation system Ldalvik/annotation/Signature;
+    value = {
+        "Lkotlin/coroutines/jvm/internal/SuspendLambda;",
+        "Lkotlin/jvm/functions/Function2<",
+        "Lkotlinx/coroutines/CoroutineScope;",
+        "Lkotlin/coroutines/Continuation<",
+        "-",
+        "Lkotlin/Unit;",
+        ">;",
+        "Ljava/lang/Object;",
+        ">;"
+    }
+.end annotation
+
+.annotation runtime Lkotlin/Metadata;
+    d1 = {
+        "\u0000\n\n\u0002\u0018\u0002\n\u0002\u0010\u0002\n\u0000\u0010\u0002\u001a\u00020\u0001*\u00020\u0000H\u008a@"
+    }
+    d2 = {
+        "Lkotlinx/coroutines/CoroutineScope;",
+        "",
+        "<anonymous>"
+    }
+    k = 0x3
+    mv = {
+        0x1,
+        0x9,
+        0x0
+    }
+.end annotation
+
+.annotation runtime Lkotlin/coroutines/jvm/internal/DebugMetadata;
+    c = "de.komoot.android.net.NetworkMasterFactory$init$1"
+    f = "NetworkMasterFactory.kt"
+    l = {}
+    m = "invokeSuspend"
+.end annotation
+
+
+# instance fields
+.field a:I
+
+.field final synthetic b:Landroid/content/Context;
+
+
+# direct methods
+.method constructor <init>(Landroid/content/Context;Lkotlin/coroutines/Continuation;)V
+    .locals 0
+
+    iput-object p1, p0, Lde/komoot/android/net/NetworkMasterFactory$init$1;->b:Landroid/content/Context;
+
+    const/4 p1, 0x2
+
+    invoke-direct {p0, p1, p2}, Lkotlin/coroutines/jvm/internal/SuspendLambda;-><init>(ILkotlin/coroutines/Continuation;)V
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public final create(Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Lkotlin/coroutines/Continuation;
+    .locals 1
+
+    new-instance p1, Lde/komoot/android/net/NetworkMasterFactory$init$1;
+
+    iget-object v0, p0, Lde/komoot/android/net/NetworkMasterFactory$init$1;->b:Landroid/content/Context;
+
+    invoke-direct {p1, v0, p2}, Lde/komoot/android/net/NetworkMasterFactory$init$1;-><init>(Landroid/content/Context;Lkotlin/coroutines/Continuation;)V
+
+    return-object p1
+.end method
+
+.method public bridge synthetic invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    .locals 0
+
+    .line 1
+    check-cast p1, Lkotlinx/coroutines/CoroutineScope;
+
+    check-cast p2, Lkotlin/coroutines/Continuation;
+
+    invoke-virtual {p0, p1, p2}, Lde/komoot/android/net/NetworkMasterFactory$init$1;->invoke(Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+
+    move-result-object p1
+
+    return-object p1
+.end method
+
+.method public final invoke(Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+    .locals 0
+
+    .line 2
+    invoke-virtual {p0, p1, p2}, Lde/komoot/android/net/NetworkMasterFactory$init$1;->create(Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Lkotlin/coroutines/Continuation;
+
+    move-result-object p1
+
+    check-cast p1, Lde/komoot/android/net/NetworkMasterFactory$init$1;
+
+    sget-object p2, Lkotlin/Unit;->INSTANCE:Lkotlin/Unit;
+
+    invoke-virtual {p1, p2}, Lde/komoot/android/net/NetworkMasterFactory$init$1;->invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object p1
+
+    return-object p1
+.end method
+
+.method public final invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
+    .locals 4
+
+    invoke-static {}, Lkotlin/coroutines/intrinsics/IntrinsicsKt;->c()Ljava/lang/Object;
+
+    iget v0, p0, Lde/komoot/android/net/NetworkMasterFactory$init$1;->a:I
+
+    if-nez v0, :cond_2
+
+    invoke-static {p1}, Lkotlin/ResultKt;->b(Ljava/lang/Object;)V
+
+    new-instance p1, Lde/komoot/android/app/AppPreferenceProviderImpl;
+
+    iget-object v0, p0, Lde/komoot/android/net/NetworkMasterFactory$init$1;->b:Landroid/content/Context;
+
+    invoke-direct {p1, v0}, Lde/komoot/android/app/AppPreferenceProviderImpl;-><init>(Landroid/content/Context;)V
+
+    sget-object v0, Lde/komoot/android/app/AppPreference;->BackendSystemApiMain:Lde/komoot/android/app/AppPreference;
+
+    new-instance v1, Lde/komoot/android/services/api/BackendSystemFactory;
+
+    invoke-direct {v1}, Lde/komoot/android/services/api/BackendSystemFactory;-><init>()V
+
+    invoke-virtual {p1, v0, v1}, Lde/komoot/android/app/AppPreferenceProviderImpl;->b(Lde/komoot/android/app/AppPreference;Lde/komoot/android/util/EnumFactory;)Ljava/lang/Enum;
+
+    move-result-object v0
+
+    check-cast v0, Lde/komoot/android/services/api/BackendSystem;
+
+    sget-object v1, Lde/komoot/android/app/AppPreference;->BackendSystemApiRouting:Lde/komoot/android/app/AppPreference;
+
+    new-instance v2, Lde/komoot/android/services/api/BackendSystemFactory;
+
+    invoke-direct {v2}, Lde/komoot/android/services/api/BackendSystemFactory;-><init>()V
+
+    invoke-virtual {p1, v1, v2}, Lde/komoot/android/app/AppPreferenceProviderImpl;->b(Lde/komoot/android/app/AppPreference;Lde/komoot/android/util/EnumFactory;)Ljava/lang/Enum;
+
+    move-result-object p1
+
+    check-cast p1, Lde/komoot/android/services/api/BackendSystem;
+
+    const-string v1, "KomootSystem"
+
+    if-eqz v0, :cond_0
+
+    sget-object v2, Lde/komoot/android/services/api/AbstractKmtMainApiService;->Companion:Lde/komoot/android/services/api/AbstractKmtMainApiService$Companion;
+
+    invoke-virtual {v2, v0}, Lde/komoot/android/services/api/AbstractKmtMainApiService$Companion;->f(Lde/komoot/android/services/api/BackendSystem;)V
+
+    sget-object v2, Lde/komoot/android/services/api/BackendSystem;->Production:Lde/komoot/android/services/api/BackendSystem;
+
+    if-eq v0, v2, :cond_0
+
+    invoke-virtual {v0}, Ljava/lang/Enum;->name()Ljava/lang/String;
+
+    move-result-object v0
+
+    new-instance v2, Ljava/lang/StringBuilder;
+
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v3, "API Main :: "
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-static {v1, v0}, Lde/komoot/android/log/LogWrapper;->z(Ljava/lang/String;Ljava/lang/String;)V
+
+    :cond_0
+    if-eqz p1, :cond_1
+
+    sget-object v0, Lde/komoot/android/services/api/RoutingV2ApiService;->Companion:Lde/komoot/android/services/api/RoutingV2ApiService$Companion;
+
+    invoke-virtual {v0, p1}, Lde/komoot/android/services/api/RoutingV2ApiService$Companion;->b(Lde/komoot/android/services/api/BackendSystem;)V
+
+    sget-object v0, Lde/komoot/android/services/api/BackendSystem;->Production:Lde/komoot/android/services/api/BackendSystem;
+
+    if-eq p1, v0, :cond_1
+
+    invoke-virtual {p1}, Ljava/lang/Enum;->name()Ljava/lang/String;
+
+    move-result-object p1
+
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v2, "API Routing :: "
+
+    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object p1
+
+    invoke-static {v1, p1}, Lde/komoot/android/log/LogWrapper;->z(Ljava/lang/String;Ljava/lang/String;)V
+
+    :cond_1
+    sget-object p1, Lkotlin/Unit;->INSTANCE:Lkotlin/Unit;
+
+    return-object p1
+
+    :cond_2
+    new-instance p1, Ljava/lang/IllegalStateException;
+
+    const-string v0, "call to \'resume\' before \'invoke\' with coroutine"
+
+    invoke-direct {p1, v0}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
+
+    throw p1
+.end method

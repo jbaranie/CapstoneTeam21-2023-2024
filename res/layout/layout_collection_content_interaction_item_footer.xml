@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <include android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/default_margin_and_padding" android:layout_marginStart="@dimen/default_margin_and_padding" android:elevation="3.0dip" layout="@layout/divider_line_horizontal_1dp" />
+    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="48.0dip">
+        <LinearLayout android:gravity="start" android:orientation="horizontal" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="2.0" android:layout_marginStart="8.0dip">
+            <TextView android:textSize="16.0sp" android:textColor="@color/main_grey" android:gravity="center_vertical" android:id="@id/textview_like" android:background="@drawable/btn_borderless_on_light" android:layout_width="wrap_content" android:layout_height="fill_parent" android:drawablePadding="8.0dip" android:drawableStart="@drawable/ic_tour_like_selector" android:fontFamily="@font/source_sans_pro_bold" android:paddingStart="8.0dip" android:paddingEnd="8.0dip" />
+            <LinearLayout android:gravity="start" android:orientation="horizontal" android:id="@id/container_interaction_button" android:background="@drawable/btn_borderless_on_light" android:focusable="true" android:clickable="true" android:layout_width="wrap_content" android:layout_height="fill_parent">
+                <ImageView android:layout_gravity="center_vertical" android:id="@id/imageview_save" android:visibility="gone" android:layout_width="24.0dip" android:layout_height="fill_parent" android:src="@drawable/ic_tour_save_selector" android:layout_marginStart="8.0dip" />
+                <TextView android:textSize="16.0sp" android:textColor="@color/main_grey" android:gravity="center_vertical" android:id="@id/textview_interaction_description" android:paddingLeft="8.0dip" android:paddingRight="8.0dip" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/collections_route_save_btn" android:fontFamily="@font/source_sans_pro_bold" android:paddingStart="8.0dip" android:paddingEnd="8.0dip" />
+            </LinearLayout>
+            <TextView android:textSize="16.0sp" android:textColor="@color/secondary" android:gravity="end|center" android:id="@id/button_details" android:background="@drawable/btn_borderless_on_light" android:focusable="true" android:clickable="true" android:layout_width="0.0dip" android:layout_height="fill_parent" android:text="@string/user_activity_feed_details" android:maxLines="1" android:drawablePadding="8.0dip" android:layout_weight="1.0" android:textAllCaps="true" android:drawableEnd="@drawable/ic_chevron_right" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="8.0dip" android:layout_marginEnd="8.0dip" app:drawableTint="@color/secondary" />
+        </LinearLayout>
+    </LinearLayout>
+</merge>

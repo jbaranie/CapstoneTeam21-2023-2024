@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar android:theme="@style/KmtSupportTheme.NoActionBar.LightControls" android:id="@id/lsea_actionbar_tb" android:background="@color/info_header_blue" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView android:text="@string/lsea_caption" android:fontFamily="@font/source_sans_pro_bold" style="@style/KmtWidget.SignUpLogin.TextView.ActionbarCaption.NoTitle" />
+    </androidx.appcompat.widget.Toolbar>
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="10.0dip" android:src="@drawable/ic_email" android:layout_alignBottom="@id/lsea_input_field_container_fll" android:layout_centerVertical="true" android:layout_marginStart="@dimen/default_margin_and_padding" app:tint="@color/main_grey" />
+        <de.komoot.android.view.composition.FloatLabelLayout android:id="@id/lsea_input_field_container_fll" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/default_margin_and_padding" android:layout_marginStart="72.0dip" app:floatLabelHint="@string/lsea_email_field_hint" app:floatLabelTextAppearance="@style/TextAppearance.Komoot.FloatLabel">
+            <EditText android:textSize="16.0sp" android:textColor="@color/black" android:textColorHint="@color/text_secondary" android:id="@id/lsea_input_field_tet" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="@string/lsea_email_field_hint" android:inputType="textEmailAddress" android:imeOptions="actionNext" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+        </de.komoot.android.view.composition.FloatLabelLayout>
+        <TextView android:textSize="12.0sp" android:textColor="@color/error" android:id="@id/lsea_feedback_message_ttv" android:background="@drawable/bg_pressable_text_states" android:paddingTop="8.0dip" android:paddingBottom="8.0dip" android:visibility="invisible" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/lsea_invalid_email" android:layout_below="@id/lsea_input_field_container_fll" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="@dimen/default_margin_and_padding" android:paddingEnd="@dimen/default_margin_and_padding" android:layout_marginStart="60.0dip" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+    </RelativeLayout>
+    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" android:layout_marginStart="76.0dip">
+        <Button android:enabled="false" android:id="@id/lsea_next_button_tb" android:background="@drawable/btn_blue_states" android:text="@string/btn_next" android:fontFamily="@font/source_sans_pro_regular" style="@style/KmtWidget.SignUpLogin.Button.CTA.Colored" />
+        <ProgressBar android:id="@id/lsea_email_lookup_progress_pb" android:visibility="gone" android:layout_width="36.0dip" android:layout_height="36.0dip" android:indeterminate="true" android:layout_marginStart="@dimen/default_margin_and_padding" android:indeterminateTint="@color/info_header_blue" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,46 @@
+.class public final synthetic Lde/komoot/android/view/recylcerview/l;
+.super Ljava/lang/Object;
+.source "SourceFile"
+
+# interfaces
+.implements Ljava/lang/Runnable;
+
+
+# instance fields
+.field public final synthetic a:Lde/komoot/android/view/recylcerview/PagerListenerStub;
+
+.field public final synthetic b:Lde/komoot/android/view/recylcerview/RecyclerViewPagerV2;
+
+.field public final synthetic c:Lde/komoot/android/FailedException;
+
+
+# direct methods
+.method public synthetic constructor <init>(Lde/komoot/android/view/recylcerview/PagerListenerStub;Lde/komoot/android/view/recylcerview/RecyclerViewPagerV2;Lde/komoot/android/FailedException;)V
+    .locals 0
+
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    iput-object p1, p0, Lde/komoot/android/view/recylcerview/l;->a:Lde/komoot/android/view/recylcerview/PagerListenerStub;
+
+    iput-object p2, p0, Lde/komoot/android/view/recylcerview/l;->b:Lde/komoot/android/view/recylcerview/RecyclerViewPagerV2;
+
+    iput-object p3, p0, Lde/komoot/android/view/recylcerview/l;->c:Lde/komoot/android/FailedException;
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public final run()V
+    .locals 3
+
+    iget-object v0, p0, Lde/komoot/android/view/recylcerview/l;->a:Lde/komoot/android/view/recylcerview/PagerListenerStub;
+
+    iget-object v1, p0, Lde/komoot/android/view/recylcerview/l;->b:Lde/komoot/android/view/recylcerview/RecyclerViewPagerV2;
+
+    iget-object v2, p0, Lde/komoot/android/view/recylcerview/l;->c:Lde/komoot/android/FailedException;
+
+    invoke-static {v0, v1, v2}, Lde/komoot/android/view/recylcerview/PagerListenerStub;->f(Lde/komoot/android/view/recylcerview/PagerListenerStub;Lde/komoot/android/view/recylcerview/RecyclerViewPagerV2;Lde/komoot/android/FailedException;)V
+
+    return-void
+.end method

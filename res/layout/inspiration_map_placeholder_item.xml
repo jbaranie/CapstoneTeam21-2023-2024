@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="fill_parent" android:layout_height="@dimen/map_placeholder_height_with_padding"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <View android:background="@color/white" android:layout_width="fill_parent" android:layout_height="@dimen/map_placeholder_top_padding_height" />
+    <View android:id="@id/touch_delegate" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="@dimen/map_placeholder_top_padding_height" />
+</FrameLayout>

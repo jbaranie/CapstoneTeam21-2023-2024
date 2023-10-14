@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center" android:orientation="vertical" android:background="@color/white" android:paddingTop="20.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingStart="@dimen/default_margin_and_padding" android:paddingEnd="@dimen/default_margin_and_padding"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView android:id="@id/avatar" android:layout_width="44.0dip" android:layout_height="44.0dip" />
+    <com.google.android.flexbox.FlexboxLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/default_margin_and_padding" android:layout_marginTop="4.0dip" android:layout_marginRight="@dimen/default_margin_and_padding" android:layout_marginBottom="16.0dip" app:flexDirection="row" app:flexWrap="wrap" app:justifyContent="center">
+        <TextView android:textSize="16.0sp" android:textColor="@color/text_underline" android:gravity="center" android:id="@id/inspiration_by_caption" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="@font/source_sans_pro_bold" />
+        <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <de.komoot.android.widget.UsernameTextView android:textSize="16.0sp" android:textColor="@color/secondary" android:gravity="center" android:id="@id/inspiration_by_username" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="16.0sp" android:textColor="@color/text_underline" android:id="@id/inspiration_by_separator" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" • " android:fontFamily="@font/source_sans_pro_bold" />
+        </LinearLayout>
+        <TextView android:textSize="16.0sp" android:textColor="@color/secondary" android:id="@id/inspiration_by_follow" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/user_info_action_follow_user" android:fontFamily="@font/source_sans_pro_bold" />
+    </com.google.android.flexbox.FlexboxLayout>
+</LinearLayout>

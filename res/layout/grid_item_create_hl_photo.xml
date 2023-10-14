@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.komoot.android.view.FixedAspectRatioFrameLayout android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_marginBottom="1.0dip" android:layout_columnSpan="1" android:layout_marginEnd="1.0dip" android:layout_columnWeight="1.0" app:aspectRatioHeight="1" app:aspectRatioWidth="1"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView android:id="@id/hl_grid_photo" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="centerCrop" />
+    <ImageView android:layout_gravity="end|center|top" android:id="@id/hl_grid_photo_check" android:padding="8.0dip" android:layout_width="52.0dip" android:layout_height="52.0dip" />
+</de.komoot.android.view.FixedAspectRatioFrameLayout>

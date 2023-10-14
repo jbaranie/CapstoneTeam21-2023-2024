@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:baselineAligned="false">
+        <RelativeLayout android:id="@id/layout_tab_tours" android:layout_width="0.0dip" android:layout_height="48.0dip" android:layout_weight="1.0">
+            <TextView android:textSize="16.0sp" android:layout_gravity="center" android:id="@id/textview_tab_tours" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3.0dip" android:text="@string/aif_tab_routes_title" android:layout_centerHorizontal="true" android:layout_centerVertical="true" android:fontFamily="@font/source_sans_pro_bold" />
+            <View android:id="@id/divider_bottom_1" android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="1.0dip" android:layout_alignParentBottom="true" />
+            <View android:id="@id/divider_end1" android:background="@color/divider" android:layout_width="1.0dip" android:layout_height="fill_parent" android:layout_marginTop="12.0dip" android:layout_marginBottom="12.0dip" android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+        <RelativeLayout android:id="@id/layout_tab_higlights" android:layout_width="0.0dip" android:layout_height="48.0dip" android:layout_weight="1.0">
+            <TextView android:textSize="16.0sp" android:textColor="@color/white" android:layout_gravity="center" android:id="@id/textview_tab_highlights" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3.0dip" android:text="@string/aif_tab_places_title" android:layout_centerHorizontal="true" android:layout_centerVertical="true" android:fontFamily="@font/source_sans_pro_bold" />
+            <View android:id="@id/divider_bottom_2" android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="1.0dip" android:layout_alignParentBottom="true" />
+            <View android:id="@id/divider_end2" android:background="@color/divider" android:layout_width="1.0dip" android:layout_height="fill_parent" android:layout_marginTop="12.0dip" android:layout_marginBottom="12.0dip" android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+        <RelativeLayout android:id="@id/layout_tab_collections" android:layout_width="0.0dip" android:layout_height="48.0dip" android:layout_weight="1.0">
+            <TextView android:textSize="16.0sp" android:textColor="@color/white" android:layout_gravity="center" android:id="@id/textview_tab_collections" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3.0dip" android:text="@string/aif_tab_collections_title" android:layout_centerHorizontal="true" android:layout_centerVertical="true" android:fontFamily="@font/source_sans_pro_bold" />
+            <View android:id="@id/divider_bottom_3" android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="1.0dip" android:layout_alignParentBottom="true" />
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:id="@id/layout_nib_container" android:layout_width="fill_parent" android:layout_height="wrap_content" android:baselineAligned="false">
+        <FrameLayout android:id="@id/layout_nib_tours" android:layout_width="0.0dip" android:layout_height="8.0dip" android:layout_weight="1.0">
+            <ImageView android:layout_gravity="center_horizontal" android:id="@id/risbv_waypoints_nib" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_navigation_nib_down" app:tint="@color/tertiary" />
+        </FrameLayout>
+        <FrameLayout android:id="@id/layout_nib_highlights" android:layout_width="0.0dip" android:layout_height="8.0dip" android:layout_weight="1.0">
+            <ImageView android:layout_gravity="center_horizontal" android:id="@id/risbv_stats_nib" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_navigation_nib_down" app:tint="@color/tertiary" />
+        </FrameLayout>
+        <FrameLayout android:id="@id/layout_nib_collections" android:layout_width="0.0dip" android:layout_height="8.0dip" android:layout_weight="1.0">
+            <ImageView android:layout_gravity="center_horizontal" android:id="@id/risbv_weather_nib" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_navigation_nib_down" app:tint="@color/tertiary" />
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>

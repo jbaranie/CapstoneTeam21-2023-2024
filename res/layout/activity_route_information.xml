@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:gravity="center_horizontal" android:orientation="vertical" android:id="@id/layout_route_information" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:id="@id/layout_header" android:layout_width="fill_parent" android:layout_height="@dimen/tour_details_map_height">
+        <ViewStub android:id="@id/map_stub" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    </RelativeLayout>
+    <de.komoot.android.widget.NotifyingScrollView android:scrollbarStyle="outsideOverlay" android:id="@id/scrollview" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <View android:id="@id/view_photo_spacer" android:layout_width="fill_parent" android:layout_height="@dimen/tour_details_map_height" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/crouton_offline_text_color" android:gravity="center" android:id="@id/ria_offline_crouton" android:background="@color/crouton_offline_bg" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/tour_information_notice_inet_needed" android:fontFamily="@font/source_sans_pro_regular" />
+            <LinearLayout android:orientation="vertical" android:id="@id/layout_generic_tour_stats" android:background="@color/white" android:padding="16.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                <TextView android:textSize="@dimen/text_size_route_name" android:textColor="@color/text_primary" android:id="@id/textview_tour_name" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="3" android:fontFamily="@font/source_sans_pro_bold" />
+                <TextView android:textSize="14.0sp" android:textColor="@color/text_secondary" android:id="@id/textview_planned_date" android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="30.0dip" android:maxLines="1" android:fontFamily="@font/source_sans_pro_regular" />
+                <TextView android:textSize="16.0sp" android:textColor="@color/secondary" android:gravity="center_vertical" android:id="@id/textview_schedule_date" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="8.0dip" android:minHeight="30.0dip" android:text="@string/route_info_schedule_date" android:maxLines="1" android:fontFamily="@font/source_sans_pro_bold" />
+                <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip">
+                    <androidx.appcompat.widget.AppCompatImageView android:id="@id/imageview_tour_sport" android:layout_width="24.0dip" android:layout_height="24.0dip" android:src="@drawable/ic_sport_hike_24" android:scaleType="centerInside" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" app:tint="@color/black" />
+                    <TextView android:textSize="13.0sp" android:textColor="@color/white" android:gravity="center_vertical" android:id="@id/textview_difficulty_badge" android:background="@drawable/difficulty_bar_moderate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:layout_marginBottom="4.0dip" android:text="@string/route_difficulty_intermediate" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="16.0dip" android:paddingHorizontal="6.0dip" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toEndOf="@id/imageview_tour_sport" app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView android:textSize="13.0sp" android:textColor="@color/text_underline" android:id="@id/textview_difficulty_description" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:maxLines="4" android:fontFamily="@font/source_sans_pro_regular" />
+            </LinearLayout>
+            <ViewStub android:id="@id/view_stub_route_extra_tips" android:inflatedId="@id/layout_extra_tips" android:layout_width="fill_parent" android:layout_height="wrap_content" layout="@layout/view_route_extra_tips" />
+            <include layout="@layout/divider_item" />
+            <ViewStub android:id="@id/view_stub_route_info_stats" android:inflatedId="@id/view_route_stats" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <include layout="@layout/divider_item" />
+            <ViewStub android:id="@id/view_stub_route_info_participants" android:inflatedId="@id/view_route_participants" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <ViewStub android:id="@id/view_stub_route_offline" android:inflatedId="@id/view_route_offline" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <ViewStub android:id="@id/view_stub_route_visibility" android:inflatedId="@id/view_route_visibility" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <ViewStub android:id="@id/view_stub_route_info_shortcut_bar" android:inflatedId="@id/view_route_info_shortcut_bar" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <LinearLayout android:orientation="vertical" android:id="@id/layout_timeline" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                <TextView android:textAppearance="@style/TextAppearance.Komoot.Headline2" android:gravity="start|bottom|center" android:paddingBottom="8.0dip" android:layout_width="fill_parent" android:layout_height="56.0dip" android:text="@string/route_information_waypoints" android:paddingStart="@dimen/std_border_left" android:paddingEnd="@dimen/std_border_right" />
+                <LinearLayout android:orientation="vertical" android:id="@id/layout_timeline_holder" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="10.0dip" />
+            <TextView android:textAppearance="@style/TextAppearance.Komoot.Headline2" android:gravity="start|bottom|center" android:id="@id/view_stats_caption" android:background="@color/white" android:paddingBottom="8.0dip" android:layout_width="wrap_content" android:layout_height="56.0dip" android:text="@string/route_information_section_stats" android:paddingStart="@dimen/std_border_left" android:paddingEnd="@dimen/std_border_right" />
+            <TextView android:textAppearance="@style/TextAppearance.Komoot.Headline4" android:gravity="start|bottom|center" android:id="@id/view_difficulty_caption" android:background="@color/white" android:paddingBottom="6.0dip" android:layout_width="wrap_content" android:layout_height="45.0dip" android:text="@string/route_information_section_difficulty" android:paddingStart="@dimen/std_border_left" android:paddingEnd="@dimen/std_border_right" />
+            <ViewStub android:id="@id/view_stub_route_info_difficulty_level" android:inflatedId="@id/view_legend_difficulty_level" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <View android:background="@color/white" android:layout_width="fill_parent" android:layout_height="4.0dip" />
+            <ViewStub android:id="@id/view_stub_route_info_fitness_level" android:inflatedId="@id/view_legend_fitness_level" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <View android:background="@color/white" android:layout_width="fill_parent" android:layout_height="8.0dip" />
+            <include layout="@layout/divider_item" />
+            <ViewStub android:id="@id/view_stub_route_elevation_profile" android:inflatedId="@id/view_route_evelation_profile" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <include layout="@layout/divider_item" />
+            <ViewStub android:id="@id/view_stub_route_info_ways" android:inflatedId="@id/view_legend_ways" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <include layout="@layout/divider_item" />
+            <ViewStub android:id="@id/view_stub_route_info_surfaces" android:inflatedId="@id/view_legend_surfaces" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <ViewStub android:id="@id/view_stub_route_weather_summary" android:inflatedId="@id/view_route_weather_summary" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <View android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="10.0dip" />
+            <ViewStub android:id="@id/view_stub_route_social" android:inflatedId="@id/view_route_social" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <de.komoot.android.view.AlertView android:id="@id/smart_tour_source_info" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="16.0dip" android:layout_marginTop="24.0dip" android:layout_marginRight="16.0dip" app:actionText="@string/generic_learn_more" app:message="@string/smart_tours_source_explanation" app:tone="info" />
+            <TextView android:textSize="16.0sp" android:id="@id/editorial_tour_source_info" android:background="@drawable/bg_muted_rounded_8dp" android:padding="16.0dip" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="16.0dip" android:layout_marginTop="24.0dip" android:layout_marginRight="16.0dip" android:text="@string/editorial_tours_source_explanation" android:fontFamily="?fontRegular" />
+            <View android:layout_width="fill_parent" android:layout_height="84.0dip" />
+        </LinearLayout>
+    </de.komoot.android.widget.NotifyingScrollView>
+    <View android:id="@id/view_statusbar_underlay" android:layout_width="fill_parent" android:layout_height="2.0dip" />
+    <de.komoot.android.ui.tour.RouteInfoShortcutBarView android:id="@id/ria_floating_shortcut_bar" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    <androidx.fragment.app.FragmentContainerView android:name="de.komoot.android.ui.tour.ActionButtonBarFragment" android:id="@id/fragment_container_view" android:tag="action_button_bar" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    <androidx.compose.ui.platform.ComposeView android:id="@id/full_screen_loading_indicator" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+</FrameLayout>

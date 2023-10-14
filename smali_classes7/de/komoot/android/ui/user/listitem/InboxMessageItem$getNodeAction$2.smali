@@ -1,0 +1,153 @@
+.class final Lde/komoot/android/ui/user/listitem/InboxMessageItem$getNodeAction$2;
+.super Lkotlin/jvm/internal/Lambda;
+.source "SourceFile"
+
+# interfaces
+.implements Lkotlin/jvm/functions/Function0;
+
+
+# annotations
+.annotation system Ldalvik/annotation/EnclosingMethod;
+    value = Lde/komoot/android/ui/user/listitem/InboxMessageItem;->u(Lde/komoot/android/ui/user/MessageInboxActivity$MIADropIn;Lde/komoot/android/services/api/model/MessageNode;)Lkotlin/jvm/functions/Function0;
+.end annotation
+
+.annotation system Ldalvik/annotation/InnerClass;
+    accessFlags = 0x18
+    name = null
+.end annotation
+
+.annotation system Ldalvik/annotation/Signature;
+    value = {
+        "Lkotlin/jvm/internal/Lambda;",
+        "Lkotlin/jvm/functions/Function0<",
+        "Lkotlin/Unit;",
+        ">;"
+    }
+.end annotation
+
+.annotation runtime Lkotlin/Metadata;
+    d1 = {
+        "\u0000\u0008\n\u0000\n\u0002\u0010\u0002\n\u0000\u0010\u0000\u001a\u00020\u0001H\n\u00a2\u0006\u0002\u0008\u0002"
+    }
+    d2 = {
+        "<no name provided>",
+        "",
+        "invoke"
+    }
+    k = 0x3
+    mv = {
+        0x1,
+        0x9,
+        0x0
+    }
+    xi = 0x30
+.end annotation
+
+
+# instance fields
+.field final synthetic b:Lde/komoot/android/ui/user/MessageInboxActivity$MIADropIn;
+
+.field final synthetic c:Lde/komoot/android/services/api/model/MessageNode;
+
+
+# direct methods
+.method constructor <init>(Lde/komoot/android/ui/user/MessageInboxActivity$MIADropIn;Lde/komoot/android/services/api/model/MessageNode;)V
+    .locals 0
+
+    iput-object p1, p0, Lde/komoot/android/ui/user/listitem/InboxMessageItem$getNodeAction$2;->b:Lde/komoot/android/ui/user/MessageInboxActivity$MIADropIn;
+
+    iput-object p2, p0, Lde/komoot/android/ui/user/listitem/InboxMessageItem$getNodeAction$2;->c:Lde/komoot/android/services/api/model/MessageNode;
+
+    const/4 p1, 0x0
+
+    invoke-direct {p0, p1}, Lkotlin/jvm/internal/Lambda;-><init>(I)V
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public bridge synthetic invoke()Ljava/lang/Object;
+    .locals 1
+
+    .line 1
+    invoke-virtual {p0}, Lde/komoot/android/ui/user/listitem/InboxMessageItem$getNodeAction$2;->invoke()V
+
+    sget-object v0, Lkotlin/Unit;->INSTANCE:Lkotlin/Unit;
+
+    return-object v0
+.end method
+
+.method public final invoke()V
+    .locals 18
+
+    move-object/from16 v0, p0
+
+    .line 2
+    iget-object v1, v0, Lde/komoot/android/ui/user/listitem/InboxMessageItem$getNodeAction$2;->b:Lde/komoot/android/ui/user/MessageInboxActivity$MIADropIn;
+
+    invoke-virtual {v1}, Lde/komoot/android/widget/DropIn;->f()Landroid/content/Context;
+
+    move-result-object v1
+
+    .line 3
+    sget-object v2, Lde/komoot/android/ui/tour/RouteInformationActivity;->Companion:Lde/komoot/android/ui/tour/RouteInformationActivity$Companion;
+
+    .line 4
+    iget-object v3, v0, Lde/komoot/android/ui/user/listitem/InboxMessageItem$getNodeAction$2;->b:Lde/komoot/android/ui/user/MessageInboxActivity$MIADropIn;
+
+    invoke-virtual {v3}, Lde/komoot/android/widget/DropIn;->f()Landroid/content/Context;
+
+    move-result-object v3
+
+    .line 5
+    new-instance v4, Lde/komoot/android/services/api/nativemodel/TourID;
+
+    iget-object v5, v0, Lde/komoot/android/ui/user/listitem/InboxMessageItem$getNodeAction$2;->c:Lde/komoot/android/services/api/model/MessageNode;
+
+    check-cast v5, Lde/komoot/android/services/api/model/MessageNode$TourBasedNode;
+
+    invoke-virtual {v5}, Lde/komoot/android/services/api/model/MessageNode$TourBasedNode;->i()J
+
+    move-result-wide v5
+
+    invoke-direct {v4, v5, v6}, Lde/komoot/android/services/api/nativemodel/TourID;-><init>(J)V
+
+    const/4 v5, 0x0
+
+    .line 6
+    sget-object v6, Lde/komoot/android/services/api/nativemodel/RouteOrigin;->ORIGIN_SOCIAL_NOTIFICATION:Lde/komoot/android/services/api/nativemodel/RouteOrigin;
+
+    const-string v7, "source_internal"
+
+    .line 7
+    sget-object v8, Lde/komoot/android/ui/tour/RouteCreationSource;->PLANNED_TOUR:Lde/komoot/android/ui/tour/RouteCreationSource;
+
+    const/4 v9, 0x0
+
+    const/4 v10, 0x0
+
+    const/4 v11, 0x0
+
+    const/4 v12, 0x0
+
+    const/4 v13, 0x0
+
+    const/4 v14, 0x0
+
+    const/4 v15, 0x0
+
+    const/16 v16, 0x1fc0
+
+    const/16 v17, 0x0
+
+    .line 8
+    invoke-static/range {v2 .. v17}, Lde/komoot/android/ui/tour/RouteInformationActivity$Companion;->e(Lde/komoot/android/ui/tour/RouteInformationActivity$Companion;Landroid/content/Context;Lde/komoot/android/services/api/nativemodel/TourID;Ljava/lang/String;Lde/komoot/android/services/api/nativemodel/RouteOrigin;Ljava/lang/String;Lde/komoot/android/ui/tour/RouteCreationSource;Lde/komoot/android/ui/tour/RouteInformationActivity$Companion$Action;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lde/komoot/android/ui/tour/DeviceConnectionSession;ZLjava/lang/String;ILjava/lang/Object;)Landroid/content/Intent;
+
+    move-result-object v2
+
+    .line 9
+    invoke-virtual {v1, v2}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
+
+    return-void
+.end method

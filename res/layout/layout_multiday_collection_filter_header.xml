@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ViewStub android:id="@id/view_stub_location_selection" android:inflatedId="@id/layout_location_selection" android:layout_width="fill_parent" android:layout_height="64.0dip" />
+    <View android:background="@color/divider" android:layout_width="50.0dip" android:layout_height="1.0dip" android:layout_marginStart="72.0dip" />
+    <FrameLayout android:id="@id/layout_sport_filter" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    <View android:background="@color/divider" android:layout_width="50.0dip" android:layout_height="1.0dip" android:layout_marginStart="72.0dip" />
+    <de.komoot.android.widget.CollectionCategoriesSelectionBar android:id="@id/widget_categories" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    <View android:background="@color/divider" android:layout_width="50.0dip" android:layout_height="1.0dip" android:layout_marginStart="72.0dip" />
+    <de.komoot.android.ui.multiday.TourDurationBar android:id="@id/widget_tour_duration" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    <View android:background="@color/divider" android:layout_width="50.0dip" android:layout_height="1.0dip" android:layout_marginStart="72.0dip" />
+    <de.komoot.android.ui.multiday.TechDifficultyBar android:id="@id/widget_route_difficulty" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+</LinearLayout>

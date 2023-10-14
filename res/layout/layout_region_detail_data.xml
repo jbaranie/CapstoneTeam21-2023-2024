@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/layout_region_detail_data" android:paddingLeft="16.0dip" android:paddingRight="16.0dip" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="0.7"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:gravity="center_vertical" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="25.0dip" android:layout_marginBottom="10.0dip">
+        <LinearLayout android:gravity="fill_horizontal|bottom|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView android:textSize="20.0sp" android:textColor="@android:color/black" android:gravity="start|bottom|center" android:id="@id/textview_region_title" android:layout_width="0.0dip" android:layout_height="wrap_content" android:maxLines="1" android:singleLine="true" android:layout_weight="1.0" android:fontFamily="@font/source_sans_pro_regular" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/text_secondary" android:gravity="end|bottom|center" android:id="@id/textview_strikethrough_price" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:singleLine="true" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="0.0dip" android:paddingEnd="5.299988dip" />
+            <TextView android:textSize="16.0sp" android:textColor="@color/text_primary" android:gravity="end|bottom|center" android:id="@id/textview_price" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:singleLine="true" android:fontFamily="@font/source_sans_pro_bold" />
+        </LinearLayout>
+        <LinearLayout android:gravity="fill_horizontal|center|top" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView android:textSize="14.0sp" android:gravity="start" android:id="@id/textview_sub_title" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_marginTop="4.0dip" android:text="@string/region_detail_type_region" android:maxLines="1" android:singleLine="true" android:layout_weight="1.0" android:fontFamily="@font/source_sans_pro_light" />
+        </LinearLayout>
+        <Button android:textSize="18.0sp" android:textColor="@color/white" android:id="@id/button_buy" android:background="@drawable/btn_primary" android:paddingLeft="10.0dip" android:paddingRight="10.0dip" android:layout_width="wrap_content" android:layout_height="36.0dip" android:layout_marginTop="16.0dip" android:layout_marginBottom="16.0dip" android:text="@string/region_detail_unlock" android:fontFamily="@font/source_sans_pro_regular" android:elevation="3.0dip" />
+    </LinearLayout>
+    <ScrollView android:visibility="visible" android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_weight="1.0">
+        <TextView android:textSize="16.0sp" android:textColor="@color/text_unimpressive" android:id="@id/textview_description" android:paddingBottom="10.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:lineSpacingMultiplier="1.0" android:textIsSelectable="true" android:fontFamily="@font/source_sans_pro_regular" />
+    </ScrollView>
+</LinearLayout>

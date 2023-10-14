@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:app1="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:id="@id/content" android:padding="@dimen/default_margin_and_padding" android:clipChildren="false" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <TextView android:textSize="18.0sp" android:textColor="@color/black" android:id="@id/premium_status" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/settings_premium_status" android:fontFamily="@font/source_sans_pro_regular" />
+        <TextView android:textSize="18.0sp" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/default_margin_and_padding" android:text="@string/settings_premium_instructions" android:fontFamily="@font/source_sans_pro_regular" />
+        <Button android:textSize="18.0sp" android:textColor="@color/secondary" android:id="@id/premium_learn_more" android:background="@drawable/btn_white_rounded_corners_states" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/default_margin_and_padding" android:text="@string/settings_premium_learn_more" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="@dimen/default_margin_and_padding" android:paddingEnd="@dimen/default_margin_and_padding" android:elevation="3.0dip" app1:elevation="3.0dip" />
+    </LinearLayout>
+    <ProgressBar android:layout_gravity="center" android:id="@id/loading" android:layout_width="wrap_content" android:layout_height="wrap_content" android:indeterminate="true" android:indeterminateTint="@color/secondary" />
+</FrameLayout>

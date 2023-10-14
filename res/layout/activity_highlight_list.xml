@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/layout_user_information" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:gravity="center_horizontal" android:orientation="vertical" android:id="@id/layout_list" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <LinearLayout android:orientation="horizontal" android:id="@id/hla_tabbar_container" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:elevation="3.0dip">
+            <de.komoot.android.view.composition.TabBarTextTab android:id="@id/hla_saved_tab_tbtb" android:background="@drawable/bg_dark_tab_bar_states" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" app:tabActive="false" app:tabActiveTextColor="@color/primary_on_dark" app:tabDefaultTextColor="@color/white" app:tabTitle="@string/highlights_list_bookmarked" />
+            <de.komoot.android.view.composition.TabBarTextTab android:id="@id/hla_recommended_tab_tbtb" android:background="@drawable/bg_dark_tab_bar_states" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" app:tabActive="true" app:tabActiveTextColor="@color/primary_on_dark" app:tabDefaultTextColor="@color/white" app:tabTitle="@string/highlights_list_recommended" />
+        </LinearLayout>
+        <androidx.viewpager.widget.ViewPager android:id="@id/hla_viewpager_vp" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    </LinearLayout>
+    <FrameLayout android:id="@id/layout_search" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <TextView android:textSize="20.0sp" android:textColor="@color/text_secondary" android:gravity="center" android:layout_gravity="center_horizontal" android:id="@id/empty_search_term" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="30.0dip" android:text="@string/highlights_list_search" android:drawableTop="@drawable/ic_emptystate_search" android:drawablePadding="30.0dip" android:fontFamily="@font/source_sans_pro_regular" />
+        <FrameLayout android:scrollbarStyle="outsideOverlay" android:id="@id/search_fragment" android:visibility="visible" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    </FrameLayout>
+</FrameLayout>

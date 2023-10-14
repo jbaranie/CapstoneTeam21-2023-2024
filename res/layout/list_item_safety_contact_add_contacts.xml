@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:focusable="false" android:clickable="false" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="16.0sp" android:textColor="@color/text_primary" android:gravity="center_vertical" android:orientation="horizontal" android:background="@drawable/list_item_background_states" android:paddingLeft="16.0dip" android:paddingTop="16.0dip" android:paddingRight="16.0dip" android:paddingBottom="8.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/safety_contacts_empty_message" android:lineSpacingExtra="4.0sp" android:fontFamily="?fontRegular" />
+    <Button android:textSize="16.0sp" android:textColor="@color/secondary" android:id="@id/button" android:background="@drawable/bg_transparent_with_pressable_text_states" android:padding="@dimen/default_margin_and_padding" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/safety_contacts_empty_cta" android:textAllCaps="true" android:fontFamily="?fontRegular" />
+</LinearLayout>

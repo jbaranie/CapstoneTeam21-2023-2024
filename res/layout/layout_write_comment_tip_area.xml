@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Button android:id="@id/mention_test" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mention" />
+    <androidx.compose.ui.platform.ComposeView android:id="@id/mention_suggestions_compose_view" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    <LinearLayout android:gravity="start" android:orientation="horizontal" android:focusableInTouchMode="true" android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingStart="0.0dip" android:paddingEnd="@dimen/list_item_side_padding">
+        <com.makeramen.roundedimageview.RoundedImageView android:id="@id/wctal_user_avatar_iv" android:layout_width="@dimen/avatar_36" android:layout_height="@dimen/avatar_36" android:layout_margin="16.0dip" android:src="@drawable/placeholder_avatar_36" android:scaleType="centerCrop" app:riv_oval="true" />
+        <de.komoot.android.view.SelectableEditText android:textSize="18.0sp" android:textColorHint="#ffc4c4c4" android:gravity="start|center|top" android:id="@id/wctal_edittext_compose" android:background="@null" android:paddingTop="10.0dip" android:paddingBottom="10.0dip" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:hint="@string/tour_comment_write_hint" android:minLines="3" android:scrollHorizontally="false" android:maxLength="1000" android:layout_weight="1.0" android:inputType="textCapSentences|textMultiLine" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="4.0dip" android:layout_marginEnd="10.0dip" android:nestedScrollingEnabled="false" android:scrollIndicators="end|right" />
+        <ImageView android:gravity="center_vertical" android:id="@id/button_post" android:background="@drawable/btn_bg_on_white_states" android:padding="6.0dip" android:layout_width="36.0dip" android:layout_height="36.0dip" android:layout_marginTop="16.0dip" android:src="@drawable/ic_sendcomment" android:layout_marginStart="0.0dip" />
+    </LinearLayout>
+</LinearLayout>

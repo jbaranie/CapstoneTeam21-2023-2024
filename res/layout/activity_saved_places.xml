@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="horizontal" android:id="@id/spa_tabbar_container" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:elevation="3.0dip">
+        <de.komoot.android.view.composition.TabBarTextTab android:id="@id/spa_recent_tab_tbtb" android:background="@drawable/bg_dark_tab_bar_states" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" app:tabActive="true" app:tabActiveTextColor="@color/primary_on_dark" app:tabDefaultTextColor="@color/white" app:tabTitle="@string/spa_recent_places" />
+        <de.komoot.android.view.composition.TabBarTextTab android:id="@id/spa_nearby_tab_tbtb" android:background="@drawable/bg_dark_tab_bar_states" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" app:tabActive="false" app:tabActiveTextColor="@color/primary_on_dark" app:tabDefaultTextColor="@color/white" app:tabTitle="@string/spa_nearby_places" />
+    </LinearLayout>
+    <de.komoot.android.ui.planning.view.SportChooserView android:id="@id/spa_sport_chooser_scv" android:layout_width="fill_parent" android:layout_height="wrap_content" app:activeSportIconTint="@color/white" app:activeSportItemBackground="@drawable/bg_circle_regular_blue" app:inactiveSportIconTint="@color/white" app:inactiveSportItemBackground="@drawable/bg_circle_actionbar_normal" />
+    <View android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="1.0dip" />
+    <androidx.viewpager.widget.ViewPager android:id="@id/spa_lists_viewpager_vp" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+</LinearLayout>

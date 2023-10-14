@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/container_tour_visibility" android:layout_width="fill_parent" android:layout_height="56.0dip" android:paddingStart="@dimen/std_border_left" android:paddingEnd="@dimen/std_border_right">
+        <ImageView android:id="@id/imageview_tour_visibility" android:layout_width="24.0dip" android:layout_height="24.0dip" android:src="@drawable/ic_public" />
+        <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/textview_tour_visibility" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/tour_visibility_component_description" android:singleLine="true" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="32.0dip" />
+        <de.komoot.android.widget.UsernameTextView android:textSize="16.0sp" android:textColor="@color/black" android:gravity="center_vertical" android:id="@id/usernametextview_tour_visibility" android:layout_width="0.0dip" android:layout_height="wrap_content" android:maxLines="2" android:layout_weight="1.0" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="4.0dip" />
+        <TextView android:textSize="16.0sp" android:textColor="@color/secondary" android:layout_gravity="end|center" android:id="@id/textview_tour_visibility_change" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/rwdl_change" />
+    </LinearLayout>
+    <include layout="@layout/divider_item" />
+</LinearLayout>

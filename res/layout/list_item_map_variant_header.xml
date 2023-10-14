@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="1.0dip" />
+    <LinearLayout android:gravity="center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="24.0dip" android:layout_marginBottom="8.0dip">
+        <TextView android:textSize="20.0sp" android:textColor="@color/black" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/sport_specific_map_upsell_title" android:layout_weight="1.0" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="@dimen/default_margin_and_padding" />
+        <ImageView android:layout_gravity="bottom" android:id="@id/premium_ssm_logo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="4.0dip" android:src="@drawable/logo_premium_short_small" android:layout_marginStart="2.0dip" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+    </LinearLayout>
+    <RelativeLayout android:id="@id/ssm_hook_container" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView android:textSize="16.0sp" android:textColor="@color/text_secondary" android:id="@id/premium_ssm_hook_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" android:text="@string/premium_hook_sport_specific_maps" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="@dimen/default_margin_and_padding" android:paddingEnd="@dimen/default_margin_and_padding" />
+        <TextView android:textSize="16.0sp" android:textColor="@color/primary" android:gravity="center_vertical" android:id="@id/premium_ssm_hook_btn" android:background="@drawable/bg_transparent_with_pressable_text_states" android:layout_width="wrap_content" android:layout_height="36.0dip" android:layout_margin="8.0dip" android:text="@string/premium_hook_learn_more_btn" android:layout_below="@id/premium_ssm_hook_text" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_bold" android:paddingStart="8.0dip" android:paddingEnd="8.0dip" android:elevation="0.0dip" />
+        <ImageView android:layout_width="wrap_content" android:layout_height="36.0dip" android:src="@drawable/logo_premium_short_small" android:layout_alignBottom="@id/premium_ssm_hook_btn" android:layout_marginEnd="@dimen/default_margin_and_padding" android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/layoutScreenFeedbackFrame" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/imageViewScreenShot" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    <RelativeLayout android:id="@id/layoutTarget" android:background="@drawable/background_screenshot_target" android:layout_width="100.0dip" android:layout_height="100.0dip" />
+    <RelativeLayout android:background="#01000000" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <LinearLayout android:orientation="vertical" android:id="@id/layoutInstructions" android:background="#aa000000" android:padding="15.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="30.0dip" android:layout_centerInParent="true">
+            <TextView android:textSize="20.0sp" android:textColor="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="20.0dip" android:text="@string/activity_feedback_title" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/activity_feedback_description" />
+            <Button android:id="@id/buttonSend" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="20.0dip" android:text="@string/activity_feedback_btn_send" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/activity_feedback_select_txt" />
+            <Button android:id="@id/buttonClickSend" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/activity_feedback_btn_select" />
+            <Button android:id="@id/buttonCancel" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="15.0dip" android:text="@string/btn_abort" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

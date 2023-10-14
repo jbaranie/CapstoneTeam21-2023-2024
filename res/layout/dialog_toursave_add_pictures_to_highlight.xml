@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@drawable/white_round_corners_background" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:textSize="20.0sp" android:textColor="@color/black" android:id="@id/textView" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/default_margin_and_padding" android:layout_marginTop="24.0dip" android:layout_marginRight="@dimen/default_margin_and_padding" android:text="@string/tsapthd_title" android:fontFamily="@font/source_sans_pro_bold" />
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/tsapthd_possible_highlight_pictures_rv" android:layout_width="fill_parent" android:layout_height="240.0dip" android:layout_marginLeft="@dimen/default_margin_and_padding" android:layout_marginTop="20.0dip" android:layout_marginRight="@dimen/default_margin_and_padding" />
+    <ImageView android:id="@id/divider" android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="1.0dip" />
+    <LinearLayout android:gravity="end" android:orientation="horizontal" android:padding="8.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView android:textSize="16.0sp" android:textColor="@color/text_blue_states" android:id="@id/tsapthd_cancel_button_tv" android:background="@drawable/btn_borderless_on_light" android:padding="8.0dip" android:layout_width="wrap_content" android:layout_height="36.0dip" android:text="@string/btn_cancel" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_regular" />
+        <TextView android:textSize="16.0sp" android:textColor="@color/text_blue_states" android:id="@id/tsapthd_add_to_highlight_button_tv" android:background="@drawable/btn_borderless_on_light" android:padding="8.0dip" android:layout_width="wrap_content" android:layout_height="36.0dip" android:text="@string/tsapthd_add_to_highlight_button" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="8.0dip" />
+    </LinearLayout>
+</LinearLayout>

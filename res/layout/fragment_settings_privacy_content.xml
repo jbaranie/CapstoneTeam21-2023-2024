@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:background="@color/muted" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <LinearLayout android:orientation="vertical" android:background="@color/white" android:padding="@dimen/default_margin_and_padding" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView android:textSize="20.0sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/settings_privacy_content_tour_header" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="18.0sp" android:paddingBottom="8.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/settings_privacy_content_tour_header_subtitle" />
+            <de.komoot.android.ui.generic.RadioGroupContainer android:id="@id/settings_privacy_tour_visibility_group" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                <de.komoot.android.ui.generic.RadioItemSelector android:id="@id/settings_privacy_tour_private" android:layout_width="fill_parent" android:layout_height="wrap_content" app:descriptionText="@string/settings_privacy_content_tour_private_checkbox_description" app:labelText="@string/settings_privacy_content_tour_private_checkbox" />
+                <de.komoot.android.ui.generic.RadioItemSelector android:id="@id/settings_privacy_tour_friends" android:layout_width="fill_parent" android:layout_height="wrap_content" app:descriptionText="@string/settings_privacy_content_tour_friend_checkbox_description" app:labelText="@string/settings_privacy_content_tour_friend_checkbox" />
+                <de.komoot.android.ui.generic.RadioItemSelector android:id="@id/settings_privacy_tour_public" android:layout_width="fill_parent" android:layout_height="wrap_content" app:descriptionText="@string/settings_privacy_content_tour_public_checkbox_description" app:labelText="@string/settings_privacy_content_tour_public_checkbox" />
+            </de.komoot.android.ui.generic.RadioGroupContainer>
+        </LinearLayout>
+        <LinearLayout android:orientation="vertical" android:background="@color/white" android:padding="@dimen/default_margin_and_padding" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/settings_section_padding">
+            <TextView android:textSize="20.0sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/settings_privacy_content_collections_header" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="18.0sp" android:paddingBottom="8.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/settings_privacy_content_collections_header_subtitle" />
+            <de.komoot.android.ui.generic.RadioGroupContainer android:id="@id/settings_privacy_collections_visibility_group" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                <de.komoot.android.ui.generic.RadioItemSelector android:id="@id/settings_privacy_collections_private" android:layout_width="fill_parent" android:layout_height="wrap_content" app:descriptionText="@string/settings_privacy_content_collections_private_checkbox_description" app:labelText="@string/settings_privacy_content_tour_private_checkbox" />
+                <de.komoot.android.ui.generic.RadioItemSelector android:id="@id/settings_privacy_collections_friends" android:layout_width="fill_parent" android:layout_height="wrap_content" app:descriptionText="@string/settings_privacy_content_collections_friend_checkbox_description" app:labelText="@string/settings_privacy_content_tour_friend_checkbox" />
+                <de.komoot.android.ui.generic.RadioItemSelector android:id="@id/settings_privacy_collections_public" android:layout_width="fill_parent" android:layout_height="wrap_content" app:descriptionText="@string/settings_privacy_content_collections_public_checkbox_description" app:labelText="@string/settings_privacy_content_tour_public_checkbox" />
+            </de.komoot.android.ui.generic.RadioGroupContainer>
+        </LinearLayout>
+        <LinearLayout android:orientation="vertical" android:background="@color/white" android:padding="@dimen/default_margin_and_padding" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/settings_section_padding">
+            <TextView android:textSize="20.0sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/settings_privacy_content_highlights_header" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="18.0sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/settings_privacy_content_highlights_header_subtitle" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

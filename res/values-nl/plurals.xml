@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="atlas_carrousel_hikes_pagination">
+        <item quantity="other">%1$d-%2$d van de %3$d wandelroutes</item>
+        <item quantity="one">%1$d-%2$d van %3$d wandelroute</item>
+    </plurals>
+    <plurals name="atlas_carrousel_rides_pagination">
+        <item quantity="other">%1$d-%2$d van de %3$d fietsroutes</item>
+        <item quantity="one">%1$d-%2$d van %3$d fietsroute</item>
+    </plurals>
+    <plurals name="atlas_carrousel_runs_pagination">
+        <item quantity="other">%1$d-%2$d van de %3$d hardlooproutes</item>
+        <item quantity="one">%1$d-%2$d van %3$d hardlooproute</item>
+    </plurals>
+    <plurals name="atlas_filter_hikes_show_button">
+        <item quantity="other">%s wandelroutes</item>
+        <item quantity="one">%s wandelroute</item>
+    </plurals>
+    <plurals name="atlas_filter_rides_show_button">
+        <item quantity="other">%s fietsroutes</item>
+        <item quantity="one">%s fietsroute</item>
+    </plurals>
+    <plurals name="atlas_filter_runs_show_button">
+        <item quantity="other">%s hardlooproutes</item>
+        <item quantity="one">%s hardlooproute</item>
+    </plurals>
+    <plurals name="atlas_highlight_header">
+        <item quantity="other">‪%1$d‬ Highlights</item>
+        <item quantity="one">‪%1$d‬ Highlight</item>
+    </plurals>
+    <plurals name="atlas_highlight_hikes_social_proof">
+        <item quantity="other">Aanbevolen door %1$d van de %2$d wandelaars</item>
+        <item quantity="one">Aanbevolen door %1$d van %2$d wandelaar</item>
+    </plurals>
+    <plurals name="atlas_highlight_mtb_social_proof">
+        <item quantity="other">Aanbevolen door %1$d van de %2$d mountainbikers</item>
+        <item quantity="one">Aanbevolen door %1$d van de %2$d mountainbiker</item>
+    </plurals>
+    <plurals name="atlas_highlight_rides_social_proof">
+        <item quantity="other">Aanbevolen door %1$d van de %2$d fietsers</item>
+        <item quantity="one">Aanbevolen door %1$d van %2$d fietser</item>
+    </plurals>
+    <plurals name="atlas_highlight_road_social_proof">
+        <item quantity="other">Aanbevolen door %1$d van de %2$d wielrenners</item>
+        <item quantity="one">Aanbevolen door %1$d van %2$d wielrenner</item>
+    </plurals>
+    <plurals name="atlas_highlight_runs_social_proof">
+        <item quantity="other">Aanbevolen door %1$d van de %2$d hardlopers</item>
+        <item quantity="one">Aanbevolen door %1$d van %2$d hardloper</item>
+    </plurals>
+    <plurals name="atlas_list_header_hikes">
+        <item quantity="other">%1$d wandelroutes</item>
+        <item quantity="one">%1$d wandelroute</item>
+    </plurals>
+    <plurals name="atlas_list_header_rides">
+        <item quantity="other">%1$d fietsroutes</item>
+        <item quantity="one">%1$d fietsroute</item>
+    </plurals>
+    <plurals name="atlas_list_header_runs">
+        <item quantity="other">%1$d hardlooproutes</item>
+        <item quantity="one">%1$d hardlooproute</item>
+    </plurals>
+    <plurals name="atw_highlight_recommend_photo_contributions_plural">
+        <item quantity="other">"Je hebt %s nieuwe foto's van deze plek. Wil je er een paar toevoegen?"</item>
+        <item quantity="one">Je hebt %s nieuwe foto van deze plek. Wil je deze toevoegen?</item>
+    </plurals>
+    <plurals name="cfa_highlights">
+        <item quantity="other">Highlights</item>
+        <item quantity="one">Highlight</item>
+    </plurals>
+    <plurals name="collection_summary_highlights_count">
+        <item quantity="other">‪%1$d‬ Highlights</item>
+        <item quantity="one">‪%1$d‬ Highlight</item>
+    </plurals>
+    <plurals name="collection_summary_tours_count">
+        <item quantity="other">‪%1$d‬ Tours</item>
+        <item quantity="one">1 Tour</item>
+    </plurals>
+    <plurals name="exo_controls_fastforward_by_amount_description">
+        <item quantity="other">%d seconden vooruitspoelen</item>
+        <item quantity="one">%d seconde vooruitspoelen</item>
+    </plurals>
+    <plurals name="exo_controls_rewind_by_amount_description">
+        <item quantity="other">%d seconden terugspoelen</item>
+        <item quantity="one">%d seconde terugspoelen</item>
+    </plurals>
+    <plurals name="expire_in_days">
+        <item quantity="other">%s dagen</item>
+        <item quantity="one">%s dag</item>
+    </plurals>
+    <plurals name="expire_in_hours_plural">
+        <item quantity="other">%s uren</item>
+        <item quantity="one">‪%s‬ uur</item>
+    </plurals>
+    <plurals name="expire_in_minutes_plural">
+        <item quantity="other">%s minuten</item>
+        <item quantity="one">%s minuut</item>
+    </plurals>
+    <plurals name="fca_follow_all_friends_button">
+        <item quantity="other">Alle %d vrienden volgen</item>
+        <item quantity="one">Deze vriend volgen</item>
+    </plurals>
+    <plurals name="fcca_items">
+        <item quantity="other">Items</item>
+        <item quantity="one">Item</item>
+    </plurals>
+    <plurals name="ffa_follow_n_contact_friends">
+        <item quantity="other">%d contacten tonen</item>
+        <item quantity="one">Eén contact tonen</item>
+    </plurals>
+    <plurals name="ffa_follow_n_facebook_friends">
+        <item quantity="other">%d Facebook vrienden tonen</item>
+        <item quantity="one">Eén Facebook vriend tonen</item>
+    </plurals>
+    <plurals name="garmin_history_import_loading_progress_plural">
+        <item quantity="other">‪%1$d‬ Tours</item>
+        <item quantity="one">‪%1$d‬ Tour</item>
+    </plurals>
+    <plurals name="instabug_feature_rq_str_days_ago">
+        <item quantity="other">%d dagen geleden</item>
+        <item quantity="one">%d dag geleden</item>
+    </plurals>
+    <plurals name="instabug_feature_rq_str_hours_ago">
+        <item quantity="other">%d uur geleden</item>
+        <item quantity="one">%d uur geleden</item>
+    </plurals>
+    <plurals name="instabug_feature_rq_str_minutes_ago">
+        <item quantity="other">%d minuten geleden</item>
+        <item quantity="one">%d minuut geleden</item>
+    </plurals>
+    <plurals name="lang_sport_count_cycling">
+        <item quantity="other">%1$d van de %2$d fietsers</item>
+        <item quantity="one">1 fietser</item>
+    </plurals>
+    <plurals name="lang_sport_count_hiking">
+        <item quantity="other">%1$d van de %2$d wandelaars</item>
+        <item quantity="one">1 wandelaar</item>
+    </plurals>
+    <plurals name="lang_sport_count_mountain_biking">
+        <item quantity="other">%1$d van de %2$d mountainbikers</item>
+        <item quantity="one">1 mountainbiker</item>
+    </plurals>
+    <plurals name="lang_sport_count_mountaineering">
+        <item quantity="other">%1$d van de %2$d bergwandelaars</item>
+        <item quantity="one">1 bergwandelaar</item>
+    </plurals>
+    <plurals name="lang_sport_count_other">
+        <item quantity="other">%1$d van de %2$d personen</item>
+        <item quantity="one">1 persoon</item>
+    </plurals>
+    <plurals name="lang_sport_count_road_cycling">
+        <item quantity="other">%1$d van de %2$d wielrenners</item>
+        <item quantity="one">1 wielrenner</item>
+    </plurals>
+    <plurals name="lang_sport_count_running">
+        <item quantity="other">%1$d van de %2$d hardlopers</item>
+        <item quantity="one">1 hardloper</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_cycling">
+        <item quantity="other">Aanbevolen door %1$d van de %2$d fietsers</item>
+        <item quantity="one">Aanbevolen door 1 fietser</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_hiking">
+        <item quantity="other">Aanbevolen door %1$d van de %2$d wandelaars</item>
+        <item quantity="one">Aanbevolen door 1 wandelaar</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_mountain_biking">
+        <item quantity="other">Aanbevolen door %1$d van de %2$d mountainbikers</item>
+        <item quantity="one">Aanbevolen door 1 mountainbiker</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_mountaineering">
+        <item quantity="other">Aanbevolen door %1$d van de %2$d bergwandelaars</item>
+        <item quantity="one">Aanbevolen door 1 bergwandelaar</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_other">
+        <item quantity="other">Aanbevolen door %1$d van de %2$d personen</item>
+        <item quantity="one">Aanbevolen door 1 persoon</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_road_cycling">
+        <item quantity="other">Aanbevolen door %1$d van de %2$d wielrenners</item>
+        <item quantity="one">Aanbevolen door 1 wielrenner</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_running">
+        <item quantity="other">Aanbevolen door %1$d van de %2$d hardlopers</item>
+        <item quantity="one">Aanbevolen door 1 hardloper</item>
+    </plurals>
+    <plurals name="mtrl_badge_content_description">
+        <item quantity="other">%d nieuwe meldingen</item>
+        <item quantity="one">%d nieuwe melding</item>
+    </plurals>
+    <plurals name="multiday_travel_time_per_day_hours_plural">
+        <item quantity="other">‪%s‬ uren</item>
+        <item quantity="one">‪%s‬ uur</item>
+    </plurals>
+    <plurals name="notification_deleting">
+        <item quantity="other">Kaarten van %d aan het verwijderen</item>
+        <item quantity="one">Kaart van %d aan het verwijderen</item>
+    </plurals>
+    <plurals name="notification_downloading">
+        <item quantity="other">Kaarten van %d aan het downloaden</item>
+        <item quantity="one">Kaart van %d aan het downloaden</item>
+    </plurals>
+    <plurals name="notification_requests_header">
+        <item quantity="other">%s nieuwe verzoeken</item>
+        <item quantity="one">1 nieuw verzoek</item>
+    </plurals>
+    <plurals name="offer_ends_in_hours_plural">
+        <item quantity="other">Aanbod loopt over ‪%s‬ uur af</item>
+        <item quantity="one">Aanbod loopt over ‪%s‬ uur af</item>
+    </plurals>
+    <plurals name="offer_ends_in_minutes_plural">
+        <item quantity="other">Aanbod loopt over ‪%s‬ minuten af</item>
+        <item quantity="one">Aanbod loopt over ‪%s‬ minuut af</item>
+    </plurals>
+    <plurals name="onboarding_sport_selection_greetingfavorite_inspiration_4_more">
+        <item quantity="other">Je hebt %1$s, %2$s, %3$s en %4$s andere activiteiten geselecteerd. Wil je dit nog aanpassen? Je kunt op elk moment je favoriete outdooractiviteiten wijzigen in de instellingen.</item>
+        <item quantity="one">Je hebt %1$s, %2$s, %3$s en %4$s andere activiteit geselecteerd. Wil je dit nog aanpassen? Je kunt op elk moment je favoriete outdooractiviteiten wijzigen in de instellingen.</item>
+    </plurals>
+    <plurals name="place_info_reviews_tripadvisor_count">
+        <item quantity="other">%d reviews</item>
+        <item quantity="one">%d review</item>
+    </plurals>
+    <plurals name="place_info_reviews_yelp_count">
+        <item quantity="other">Gebaseerd op %d reviews</item>
+        <item quantity="one">Gebaseerd op %d review</item>
+    </plurals>
+    <plurals name="premium_buy_welcome_months_offer_plural">
+        <item quantity="other">Krijg %s maanden gratis</item>
+        <item quantity="one">Krijg %s maand gratis</item>
+    </plurals>
+    <plurals name="premium_buy_welcome_months_text_plural">
+        <item quantity="other">Ga een jaar vol fantastische avonturen tegemoet, betaal minder: krijg %1$s maanden Premium gratis — en ga écht verder in %2$s.</item>
+        <item quantity="one">Ga een jaar vol fantastische avonturen tegemoet, betaal minder: krijg %1$s maand Premium gratis — en ga écht verder in %2$s.</item>
+    </plurals>
+    <plurals name="pwa_hide_waypoints">
+        <item quantity="other">Waypoints verbergen</item>
+        <item quantity="one">Waypoint verbergen</item>
+    </plurals>
+    <plurals name="pwa_n_more_waypoints">
+        <item quantity="other">Nog %d waypoints</item>
+        <item quantity="one">Nog %d waypoint</item>
+    </plurals>
+    <plurals name="route_extra_tip_cycling_dismount_msg">
+        <item quantity="other">Hier zal je van je fiets moeten afstappen.</item>
+        <item quantity="one">Hier zal je van je fiets moeten afstappen.</item>
+    </plurals>
+    <plurals name="route_extra_tip_cycling_dismount_title">
+        <item quantity="other">Fietsen is niet toegestaan op delen van deze route.</item>
+        <item quantity="one">Fietsen is niet toegestaan op een deel van deze route.</item>
+    </plurals>
+    <plurals name="route_extra_tip_ferry_msg">
+        <item quantity="other">Bekijk dienstregeling veerpont.</item>
+        <item quantity="one">Bekijk dienstregeling veerpont.</item>
+    </plurals>
+    <plurals name="route_extra_tip_ferry_title">
+        <item quantity="other">Bevat overtochten met veerpont</item>
+        <item quantity="one">Bevat een overtocht met veerpont</item>
+    </plurals>
+    <plurals name="route_extra_tip_heavy_traffic_msg">
+        <item quantity="other">Voorzichtig rijden langs drukke wegen.</item>
+        <item quantity="one">Voorzichtig rijden langs drukke wegen.</item>
+    </plurals>
+    <plurals name="route_extra_tip_heavy_traffic_title">
+        <item quantity="other">Bevat wegen met druk verkeer</item>
+        <item quantity="one">Bevat een weg met druk verkeer</item>
+    </plurals>
+    <plurals name="route_extra_tip_high_danger_msg">
+        <item quantity="other">"Delen van deze route bestaan uit zeer technisch, moeilijk of gevaarlijk terrein. Specialistische uitrusting en eerdere ervaring is noodzakelijk. "</item>
+        <item quantity="one">"Een deel van deze route bestaat uit zeer technisch, moeilijk of gevaarlijk terrein. Specialistische uitrusting en eerdere ervaring is noodzakelijk. "</item>
+    </plurals>
+    <plurals name="route_extra_tip_high_danger_title">
+        <item quantity="other">Bevat segmenten die zeer gevaarlijk zijn</item>
+        <item quantity="one">Bevat een segment dat zeer gevaarlijk is</item>
+    </plurals>
+    <plurals name="route_extra_tip_moderate_danger_msg">
+        <item quantity="other">"Delen van deze route bestaan uit technisch, moeilijk of gevaarlijk terrein. Specialistische uitrusting en eerdere ervaring is misschien noodzakelijk. "</item>
+        <item quantity="one">"Een deel van deze route bestaat uit technisch, moeilijk of gevaarlijk terrein. Specialistische uitrusting en eerdere ervaring is misschien noodzakelijk. "</item>
+    </plurals>
+    <plurals name="route_extra_tip_moderate_danger_title">
+        <item quantity="other">Bevat segmenten die mogelijk gevaarlijk zijn</item>
+        <item quantity="one">Bevat een segment dat mogelijk gevaarlijk is</item>
+    </plurals>
+    <plurals name="route_extra_tip_moveable_bridge_msg">
+        <item quantity="other">Controleer openingstijden.</item>
+        <item quantity="one">Controleer openingstijden.</item>
+    </plurals>
+    <plurals name="route_extra_tip_moveable_bridge_title">
+        <item quantity="other">Bevat beweegbare bruggen.</item>
+        <item quantity="one">Bevat een beweegbare brug.</item>
+    </plurals>
+    <plurals name="route_extra_tip_offgrid_msg">
+        <item quantity="other">Navigatie-instructies zijn mogelijk beperkt.</item>
+        <item quantity="one">Navigatie-instructies zijn mogelijk beperkt.</item>
+    </plurals>
+    <plurals name="route_extra_tip_offgrid_title">
+        <item quantity="other">Bevat segmenten over onbekend terrein</item>
+        <item quantity="one">Bevat een segment over onbekend terrein</item>
+    </plurals>
+    <plurals name="route_extra_tip_restricted_msg">
+        <item quantity="other">Check van tevoren of alle segmenten toegankelijk zijn.</item>
+        <item quantity="one">Check van tevoren of alle segmenten toegankelijk zijn.</item>
+    </plurals>
+    <plurals name="route_extra_tip_restricted_title">
+        <item quantity="other">Bevat segmenten met tijdelijk beperkte toegang.</item>
+        <item quantity="one">Bevat een segment met tijdelijk beperkte toegang.</item>
+    </plurals>
+    <plurals name="route_extra_tip_unsuitable_msg">
+        <item quantity="other">Sommige segmenten van je route bevatten wegen of ondergrond die mogelijk niet geschikt zijn voor je gekozen sport.</item>
+        <item quantity="one">Een segment van je route bevat wegen of ondergrond die mogelijk niet geschikt zijn voor je gekozen sport.</item>
+    </plurals>
+    <plurals name="route_extra_tip_unsuitable_title">
+        <item quantity="other">Een gedeelte van deze Tour bevat mogelijk ongeschikte ondergrond</item>
+        <item quantity="one">Een segment van deze Tour bevat mogelijk ongeschikte ondergrond</item>
+    </plurals>
+    <plurals name="route_info_timeline_more">
+        <item quantity="other">Nog ‪%s‬ plekken</item>
+        <item quantity="one">Nog 1 plek</item>
+    </plurals>
+    <plurals name="route_information_show_more">
+        <item quantity="other">Nog %s tips tonen</item>
+        <item quantity="one">Nog 1 tip tonen</item>
+    </plurals>
+    <plurals name="shop_premium_welcome_months_text_plural">
+        <item quantity="other">Door je aan te sluiten bij komoot heb je de de deur naar nieuwe outdooravonturen al opengezet. Neem nu de volgende stap met een Premium jaarabonnement en krijg %s maanden gratis in je eerste jaar.</item>
+        <item quantity="one">Door je aan te sluiten bij komoot heb je de de deur naar nieuwe outdooravonturen al opengezet. Neem nu de volgende stap met een Premium jaarabonnement en krijg %s maand gratis in je eerste jaar.</item>
+    </plurals>
+    <plurals name="shop_premium_welcome_months_title_plural">
+        <item quantity="other">Ben je klaar om verder te gaan? Krijg %s maanden Premium gratis</item>
+        <item quantity="one">Ben je klaar om verder te gaan? Krijg %s maand Premium gratis</item>
+    </plurals>
+    <plurals name="som_imperial_feet_dative">
+        <item quantity="other">voet</item>
+        <item quantity="one">voet</item>
+    </plurals>
+    <plurals name="som_imperial_feet_nominative">
+        <item quantity="other">voet</item>
+        <item quantity="one">voet</item>
+    </plurals>
+    <plurals name="som_imperial_mile_dative">
+        <item quantity="other">mijlen</item>
+        <item quantity="one">mijl</item>
+    </plurals>
+    <plurals name="som_imperial_mile_nominative">
+        <item quantity="other">mijlen</item>
+        <item quantity="one">mijl</item>
+    </plurals>
+    <plurals name="som_imperial_yard_dative">
+        <item quantity="one">yard</item>
+    </plurals>
+    <plurals name="som_imperial_yard_nominative">
+        <item quantity="other">yards</item>
+        <item quantity="one">yard</item>
+    </plurals>
+    <plurals name="som_metric_kilometer_dative">
+        <item quantity="other">kilometer</item>
+        <item quantity="one">kilometer</item>
+    </plurals>
+    <plurals name="som_metric_kilometer_nominative">
+        <item quantity="other">kilometer</item>
+        <item quantity="one">kilometer</item>
+    </plurals>
+    <plurals name="som_metric_meter_dative">
+        <item quantity="other">meter</item>
+        <item quantity="one">meter</item>
+    </plurals>
+    <plurals name="som_metric_meter_nominative">
+        <item quantity="other">meter</item>
+        <item quantity="one">meter</item>
+    </plurals>
+    <plurals name="tour_list_filter_result_count_plural">
+        <item quantity="other">‪%s‬ Tours gevonden</item>
+        <item quantity="one">‪%s‬ Tour gevonden</item>
+    </plurals>
+    <plurals name="tour_list_tour_count">
+        <item quantity="other">%d Tours</item>
+        <item quantity="one">%d Tour</item>
+    </plurals>
+    <plurals name="tour_upload_image_upload_successful_msg_plural">
+        <item quantity="other">"Tik hier om ‪%s‬ foto's te delen."</item>
+        <item quantity="one">Tik hier om ‪%s‬ foto te delen.</item>
+    </plurals>
+    <plurals name="unit_hour">
+        <item quantity="other">uur</item>
+        <item quantity="one">uur</item>
+    </plurals>
+    <plurals name="unit_name_hour">
+        <item quantity="other">uur</item>
+        <item quantity="one">uur</item>
+    </plurals>
+    <plurals name="unit_name_minutes">
+        <item quantity="other">minuten</item>
+        <item quantity="one">minuut</item>
+    </plurals>
+    <plurals name="user_activity_feed_more_comments">
+        <item quantity="other">Nog %d reacties tonen</item>
+        <item quantity="one">Nog %d reactie tonen</item>
+    </plurals>
+    <plurals name="user_highlight_contribute_photos_plural">
+        <item quantity="other">"Je hebt ‪%s‬ nieuwe foto's van deze plek. Wil je er een paar toevoegen?"</item>
+        <item quantity="one">Je hebt ‪%s‬ nieuwe foto van deze plek. Wil je deze toevoegen?</item>
+    </plurals>
+    <plurals name="user_info_followers_count">
+        <item quantity="other">‪%1$d‬ volgers</item>
+        <item quantity="one">‪%1$d‬ volger</item>
+    </plurals>
+    <plurals name="voiceNavigation_kilometer">
+        <item quantity="other">kilometer</item>
+        <item quantity="one">kilometer</item>
+    </plurals>
+    <plurals name="voiceNavigation_kilometer_accusative">
+        <item quantity="other">kilometer</item>
+        <item quantity="one">kilometer</item>
+    </plurals>
+    <plurals name="voiceNavigation_meter">
+        <item quantity="other">meter</item>
+        <item quantity="one">meter</item>
+    </plurals>
+    <plurals name="voiceNavigation_meter_accusative">
+        <item quantity="other">meter</item>
+        <item quantity="one">meter</item>
+    </plurals>
+    <plurals name="world_pack_first_unlocked">
+        <item quantity="other">Ontgrendelde kaarten</item>
+        <item quantity="one">Ontgrendelde kaart</item>
+    </plurals>
+</resources>

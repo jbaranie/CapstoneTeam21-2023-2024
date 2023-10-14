@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <de.komoot.android.view.AutofitTextView android:textAppearance="?textAppearanceTitle" android:gravity="center_horizontal" android:layout_gravity="center_horizontal" android:id="@id/off_title" android:layout_width="@dimen/onboarding_title_width" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/onboarding_side_margin" android:layout_marginTop="@dimen/onboarding_title_margin_top" android:layout_marginRight="@dimen/onboarding_side_margin" android:text="@string/onboarding_facebook_title" android:maxLines="2" />
+    <TextView android:textAppearance="?textAppearanceSubtitle" android:gravity="center" android:layout_gravity="center_horizontal" android:id="@id/off_subtitle" android:layout_width="@dimen/onboarding_subtitle_width" android:layout_height="wrap_content" android:layout_marginTop="@dimen/onboarding_subtitle_margin_top" android:text="@string/onboarding_facebook_subtitle" android:layout_marginStart="@dimen/onboarding_side_margin" android:layout_marginEnd="@dimen/onboarding_side_margin" />
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/off_add_all_container" android:background="@drawable/bg_pressable_text_states" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip">
+        <ImageView android:paddingTop="10.0dip" android:paddingBottom="10.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_add_friends" android:paddingStart="16.0dip" android:paddingEnd="20.0dip" />
+        <TextView android:textSize="16.0sp" android:textColor="@color/secondary" android:id="@id/off_add_all" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_regular" />
+    </LinearLayout>
+</LinearLayout>

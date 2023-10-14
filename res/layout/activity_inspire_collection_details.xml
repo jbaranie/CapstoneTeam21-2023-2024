@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/icda_scroll_container_nsrl" android:layout_width="fill_parent" android:layout_height="fill_parent" android:isScrollContainer="true"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <de.komoot.android.widget.NotifyingListView android:id="@id/listview" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="fill_parent" android:listSelector="@android:color/transparent" android:cacheColorHint="@android:color/transparent" android:divider="@color/transparent" android:dividerHeight="0.0px" android:layout_alignParentTop="true" android:headerDividersEnabled="false" android:footerDividersEnabled="false" />
+    <FrameLayout android:id="@id/big_map_holder" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    <View android:id="@id/view_statusbar_underlay" android:layout_width="fill_parent" android:layout_height="2.0dip" android:layout_alignParentTop="true" />
+    <include android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" layout="@layout/inc_sponsored_collection_actions" />
+    <LinearLayout android:orientation="vertical" android:id="@id/layout_highlight_preview" android:focusable="true" android:visibility="gone" android:clickable="true" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true">
+        <View android:background="@drawable/gradient_vertical_black_alpha0_black_alpha10" android:layout_width="fill_parent" android:layout_height="8.0dip" />
+        <FrameLayout android:background="@color/white" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <ImageView android:layout_gravity="end" android:id="@id/view_btn_highlight_preview_close" android:background="@drawable/bg_white_shape_with_grey_effect_states" android:padding="15.0dip" android:layout_width="54.0dip" android:layout_height="54.0dip" android:src="@drawable/btn_close_black_x_states" android:scaleType="centerInside" />
+        </FrameLayout>
+        <include android:layout_width="fill_parent" android:layout_height="wrap_content" layout="@layout/inc_inspire_hl_preview_item" />
+    </LinearLayout>
+    <LinearLayout android:orientation="vertical" android:id="@id/layout_route_preview" android:focusable="true" android:visibility="gone" android:clickable="true" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:elevation="3.0dip">
+        <View android:background="@drawable/gradient_vertical_black_alpha0_black_alpha10" android:layout_width="fill_parent" android:layout_height="8.0dip" />
+        <FrameLayout android:background="@color/white" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <ImageView android:layout_gravity="end" android:id="@id/view_btn_route_preview_close" android:background="@drawable/bg_white_shape_with_grey_effect_states" android:padding="15.0dip" android:layout_width="54.0dip" android:layout_height="54.0dip" android:src="@drawable/btn_close_black_x_states" android:scaleType="centerInside" />
+        </FrameLayout>
+        <include android:layout_width="fill_parent" android:layout_height="wrap_content" layout="@layout/inc_inspire_route_preview_item" />
+    </LinearLayout>
+    <LinearLayout android:orientation="vertical" android:id="@id/layout_tour_preview" android:focusable="true" android:visibility="gone" android:clickable="true" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:elevation="3.0dip">
+        <View android:background="@drawable/gradient_vertical_black_alpha0_black_alpha10" android:layout_width="fill_parent" android:layout_height="8.0dip" />
+        <FrameLayout android:background="@color/white" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <ImageView android:layout_gravity="end" android:id="@id/view_btn_tour_preview_close" android:background="@drawable/bg_white_shape_with_grey_effect_states" android:padding="15.0dip" android:layout_width="54.0dip" android:layout_height="54.0dip" android:src="@drawable/btn_close_black_x_states" android:scaleType="centerInside" />
+        </FrameLayout>
+        <include android:layout_width="fill_parent" android:layout_height="wrap_content" layout="@layout/inc_inspire_tour_preview_item" />
+    </LinearLayout>
+</RelativeLayout>

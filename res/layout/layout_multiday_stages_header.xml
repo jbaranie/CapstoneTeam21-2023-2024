@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View android:id="@id/view_shadow" android:background="@drawable/gradient_top_transparent_to_bottom_light_grey_transparent" android:layout_width="fill_parent" android:layout_height="16.0dip" />
+    <LinearLayout android:gravity="center_horizontal" android:orientation="horizontal" android:background="@color/white" android:paddingTop="16.0dip" android:paddingBottom="16.0dip" android:layout_width="fill_parent" android:layout_height="81.0dip"
+      xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+        <RelativeLayout android:id="@id/days_container" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <ImageView android:id="@id/imageview_days" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_marginBottom="4.0dip" android:src="@drawable/ic_tour_stats_days" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/main_grey" android:id="@id/textview_mulitday_duration" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawablePadding="2.0dip" android:layout_below="@id/imageview_days" android:layout_centerHorizontal="true" android:fontFamily="@font/source_sans_pro_bold" />
+        </RelativeLayout>
+        <View android:background="@color/divider" android:layout_width="@dimen/divider_height" android:layout_height="20.0dip" android:layout_marginTop="2.0dip" />
+        <RelativeLayout android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <ImageView android:id="@id/imageview_time_per_day" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_marginBottom="4.0dip" android:src="@drawable/ic_tour_stats_time" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/main_grey" android:id="@id/textview_mulitday_time_per_day" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/imageview_time_per_day" android:layout_centerHorizontal="true" android:fontFamily="@font/source_sans_pro_bold" />
+        </RelativeLayout>
+        <View android:background="@color/divider" android:layout_width="@dimen/divider_height" android:layout_height="20.0dip" android:layout_marginTop="2.0dip" />
+        <RelativeLayout android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <ImageView android:id="@id/imageview_distance" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_marginBottom="4.0dip" android:src="@drawable/ic_tour_stats_distance" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/main_grey" android:id="@id/textview_multiday_distance" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/imageview_distance" android:layout_centerHorizontal="true" android:fontFamily="@font/source_sans_pro_bold" />
+        </RelativeLayout>
+        <View android:background="@color/divider" android:layout_width="@dimen/divider_height" android:layout_height="20.0dip" android:layout_marginTop="2.0dip" />
+        <de.komoot.android.ui.tour.view.TourStatsAscentDescentView android:id="@id/ascent_descent" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" />
+    </LinearLayout>
+    <include layout="@layout/divider_item" />
+    <RelativeLayout android:background="@color/white" android:layout_width="fill_parent" android:layout_height="48.0dip">
+        <de.komoot.android.view.AutofitTextView android:textSize="16.0sp" android:textColor="@color/primary" android:gravity="center_vertical" android:id="@id/textview_adjust" android:background="@drawable/bg_pressable_text_states" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="fill_parent" android:text="@string/multiday_stages_button_adjust" android:layout_centerVertical="true" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_bold" android:paddingStart="72.0dip" android:paddingEnd="0.0dip" android:layout_alignParentStart="true" />
+        <ImageView android:layout_width="24.0dip" android:layout_height="24.0dip" android:src="@drawable/ic_number_change" android:layout_centerVertical="true" android:layout_marginStart="16.0dip" android:layout_marginEnd="0.0dip" android:layout_alignParentStart="true" />
+    </RelativeLayout>
+    <include android:id="@id/switch_e_bike_adjust_divider" android:visibility="gone" layout="@layout/divider_item" />
+    <androidx.appcompat.widget.SwitchCompat android:textSize="16.0sp" android:id="@id/switch_e_bike_adjust" android:layout_width="fill_parent" android:layout_height="48.0dip" android:text="@string/multiday_adjust_stats_for_e_bike" android:drawablePadding="36.0dip" android:drawableStart="@drawable/ic_ebike_flash_grey" android:paddingStart="20.0dip" android:paddingEnd="16.0dip" />
+    <include layout="@layout/divider_item" />
+    <View android:background="@color/white" android:layout_width="fill_parent" android:layout_height="16.0dip" />
+</LinearLayout>

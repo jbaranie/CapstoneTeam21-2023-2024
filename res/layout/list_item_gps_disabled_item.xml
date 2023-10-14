@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:gravity="center_vertical" android:id="@id/layout_gps_disabled" android:background="@color/white" android:paddingLeft="@dimen/std_border_left" android:paddingRight="@dimen/std_border_right" android:layout_width="fill_parent" android:layout_height="64.0dip" android:paddingStart="@dimen/std_border_left" android:paddingEnd="@dimen/std_border_right"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:textSize="16.0sp" android:textColor="@color/text_primary" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/li_gps_disabled" android:layout_alignParentLeft="true" android:fontFamily="@font/source_sans_pro_regular" />
+    <TextView android:textSize="16.0sp" android:textColor="@color/btn_blue_info" android:id="@id/textview_btn_request_location_permission" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/li_gps_disabled_btn" android:layout_alignParentRight="true" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_regular" />
+</RelativeLayout>

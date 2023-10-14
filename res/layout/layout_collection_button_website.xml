@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/layout_button_website" android:background="@drawable/bg_white_shape_with_grey_effect_states" android:focusable="true" android:clickable="true" android:layout_width="wrap_content" android:layout_height="fill_parent" android:layout_marginTop="3.0dip" android:layout_marginBottom="4.0dip" android:layout_weight="0.5" android:layout_marginStart="15.0dip" android:layout_marginEnd="12.0dip" xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/imageview_btn_website" android:layout_width="24.0dip" android:layout_height="24.0dip" android:src="@drawable/ic_cta_sponsored_website" app:tint="@color/primary" />
+    <TextView android:textSize="13.0sp" android:textColor="@color/primary" android:gravity="center_horizontal" android:id="@id/textview_btn_website" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2.0dip" android:text="@string/collections_sponsored_website" android:maxLines="1" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_regular" />
+</LinearLayout>

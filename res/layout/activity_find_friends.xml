@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/layout_user_information" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" android:id="@id/activity_find_friends_toolbar" android:background="@color/navigation" android:layout_width="fill_parent" android:layout_height="wrap_content" android:elevation="4.0dip" app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    <LinearLayout android:orientation="vertical" android:id="@id/activity_find_friends_container" android:layout_width="fill_parent" android:layout_height="fill_parent" android:elevation="4.0dip">
+        <LinearLayout android:orientation="horizontal" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:elevation="3.0dip">
+            <de.komoot.android.view.composition.TabBarTextTab android:id="@id/activity_find_friends_followers_tab" android:background="@drawable/bg_dark_tab_bar_states" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" app:tabActive="true" app:tabActiveTextColor="@color/primary_on_dark" app:tabDefaultTextColor="@color/white" app:tabTitle="@string/user_info_find_friends" />
+            <de.komoot.android.view.composition.TabBarTextTab android:id="@id/activity_find_friends_friends_tab" android:background="@drawable/bg_dark_tab_bar_states" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" app:tabActive="false" app:tabActiveTextColor="@color/primary_on_dark" app:tabDefaultTextColor="@color/white" app:tabTitle="@string/profile_friends_tab_title" />
+        </LinearLayout>
+        <androidx.viewpager.widget.ViewPager android:id="@id/activity_find_friends_view_pager" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    </LinearLayout>
+</LinearLayout>

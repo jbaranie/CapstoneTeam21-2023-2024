@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="inspiration_floating_header_offset">75.0dip</dimen>
+    <dimen name="navigation_settings_landscape_content_width">280.0dip</dimen>
+    <dimen name="navigation_settings_landscape_header_text_size">20.0sp</dimen>
+    <dimen name="navigation_settings_landscape_item_text_size">16.0sp</dimen>
+    <dimen name="navigation_settings_landscape_margin_sides">24.0dip</dimen>
+    <dimen name="onboarding_content_width">512.0dip</dimen>
+    <dimen name="onboarding_feature_box_width">512.0dip</dimen>
+    <dimen name="onboarding_next_button_width">512.0dip</dimen>
+    <dimen name="onboarding_subtitle_width">512.0dip</dimen>
+    <dimen name="onboarding_title_width">512.0dip</dimen>
+    <dimen name="p20t45">45.0dip</dimen>
+    <dimen name="p8t10">10.0dip</dimen>
+    <dimen name="phone_match_parent_tablet_600dp">600.0dip</dimen>
+</resources>

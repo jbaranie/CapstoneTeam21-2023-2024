@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/layout_sport" android:background="@drawable/list_item_background_states" android:clickable="false" android:layout_width="fill_parent" android:layout_height="56.0dip" android:layout_alignParentTop="true" xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/etwpml_participants_icon" android:layout_width="24.0dip" android:layout_height="24.0dip" android:src="@drawable/ic_blank_user" android:scaleType="centerInside" android:layout_centerVertical="true" android:layout_alignParentStart="true" />
+    <TextView android:textSize="16.0sp" android:ellipsize="end" android:id="@id/etwpml_participants_text" android:layout_width="wrap_content" android:layout_height="24.0dip" android:maxLines="1" android:singleLine="true" android:layout_centerVertical="true" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="56.0dip" android:layout_alignParentStart="true" />
+</RelativeLayout>

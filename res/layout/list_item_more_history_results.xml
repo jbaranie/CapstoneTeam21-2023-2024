@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/mhrli_container_fl" android:background="@drawable/bg_pressable_text_states" android:layout_width="fill_parent" android:layout_height="56.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:textSize="16.0sp" android:textColor="@color/text_secondary" android:gravity="center_vertical" android:id="@id/mhb_text_ttv" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginLeft="72.0dip" android:text="@string/sshv_more_from_search_history" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="72.0dip" />
+</FrameLayout>

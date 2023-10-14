@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@drawable/bg_white_with_grey_effect_states" android:clickable="false" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <HorizontalScrollView android:scrollbars="none" android:layout_width="fill_parent" android:layout_height="@dimen/elevation_profile_min_height" android:fillViewport="true" android:layout_marginStart="@dimen/default_margin_and_padding">
+        <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="fill_parent">
+            <FrameLayout android:layout_width="wrap_content" android:layout_height="fill_parent">
+                <TextView android:textSize="14.0sp" android:textStyle="bold" android:textColor="@color/primary" android:gravity="center" android:id="@id/textview_footer_distance" android:layout_width="wrap_content" android:layout_height="fill_parent" android:drawablePadding="@dimen/tour_stat_icon_margin_right" android:drawableStart="@drawable/ic_tourprofile_distance_point" android:fontFamily="@font/source_sans_pro_bold" />
+            </FrameLayout>
+            <FrameLayout android:layout_width="wrap_content" android:layout_height="fill_parent">
+                <TextView android:textSize="14.0sp" android:textStyle="bold" android:textColor="@color/primary" android:gravity="center" android:id="@id/textview_footer_time" android:layout_width="wrap_content" android:layout_height="fill_parent" android:drawablePadding="@dimen/tour_stat_icon_margin_right" android:drawableStart="@drawable/ic_tourprofile_time" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="@dimen/tour_stat_item_margin_right" />
+            </FrameLayout>
+            <FrameLayout android:layout_width="wrap_content" android:layout_height="fill_parent">
+                <TextView android:textSize="14.0sp" android:textStyle="bold" android:textColor="@color/primary" android:gravity="center" android:id="@id/textview_footer_uphill" android:layout_width="wrap_content" android:layout_height="fill_parent" android:drawablePadding="@dimen/tour_stat_icon_margin_right" android:drawableStart="@drawable/ic_tourprofile_uphill" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="@dimen/tour_stat_item_margin_right" />
+            </FrameLayout>
+            <FrameLayout android:layout_width="wrap_content" android:layout_height="fill_parent">
+                <TextView android:textSize="14.0sp" android:textStyle="bold" android:textColor="@color/primary" android:gravity="center" android:id="@id/textview_footer_gradient" android:layout_width="wrap_content" android:layout_height="fill_parent" android:drawablePadding="@dimen/tour_stat_icon_margin_right" android:drawableStart="@drawable/ic_tourprofile_gradient" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="@dimen/tour_stat_item_margin_right" />
+            </FrameLayout>
+            <FrameLayout android:layout_width="wrap_content" android:layout_height="fill_parent">
+                <TextView android:textSize="14.0sp" android:textStyle="bold" android:textColor="@color/primary" android:gravity="center" android:id="@id/textview_footer_altitude" android:layout_width="wrap_content" android:layout_height="fill_parent" android:drawablePadding="@dimen/tour_stat_icon_margin_right" android:drawableStart="@drawable/ic_tourprofile_elevation" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="@dimen/tour_stat_item_margin_right" />
+            </FrameLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+    <de.komoot.android.view.TouringElevationProfileView android:id="@id/elevationview_tour_large" android:paddingLeft="@dimen/list_item_side_padding" android:paddingTop="@dimen/elevation_profile_selector_padding" android:paddingRight="@dimen/list_item_side_padding" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginBottom="8.0dip" />
+</LinearLayout>

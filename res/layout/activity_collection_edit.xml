@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <de.komoot.android.widget.KmtRecyclerView android:id="@id/mRecyclerViewNRV" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    <LinearLayout android:orientation="vertical" android:id="@id/mDoneCTAContainerLL" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true">
+        <View android:id="@id/view_shadow" android:background="@drawable/gradient_top_transparent_to_bottom_light_grey_transparent" android:layout_width="fill_parent" android:layout_height="8.0dip" />
+        <FrameLayout android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <Button android:textSize="16.0sp" android:textColor="@color/white" android:gravity="center" android:id="@id/mDoneCTA" android:background="@drawable/btn_primary" android:layout_width="fill_parent" android:layout_height="36.0dip" android:layout_marginTop="12.0dip" android:layout_marginBottom="12.0dip" android:text="@string/btn_done" android:lines="1" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" android:elevation="2.0dip" />
+        </FrameLayout>
+    </LinearLayout>
+</RelativeLayout>

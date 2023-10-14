@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <de.komoot.android.widget.KmtRecyclerView android:id="@id/mRecyclerViewRV" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    <View android:id="@id/mStatusbarUnderlayV" android:layout_width="fill_parent" android:layout_height="2.0dip" android:layout_alignParentTop="true" />
+    <RelativeLayout android:id="@id/mNoContentContainerRL" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_below="@id/mRecyclerViewRV">
+        <TextView android:textSize="18.0sp" android:textColor="@color/text_underline" android:gravity="center" android:layout_gravity="center_horizontal" android:id="@id/mNoContentHintTTV" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="64.0dip" android:text="@string/scia_no_content_text" android:drawablePadding="30.0dip" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+        <ImageView android:id="@id/mSearchHintIV" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/placeholder_emptyscreen" android:scaleType="fitCenter" android:adjustViewBounds="true" android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+</RelativeLayout>

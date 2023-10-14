@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:id="@id/layout_extra_tips_title" android:paddingBottom="8.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/route_information_tips" android:paddingStart="@dimen/std_border_left" android:paddingEnd="@dimen/std_border_left" style="@style/TextAppearance.Komoot.Headline4" />
+    <LinearLayout android:orientation="vertical" android:id="@id/layout_extra_tips_holder" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" />
+    <Button android:gravity="start|center" android:id="@id/layout_extra_tips_show_more" android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/BorderlessLightButton" />
+</LinearLayout>

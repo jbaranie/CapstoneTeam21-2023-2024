@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:id="@id/splf_looking_for_location_container_ll" android:padding="@dimen/default_margin_and_padding" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/default_margin_and_padding">
+        <de.komoot.android.view.AutofitTextView android:textSize="24.0sp" android:textColor="@color/text_secondary" android:gravity="center_horizontal" android:layout_gravity="center_horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/default_margin_and_padding" android:text="@string/splf_looking_for_location" android:lines="1" android:fontFamily="@font/source_sans_pro_regular" />
+        <ProgressBar android:layout_gravity="center_horizontal" android:layout_width="32.0dip" android:layout_height="32.0dip" android:progressTint="@color/secondary" />
+    </LinearLayout>
+    <de.komoot.android.view.AutofitTextView android:textSize="24.0sp" android:textColor="@color/text_secondary" android:gravity="center_horizontal" android:layout_gravity="center_horizontal" android:id="@id/splf_no_saved_places_text_tatv" android:paddingTop="@dimen/default_margin_and_padding" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="@dimen/default_margin_and_padding" android:text="@string/splf_no_saved_places" android:lines="1" android:fontFamily="@font/source_sans_pro_regular" />
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <androidx.recyclerview.widget.RecyclerView android:id="@id/splf_paging_list_rv" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+        <ProgressBar android:layout_gravity="center_horizontal" android:id="@id/splf_loading_content_spinner_pb" android:paddingBottom="@dimen/default_margin_and_padding" android:visibility="gone" android:layout_width="32.0dip" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" android:progressTint="@color/secondary" />
+    </RelativeLayout>
+</LinearLayout>

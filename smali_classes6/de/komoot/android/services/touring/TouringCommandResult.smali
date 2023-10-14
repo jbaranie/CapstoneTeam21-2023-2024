@@ -1,0 +1,82 @@
+.class public interface abstract Lde/komoot/android/services/touring/TouringCommandResult;
+.super Ljava/lang/Object;
+.source "SourceFile"
+
+# interfaces
+.implements Lde/komoot/android/log/LoggingEntity;
+
+
+# annotations
+.annotation system Ldalvik/annotation/MemberClasses;
+    value = {
+        Lde/komoot/android/services/touring/TouringCommandResult$DefaultImpls;,
+        Lde/komoot/android/services/touring/TouringCommandResult$Done;,
+        Lde/komoot/android/services/touring/TouringCommandResult$LocationSourceFailure;,
+        Lde/komoot/android/services/touring/TouringCommandResult$MissingLocationPermission;,
+        Lde/komoot/android/services/touring/TouringCommandResult$RecorderFailure;,
+        Lde/komoot/android/services/touring/TouringCommandResult$StateFailure;
+    }
+.end annotation
+
+.annotation runtime Lkotlin/Metadata;
+    d1 = {
+        "\u0000P\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0010\u0002\n\u0002\u0008\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\u0008\u0002\n\u0002\u0010\u0008\n\u0000\n\u0002\u0010\u000e\n\u0002\u0008\u0005\n\u0002\u0018\u0002\n\u0002\u0008\u0006\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\u0008v\u0018\u00002\u00020\u0001:\u0005\u0015\u0016\u0017\u0018\u0019J\u0016\u0010\u0005\u001a\u00020\u00032\u000c\u0010\u0004\u001a\u0008\u0012\u0004\u0012\u00020\u00030\u0002H\u0016J1\u0010\t\u001a\u00020\u00032\u001c\u0010\u0004\u001a\u0018\u0008\u0001\u0012\n\u0012\u0008\u0012\u0004\u0012\u00020\u00030\u0007\u0012\u0006\u0012\u0004\u0018\u00010\u00080\u0006H\u0096@\u00f8\u0001\u0000\u00a2\u0006\u0004\u0008\t\u0010\nJ\u0018\u0010\u000f\u001a\u00020\u00032\u0006\u0010\u000c\u001a\u00020\u000b2\u0006\u0010\u000e\u001a\u00020\rH\u0016J\u0018\u0010\u0012\u001a\u00020\u00032\u0006\u0010\u0010\u001a\u00020\u000b2\u0006\u0010\u0011\u001a\u00020\rH\u0016J\n\u0010\u0014\u001a\u0004\u0018\u00010\u0013H\u0016\u0082\u0001\u0005\u001a\u001b\u001c\u001d\u001e\u0082\u0002\u0004\n\u0002\u0008\u0019\u00a8\u0006\u001f"
+    }
+    d2 = {
+        "Lde/komoot/android/services/touring/TouringCommandResult;",
+        "Lde/komoot/android/log/LoggingEntity;",
+        "Lkotlin/Function0;",
+        "",
+        "run",
+        "runOnFailure",
+        "Lkotlin/Function1;",
+        "Lkotlin/coroutines/Continuation;",
+        "",
+        "l",
+        "(Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;",
+        "",
+        "level",
+        "",
+        "logTag",
+        "logOnFailure",
+        "pLevel",
+        "pLogTag",
+        "logEntity",
+        "Lde/komoot/android/services/touring/NavigationStartCmd;",
+        "h0",
+        "Done",
+        "LocationSourceFailure",
+        "MissingLocationPermission",
+        "RecorderFailure",
+        "StateFailure",
+        "Lde/komoot/android/services/touring/TouringCommandResult$Done;",
+        "Lde/komoot/android/services/touring/TouringCommandResult$LocationSourceFailure;",
+        "Lde/komoot/android/services/touring/TouringCommandResult$MissingLocationPermission;",
+        "Lde/komoot/android/services/touring/TouringCommandResult$RecorderFailure;",
+        "Lde/komoot/android/services/touring/TouringCommandResult$StateFailure;",
+        "data-touring_release"
+    }
+    k = 0x1
+    mv = {
+        0x1,
+        0x9,
+        0x0
+    }
+.end annotation
+
+
+# virtual methods
+.method public abstract h0()Lde/komoot/android/services/touring/NavigationStartCmd;
+.end method
+
+.method public abstract l(Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+.end method
+
+.method public abstract logEntity(ILjava/lang/String;)V
+.end method
+
+.method public abstract logOnFailure(ILjava/lang/String;)V
+.end method
+
+.method public abstract runOnFailure(Lkotlin/jvm/functions/Function0;)V
+.end method

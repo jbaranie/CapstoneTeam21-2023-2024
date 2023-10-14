@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="horizontal" android:id="@id/mSnackBarLayoutContainerLL" android:background="@color/dark_grey" android:layout_width="fill_parent" android:layout_height="0.0dip" android:minHeight="48.0dip" android:alpha="0.0"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <de.komoot.android.view.AutofitTextView android:textSize="16.0sp" android:textColor="@color/white" android:id="@id/mMessageTTV" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_margin="@dimen/default_margin_and_padding" android:lines="1" android:layout_weight="1.0" android:fontFamily="@font/source_sans_pro_regular" />
+    <TextView android:textSize="16.0sp" android:textColor="@color/primary_on_dark" android:gravity="center_vertical" android:id="@id/mCTAButtonTTV" android:background="@drawable/btn_borderless_on_dark" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="fill_parent" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="@dimen/default_margin_and_padding" android:paddingEnd="@dimen/default_margin_and_padding" />
+</LinearLayout>

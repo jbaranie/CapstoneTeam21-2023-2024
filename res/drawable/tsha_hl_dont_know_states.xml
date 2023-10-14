@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="false" android:drawable="@drawable/tsha_ic_thumb_highlight_large_neutral_normal" />
+    <item android:state_pressed="true" android:drawable="@drawable/tsha_ic_thumb_highlight_large_neutral_selected" />
+</selector>

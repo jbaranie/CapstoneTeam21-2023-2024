@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="18.0sp" android:textColor="@color/primary" android:gravity="center_vertical" android:layout_gravity="center" android:id="@id/textview_btn_recenter" android:background="@drawable/btn_white_chip_44dp" android:paddingTop="4.0dip" android:paddingBottom="4.0dip" android:focusable="true" android:visibility="invisible" android:clickable="true" android:layout_width="wrap_content" android:layout_height="44.0dip" android:text="@string/touring_btn_recenter" android:drawablePadding="4.0dip" android:drawableStart="@drawable/ic_location_recenter" android:fontFamily="@font/source_sans_pro_bold" android:paddingStart="15.0dip" android:paddingEnd="15.0dip" android:elevation="6.0dip" android:drawableTint="@color/primary" />
+</FrameLayout>

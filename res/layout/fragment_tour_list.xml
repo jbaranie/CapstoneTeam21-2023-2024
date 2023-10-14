@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/layout_fragment_tour_list" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:id="@id/layout_swipe_to_refresh" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <ListView android:scrollbarStyle="outsideOverlay" android:id="@id/listview" android:visibility="visible" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <ImageView android:id="@id/tlf_no_content_image_iv" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/placeholder_emptyscreen" android:scaleType="fitCenter" android:adjustViewBounds="true" android:layout_alignParentBottom="true" />
+    <ImageButton android:id="@id/imagebutton_search" android:background="@drawable/btn_round_blue_states" android:layout_width="56.0dip" android:layout_height="56.0dip" android:layout_margin="16.0dip" android:src="@drawable/ic_btn_search_white" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:elevation="3.0dip" />
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_horizontal" android:orientation="horizontal" android:id="@id/layout_one_way_point_search" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <View android:background="@color/muted" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" />
+    <de.komoot.android.widget.KmtRecyclerView android:id="@id/recyclerview" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    <View android:background="@color/muted" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" />
+</LinearLayout>

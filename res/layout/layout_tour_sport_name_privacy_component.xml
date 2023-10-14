@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:gravity="center" android:id="@id/tsnpcl_sport_iv" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_alignTop="@id/tsnpcl_name_ttv" android:layout_alignBottom="@id/tsnpcl_name_ttv" />
+    <TextView android:textSize="18.0sp" android:textColor="@color/text_primary" android:id="@id/tsnpcl_name_ttv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="8.0dip" android:maxLines="3" android:layout_alignParentTop="true" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="8.0dip" android:layout_toStartOf="@id/tsnpcl_private_symbol_iv" android:layout_toEndOf="@id/tsnpcl_sport_iv" />
+    <ImageView android:id="@id/tsnpcl_private_symbol_iv" android:layout_width="16.0dip" android:layout_height="wrap_content" android:src="@drawable/ic_lock" android:layout_alignTop="@id/tsnpcl_name_ttv" android:layout_alignBottom="@id/tsnpcl_name_ttv" android:layout_alignParentEnd="true" app:tint="@color/text_secondary" />
+</merge>

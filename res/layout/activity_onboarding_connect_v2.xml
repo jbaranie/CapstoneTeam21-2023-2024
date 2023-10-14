@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="@color/canvas" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include android:id="@id/onboarding_indicators" layout="@layout/layout_onboarding_indicators" />
+    <ScrollView android:paddingBottom="@dimen/onboarding_bottom_gradient_height" android:scrollbars="none" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_below="@id/onboarding_indicators">
+        <LinearLayout android:gravity="center_horizontal" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/onboarding_title_margin_top" android:layout_marginStart="@dimen/onboarding_side_margin" android:layout_marginEnd="@dimen/onboarding_side_margin">
+            <de.komoot.android.view.AutofitTextView android:textAppearance="?textAppearanceTitle" android:gravity="center_horizontal" android:layout_width="@dimen/onboarding_title_width" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/onboarding_subtitle_margin_top" android:text="@string/oca_content_title" android:maxLines="2" />
+            <androidx.cardview.widget.CardView android:layout_gravity="center" android:background="@color/white" android:layout_width="@dimen/onboarding_subtitle_width" android:layout_height="wrap_content" android:layout_margin="3.0dip" app:cardCornerRadius="3.0dip" app:cardElevation="2.0dip" app:cardUseCompatPadding="true">
+                <LinearLayout android:gravity="center_horizontal" android:orientation="vertical" android:padding="@dimen/default_margin_and_padding" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/logo_garmin_onboarding" />
+                    <TextView android:textAppearance="?textAppearanceSubtitle" android:gravity="center_horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/default_margin_and_padding" android:text="@string/oca_garmin_text" />
+                    <Button android:id="@id/oca_connect_garmin_cta_tb" android:layout_width="wrap_content" android:layout_height="36.0dip" android:layout_marginTop="@dimen/default_margin_and_padding" android:text="@string/oca_garmin_cta" android:elevation="0.0dip" style="@style/KmtWidget.Onboarding.Button.Blue" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <TextView android:textAppearance="@style/KmtTextAppearance.Onboarding.Content" android:textColor="@color/text_underline" android:gravity="center_horizontal" android:layout_width="@dimen/onboarding_subtitle_width" android:layout_height="wrap_content" android:layout_marginTop="30.0dip" android:text="@string/oca_komoot_device_support_text" />
+            <ImageView android:id="@id/imageview_partner_logos" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24.0dip" android:layout_marginBottom="36.0dip" android:src="@drawable/logo_partner_services_onboarding_v3" />
+        </LinearLayout>
+    </ScrollView>
+    <View android:background="@drawable/gradient_top_transparent_to_bottom_dark_grey_transparent" android:layout_width="fill_parent" android:layout_height="@dimen/onboarding_bottom_gradient_height" android:layout_alignParentBottom="true" />
+    <Button android:id="@id/oca_next_tb" android:layout_width="@dimen/onboarding_next_button_width" android:layout_height="36.0dip" android:layout_marginBottom="@dimen/onboarding_next_button_margin" android:text="@string/oca_next_cta" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" />
+</RelativeLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center" android:orientation="vertical" android:background="@color/transparent" android:layout_width="960.0px" android:layout_height="960.0px"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView android:id="@id/instagram_asset_stats_icon" android:layout_width="108.0px" android:layout_height="108.0px" android:src="@drawable/ic_komoot" />
+    <TextView android:textSize="60.0px" android:textColor="@color/white" android:gravity="center" android:id="@id/instagram_asset_stats_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="72.0px" android:layout_marginBottom="24.0px" android:maxLines="2" />
+    <LinearLayout android:gravity="center_horizontal" android:orientation="horizontal" android:paddingTop="48.0px" android:paddingBottom="48.0px" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <LinearLayout android:gravity="center" android:orientation="vertical" android:layout_width="0.0px" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <ImageView android:layout_width="72.0px" android:layout_height="72.0px" android:layout_marginBottom="12.0px" android:src="@drawable/ic_tour_stats_time" app:tint="@color/white" />
+            <TextView android:textSize="42.0px" android:textColor="@color/white" android:id="@id/instagram_asset_stats_time_in_motion_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="@font/source_sans_pro_bold" />
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:orientation="vertical" android:layout_width="0.0px" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <ImageView android:layout_width="72.0px" android:layout_height="72.0px" android:layout_marginBottom="12.0px" android:src="@drawable/ic_tour_stats_distance" app:tint="@color/white" />
+            <TextView android:textSize="42.0px" android:textColor="@color/white" android:id="@id/instagram_asset_stats_distance_icon_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="@font/source_sans_pro_bold" />
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:orientation="vertical" android:layout_width="0.0px" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <ImageView android:layout_width="72.0px" android:layout_height="72.0px" android:layout_marginBottom="12.0px" android:src="@drawable/ic_tour_stats_ascent" app:tint="@color/white" />
+            <TextView android:textSize="42.0px" android:textColor="@color/white" android:id="@id/instagram_asset_stats_ascent_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="@font/source_sans_pro_bold" />
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:orientation="vertical" android:layout_width="0.0px" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <ImageView android:layout_width="72.0px" android:layout_height="72.0px" android:layout_marginBottom="12.0px" android:src="@drawable/ic_tour_stats_descent" app:tint="@color/white" />
+            <TextView android:textSize="42.0px" android:textColor="@color/white" android:id="@id/instagram_asset_stats_descent_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="@font/source_sans_pro_bold" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

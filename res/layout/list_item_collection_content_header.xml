@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/layout_list_item_collection_content_header" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View android:layout_gravity="center_horizontal" android:background="@color/primary" android:layout_width="30.0dip" android:layout_height="3.0dip" />
+    <TextView android:textSize="24.0sp" android:textColor="@android:color/black" android:layout_gravity="center_horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="30.0dip" android:layout_marginBottom="0.0dip" android:text="@string/collection_edit_header_tours_highlights" android:maxLines="1" android:singleLine="true" android:fontFamily="@font/source_sans_pro_bold" android:textAlignment="gravity" />
+</LinearLayout>

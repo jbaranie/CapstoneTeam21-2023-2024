@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.Toolbar android:theme="@style/KmtThemeOverlay.DarkActionBar" android:id="@id/toolbar" android:layout_width="fill_parent" android:layout_height="wrap_content" android:elevation="4.0dip" app:popupTheme="@style/ThemeOverlay.AppCompat.Light" app:title="@string/discover_results_title" app:titleTextAppearance="@style/KmtTitleTextAppearance" />
+    <androidx.coordinatorlayout.widget.CoordinatorLayout android:id="@id/layout_container" android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_weight="1.0">
+        <com.google.android.material.appbar.AppBarLayout android:id="@id/app_bar" android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="wrap_content" app:elevation="0.0dip">
+            <FrameLayout android:id="@id/search_container" android:background="@color/white" android:paddingLeft="16.0dip" android:paddingTop="12.0dip" android:paddingRight="16.0dip" android:paddingBottom="12.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" app:layout_scrollFlags="scroll">
+                <TextView android:textSize="18.0sp" android:textColor="@color/text_primary" android:gravity="center_vertical" android:id="@id/textview_search" android:background="@drawable/bg_muted_rounded_4dp" android:paddingLeft="12.0dip" android:paddingTop="8.0dip" android:paddingRight="12.0dip" android:paddingBottom="8.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="1" android:drawablePadding="16.0dip" android:fontFamily="?fontRegular" app:drawableStartCompat="@drawable/ic_search" />
+            </FrameLayout>
+            <FrameLayout android:layout_width="fill_parent" android:layout_height="150.0dip" app:layout_scrollFlags="scroll">
+                <include android:layout_width="fill_parent" android:layout_height="150.0dip" layout="@layout/inc_map_new" />
+                <androidx.constraintlayout.widget.ConstraintLayout android:id="@id/layout_diameter" android:layout_width="fill_parent" android:layout_height="150.0dip">
+                    <FrameLayout android:id="@id/layout_diameter2" android:layout_width="150.0dip" android:layout_height="150.0dip" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.5" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
+                        <ImageView android:layout_width="150.0dip" android:layout_height="150.0dip" android:src="@drawable/map_diameter_mask" />
+                        <ImageView android:id="@id/imageview_radius_lines" android:layout_width="150.0dip" android:layout_height="150.0dip" android:src="@drawable/ic_map_radius_lines" />
+                    </FrameLayout>
+                    <View android:id="@id/view_transparent_left" android:background="@color/white_alpha70" android:layout_width="0.0dip" android:layout_height="fill_parent" app:layout_constraintEnd_toStartOf="@id/layout_diameter2" app:layout_constraintHorizontal_bias="0.0" app:layout_constraintStart_toStartOf="parent" />
+                    <View android:id="@id/view_transparent_right" android:background="@color/white_alpha70" android:layout_width="0.0dip" android:layout_height="fill_parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toEndOf="@id/layout_diameter2" />
+                    <TextView android:textSize="14.0sp" android:id="@id/textview_radius" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="7.0dip" android:fontFamily="@font/source_sans_pro_bold" app:layout_constraintStart_toEndOf="@id/layout_diameter2" app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout android:id="@id/layout_map_pin" android:layout_width="fill_parent" android:layout_height="150.0dip">
+                    <ImageView android:id="@id/imageview_pin" android:paddingBottom="42.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_pin_point" android:scaleType="center" android:layout_centerInParent="true" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageButton android:id="@id/button_expand" android:background="@drawable/btn_map_overlay_transparent_dark_states" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_margin="12.0dip" android:src="@drawable/ic_zoom_out" app:tint="@color/white" />
+                <LinearLayout android:gravity="center" android:layout_gravity="end|bottom|center" android:orientation="vertical" android:background="@drawable/bg_white_rounded_8dp" android:layout_width="40.0dip" android:layout_height="wrap_content" android:layout_margin="12.0dip" android:elevation="2.0dip">
+                    <ImageButton android:id="@id/imagebutton_zoom_in" android:background="@drawable/bg_blue_ripple_rounded_8dp" android:layout_width="40.0dip" android:layout_height="40.0dip" android:src="@drawable/ic_plus" app:tint="@color/whisper_states" />
+                    <View android:background="@color/black_10p" android:layout_width="24.0dip" android:layout_height="1.0dip" />
+                    <ImageButton android:id="@id/imagebutton_zoom_out" android:background="@drawable/bg_blue_ripple_rounded_8dp" android:layout_width="40.0dip" android:layout_height="40.0dip" android:src="@drawable/ic_minus" app:tint="@color/whisper_states" />
+                </LinearLayout>
+            </FrameLayout>
+            <de.komoot.android.ui.inspiration.discoverV2.view.DiscoverTabBarView android:id="@id/dta_head_tab_bar_dtbv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:outlineProvider="bounds" app:layout_scrollFlags="scroll" />
+        </com.google.android.material.appbar.AppBarLayout>
+        <androidx.viewpager.widget.ViewPager android:id="@id/dta_fragment_viewpager_vp" android:background="@color/canvas" android:layout_width="fill_parent" android:layout_height="fill_parent" app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

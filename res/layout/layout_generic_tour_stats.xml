@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.flexbox.FlexboxLayout android:id="@id/layout_generic_tour_stats" android:layout_width="fill_parent" android:layout_height="wrap_content" app:flexWrap="wrap"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <ImageView android:id="@id/imageview_stats_time" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_tourprofile_time" android:scaleType="centerInside" android:layout_marginEnd="4.0dip" app:tint="@color/black" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/black" android:id="@id/textview_stats_time" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:drawablePadding="4.0dip" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginEnd="8.0dip" />
+    </LinearLayout>
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <ImageView android:id="@id/imageview_stats_distance" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_tourprofile_distance_segment" android:scaleType="centerInside" android:layout_marginEnd="4.0dip" app:tint="@color/black" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/black" android:id="@id/textview_stats_distance" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginEnd="8.0dip" />
+    </LinearLayout>
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <ImageView android:id="@id/imageview_stats_average_speed" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_tourprofile_speed" android:layout_marginEnd="4.0dip" app:tint="@color/black" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/black" android:id="@id/textview_stats_average_speed" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:drawablePadding="4.0dip" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginEnd="8.0dip" />
+    </LinearLayout>
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <ImageView android:id="@id/imageview_stats_up" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_tourprofile_uphill" android:scaleType="centerInside" android:layout_marginEnd="4.0dip" app:tint="@color/black" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/black" android:id="@id/textview_stats_up" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginEnd="8.0dip" />
+    </LinearLayout>
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <ImageView android:id="@id/imageview_stats_down" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_tourprofile_downhill" android:scaleType="centerInside" android:layout_marginEnd="4.0dip" app:tint="@color/black" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/black" android:layout_gravity="center_vertical" android:id="@id/textview_stats_down" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/source_sans_pro_bold" />
+    </LinearLayout>
+</com.google.android.flexbox.FlexboxLayout>

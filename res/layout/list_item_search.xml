@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/layout_search_listitem" android:background="@drawable/ic_search_cell_states" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="76.0dip">
+        <ImageView android:id="@id/imageview_icon" android:visibility="visible" android:layout_width="30.0dip" android:layout_height="30.0dip" android:layout_marginLeft="10.0dip" android:layout_marginRight="10.0dip" android:scaleType="centerInside" android:layout_centerVertical="true" android:layout_alignParentStart="true" />
+        <ProgressBar android:id="@id/progressbar" android:visibility="gone" android:layout_width="30.0dip" android:layout_height="30.0dip" android:layout_marginLeft="10.0dip" android:layout_marginRight="10.0dip" android:layout_centerVertical="true" android:layout_alignParentStart="true" />
+        <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_marginStart="50.0dip" android:layout_marginEnd="@dimen/default_margin_and_padding" android:layout_alignParentStart="true">
+            <TextView android:textSize="18.699982sp" android:textColor="@color/kmt_style_text_first_level_info" android:id="@id/textview_list_item_label" android:visibility="visible" android:layout_width="fill_parent" android:layout_height="wrap_content" android:fontFamily="@font/source_sans_pro_regular" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/kmt_style_text_second_level_info" android:id="@id/textview_list_item_line1" android:visibility="visible" android:layout_width="fill_parent" android:layout_height="wrap_content" android:fontFamily="@font/source_sans_pro_regular" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/kmt_style_text_third_level_info" android:id="@id/textview_list_item_line2" android:visibility="visible" android:layout_width="fill_parent" android:layout_height="wrap_content" android:fontFamily="@font/source_sans_pro_regular" />
+        </LinearLayout>
+    </RelativeLayout>
+</FrameLayout>

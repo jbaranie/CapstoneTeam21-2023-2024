@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/ihli_layout_container_ll" android:paddingLeft="@dimen/default_margin_and_padding" android:paddingTop="@dimen/default_margin_and_padding" android:paddingRight="@dimen/default_margin_and_padding" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.percentlayout.widget.PercentFrameLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="30.0dip">
+        <ImageView android:id="@id/imageView_higlight" android:src="@drawable/placeholder_highlight" android:scaleType="centerCrop" app:layout_aspectRatio="177.99988%" app:layout_widthPercent="100.0%" />
+    </androidx.percentlayout.widget.PercentFrameLayout>
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/default_margin_and_padding">
+        <androidx.appcompat.widget.AppCompatImageView android:id="@id/imageView_sport_icon" android:layout_width="24.0dip" android:layout_height="24.0dip" android:scaleType="centerInside" android:layout_marginEnd="32.0dip" />
+        <TextView android:textSize="18.0sp" android:textColor="@color/text_primary" android:gravity="center_vertical" android:id="@id/textView_highlight_name" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="8.0dip" android:fontFamily="@font/source_sans_pro_bold" android:layout_toEndOf="@id/imageView_sport_icon" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/text_secondary" android:id="@id/textView_highlight_sport" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/textView_highlight_name" android:fontFamily="@font/source_sans_pro_regular" android:layout_alignStart="@id/textView_highlight_name" />
+    </RelativeLayout>
+</LinearLayout>

@@ -1,12 +1,3 @@
-SER Capstone 2023-2024
-SER401 [76999]
-SER402 [TBD]
+**Disclaimer: This is for educational purposes only. No proprietary content is shared in this repository.**
 
-Members:
-- Jan Baraniecki
-- John French
-- Larry Huang
-- Abel Mejia
-- Shadow Perea-Pilant
-
-Sponsor: Matt Parkin, Mornings with Matt Consulting
+Attempt at reverse engineering Koomot via using APKTool. These are the generated files created from getting Komoots APK file and running it through APKTool. The output is a codebase written in smali code.  

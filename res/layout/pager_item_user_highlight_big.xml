@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/layout_pager_item_user_highlight" android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="1.0dip" android:layout_marginBottom="5.0dip" android:layout_marginStart="16.0dip" android:layout_marginEnd="2.0dip" app:cardCornerRadius="@dimen/corner_rounding_default" app:cardElevation="3.0dip" app:contentPadding="0.0dip">
+        <LinearLayout android:orientation="vertical" android:layout_width="288.0dip" android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatImageView android:id="@id/highlight_image_iv" android:layout_width="fill_parent" android:layout_height="162.0dip" android:src="@drawable/placeholder_highlight" android:scaleType="centerCrop" />
+            <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:background="@drawable/background_button_white_rounded_bottom" android:layout_width="fill_parent" android:layout_height="48.0dip">
+                <androidx.appcompat.widget.AppCompatImageView android:id="@id/imageViewSportIcon" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_marginLeft="16.0dip" android:layout_marginRight="16.0dip" android:src="@drawable/ic_sport_hike_hl_badge" />
+                <TextView android:textSize="16.0sp" android:textColor="@color/black" android:ellipsize="end" android:id="@id/textViewTitle" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="1" android:singleLine="true" android:fontFamily="@font/source_sans_pro_regular" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:background="@color/primary" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <ImageView android:layout_gravity="center_horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="30.0dip" android:src="@drawable/ic_bluetooth_connect" />
+        <TextView android:textSize="24.0sp" android:textColor="@color/white" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="20.0dip" android:layout_marginBottom="30.0dip" android:text="@string/boa_general_title" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+    </LinearLayout>
+    <TextView android:textSize="20.0sp" android:textColor="@color/black" android:id="@id/bhli_connected_to_title_ttv" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="24.0dip" android:layout_marginBottom="24.0dip" android:text="@string/boa_my_devices" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+</LinearLayout>

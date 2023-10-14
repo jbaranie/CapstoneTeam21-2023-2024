@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:animationCache="true" android:layout_width="fill_parent" android:layout_height="wrap_content" android:animateLayoutChanges="true"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/tetvl_text_ttv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:fontFamily="@font/source_sans_pro_regular" />
+    <TextView android:textSize="16.0sp" android:textColor="@color/style1_text_primary" android:id="@id/tetvl_show_more_button_ttv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" android:text="@string/tetvl_show_more" android:fontFamily="@font/source_sans_pro_regular" />
+</LinearLayout>

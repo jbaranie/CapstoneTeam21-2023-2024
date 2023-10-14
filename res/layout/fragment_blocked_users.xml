@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:background="@color/muted" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:textSize="20.0sp" android:gravity="center" android:id="@id/empty_state_text" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="64.0dip" android:text="@string/settings_privacy_blocked_empty_state" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/recycler_view" android:background="@color/white" android:paddingTop="10.0dip" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="fill_parent" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    <ImageView android:layout_gravity="bottom" android:id="@id/empty_state_image" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/placeholder_emptyscreen" android:scaleType="fitCenter" android:adjustViewBounds="true" />
+</FrameLayout>

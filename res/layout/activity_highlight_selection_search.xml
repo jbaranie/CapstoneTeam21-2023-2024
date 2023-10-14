@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/recyclerview" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_alignParentTop="true" />
+    <TextView android:textSize="20.0sp" android:textColor="@color/text_secondary" android:gravity="center" android:layout_gravity="center_horizontal" android:id="@id/textview_search_hint" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="30.0dip" android:text="@string/hssa_search_for_a_highlight" android:drawableTop="@drawable/ic_emptystate_search" android:drawablePadding="30.0dip" android:fontFamily="@font/source_sans_pro_regular" />
+    <ImageView android:id="@id/imageview_search_hint" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/placeholder_emptyscreen" android:scaleType="fitCenter" android:adjustViewBounds="true" android:layout_alignParentBottom="true" />
+</RelativeLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:background="@drawable/list_item_background_states" android:paddingLeft="16.0dip" android:paddingRight="16.0dip" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.makeramen.roundedimageview.RoundedImageView android:id="@id/image" android:layout_width="@dimen/avatar_36" android:layout_height="@dimen/avatar_36" android:layout_marginTop="10.0dip" android:layout_marginBottom="10.0dip" app:riv_oval="true" />
+    <de.komoot.android.widget.UsernameTextView android:textSize="18.0sp" android:ellipsize="end" android:id="@id/user_text_view" android:layout_width="0.0dip" android:layout_height="wrap_content" android:maxLines="2" android:layout_weight="1.0" android:fontFamily="?fontRegular" android:layout_marginStart="20.0dip" app:sizeToFit="false" />
+    <Button android:id="@id/button_add" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/safety_contacts_item_action_add" android:drawableStart="@drawable/ic_plus_blue" style="@style/BorderlessButton" />
+    <Button android:textColor="@color/primary" android:id="@id/button_added" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/safety_contacts_item_action_added" android:drawableStart="@drawable/ic_check_green" style="@style/BorderlessButton" />
+</LinearLayout>

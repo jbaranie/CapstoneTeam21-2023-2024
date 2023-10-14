@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/nil_large_container_rl" android:background="@drawable/background_navigation_item_states" android:layout_width="fill_parent" android:layout_height="@dimen/map_portrait_navigation_item_large" xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/nil_direction_arrow_large_iv" android:layout_width="75.0dip" android:layout_height="75.0dip" android:layout_marginTop="48.0dip" android:scaleType="fitXY" android:layout_marginStart="24.0dip" android:layout_marginEnd="21.0dip" android:layout_alignParentStart="false" />
+    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignTop="@id/nil_direction_arrow_large_iv" android:layout_marginEnd="8.0dip" android:layout_toEndOf="@id/nil_direction_arrow_large_iv">
+        <de.komoot.android.view.AutofitTextView android:textSize="48.0sp" android:textColor="@android:color/white" android:gravity="start" android:id="@id/nil_header_text_large_ttv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="1" android:singleLine="true" android:fontFamily="@font/source_sans_pro_bold" />
+        <de.komoot.android.view.AutofitTextView android:textSize="24.0sp" android:textColor="@android:color/white" android:gravity="start" android:id="@id/nil_sub_text_large_ttv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/default_margin_and_padding" android:maxLines="1" android:singleLine="true" android:drawablePadding="6.0dip" android:fontFamily="@font/source_sans_pro_regular" />
+    </LinearLayout>
+</RelativeLayout>

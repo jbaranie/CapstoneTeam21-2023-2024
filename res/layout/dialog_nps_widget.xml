@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <de.komoot.android.view.TextInputWebView android:id="@id/nwd_webview_wv" android:background="@drawable/bg_white_no_focus" android:focusable="true" android:focusableInTouchMode="true" android:layout_width="fill_parent" android:layout_height="256.0dip" android:layout_centerHorizontal="true" android:layout_centerVertical="true" style="?android:webViewStyle" />
+    <ProgressBar android:id="@id/nwd_progress_wheel_pb" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:indeterminate="true" android:layout_centerHorizontal="true" android:layout_centerVertical="true" />
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="200.0dip" android:layout_height="120.0dip" android:layout_marginEnd="1.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView android:id="@id/sccli_image_iv" android:layout_width="200.0dip" android:layout_height="120.0dip" android:src="@drawable/placeholder_highlight_nopicture_svg" android:scaleType="centerCrop" />
+    <ImageView android:background="@drawable/inspire_collection_item_overlay_with_effect" android:duplicateParentState="true" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignTop="@id/sccli_image_iv" android:layout_alignBottom="@id/sccli_image_iv" android:layout_alignStart="@id/sccli_image_iv" android:layout_alignEnd="@id/sccli_image_iv" />
+    <de.komoot.android.view.AutofitTextView android:textSize="18.0sp" android:textColor="@color/white" android:gravity="center_horizontal" android:id="@id/sccli_name_tatv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="4.0dip" android:maxLines="4" android:layout_centerInParent="true" android:fontFamily="@font/source_sans_pro_bold" />
+</RelativeLayout>

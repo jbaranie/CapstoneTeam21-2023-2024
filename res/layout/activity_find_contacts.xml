@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/fca_contacts_rv" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    <ProgressBar android:layout_gravity="center" android:id="@id/fca_loading_spinner_pb" android:visibility="gone" android:layout_width="32.0dip" android:layout_height="32.0dip" android:layout_margin="@dimen/default_margin_and_padding" android:indeterminate="true" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" />
+    <LinearLayout android:orientation="vertical" android:id="@id/fca_no_contacts_permission_hint_container_ll" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView android:textSize="16.0sp" android:textColor="@color/text_secondary" android:gravity="center_horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="30.0dip" android:layout_marginBottom="30.0dip" android:text="@string/fca_needs_permission_text" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+        <Button android:textSize="16.0sp" android:textColor="@color/secondary" android:layout_gravity="center_horizontal" android:id="@id/fca_request_permission_tb" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/fca_request_permission_button" android:fontFamily="@font/source_sans_pro_regular" style="@style/Base.Widget.AppCompat.Button.Borderless.Colored" />
+    </LinearLayout>
+    <include layout="@layout/layout_follow_all_bottom_bar" />
+</RelativeLayout>

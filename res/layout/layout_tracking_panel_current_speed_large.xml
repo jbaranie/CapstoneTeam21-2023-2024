@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center" android:orientation="vertical" android:background="@drawable/bg_white_with_grey_effect_states" android:clickable="false" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:textSize="16.0sp" android:textColor="@android:color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/map_stats_current_speed" android:fontFamily="@font/source_sans_pro_regular" />
+    <TextView android:textSize="84.0sp" android:textStyle="bold" android:textColor="@android:color/black" android:id="@id/tpl_current_speed_full_tv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:fontFamily="sans-serif-condensed" />
+    <TextView android:textSize="16.0sp" android:textColor="@android:color/black" android:id="@id/tpl_current_speed_unit_full_ttv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6.0dip" android:fontFamily="@font/source_sans_pro_bold" />
+</LinearLayout>

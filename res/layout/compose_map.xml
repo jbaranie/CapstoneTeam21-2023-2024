@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.komoot.android.core.map.WrappedMapView android:id="@id/map" android:layout_width="fill_parent" android:layout_height="fill_parent" app:maplibre_localIdeographFontFamily="sans-serif" app:maplibre_renderTextureMode="true" app:maplibre_uiAttribution="false" app:maplibre_uiCompass="false" app:maplibre_uiLogo="false"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" />

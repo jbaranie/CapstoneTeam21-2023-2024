@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@color/black_70p" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <de.komoot.android.ui.onboarding.tips.ScreenTipHole android:id="@id/hole" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="-40.0dip" android:layout_marginTop="16.0dip" />
+    <de.komoot.android.ui.onboarding.tips.ScreenTipView android:id="@id/screen_tip_view" android:layout_width="fill_parent" android:layout_height="wrap_content" app:buttonText="@string/onboarding_tips_next_button" app:subtitle="@string/onboarding_planning_tour_properties_help_subtitle" app:title="@string/onboarding_planning_tour_properties_help_title" />
+</LinearLayout>

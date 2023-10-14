@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen android:title="@string/settings_screen_title"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="🛠️ Develop Build Options 🛠️" android:key="pref_key_cat_beta_build" app:iconSpaceReserved="false">
+        <Preference android:title="Feature Flags" android:key="pref_key_feature_flags" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="Limits" android:key="pref_key_limits" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_group_account" android:key="pref_key_cat_account_settings" app:iconSpaceReserved="false">
+        <Preference android:title="@string/setting_button_notification" android:key="pref_key_account_messages" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="@string/settings_profile_information" android:key="pref_key_profile_information" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="@string/settings_privacy" android:key="pref_key_settings_privacy_main" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="@string/live_tracking_switch" android:key="pref_key_settings_live_tracking" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="@string/settings_premium" android:key="pref_key_settings_premium" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="@string/settings_favorite_sport_select" android:key="pref_key_favorite_sports" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="@string/settings_button_app_settings" android:key="pref_key_app_settings" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="@string/settings_button_used_storage" android:key="pref_key_data_usage" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_group_connect_ext" android:key="pref_key_cat_ext_connect" app:iconSpaceReserved="false">
+        <Preference android:title="@string/settings_facebook" android:key="pref_key_account_facebook" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="@string/setting_komoot_connect_title" android:key="pref_key_ble_connect" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="@string/setting_garmin_connect_title" android:key="pref_key_garmin_connect" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_group_komoot" android:key="pref_key_cat_komoot_settings" app:iconSpaceReserved="false">
+        <Preference android:title="@string/settings_release_notes" android:key="pref_key_komoot_release_notes" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="@string/settings_feddback_support" android:key="pref_key_komoot_support" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="@string/settings_rate_app" android:key="pref_key_komoot_rate_app" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="@string/settings_legal" android:key="pref_key_komoot_legal_screen" app:allowDividerAbove="true" app:allowDividerBelow="true" app:iconSpaceReserved="false" />
+        <Preference android:title="@string/settings_button_logout" android:key="pref_key_logout" app:allowDividerAbove="true" app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

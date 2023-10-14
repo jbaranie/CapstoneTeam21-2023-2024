@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/search" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="20.0sp" android:textColor="@color/text_secondary" android:gravity="center" android:layout_gravity="center_horizontal" android:id="@id/empty_search_term" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="30.0dip" android:text="@string/tour_list_search_empty" android:drawableTop="@drawable/ic_emptystate_search" android:drawablePadding="30.0dip" android:fontFamily="@font/source_sans_pro_regular" />
+    <FrameLayout android:scrollbarStyle="outsideOverlay" android:id="@id/search_fragment" android:visibility="visible" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+</FrameLayout>

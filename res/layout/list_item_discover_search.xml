@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@drawable/list_item_background_states" android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="56.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="horizontal" android:paddingTop="16.0dip" android:paddingBottom="16.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <ImageView android:id="@id/imageview_spot_icon" android:background="@drawable/bg_muted_rounded_12dp" android:layout_width="48.0dip" android:layout_height="48.0dip" android:src="@drawable/ic_poi_188" android:scaleType="center" android:layout_marginStart="@dimen/default_margin_and_padding" />
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="12.0dip" android:layout_marginEnd="@dimen/default_margin_and_padding">
+            <TextView android:textSize="16.0sp" android:textColor="@color/text" android:id="@id/textview_list_item_label" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="4.0dip" android:maxLines="2" android:fontFamily="@font/source_sans_pro" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/text_whisper" android:id="@id/textview_list_item_line1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="4.0dip" android:maxLines="1" android:fontFamily="?fontLight" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/text_whisper" android:id="@id/textview_list_item_line2" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="?fontLight" />
+        </LinearLayout>
+    </LinearLayout>
+    <View android:background="@color/divider" android:layout_width="wrap_content" android:layout_height="1.0dip" android:layout_marginStart="16.0dip" />
+</LinearLayout>

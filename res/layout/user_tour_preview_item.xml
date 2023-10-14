@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/route_preview_details" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <ImageView android:id="@id/imageview_sport" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_marginTop="8.0dip" android:layout_marginBottom="8.0dip" android:layout_marginStart="16.0dip" />
+        <TextView android:textSize="18.0sp" android:textColor="@color/text_primary" android:ellipsize="end" android:id="@id/textview_route_preview_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" android:layout_marginBottom="8.0dip" android:maxLines="1" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+    </LinearLayout>
+    <include android:layout_width="fill_parent" android:layout_height="78.0dip" layout="@layout/layout_planning_route_stats" />
+    <Button android:textSize="16.0sp" android:textColor="@color/white" android:layout_gravity="center_vertical" android:id="@id/button_route_preview_show" android:background="@drawable/btn_primary" android:layout_width="fill_parent" android:layout_height="36.0dip" android:layout_marginLeft="@dimen/default_margin_and_padding" android:layout_marginTop="8.0dip" android:layout_marginRight="@dimen/default_margin_and_padding" android:layout_marginBottom="@dimen/default_margin_and_padding" android:text="@string/feed_show_more" android:maxLines="1" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" android:elevation="3.0dip" />
+</LinearLayout>

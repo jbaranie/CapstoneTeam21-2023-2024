@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:textSize="13.0sp" android:textColor="@color/white" android:gravity="center_vertical" android:id="@id/textview_difficulty_badge" android:background="@drawable/difficulty_bar_moderate" android:paddingLeft="6.0dip" android:paddingRight="6.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:layout_marginBottom="12.0dip" android:text="@string/route_difficulty_intermediate" android:fontFamily="@font/source_sans_pro_bold" android:paddingStart="6.0dip" android:paddingEnd="6.0dip" android:layout_marginStart="@dimen/std_border_left" />
+    <TextView android:textSize="14.0sp" android:textColor="@color/text_underline" android:id="@id/textview_difficulty_description" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="4" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="@dimen/std_border_left" android:layout_marginEnd="@dimen/std_border_right" />
+</LinearLayout>

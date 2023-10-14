@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_weight="1.0">
+        <androidx.fragment.app.FragmentContainerView android:id="@id/compose_fragment_container" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+        <androidx.fragment.app.FragmentContainerView android:theme="@style/ThemeOverlay.KmtTheme.Dark" android:layout_gravity="bottom" android:id="@id/popup_banner_container" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    </FrameLayout>
+    <androidx.fragment.app.FragmentContainerView android:theme="@style/ThemeOverlay.KmtTheme.Dark" android:id="@id/navigation_bar_container" android:layout_width="fill_parent" android:layout_height="@dimen/kmt_main_bottom_navigation_bar_height" />
+    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation android:theme="@style/ThemeOverlay.KmtTheme.Dark" android:id="@id/navigation_bar" android:layout_width="fill_parent" android:layout_height="@dimen/kmt_main_bottom_navigation_bar_height" />
+</LinearLayout>

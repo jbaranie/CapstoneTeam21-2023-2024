@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:id="@id/sfcbli_follow_facebook_friends_container_rl" android:background="@drawable/bg_pressable_text_states" android:addStatesFromChildren="true" android:layout_width="fill_parent" android:layout_height="56.0dip">
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_friends_facebook" android:layout_centerVertical="true" android:layout_marginStart="@dimen/default_margin_and_padding" />
+        <de.komoot.android.view.AutofitTextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/sfcbli_follow_facebook_text_tatv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:lines="1" android:layout_centerVertical="true" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="72.0dip" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+    </RelativeLayout>
+    <RelativeLayout android:id="@id/sfcbli_follow_contacts_friends_container_rl" android:background="@drawable/bg_pressable_text_states" android:visibility="gone" android:addStatesFromChildren="true" android:layout_width="fill_parent" android:layout_height="56.0dip">
+        <View android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="1.0dip" android:layout_alignStart="@id/sfcbli_follow_contacts_text_tatv" />
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_friends_contacts" android:layout_centerVertical="true" android:layout_marginStart="@dimen/default_margin_and_padding" />
+        <de.komoot.android.view.AutofitTextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/sfcbli_follow_contacts_text_tatv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:lines="1" android:layout_centerVertical="true" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="72.0dip" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+    </RelativeLayout>
+    <View android:background="@color/divider" android:layout_width="fill_parent" android:layout_height="1.0dip" />
+</LinearLayout>

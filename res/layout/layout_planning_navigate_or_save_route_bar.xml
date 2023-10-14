@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:elevation="9.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View android:id="@id/pnsrb_top_shadow_view" android:background="@drawable/gradient_top_transparent_to_bottom_light_grey_transparent" android:layout_width="fill_parent" android:layout_height="@dimen/pa_panel_shadow_height" />
+    <LinearLayout android:orientation="horizontal" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="@dimen/pa_navigate_or_save_bar_height" android:baselineAligned="true">
+        <FrameLayout android:id="@id/layout_btn_save" android:background="@drawable/btn_white_c8_grey_border_ripple" android:padding="0.0dip" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="48.0dip" android:layout_marginTop="12.0dip" android:layout_weight="1.0" android:layout_marginStart="16.0dip" android:layout_marginEnd="8.0dip" android:elevation="0.0dip" android:stateListAnimator="@null">
+            <de.komoot.android.view.AutofitTextView android:textSize="18.0sp" android:textColor="@color/black" android:gravity="center" android:layout_width="fill_parent" android:layout_height="fill_parent" android:text="@string/tour_information_save_tour" android:maxLines="1" android:textAllCaps="false" android:fontFamily="@font/source_sans_pro_bold" android:paddingStart="8.0dip" android:paddingEnd="8.0dip" app:minTextSize="10.0sp" />
+        </FrameLayout>
+        <FrameLayout android:id="@id/layout_btn_navigate" android:background="@drawable/btn_hero_green_c8_states" android:padding="0.0dip" android:focusable="true" android:clickable="true" android:layout_width="fill_parent" android:layout_height="48.0dip" android:layout_marginTop="12.0dip" android:layout_marginBottom="12.0dip" android:layout_weight="1.0" android:layout_marginStart="8.0dip" android:layout_marginEnd="16.0dip" android:elevation="0.0dip" android:stateListAnimator="@null">
+            <LinearLayout android:gravity="center_horizontal" android:layout_gravity="center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingStart="8.0dip" android:paddingEnd="8.0dip">
+                <ImageView android:layout_width="24.0dip" android:layout_height="24.0dip" android:src="@drawable/ic_plan_navigation" android:scaleType="centerInside" android:layout_marginEnd="4.0dip" />
+                <de.komoot.android.view.AutofitTextView android:textSize="18.0sp" android:textColor="@android:color/white" android:gravity="center_vertical" android:id="@id/textview_cta" android:layout_width="wrap_content" android:layout_height="24.0dip" android:text="@string/route_information_button_start" android:maxLines="1" android:textAllCaps="false" android:fontFamily="@font/source_sans_pro_bold" app:minTextSize="10.0sp" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>

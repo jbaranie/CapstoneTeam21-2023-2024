@@ -1,0 +1,137 @@
+.class final Lde/komoot/android/ui/tour/RouteTimelineFragment$adapter$2;
+.super Lkotlin/jvm/internal/Lambda;
+.source "SourceFile"
+
+# interfaces
+.implements Lkotlin/jvm/functions/Function0;
+
+
+# annotations
+.annotation system Ldalvik/annotation/EnclosingMethod;
+    value = Lde/komoot/android/ui/tour/RouteTimelineFragment;-><init>()V
+.end annotation
+
+.annotation system Ldalvik/annotation/InnerClass;
+    accessFlags = 0x18
+    name = null
+.end annotation
+
+.annotation system Ldalvik/annotation/Signature;
+    value = {
+        "Lkotlin/jvm/internal/Lambda;",
+        "Lkotlin/jvm/functions/Function0<",
+        "Lde/komoot/android/widget/KmtRecyclerViewAdapter<",
+        "Lde/komoot/android/view/recylcerview/KmtRecyclerViewItem<",
+        "**>;>;>;"
+    }
+.end annotation
+
+.annotation runtime Lkotlin/Metadata;
+    d1 = {
+        "\u0000\u000c\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0008\u0002\u0010\u0002\u001a\u0010\u0012\u000c\u0012\n\u0012\u0002\u0008\u0003\u0012\u0002\u0008\u00030\u00010\u0000H\n\u00a2\u0006\u0004\u0008\u0002\u0010\u0003"
+    }
+    d2 = {
+        "Lde/komoot/android/widget/KmtRecyclerViewAdapter;",
+        "Lde/komoot/android/view/recylcerview/KmtRecyclerViewItem;",
+        "a",
+        "()Lde/komoot/android/widget/KmtRecyclerViewAdapter;"
+    }
+    k = 0x3
+    mv = {
+        0x1,
+        0x9,
+        0x0
+    }
+.end annotation
+
+
+# instance fields
+.field final synthetic b:Lde/komoot/android/ui/tour/RouteTimelineFragment;
+
+
+# direct methods
+.method constructor <init>(Lde/komoot/android/ui/tour/RouteTimelineFragment;)V
+    .locals 0
+
+    iput-object p1, p0, Lde/komoot/android/ui/tour/RouteTimelineFragment$adapter$2;->b:Lde/komoot/android/ui/tour/RouteTimelineFragment;
+
+    const/4 p1, 0x0
+
+    invoke-direct {p0, p1}, Lkotlin/jvm/internal/Lambda;-><init>(I)V
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public final a()Lde/komoot/android/widget/KmtRecyclerViewAdapter;
+    .locals 4
+
+    new-instance v0, Lde/komoot/android/ui/tour/item/RouteTimelineListItem$DropIn;
+
+    iget-object v1, p0, Lde/komoot/android/ui/tour/RouteTimelineFragment$adapter$2;->b:Lde/komoot/android/ui/tour/RouteTimelineFragment;
+
+    invoke-virtual {v1}, Lde/komoot/android/app/KmtCompatFragment;->C5()Lde/komoot/android/app/KomootifiedActivity;
+
+    move-result-object v1
+
+    iget-object v2, p0, Lde/komoot/android/ui/tour/RouteTimelineFragment$adapter$2;->b:Lde/komoot/android/ui/tour/RouteTimelineFragment;
+
+    invoke-static {v2}, Lde/komoot/android/ui/tour/RouteTimelineFragment;->r3(Lde/komoot/android/ui/tour/RouteTimelineFragment;)Lde/komoot/android/ui/tour/RouteInfoViewModel;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Lde/komoot/android/ui/tour/RouteInfoViewModel;->A5()Lde/komoot/android/interact/MutableObjectStore;
+
+    move-result-object v2
+
+    iget-object v3, p0, Lde/komoot/android/ui/tour/RouteTimelineFragment$adapter$2;->b:Lde/komoot/android/ui/tour/RouteTimelineFragment;
+
+    invoke-virtual {v3}, Lde/komoot/android/ui/tour/RouteTimelineFragment;->S3()Lde/komoot/android/data/repository/user/UserRelationRepository;
+
+    move-result-object v3
+
+    invoke-direct {v0, v1, v2, v3}, Lde/komoot/android/ui/tour/item/RouteTimelineListItem$DropIn;-><init>(Lde/komoot/android/app/KomootifiedActivity;Lde/komoot/android/interact/ObjectStore;Lde/komoot/android/data/repository/user/UserRelationRepository;)V
+
+    sget-object v1, Lde/komoot/android/location/LocationHelper;->Companion:Lde/komoot/android/location/LocationHelper$Companion;
+
+    invoke-virtual {v1}, Lde/komoot/android/location/LocationHelper$Companion;->s()Lde/komoot/android/location/KmtLocation;
+
+    move-result-object v1
+
+    iput-object v1, v0, Lde/komoot/android/widget/DropIn;->e:Lde/komoot/android/location/KmtLocation;
+
+    new-instance v1, Lde/komoot/android/view/helper/LetterTileIdenticon;
+
+    const-string v2, "sans-serif-light"
+
+    const/4 v3, 0x0
+
+    invoke-static {v2, v3}, Landroid/graphics/Typeface;->create(Ljava/lang/String;I)Landroid/graphics/Typeface;
+
+    move-result-object v2
+
+    new-instance v3, Lde/komoot/android/view/transformation/CircleTransformation;
+
+    invoke-direct {v3}, Lde/komoot/android/view/transformation/CircleTransformation;-><init>()V
+
+    invoke-direct {v1, v2, v3}, Lde/komoot/android/view/helper/LetterTileIdenticon;-><init>(Landroid/graphics/Typeface;Lcom/squareup/picasso/Transformation;)V
+
+    iput-object v1, v0, Lde/komoot/android/widget/DropIn;->g:Lde/komoot/android/view/helper/LetterTileIdenticon;
+
+    new-instance v1, Lde/komoot/android/widget/KmtRecyclerViewAdapter;
+
+    invoke-direct {v1, v0}, Lde/komoot/android/widget/KmtRecyclerViewAdapter;-><init>(Lde/komoot/android/widget/DropIn;)V
+
+    return-object v1
+.end method
+
+.method public bridge synthetic invoke()Ljava/lang/Object;
+    .locals 1
+
+    invoke-virtual {p0}, Lde/komoot/android/ui/tour/RouteTimelineFragment$adapter$2;->a()Lde/komoot/android/widget/KmtRecyclerViewAdapter;
+
+    move-result-object v0
+
+    return-object v0
+.end method

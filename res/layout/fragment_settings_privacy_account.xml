@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:background="@color/muted" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <LinearLayout android:orientation="vertical" android:background="@color/white" android:padding="@dimen/default_margin_and_padding" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView android:textSize="20.0sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/settings_privacy_account_profile_privacy_header" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="18.0sp" android:paddingBottom="8.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/settings_privacy_account_profile_privacy_header_subtitle" android:fontFamily="@font/source_sans_pro_regular" />
+            <de.komoot.android.ui.generic.RadioGroupContainer android:id="@id/settings_privacy_profile_group" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                <de.komoot.android.ui.generic.RadioItemSelector android:id="@id/settings_privacy_profile_public" android:layout_width="fill_parent" android:layout_height="wrap_content" app:descriptionText="@string/settings_privacy_account_profile_public_description" app:labelText="@string/settings_privacy_account_profile_privacy_public" />
+                <de.komoot.android.ui.generic.RadioItemSelector android:id="@id/settings_privacy_profile_private" android:layout_width="fill_parent" android:layout_height="wrap_content" app:descriptionText="@string/settings_privacy_account_profile_private_description" app:labelText="@string/settings_privacy_account_profile_privacy_private" />
+            </de.komoot.android.ui.generic.RadioGroupContainer>
+        </LinearLayout>
+        <LinearLayout android:orientation="vertical" android:background="@color/white" android:paddingLeft="@dimen/default_margin_and_padding" android:paddingTop="@dimen/default_margin_and_padding" android:paddingRight="@dimen/default_margin_and_padding" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/settings_section_padding">
+            <TextView android:textSize="20.0sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/settings_privacy_search_results_header" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="18.0sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/settings_privacy_search_results_header_subtitle" android:fontFamily="@font/source_sans_pro_regular" />
+            <CheckBox android:textSize="18.0sp" android:id="@id/settings_privacy_show_in_search_checkbox" android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="48.0dip" android:text="@string/settings_privacy_search_results_checkbox" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="20.0dip" android:layout_marginStart="-5.0dip" />
+        </LinearLayout>
+        <LinearLayout android:orientation="vertical" android:id="@id/settings_privacy_account_pioneer_section" android:background="@color/white" android:paddingLeft="@dimen/default_margin_and_padding" android:paddingTop="@dimen/default_margin_and_padding" android:paddingRight="@dimen/default_margin_and_padding" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/settings_section_padding">
+            <TextView android:textSize="20.0sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/settings_privacy_pioneer_program_header" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="18.0sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/settings_privacy_pioneer_program_header_subtitle" android:fontFamily="@font/source_sans_pro_regular" />
+            <CheckBox android:textSize="18.0sp" android:id="@id/settings_privacy_pioneer_program_checkbox" android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="48.0dip" android:text="@string/settings_privacy_pioneer_program_checkbox" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="20.0dip" android:layout_marginStart="-5.0dip" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

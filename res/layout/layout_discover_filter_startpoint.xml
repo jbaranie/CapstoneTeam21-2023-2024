@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:id="@id/layout_base_row_container" android:background="@drawable/bg_white_with_disabled_grey_effect_states" android:layout_width="fill_parent" android:layout_height="64.0dip">
+        <ImageView android:id="@id/imageview_start_icon" android:layout_width="24.0dip" android:layout_height="24.0dip" android:src="@drawable/ic_filter_location" android:layout_centerVertical="true" android:layout_marginStart="@dimen/default_margin_and_padding" />
+        <TextView android:textSize="18.0sp" android:textColor="@color/text_underline" android:id="@id/textview_start_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/discover_smart_tours_filter_startpoint_title" android:layout_centerVertical="true" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="24.0dip" android:layout_toEndOf="@id/imageview_start_icon" />
+        <TextView android:textSize="16.0sp" android:gravity="end" android:id="@id/textview_start_selection" android:visibility="visible" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="2" android:layout_centerVertical="true" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="8.0dip" android:layout_marginEnd="@dimen/default_margin_and_padding" android:layout_toEndOf="@id/textview_start_title" android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <FrameLayout android:theme="@style/ThemeOverlay.KmtTheme.Dark" android:id="@id/layout_expanend_row_container" android:background="@color/theme_control_normal" android:paddingTop="@dimen/default_margin_and_padding" android:paddingBottom="@dimen/default_margin_and_padding" android:visibility="gone" android:clipChildren="false" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <RadioGroup android:orientation="vertical" android:id="@id/radiogroup_startpoint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12.0dip" android:layout_marginEnd="16.0dip">
+            <RadioButton android:textSize="16.0sp" android:id="@id/radiobutton_exact" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/discover_smart_tours_filter_startpoint_current_location" android:paddingStart="20.0dip" android:paddingEnd="0.0dip" />
+            <RadioButton android:textSize="16.0sp" android:id="@id/radiobutton_area" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/discover_smart_tours_filter_startpoint_area" android:paddingStart="20.0dip" android:paddingEnd="0.0dip" />
+            <RadioButton android:textSize="16.0sp" android:id="@id/radiobutton_public_transport" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/discover_smart_tours_filter_startpoint_pubic_transport" android:paddingStart="20.0dip" android:paddingEnd="0.0dip" />
+        </RadioGroup>
+    </FrameLayout>
+</LinearLayout>

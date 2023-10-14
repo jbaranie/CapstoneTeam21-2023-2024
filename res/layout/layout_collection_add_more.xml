@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View android:background="@color/background_green_grey_dark" android:layout_width="fill_parent" android:layout_height="10.0dip" />
+    <LinearLayout android:orientation="horizontal" android:id="@id/caml_add_more_button_ll" android:background="@drawable/bg_green_grey_light_states" android:layout_width="fill_parent" android:layout_height="56.0dip" android:paddingStart="@dimen/default_margin_and_padding" android:paddingEnd="@dimen/default_margin_and_padding">
+        <ImageView android:layout_width="wrap_content" android:layout_height="fill_parent" android:src="@drawable/ic_action_add_circle_outline" />
+        <TextView android:textSize="18.0sp" android:textColor="@color/text_primary" android:gravity="center_vertical" android:id="@id/caml_add_more_button_tv" android:layout_width="0.0dip" android:layout_height="fill_parent" android:text="@string/collection_edit_btn_add_more" android:layout_weight="1.0" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="32.0dip" />
+        <ImageView android:id="@id/caml_add_more_button_iv" android:layout_width="wrap_content" android:layout_height="fill_parent" android:src="@drawable/logo_premium_short_small" />
+    </LinearLayout>
+</LinearLayout>

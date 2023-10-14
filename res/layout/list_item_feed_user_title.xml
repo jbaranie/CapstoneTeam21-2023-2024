@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/top_container" android:layout_width="fill_parent" android:layout_height="42.0dip" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="8.0dip">
+        <TextView android:id="@id/textview_time" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" style="@style/KmtTextAppearance.UserProfile.Time" />
+        <ImageButton android:id="@id/top_menu" android:background="@null" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_tourprofile_menu" />
+    </LinearLayout>
+    <LinearLayout android:gravity="center_vertical" android:id="@id/user_container" android:layout_width="fill_parent" android:layout_height="44.0dip" android:layout_marginBottom="@dimen/default_margin_and_padding" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding">
+        <com.makeramen.roundedimageview.RoundedImageView android:id="@id/imageview_user" android:focusable="true" android:clickable="true" android:layout_width="@dimen/avatar_36" android:layout_height="@dimen/avatar_36" android:scaleType="centerInside" app:riv_oval="true" />
+        <de.komoot.android.widget.UsernameTextView android:textSize="16.0sp" android:textColor="@color/black" android:gravity="center_vertical" android:id="@id/textview_user_feed_title" android:focusable="true" android:clickable="true" android:layout_width="0.0dip" android:layout_height="wrap_content" android:maxLines="2" android:layout_weight="1.0" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="20.0dip" android:layout_marginEnd="8.0dip" />
+        <ImageView android:id="@id/user_icon" android:visibility="gone" android:layout_width="16.0dip" android:layout_height="16.0dip" android:src="@drawable/ic_lock" app:tint="@color/main_grey" />
+        <Button android:textSize="16.0sp" android:textColor="@color/white" android:id="@id/user_button" android:background="@drawable/bg_blue_states" android:padding="8.0dip" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="0.0dip" android:minHeight="0.0dip" android:text="@string/user_info_action_follow_user" android:textAllCaps="false" android:fontFamily="@font/source_sans_pro_bold" android:elevation="0.0dip" android:outlineProvider="none" app:elevation="0.0dip" />
+    </LinearLayout>
+</LinearLayout>

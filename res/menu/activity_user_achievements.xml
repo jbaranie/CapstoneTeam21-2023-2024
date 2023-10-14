@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:icon="@drawable/ic_help" android:id="@id/uaam_how_it_work" android:title="@string/uaa_how_it_works_menu_item" app:iconTint="@color/white" app:showAsAction="always" />
+</menu>

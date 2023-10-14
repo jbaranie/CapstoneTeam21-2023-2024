@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include layout="@layout/divider_item" />
+    <TextView android:textSize="18.0sp" android:textColor="@color/text_primary" android:gravity="bottom" android:id="@id/textview_seasonality_title" android:paddingLeft="@dimen/list_item_side_padding" android:paddingRight="@dimen/list_item_side_padding" android:layout_width="fill_parent" android:layout_height="48.0dip" android:layout_marginBottom="8.0dip" android:text="@string/highlight_info_section_title_seasonality" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_light" android:paddingStart="@dimen/list_item_side_padding" android:paddingEnd="@dimen/list_item_side_padding" />
+    <de.komoot.android.ui.highlight.view.SeasonalityOverviewView android:id="@id/view_seasonality" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/std_border_left" android:layout_marginRight="@dimen/std_border_right" android:layout_marginStart="@dimen/std_border_left" android:layout_marginEnd="@dimen/std_border_right" />
+    <androidx.legacy.widget.Space android:layout_width="fill_parent" android:layout_height="10.0dip" />
+</LinearLayout>

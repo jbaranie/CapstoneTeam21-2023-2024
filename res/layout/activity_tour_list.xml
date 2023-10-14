@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/layout_user_information" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:id="@id/planned_and_completed" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <LinearLayout android:orientation="horizontal" android:id="@id/tabbar_container" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:elevation="3.0dip">
+            <de.komoot.android.view.composition.TabBarTextTab android:id="@id/planned_tab" android:background="@drawable/bg_dark_tab_bar_states" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" app:tabActive="true" app:tabActiveTextColor="@color/primary_on_dark" app:tabDefaultTextColor="@color/white" app:tabTitle="@string/tour_list_planned_tours_v2" />
+            <de.komoot.android.view.composition.TabBarTextTab android:id="@id/completed_tab" android:background="@drawable/bg_dark_tab_bar_states" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" app:tabActive="false" app:tabActiveTextColor="@color/primary_on_dark" app:tabDefaultTextColor="@color/white" app:tabTitle="@string/tour_list_made_tours_v2" />
+        </LinearLayout>
+        <androidx.viewpager.widget.ViewPager android:id="@id/view_pager" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    </LinearLayout>
+    <include layout="@layout/inc_tour_search" />
+</LinearLayout>

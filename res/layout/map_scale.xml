@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:elevation="1.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="12.0sp" android:textStyle="bold" android:textColor="@color/black" android:gravity="center" android:id="@id/textview_map_scale_label" android:layout_width="fill_parent" android:layout_height="wrap_content" android:fontFamily="@font/source_sans_pro_regular" />
+    <de.komoot.android.view.FloatingScale android:id="@id/map_scale" android:layout_width="0.0dip" android:layout_height="15.0dip" android:layout_marginBottom="12.0dip" android:layout_marginStart="3.0dip" />
+</LinearLayout>

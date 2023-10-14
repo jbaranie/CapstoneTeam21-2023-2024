@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@drawable/bg_white_grey_rounded_corners" android:paddingLeft="@dimen/default_margin_and_padding" android:paddingTop="24.0dip" android:paddingRight="@dimen/default_margin_and_padding" android:paddingBottom="24.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="12.0dip" android:layout_marginTop="24.0dip" android:layout_marginRight="12.0dip" android:layout_marginBottom="12.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:textSize="18.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/premium_owns_expires_title" android:fontFamily="@font/source_sans_pro_bold" />
+    <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:text="@string/premium_owns_expires_text" android:fontFamily="@font/source_sans_pro_regular" />
+    <TextView android:textSize="18.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_header" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:text="@string/premium_owns_expires_features" android:fontFamily="@font/source_sans_pro_bold" />
+    <LinearLayout android:id="@id/premium_owns_expiring_feature_mdp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip">
+        <ImageView android:id="@id/premium_owns_expiring_feature_image" android:layout_width="60.0dip" android:layout_height="60.0dip" android:src="@drawable/lt_img_small" />
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="@dimen/default_margin_and_padding">
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/premium_owns_expires_live_tracking_title" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:text="@string/premium_owns_expires_live_tracking_text" android:fontFamily="@font/source_sans_pro_regular" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:id="@id/premium_owns_expiring_feature_live_tracking" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip">
+        <ImageView android:id="@id/premium_owns_expiring_feature_image" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/multiday_planner" />
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="@dimen/default_margin_and_padding">
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/premium_owns_expires_mdp_title" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:text="@string/premium_owns_expires_mdp_text" android:fontFamily="@font/source_sans_pro_regular" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:id="@id/premium_owns_expiring_feature_pc" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip">
+        <ImageView android:id="@id/premium_owns_expiring_feature_image" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/personal_collections" />
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="@dimen/default_margin_and_padding">
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/premium_owns_expires_personal_collections_title" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:text="@string/premium_owns_expires_personal_collections_text" android:fontFamily="@font/source_sans_pro_regular" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:id="@id/premium_owns_expiring_feature_ssm" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip">
+        <ImageView android:id="@id/premium_owns_expiring_feature_image" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/sport_specific_maps" />
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="@dimen/default_margin_and_padding">
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/premium_owns_expires_ssm_title" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:text="@string/premium_owns_expires_ssm_text" android:fontFamily="@font/source_sans_pro_regular" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:id="@id/premium_owns_expiring_feature_weather" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip">
+        <ImageView android:id="@id/premium_owns_expiring_feature_image" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/weather" />
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="@dimen/default_margin_and_padding">
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/premium_owns_expires_weather_title" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:text="@string/premium_owns_expires_weather_text" android:fontFamily="@font/source_sans_pro_regular" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:id="@id/premium_owns_expiring_feature_offline_maps" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip">
+        <ImageView android:id="@id/premium_owns_expiring_feature_image" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/offline_maps_navigation" />
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="@dimen/default_margin_and_padding">
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/premium_owns_expires_offline_maps_title" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:text="@string/premium_owns_expires_offline_maps_text" android:fontFamily="@font/source_sans_pro_regular" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:id="@id/premium_owns_expiring_feature_discounts" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip">
+        <ImageView android:id="@id/premium_owns_expiring_feature_image" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/discounts" />
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="@dimen/default_margin_and_padding">
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/premium_owns_expires_discounts_title" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:text="@string/premium_owns_expires_discounts_text" android:fontFamily="@font/source_sans_pro_regular" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:id="@id/premium_owns_expiring_feature_insurance" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip">
+        <ImageView android:id="@id/premium_owns_expiring_feature_image" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/insurance" />
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="@dimen/default_margin_and_padding">
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/premium_owns_expires_insurance_title" android:fontFamily="@font/source_sans_pro_bold" />
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_owns_expiring_feature_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:text="@string/premium_owns_expires_insurance_text" android:fontFamily="@font/source_sans_pro_regular" />
+        </LinearLayout>
+    </LinearLayout>
+    <Button android:textSize="16.0sp" android:textColor="@color/white" android:id="@id/premium_owns_state_btn" android:background="@drawable/btn_primary" android:layout_width="wrap_content" android:layout_height="36.0dip" android:layout_marginTop="16.0dip" android:text="@string/premium_owns_expires_resubscribe" android:textAllCaps="true" android:fontFamily="@font/source_sans_pro_regular" android:paddingStart="@dimen/default_margin_and_padding" android:paddingEnd="@dimen/default_margin_and_padding" />
+</LinearLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="onboarding_indicator_margin_top">64.0dip</dimen>
+    <dimen name="text_size_route_name">28.0sp</dimen>
+    <dimen name="tour_list_map_size">72.0dip</dimen>
+    <dimen name="tsha_highlight_size_width">320.0dip</dimen>
+</resources>

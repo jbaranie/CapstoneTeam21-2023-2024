@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.komoot.android.view.AutofitTextView android:textSize="14.0sp" android:textColor="@color/secondary" android:gravity="center_vertical" android:layout_gravity="center_vertical" android:id="@android:id/text1" android:focusable="false" android:clickable="false" android:layout_width="fill_parent" android:layout_height="fill_parent" android:maxLines="1" android:singleLine="true" android:fontFamily="@font/source_sans_pro_regular" android:textAlignment="inherit"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" />

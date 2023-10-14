@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_horizontal" android:orientation="horizontal" android:background="@color/white" android:paddingTop="16.0dip" android:paddingBottom="16.0dip" android:layout_width="fill_parent" android:layout_height="81.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:id="@id/days_container" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+        <ImageView android:id="@id/imageview_days" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_marginBottom="4.0dip" android:src="@drawable/ic_tour_stats_days" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" app:tint="@color/main_grey" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/main_grey" android:id="@id/textview_mulitday_duration" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawablePadding="2.0dip" android:layout_below="@id/imageview_days" android:layout_centerHorizontal="true" android:fontFamily="@font/source_sans_pro_bold" />
+    </RelativeLayout>
+    <View android:background="@color/divider" android:layout_width="@dimen/divider_height" android:layout_height="20.0dip" android:layout_marginTop="2.0dip" />
+    <RelativeLayout android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+        <ImageView android:id="@id/imageview_time_per_day" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_marginBottom="4.0dip" android:src="@drawable/ic_tour_stats_time" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/main_grey" android:id="@id/textview_mulitday_time_per_day" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/imageview_time_per_day" android:layout_centerHorizontal="true" android:fontFamily="@font/source_sans_pro_bold" />
+    </RelativeLayout>
+    <View android:background="@color/divider" android:layout_width="@dimen/divider_height" android:layout_height="20.0dip" android:layout_marginTop="2.0dip" />
+    <RelativeLayout android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+        <ImageView android:id="@id/imageview_distance" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_marginBottom="4.0dip" android:src="@drawable/ic_tour_stats_distance" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/main_grey" android:id="@id/textview_multiday_distance" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/imageview_distance" android:layout_centerHorizontal="true" android:fontFamily="@font/source_sans_pro_bold" />
+    </RelativeLayout>
+    <View android:background="@color/divider" android:layout_width="@dimen/divider_height" android:layout_height="20.0dip" android:layout_marginTop="2.0dip" />
+    <RelativeLayout android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+        <ImageView android:id="@id/imageview_elevation" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_marginBottom="4.0dip" android:src="@drawable/ic_tour_stats_ascent" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/main_grey" android:id="@id/textview_multiday_elevation" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/imageview_elevation" android:layout_centerHorizontal="true" android:fontFamily="@font/source_sans_pro_bold" />
+    </RelativeLayout>
+</LinearLayout>

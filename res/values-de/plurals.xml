@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="atlas_carrousel_hikes_pagination">
+        <item quantity="other">%1$d-%2$d von %3$d Wanderungen</item>
+        <item quantity="one">%1$d-%2$d von %3$d Wanderung</item>
+    </plurals>
+    <plurals name="atlas_carrousel_rides_pagination">
+        <item quantity="other">%1$d-%2$d von %3$d Radtouren</item>
+        <item quantity="one">%1$d-%2$d von %3$d Radtour</item>
+    </plurals>
+    <plurals name="atlas_carrousel_runs_pagination">
+        <item quantity="other">%1$d-%2$d von %3$d Laufstrecken</item>
+        <item quantity="one">%1$d-%2$d von %3$d Laufstrecke</item>
+    </plurals>
+    <plurals name="atlas_filter_hikes_show_button">
+        <item quantity="other">" %s Wanderungen"</item>
+        <item quantity="one">" %s Wanderung"</item>
+    </plurals>
+    <plurals name="atlas_filter_rides_show_button">
+        <item quantity="other">" %s Radtouren"</item>
+        <item quantity="one">" %s Radtour"</item>
+    </plurals>
+    <plurals name="atlas_filter_runs_show_button">
+        <item quantity="other">" %s Laufstrecken"</item>
+        <item quantity="one">" %s Laufstrecke"</item>
+    </plurals>
+    <plurals name="atlas_highlight_header">
+        <item quantity="other">%1$d Highlights</item>
+        <item quantity="one">%1$d Highlight</item>
+    </plurals>
+    <plurals name="atlas_highlight_hikes_social_proof">
+        <item quantity="other">%1$d von %2$d Wandernden empfehlen das</item>
+        <item quantity="one">%1$d von %2$d Wandernden empfiehlt das</item>
+    </plurals>
+    <plurals name="atlas_highlight_mtb_social_proof">
+        <item quantity="other">%1$d von %2$d Mountainbiker:innen empfehlen das</item>
+        <item quantity="one">%1$d von %2$d Mountainbiker:innen empfiehlt das</item>
+    </plurals>
+    <plurals name="atlas_highlight_rides_social_proof">
+        <item quantity="other">%1$d von %2$d Fahrradfahrer:innen empfehlen das</item>
+        <item quantity="one">%1$d von %2$d Fahrradfahrer:innen empfiehlt das</item>
+    </plurals>
+    <plurals name="atlas_highlight_road_social_proof">
+        <item quantity="other">%1$d von %2$d Rennradfahrer:innen empfehlen das</item>
+        <item quantity="one">%1$d von %2$d Rennradfahrer:innen empfiehlt das</item>
+    </plurals>
+    <plurals name="atlas_highlight_runs_social_proof">
+        <item quantity="other">"%1$d von %2$d Läufer:innen empfehlen das "</item>
+        <item quantity="one">%1$d von %2$d Läufer:innen empfiehlt das</item>
+    </plurals>
+    <plurals name="atlas_list_header_hikes">
+        <item quantity="other">%1$d Wanderungen</item>
+        <item quantity="one">%1$d Wanderung</item>
+    </plurals>
+    <plurals name="atlas_list_header_rides">
+        <item quantity="other">%1$d Radtouren</item>
+        <item quantity="one">%1$d Radtour</item>
+    </plurals>
+    <plurals name="atlas_list_header_runs">
+        <item quantity="other">%1$d Laufstrecken</item>
+        <item quantity="one">%1$d Laufstrecke</item>
+    </plurals>
+    <plurals name="atw_highlight_recommend_photo_contributions_plural">
+        <item quantity="other">Du hast %s neue Fotos von diesem Ort. Willst du welche davon hinzufügen?</item>
+        <item quantity="one">Du hast %s neues Foto von diesem Ort. Willst du es hinzufügen?</item>
+    </plurals>
+    <plurals name="cfa_highlights">
+        <item quantity="other">Highlights</item>
+        <item quantity="one">Highlight</item>
+    </plurals>
+    <plurals name="collection_summary_highlights_count">
+        <item quantity="other">%1$d Highlights</item>
+        <item quantity="one">%1$d Highlight</item>
+    </plurals>
+    <plurals name="collection_summary_tours_count">
+        <item quantity="other">%1$d Touren</item>
+        <item quantity="one">1 Tour</item>
+    </plurals>
+    <plurals name="exo_controls_fastforward_by_amount_description">
+        <item quantity="other">%d Sekunden vorspulen</item>
+        <item quantity="one">%d Sekunde vorspulen</item>
+    </plurals>
+    <plurals name="exo_controls_rewind_by_amount_description">
+        <item quantity="other">%d Sekunden zurückspulen</item>
+        <item quantity="one">%d Sekunde zurückspulen</item>
+    </plurals>
+    <plurals name="expire_in_days">
+        <item quantity="other">%s Tage</item>
+        <item quantity="one">%s Tag</item>
+    </plurals>
+    <plurals name="expire_in_hours_plural">
+        <item quantity="other">%s Stunden</item>
+        <item quantity="one">‪%s‬ Stunde</item>
+    </plurals>
+    <plurals name="expire_in_minutes_plural">
+        <item quantity="other">%s Minuten</item>
+        <item quantity="one">%s Minute</item>
+    </plurals>
+    <plurals name="fca_follow_all_friends_button">
+        <item quantity="other">Allen %d Freunden folgen</item>
+        <item quantity="one">Einem Freund folgen</item>
+    </plurals>
+    <plurals name="fcca_items">
+        <item quantity="other">Einträge</item>
+        <item quantity="one">Eintrag</item>
+    </plurals>
+    <plurals name="ffa_follow_n_contact_friends">
+        <item quantity="other">%d Kontakte anzeigen</item>
+        <item quantity="one">Einen Kontakt anzeigen</item>
+    </plurals>
+    <plurals name="ffa_follow_n_facebook_friends">
+        <item quantity="other">%d Facebook-Freunde anzeigen</item>
+        <item quantity="one">Einen Facebook-Freund anzeigen</item>
+    </plurals>
+    <plurals name="garmin_history_import_loading_progress_plural">
+        <item quantity="other">%1$d Touren</item>
+        <item quantity="one">%1$d Tour</item>
+    </plurals>
+    <plurals name="instabug_feature_rq_str_days_ago">
+        <item quantity="other">Vor %d Tagen</item>
+        <item quantity="one">Vor %d Tag</item>
+    </plurals>
+    <plurals name="instabug_feature_rq_str_hours_ago">
+        <item quantity="other">Vor %d Stunden</item>
+        <item quantity="one">Vor %d Stunde</item>
+    </plurals>
+    <plurals name="instabug_feature_rq_str_minutes_ago">
+        <item quantity="other">Vor %d Minuten</item>
+        <item quantity="one">Vor %d Minute</item>
+    </plurals>
+    <plurals name="lang_sport_count_cycling">
+        <item quantity="other">%1$d von %2$d Fahrradfahrern</item>
+        <item quantity="one">einem Fahrradfahrer</item>
+    </plurals>
+    <plurals name="lang_sport_count_hiking">
+        <item quantity="other">%1$d von %2$d Wandernden</item>
+        <item quantity="one">1 Wanderer/Wanderin</item>
+    </plurals>
+    <plurals name="lang_sport_count_mountain_biking">
+        <item quantity="other">%1$d von %2$d Mountainbikern</item>
+        <item quantity="one">einem Mountainbiker</item>
+    </plurals>
+    <plurals name="lang_sport_count_mountaineering">
+        <item quantity="other">%1$d von %2$d Bergwandernden</item>
+        <item quantity="one">1 Bergwanderer/Bergwanderin</item>
+    </plurals>
+    <plurals name="lang_sport_count_other">
+        <item quantity="other">%1$d von %2$d Personen</item>
+        <item quantity="one">1 Person</item>
+    </plurals>
+    <plurals name="lang_sport_count_road_cycling">
+        <item quantity="other">%1$d von %2$d Rennradfahrern</item>
+        <item quantity="one">einem Rennradfahrer</item>
+    </plurals>
+    <plurals name="lang_sport_count_running">
+        <item quantity="other">%1$d von %2$d Läufern</item>
+        <item quantity="one">einem Läufer</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_cycling">
+        <item quantity="other">%1$d von %2$d Fahrradfahrer:innen empfehlen das</item>
+        <item quantity="one">1 Fahrradfahrer:in empfiehlt das</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_hiking">
+        <item quantity="other">%1$d von %2$d Wandernden empfehlen das</item>
+        <item quantity="one">1 Wanderer/Wanderin empfiehlt das</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_mountain_biking">
+        <item quantity="other">%1$d von %2$d Mountainbiker:innen empfehlen das</item>
+        <item quantity="one">1 Mountainbiker:in empfiehlt das</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_mountaineering">
+        <item quantity="other">%1$d von %2$d Bergwandernden empfehlen das</item>
+        <item quantity="one">1 Bergwanderer/Bergwanderin empfiehlt das</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_other">
+        <item quantity="other">%1$d von %2$d Personen empfehlen das</item>
+        <item quantity="one">1 Person empfiehlt das</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_road_cycling">
+        <item quantity="other">%1$d von %2$d Rennradfahrer:innen empfehlen das</item>
+        <item quantity="one">1 Rennradfahrer:in empfiehlt das</item>
+    </plurals>
+    <plurals name="lang_sport_recommended_by_running">
+        <item quantity="other">"%1$d von %2$d Läufer:innen empfehlen das "</item>
+        <item quantity="one">1 Läufer:in empfiehlt das</item>
+    </plurals>
+    <plurals name="mtrl_badge_content_description">
+        <item quantity="other">%d neue Benachrichtigungen</item>
+        <item quantity="one">%d neue Benachrichtigung</item>
+    </plurals>
+    <plurals name="multiday_travel_time_per_day_hours_plural">
+        <item quantity="other">%s Stunden</item>
+        <item quantity="one">‪%s‬ Stunde</item>
+    </plurals>
+    <plurals name="notification_deleting">
+        <item quantity="other">%d Karten werden gelöscht</item>
+        <item quantity="one">%d Karte wird gelöscht</item>
+    </plurals>
+    <plurals name="notification_downloading">
+        <item quantity="other">%d Karten werden heruntergeladen</item>
+        <item quantity="one">%d Karte wird heruntergeladen</item>
+    </plurals>
+    <plurals name="notification_requests_header">
+        <item quantity="other">%s neue Anfragen</item>
+        <item quantity="one">1 neue Anfrage</item>
+    </plurals>
+    <plurals name="offer_ends_in_hours_plural">
+        <item quantity="other">Angebot endet in %s Stunden</item>
+        <item quantity="one">Angebot endet in %s Stunde</item>
+    </plurals>
+    <plurals name="offer_ends_in_minutes_plural">
+        <item quantity="other">Angebot endet in ‪%s‬ Minuten</item>
+        <item quantity="one">Angebot endet in ‪%s‬ Minute</item>
+    </plurals>
+    <plurals name="onboarding_sport_selection_greetingfavorite_inspiration_4_more">
+        <item quantity="other">Du hast %1$s, %2$s, %3$s und %4$s andere Aktivitäten ausgewählt. Möchtest du etwas ändern? Kein Problem: Du kannst deine Lieblings-Outdoor-Aktivitäten jederzeit in den Einstellungen bearbeiten.</item>
+        <item quantity="one">Du hast %1$s, %2$s, %3$s und %4$s andere Aktivität ausgewählt. Möchtest du etwas ändern? Kein Problem: Du kannst deine Lieblings-Outdoor-Aktivitäten jederzeit in den Einstellungen bearbeiten.</item>
+    </plurals>
+    <plurals name="place_info_reviews_tripadvisor_count">
+        <item quantity="other">%d Bewertungen</item>
+        <item quantity="one">%d Bewertung</item>
+    </plurals>
+    <plurals name="place_info_reviews_yelp_count">
+        <item quantity="other">Basiert auf %d Bewertungen</item>
+        <item quantity="one">Basiert auf %d Bewertung</item>
+    </plurals>
+    <plurals name="premium_buy_welcome_months_offer_plural">
+        <item quantity="other">%s Monate kostenlos</item>
+        <item quantity="one">%s Monat kostenlos</item>
+    </plurals>
+    <plurals name="premium_buy_welcome_months_text_plural">
+        <item quantity="other">Entscheide dich für ein Jahr voller fantastischer Abenteuer und zahl weniger: Hol dir %1$s Monate Premium kostenlos – und geh %2$s weiter als je zuvor.</item>
+        <item quantity="one">Entscheide dich für ein Jahr voller fantastischer Abenteuer und zahl weniger: Hol dir %1$s Monat Premium kostenlos – und geh %2$s weiter als je zuvor.</item>
+    </plurals>
+    <plurals name="pwa_hide_waypoints">
+        <item quantity="other">Wegpunkte verbergen</item>
+        <item quantity="one">Wegpunkt verbergen</item>
+    </plurals>
+    <plurals name="pwa_n_more_waypoints">
+        <item quantity="other">%d weitere Wegpunkte</item>
+        <item quantity="one">%d weiterer Wegpunkt</item>
+    </plurals>
+    <plurals name="route_extra_tip_cycling_dismount_msg">
+        <item quantity="other">Hier wirst du absteigen und schieben müssen.</item>
+        <item quantity="one">Hier wirst du absteigen und schieben müssen.</item>
+    </plurals>
+    <plurals name="route_extra_tip_cycling_dismount_title">
+        <item quantity="other">Auf Teilen dieser Route ist Radfahren verboten.</item>
+        <item quantity="one">Auf einem Teil dieser Route ist Radfahren verboten.</item>
+    </plurals>
+    <plurals name="route_extra_tip_ferry_msg">
+        <item quantity="other">Schau vorher auf den Fahrplan.</item>
+        <item quantity="one">Schau vorher auf den Fahrplan.</item>
+    </plurals>
+    <plurals name="route_extra_tip_ferry_title">
+        <item quantity="other">Enthält Fährfahrten</item>
+        <item quantity="one">Enthält eine Fährfahrt</item>
+    </plurals>
+    <plurals name="route_extra_tip_heavy_traffic_msg">
+        <item quantity="other">Fahr auf stark befahrenen Straßen besonders vorsichtig.</item>
+        <item quantity="one">Fahr auf stark befahrenen Straßen besonders vorsichtig.</item>
+    </plurals>
+    <plurals name="route_extra_tip_heavy_traffic_title">
+        <item quantity="other">Enthält viel befahrene Straßen</item>
+        <item quantity="one">Enthält eine viel befahrene Straße</item>
+    </plurals>
+    <plurals name="route_extra_tip_high_danger_msg">
+        <item quantity="other">Teile dieser Route führen durch sehr technisches, schwieriges oder gefährliches Gelände. Spezielle Ausrüstung und Vorkenntnisse sind unbedingt erforderlich.</item>
+        <item quantity="one">Ein Teil dieser Route führt durch sehr technisches, schwieriges oder gefährliches Gelände. Spezielle Ausrüstung und Vorkenntnisse sind unbedingt erforderlich.</item>
+    </plurals>
+    <plurals name="route_extra_tip_high_danger_title">
+        <item quantity="other">Enthält sehr gefährliche Abschnitte</item>
+        <item quantity="one">Enthält einen sehr gefährlichen Abschnitt</item>
+    </plurals>
+    <plurals name="route_extra_tip_moderate_danger_msg">
+        <item quantity="other">Teile dieser Route führen durch technisches, anspruchsvolles oder gefährliches Gelände. Möglicherweise sind dafür spezielle Ausrüstung und Vorkenntnisse erforderlich.</item>
+        <item quantity="one">Ein Teil dieser Route führt durch technisches, anspruchsvolles oder gefährliches Gelände. Möglicherweise sind dafür spezielle Ausrüstung und Vorkenntnisse erforderlich.</item>
+    </plurals>
+    <plurals name="route_extra_tip_moderate_danger_title">
+        <item quantity="other">Enthält Abschnitte, die gefährlich sein können</item>
+        <item quantity="one">Enthält einen Abschnitt, der gefährlich sein kann</item>
+    </plurals>
+    <plurals name="route_extra_tip_moveable_bridge_msg">
+        <item quantity="other">Schau vorher auf die Öffnungszeiten.</item>
+        <item quantity="one">Schau vorher auf die Öffnungszeiten.</item>
+    </plurals>
+    <plurals name="route_extra_tip_moveable_bridge_title">
+        <item quantity="other">Enthält bewegliche Brücken</item>
+        <item quantity="one">Enthält eine bewegliche Brücke</item>
+    </plurals>
+    <plurals name="route_extra_tip_offgrid_msg">
+        <item quantity="other">Navigationsanweisungen eventuell eingeschränkt.</item>
+        <item quantity="one">Navigationsanweisungen eventuell eingeschränkt.</item>
+    </plurals>
+    <plurals name="route_extra_tip_offgrid_title">
+        <item quantity="other">Enthält Off-Grid-Abschnitte</item>
+        <item quantity="one">Enthält einen Off-Grid-Abschnitt</item>
+    </plurals>
+    <plurals name="route_extra_tip_restricted_msg">
+        <item quantity="other">Informier dich vor einer Tour über eventuelle Sperrungen.</item>
+        <item quantity="one">Informier dich vor einer Tour über eventuelle Sperrungen.</item>
+    </plurals>
+    <plurals name="route_extra_tip_restricted_title">
+        <item quantity="other">Enthält Abschnitte mit zeitlich befristeten Zutrittsbeschränkungen</item>
+        <item quantity="one">Enthält einen Abschnitt mit zeitlich befristeter Zutrittsbeschränkung</item>
+    </plurals>
+    <plurals name="route_extra_tip_unsuitable_msg">
+        <item quantity="other">Auf einigen Abschnitten der Tour ist die Wegoberfläche wahrscheinlich nicht für deine gewählte Sportart geeignet.</item>
+        <item quantity="one">Die Wegoberfläche eines Abschnitts deiner Tour ist für deine gewählte Sportart wahrscheinlich nicht geeignet.</item>
+    </plurals>
+    <plurals name="route_extra_tip_unsuitable_title">
+        <item quantity="other">Die Wegoberfläche an manchen Stellen ist möglicherweise ungeeignet.</item>
+        <item quantity="one">Die Wegoberfläche auf einem Abschnitt dieser Tour ist möglicherweise ungeeignet.</item>
+    </plurals>
+    <plurals name="route_info_timeline_more">
+        <item quantity="other">‪%s‬ weitere Orte</item>
+        <item quantity="one">1 weiterer Ort</item>
+    </plurals>
+    <plurals name="route_information_show_more">
+        <item quantity="other">%s weitere Tipps anzeigen</item>
+        <item quantity="one">1 weiteren Tipp anzeigen</item>
+    </plurals>
+    <plurals name="shop_premium_welcome_months_text_plural">
+        <item quantity="other">Mit deiner Anmeldung bei komoot hast du schon einen großen Schritt in Richtung Abenteuer gemacht. Entscheide dich jetzt für zwölf Monate voller großartiger Outdoor-Erlebnisse mit Premium und du bekommst %s Monate kostenlos im ersten Jahr.</item>
+        <item quantity="one">Mit deiner Anmeldung bei komoot hast du schon einen großen Schritt in Richtung Abenteuer gemacht. Entscheide dich jetzt für zwölf Monate voller großartiger Outdoor-Erlebnisse mit Premium und du bekommst %s Monat kostenlos im ersten Jahr.</item>
+    </plurals>
+    <plurals name="shop_premium_welcome_months_title_plural">
+        <item quantity="one">Bereit, weiter zu gehen? Hol dir %s Monat Premium kostenlos</item>
+    </plurals>
+    <plurals name="som_imperial_feet_dative">
+        <item quantity="other">Fuß</item>
+        <item quantity="one">Fuß</item>
+    </plurals>
+    <plurals name="som_imperial_feet_nominative">
+        <item quantity="other">Fuß</item>
+        <item quantity="one">Fuß</item>
+    </plurals>
+    <plurals name="som_imperial_mile_dative">
+        <item quantity="other">Meilen</item>
+        <item quantity="one">Meile</item>
+    </plurals>
+    <plurals name="som_imperial_mile_nominative">
+        <item quantity="other">Meilen</item>
+        <item quantity="one">Meile</item>
+    </plurals>
+    <plurals name="som_imperial_yard_dative">
+        <item quantity="other">Yards</item>
+        <item quantity="zero">Yards</item>
+        <item quantity="one">Yard</item>
+    </plurals>
+    <plurals name="som_imperial_yard_nominative">
+        <item quantity="other">Yards</item>
+        <item quantity="one">Yard</item>
+    </plurals>
+    <plurals name="som_metric_kilometer_dative">
+        <item quantity="other">Kilometern</item>
+        <item quantity="one">Kilometer</item>
+    </plurals>
+    <plurals name="som_metric_kilometer_nominative">
+        <item quantity="other">Kilometer</item>
+        <item quantity="one">Kilometer</item>
+    </plurals>
+    <plurals name="som_metric_meter_dative">
+        <item quantity="other">Metern</item>
+        <item quantity="one">Meter</item>
+    </plurals>
+    <plurals name="som_metric_meter_nominative">
+        <item quantity="other">Meter</item>
+        <item quantity="one">Meter</item>
+    </plurals>
+    <plurals name="tour_list_filter_result_count_plural">
+        <item quantity="other">‪%s‬ Touren gefunden</item>
+        <item quantity="one">‪%s‬ Tour gefunden</item>
+    </plurals>
+    <plurals name="tour_list_tour_count">
+        <item quantity="other">%d Touren</item>
+        <item quantity="one">%d Touren</item>
+    </plurals>
+    <plurals name="tour_upload_image_upload_successful_msg_plural">
+        <item quantity="other">Tippe hier, um‪ %s‬ Bilder zu teilen.</item>
+        <item quantity="one">Tippe hier, um‪ %s‬ Bild zu teilen.</item>
+    </plurals>
+    <plurals name="unit_hour">
+        <item quantity="other">Stunden</item>
+        <item quantity="zero">Stunden</item>
+        <item quantity="one">Stunde</item>
+    </plurals>
+    <plurals name="unit_name_hour">
+        <item quantity="other">Stunden</item>
+        <item quantity="one">Stunde</item>
+    </plurals>
+    <plurals name="unit_name_minutes">
+        <item quantity="zero">Minuten</item>
+        <item quantity="one">Minute</item>
+    </plurals>
+    <plurals name="user_activity_feed_more_comments">
+        <item quantity="other">%d weitere Kommentare anzeigen</item>
+        <item quantity="one">%d weiteren Kommentar anzeigen</item>
+    </plurals>
+    <plurals name="user_highlight_contribute_photos_plural">
+        <item quantity="other">Du hast %s neue Fotos von diesem Ort. Möchtest du sie hinzufügen, damit auch andere sie sehen können?</item>
+        <item quantity="one">Du hast %s neues Foto von diesem Ort. Möchtest du es hinzufügen, damit auch andere es sehen können?</item>
+    </plurals>
+    <plurals name="user_info_followers_count">
+        <item quantity="other">%1$d Follower</item>
+        <item quantity="one">%1$d Follower</item>
+    </plurals>
+    <plurals name="voiceNavigation_kilometer">
+        <item quantity="other">Kilometern</item>
+        <item quantity="one">Kilometer</item>
+    </plurals>
+    <plurals name="voiceNavigation_kilometer_accusative">
+        <item quantity="other">Kilometer</item>
+        <item quantity="one">Kilometer</item>
+    </plurals>
+    <plurals name="voiceNavigation_meter">
+        <item quantity="other">Metern</item>
+        <item quantity="one">Meter</item>
+    </plurals>
+    <plurals name="voiceNavigation_meter_accusative">
+        <item quantity="other">Meter</item>
+        <item quantity="one">Meter</item>
+    </plurals>
+    <plurals name="world_pack_first_unlocked">
+        <item quantity="other">freigeschaltete Karten</item>
+        <item quantity="one">freigeschaltete Karte</item>
+    </plurals>
+</resources>

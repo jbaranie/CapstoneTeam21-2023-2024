@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:textSize="20.0sp" android:textColor="@color/text_underline" android:gravity="center_horizontal" android:id="@id/hlf_state_ttv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="64.0dip" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+    <RelativeLayout android:id="@id/hlf_no_content_container_rl" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <de.komoot.android.widget.UsernameTextView android:textSize="18.0sp" android:textColor="@color/text_underline" android:id="@id/hlf_no_content_title_ttv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="64.0dip" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+        <TextView android:textSize="18.0sp" android:textColor="@color/text_underline" android:id="@id/hlf_no_content_message_ttv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:layout_below="@id/hlf_no_content_title_ttv" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+        <ImageView android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/placeholder_emptyscreen" android:scaleType="fitCenter" android:adjustViewBounds="true" android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+    <de.komoot.android.widget.NotifyingListView android:id="@id/listview" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_alignParentTop="true" />
+    <ImageButton android:id="@id/button_search" android:background="@drawable/btn_round_blue_states" android:layout_width="56.0dip" android:layout_height="56.0dip" android:layout_margin="16.0dip" android:src="@drawable/ic_btn_search_white" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:elevation="3.0dip" />
+</RelativeLayout>

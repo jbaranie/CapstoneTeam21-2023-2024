@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:background="@color/ultralight_grey" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:layout_gravity="center_horizontal" android:orientation="vertical" android:background="@color/white" android:layout_width="@dimen/phone_match_parent_tablet_600dp" android:layout_height="wrap_content">
+        <ImageView android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/bg_premium_cover" android:scaleType="centerInside" />
+        <TextView android:textSize="32.0sp" android:textColor="@color/text_underline" android:id="@id/premium_header_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/opf_title" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:src="@drawable/logo_premium" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+        <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/premium_header_text" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:text="@string/opf_description" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="@dimen/default_margin_and_padding" android:layout_marginEnd="@dimen/default_margin_and_padding" />
+        <View android:layout_gravity="center_horizontal" android:id="@id/premium_header_divider" android:background="@color/primary" android:layout_width="30.0dip" android:layout_height="3.0dip" android:layout_marginTop="24.0dip" android:layout_marginBottom="24.0dip" />
+    </LinearLayout>
+</FrameLayout>

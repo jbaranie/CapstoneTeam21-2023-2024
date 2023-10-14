@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@id/piret_layout" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.compose.ui.platform.ComposeView android:id="@id/piret_icon" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_alignTop="@id/piret_title" android:layout_marginStart="16.0dip" />
+    <de.komoot.android.view.AutofitTextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/piret_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:layout_marginBottom="8.0dip" android:maxLines="2" android:fontFamily="@font/source_sans_pro_bold" android:layout_marginStart="52.0dip" android:layout_marginEnd="8.0dip" app:sizeToFit="true" />
+    <ScrollView android:id="@id/scroll_view" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_below="@id/piret_title" android:fadeScrollbars="false">
+        <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView android:textSize="16.0sp" android:textColor="@color/black" android:id="@id/piret_msg" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="12.0dip" android:maxLines="3" android:fontFamily="@font/source_sans_pro_regular" android:layout_marginStart="52.0dip" android:layout_marginEnd="8.0dip" app:autoSizeMaxTextSize="16.0sp" app:autoSizeMinTextSize="6.0sp" app:autoSizeStepGranularity="1.0sp" app:autoSizeTextType="uniform" />
+            <LinearLayout android:orientation="vertical" android:id="@id/piret_positions" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+    <View android:id="@id/scrolling_indicator" android:background="@drawable/gradient_top_transparent_to_bottom_card" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="44.0dip" android:layout_alignParentBottom="true" />
+</RelativeLayout>
