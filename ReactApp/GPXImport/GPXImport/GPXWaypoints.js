@@ -24,13 +24,14 @@ const GPXWaypoints = () => {
         const fileContent = await FileSystem.readAsStringAsync(uri);
   
         // Extracting waypoints
-        const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)">/g;
+        const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)".*?<name>([^<]+)<\/name>/gs;
         const matches = Array.from(fileContent.matchAll(waypointRegex));
         const newWaypoints = matches.map((match, index) => ({
-          id: index.toString(),
-          latitude: parseFloat(match[1]),
-          longitude: parseFloat(match[2]),
-        }));
+            id: index.toString(),
+            latitude: parseFloat(match[1]),
+            longitude: parseFloat(match[2]),
+            name: match[3] || 'Unnamed Waypoint'
+          }));
   
         // Extracting routes
         const routeRegex = /<rtept[^>]*lat="([-.\d]+)"[^>]*lon="([-.\d]+)"[^>]*>/g;
@@ -80,12 +81,13 @@ return (
         )}
 
         {waypoints.map((waypoint) => (
-          <Marker
+        <Marker
             key={waypoint.id}
             coordinate={{ latitude: waypoint.latitude, longitude: waypoint.longitude }}
-            title={`Waypoint ${waypoint.id}`}
-          />
+            title={waypoint.name ? waypoint.name : 'Unnamed Waypoint'}
+        />
         ))}
+
         
         {/*
         {routes.map((routePoint, index) => (
