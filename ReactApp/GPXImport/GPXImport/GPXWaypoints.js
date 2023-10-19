@@ -12,40 +12,41 @@ const GPXWaypoints = () => {
   const importGPXFile = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({ type: 'application/gpx+xml' });
-    
+      
       if (result.canceled) {
         console.log('Document Picker operation was canceled');
         return;
       }
-
-       if (result.assets && result.assets.length > 0) {
+  
+      if (result.assets && result.assets.length > 0) {
         const { uri } = result.assets[0];
         const fileContent = await FileSystem.readAsStringAsync(uri);
-
+  
+        // Extracting waypoints
         const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)">/g;
         const matches = Array.from(fileContent.matchAll(waypointRegex));
-
         const newWaypoints = matches.map((match, index) => ({
-            id: index.toString(),
-            latitude: parseFloat(match[1]),
-            longitude: parseFloat(match[2]),
-      }));
-
-        const routeRegex = /<rtept lat="([-.\d]+)" lon="([-.\d]+)">/g;
+          id: index.toString(),
+          latitude: parseFloat(match[1]),
+          longitude: parseFloat(match[2]),
+        }));
+  
+        // Extracting routes
+        const routeRegex = /<rtept[^>]*lat="([-.\d]+)"[^>]*lon="([-.\d]+)"[^>]*>/g;
         const routeMatches = Array.from(fileContent.matchAll(routeRegex));
         const newRoutes = routeMatches.map(match => ({
-            latitude: parseFloat(match[1]),
-            longitude: parseFloat(match[2]),
-      }));
-
-      setRoutes(newRoutes);
-      setWaypoints(newWaypoints);
-      setImported(true);
+          latitude: parseFloat(match[1]),
+          longitude: parseFloat(match[2]),
+        }));
+  
+        setWaypoints(newWaypoints);
+        setRoutes(newRoutes);
+        setImported(true);
+      }
+    } catch (error) {
+      console.error('Error importing GPX file:', error);
     }
-  } catch (error) {
-    console.error('Error importing GPX file:', error);
-  }
-};
+  };
 
 return (
     <View style={styles.container}>
@@ -73,6 +74,19 @@ return (
             title={`Waypoint ${waypoint.id}`}
           />
         ))}
+        
+        {/*
+        {routes.map((routePoint, index) => (
+            <Marker
+            key={`route-${index}`}
+            coordinate={routePoint}
+            title={`Route Point ${index + 1}`}
+            description={`Lat: ${routePoint.latitude}, Lon: ${routePoint.longitude}`}
+            pinColor="blue" 
+            />
+        ))}
+        */}
+            
         {routes.length > 0 && (
           <>
             <Marker

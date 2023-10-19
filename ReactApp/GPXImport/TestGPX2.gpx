@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="John French" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>Flagstaff Route</name>
+    <desc>A jagged route through Flagstaff, Arizona with random waypoints.</desc>
+  </metadata>
+  
+  <rte>
+    <name>Flagstaff Route</name>
+    <rtept lat="35.1987" lon="-111.6515">
+      <name>Start</name>
+      <desc>Starting point of the route.</desc>
+    </rtept>
+    <rtept lat="35.1988" lon="-111.6525"/>
+    <rtept lat="35.1992" lon="-111.6540"/>
+    <rtept lat="35.1998" lon="-111.6555"/>
+    <rtept lat="35.2000" lon="-111.6548"/>
+    <rtept lat="35.2005" lon="-111.6540"/>
+    <rtept lat="35.2009" lon="-111.6528"/>
+    <rtept lat="35.2012" lon="-111.6520"/>
+    <rtept lat="35.2018" lon="-111.6505"/>
+    <rtept lat="35.2022" lon="-111.6498">
+      <name>End</name>
+      <desc>Ending point of the route.</desc>
+    </rtept>
+  </rte>
+  
+  <wpt lat="35.1998" lon="-111.6555">
+    <name>A bad spot.</name>
+    <desc>Baddd</desc>
+  </wpt>
+  <wpt lat="35.2012" lon="-111.6520">
+    <name>Good Spot</name>
+    <desc>A Good Spot!</desc>
+  </wpt>
+  <wpt lat="35.2018" lon="-111.6505">
+    <name>Worse Spot</name>
+    <desc>A terrible spot..</desc>
+  </wpt>
+</gpx>
