@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 
 const GPXWaypoints = () => {
   const [waypoints, setWaypoints] = useState([]);
   const [imported, setImported] = useState(false); // Track if a GPX file has been imported
+  const [routes, setRoutes] = useState([]);
 
   const importGPXFile = async () => {
     try {
@@ -30,6 +31,14 @@ const GPXWaypoints = () => {
             longitude: parseFloat(match[2]),
       }));
 
+        const routeRegex = /<rtept lat="([-.\d]+)" lon="([-.\d]+)">/g;
+        const routeMatches = Array.from(fileContent.matchAll(routeRegex));
+        const newRoutes = routeMatches.map(match => ({
+            latitude: parseFloat(match[1]),
+            longitude: parseFloat(match[2]),
+      }));
+
+      setRoutes(newRoutes);
       setWaypoints(newWaypoints);
       setImported(true);
     }
@@ -49,6 +58,14 @@ return (
           longitudeDelta: 0.0421,
         }}
       >
+        {routes.length > 0 && (
+          <Polyline
+            coordinates={routes}
+            strokeColor="#000" // black color
+            strokeWidth={3}
+          />
+        )}
+
         {waypoints.map((waypoint) => (
           <Marker
             key={waypoint.id}
@@ -56,6 +73,18 @@ return (
             title={`Waypoint ${waypoint.id}`}
           />
         ))}
+        {routes.length > 0 && (
+          <>
+            <Marker
+              coordinate={routes[0]}
+              title="Start"
+            />
+            <Marker
+              coordinate={routes[routes.length - 1]}
+              title="End"
+            />
+          </>
+        )}
       </MapView>
       <View style={styles.buttonContainer}>
         <Button title="Import GPX File" onPress={importGPXFile} />

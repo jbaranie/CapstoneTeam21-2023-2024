@@ -1,24 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="YourAppName">
-  <wpt lat="37.7749" lon="-122.4194">
-    <name>San Francisco</name>
+<gpx version="1.1" creator="John French">
+  <metadata>
+    <name>Arizona Sample Route</name>
+    <desc>A route around Arizona with random waypoints.</desc>
+  </metadata>
+  <wpt lat="34.86974" lon="-111.76099">
+    <name>Waypoint 1</name>
+    <desc>Sedona</desc>
   </wpt>
-  <wpt lat="34.0522" lon="-118.2437">
-    <name>Los Angeles</name>
+  <wpt lat="36.10697" lon="-112.112998">
+    <name>Waypoint 2</name>
+    <desc>Grand Canyon</desc>
   </wpt>
-  <wpt lat="40.7128" lon="-74.0060">
-    <name>New York</name>
+  <wpt lat="32.222607" lon="-110.974709">
+    <name>Waypoint 3</name>
+    <desc>Tucson</desc>
   </wpt>
   <rte>
-    <name>West Coast Trip</name>
-    <rtept lat="37.7749" lon="-122.4194">
-      <name>San Francisco</name>
+    <name>Arizona Route</name>
+    <rtept lat="31.332177" lon="-109.560593">
+      <name>Start</name>
+      <desc>Douglas</desc>
     </rtept>
-    <rtept lat="34.0522" lon="-118.2437">
-      <name>Los Angeles</name>
+    <rtept lat="31.3443" lon="-110.9336">
+      <name>Checkpoint 1</name>
+      <desc>Sierra Vista</desc>
     </rtept>
-    <rtept lat="40.7128" lon="-74.0060">
-      <name>New York</name>
+    <rtept lat="32.6927" lon="-114.6277">
+      <name>Checkpoint 2</name>
+      <desc>Yuma</desc>
+    </rtept>
+    <rtept lat="34.5400" lon="-112.4685">
+      <name>Checkpoint 3</name>
+      <desc>Prescott</desc>
+    </rtept>
+    <rtept lat="36.9039" lon="-113.8247">
+      <name>Checkpoint 4</name>
+      <desc>Colorado City</desc>
+    </rtept>
+    <rtept lat="37.0003" lon="-109.0452">
+      <name>Checkpoint 5</name>
+      <desc>Four Corners Monument</desc>
+    </rtept>
+    <rtept lat="31.332177" lon="-109.560593">
+      <name>End</name>
+      <desc>Douglas</desc>
     </rtept>
   </rte>
 </gpx>
