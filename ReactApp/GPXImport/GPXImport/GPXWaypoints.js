@@ -24,13 +24,14 @@ const GPXWaypoints = () => {
         const fileContent = await FileSystem.readAsStringAsync(uri);
   
         // Extracting waypoints
-        const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)".*?<name>([^<]+)<\/name>/gs;
+        const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)".*?<name>([^<]+)<\/name>(?:.*?<rating>(\d)<\/rating>)?/gs;
         const matches = Array.from(fileContent.matchAll(waypointRegex));
         const newWaypoints = matches.map((match, index) => ({
             id: index.toString(),
             latitude: parseFloat(match[1]),
             longitude: parseFloat(match[2]),
-            name: match[3] || 'Unnamed Waypoint'
+            name: match[3] || 'Unnamed Waypoint',
+            rating: match[4] ? parseInt(match[4]) : 2
           }));
   
         // Extracting routes
@@ -80,13 +81,20 @@ return (
           />
         )}
 
-        {waypoints.map((waypoint) => (
-        <Marker
-            key={waypoint.id}
-            coordinate={{ latitude: waypoint.latitude, longitude: waypoint.longitude }}
-            title={waypoint.name ? waypoint.name : 'Unnamed Waypoint'}
-        />
-        ))}
+        {waypoints.map((waypoint) => {
+            let pinColor = "linen";  // Default color for rating 2
+            if (waypoint.rating === 1) pinColor = "red"; //
+            else if (waypoint.rating === 3) pinColor = "green";
+
+            return (
+                <Marker
+                    key={waypoint.id}
+                    coordinate={{ latitude: waypoint.latitude, longitude: waypoint.longitude }}
+                    title={waypoint.name}
+                    pinColor={pinColor}
+                />
+            );
+        })}
 
         
         {/*
