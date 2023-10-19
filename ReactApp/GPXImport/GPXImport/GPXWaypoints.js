@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef} from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 
 const GPXWaypoints = () => {
-  const [waypoints, setWaypoints] = useState([]);
-  const [imported, setImported] = useState(false); // Track if a GPX file has been imported
-  const [routes, setRoutes] = useState([]);
+    const [waypoints, setWaypoints] = useState([]);
+    const [imported, setImported] = useState(false); // Track if a GPX file has been imported
+    const [routes, setRoutes] = useState([]);
+    const mapRef = useRef(null);
 
   const importGPXFile = async () => {
     try {
@@ -42,6 +43,16 @@ const GPXWaypoints = () => {
         setWaypoints(newWaypoints);
         setRoutes(newRoutes);
         setImported(true);
+
+        if (newRoutes.length > 0) {
+            const startCoordinate = newRoutes[0];
+            mapRef.current.animateToRegion({
+              latitude: startCoordinate.latitude,
+              longitude: startCoordinate.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            });
+        }
       }
     } catch (error) {
       console.error('Error importing GPX file:', error);
@@ -50,7 +61,8 @@ const GPXWaypoints = () => {
 
 return (
     <View style={styles.container}>
-      <MapView 
+      <MapView
+        ref = {mapRef} 
         style={styles.map}
         initialRegion={{
           latitude: waypoints[0]?.latitude || 37.78825,
@@ -92,10 +104,12 @@ return (
             <Marker
               coordinate={routes[0]}
               title="Start"
+              pinColor="lightblue"
             />
             <Marker
               coordinate={routes[routes.length - 1]}
               title="End"
+              pinColor="lightblue"
             />
           </>
         )}
