@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
+import { View, Button, StyleSheet } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import MapView, { Marker } from 'react-native-maps';
 
 const GPXWaypoints = () => {
   const [waypoints, setWaypoints] = useState([]);
@@ -37,18 +38,25 @@ const GPXWaypoints = () => {
   }
 };
 
-  return (
+return (
     <View style={styles.container}>
-      <FlatList
-        data={waypoints}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.waypointContainer}>
-            <Text>Latitude: {item.latitude}</Text>
-            <Text>Longitude: {item.longitude}</Text>
-          </View>
-        )}
-      />
+      <MapView 
+        style={styles.map}
+        initialRegion={{
+          latitude: waypoints[0]?.latitude || 37.78825,
+          longitude: waypoints[0]?.longitude || -122.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      >
+        {waypoints.map((waypoint) => (
+          <Marker
+            key={waypoint.id}
+            coordinate={{ latitude: waypoint.latitude, longitude: waypoint.longitude }}
+            title={`Waypoint ${waypoint.id}`}
+          />
+        ))}
+      </MapView>
       <View style={styles.buttonContainer}>
         <Button title="Import GPX File" onPress={importGPXFile} />
       </View>
@@ -59,12 +67,9 @@ const GPXWaypoints = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
   },
-  waypointContainer: {
-    backgroundColor: '#f0f0f0',
-    padding: 10,
-    marginBottom: 10,
+  map: {
+    flex: 1,
   },
   buttonContainer: {
     position: 'absolute',
