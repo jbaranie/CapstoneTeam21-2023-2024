@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Dimensions, Button, Platform } from 'react-native';
 import MapView, { Marker, Polyline} from 'react-native-maps';
 import * as Location from 'expo-location';
-
+import * as ImagePicker from 'expo-image-picker';
 
 export default function App() {
   const [markers, setMarkers] = useState([]);
   const [currentCenter, setCurrentCenter] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [mapRegion, setMapRegion] = useState(null);
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -49,6 +50,25 @@ export default function App() {
     }
   };
 
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: false,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    //TODO
+    /*
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+    */
+  };
+
   return (
     <View style={styles.container}>
       <MapView 
@@ -80,6 +100,7 @@ export default function App() {
 
       <View style={styles.buttonContainer}>
         <Button title="Add Pin" onPress={handleAddMarker} />
+        <Button title="Select image (camera roll)" onPress={pickImage} />
       </View>
     </View>
   );
