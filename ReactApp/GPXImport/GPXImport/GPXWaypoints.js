@@ -1,9 +1,25 @@
 import React, { useState, useRef, useEffect} from 'react';
-import { View, Button, StyleSheet } from 'react-native';
+import { View, Button, StyleSheet, Alert} from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
 import MapView, { Marker, Polyline } from 'react-native-maps';
+
+//Check how far the user is from a route start.
+const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
+  const R = 3958.8; // Radius of the earth in miles
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) *
+      Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const d = R * c;
+  return d;
+};
 
 const GPXWaypoints = () => {
     const [waypoints, setWaypoints] = useState([]);
@@ -13,7 +29,7 @@ const GPXWaypoints = () => {
     const [mapRegion, setMapRegion] = useState(null);
     const mapRef = useRef(null);
 
-
+  //Get the user's location.
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -33,6 +49,7 @@ const GPXWaypoints = () => {
     })();
   }, []);
 
+  //Importing the GPX File
   const importGPXFile = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({ type: 'application/gpx+xml' });
@@ -64,7 +81,8 @@ const GPXWaypoints = () => {
           latitude: parseFloat(match[1]),
           longitude: parseFloat(match[2]),
         }));
-  
+        
+        //Set Functions
         setWaypoints(newWaypoints);
         setRoutes(newRoutes);
         setImported(true);
@@ -81,6 +99,38 @@ const GPXWaypoints = () => {
       }
     } catch (error) {
       console.error('Error importing GPX file:', error);
+    }
+  };
+
+  //Start Jog button has been pressed, check between user and route. 
+  const startJog = () => {
+    if (!routes[0] || !userLocation) return;
+  
+    const distance = getDistanceFromLatLonInMiles(
+      userLocation.latitude,
+      userLocation.longitude,
+      routes[0].latitude,
+      routes[0].longitude
+    );
+  
+    if (distance > 1) {
+      Alert.alert(
+        'Start Jog',
+        'Too far from route!',
+        [
+          {text: 'OK'}
+        ],
+        { cancelable: false }
+      );
+    } else {
+      Alert.alert(
+        'Start Jog',
+        'Jog started!',
+        [
+          {text: 'OK'}
+        ],
+        { cancelable: false }
+      );
     }
   };
 
@@ -149,7 +199,11 @@ return (
         )}
       </MapView>
       <View style={styles.buttonContainer}>
-        <Button title="Import GPX File" onPress={importGPXFile} />
+        {imported ? (
+          <Button title="Start Jog" onPress={startJog} />
+        ) : (
+          <Button title="Import GPX File" onPress={importGPXFile} />
+        )}
       </View>
     </View>
   );
