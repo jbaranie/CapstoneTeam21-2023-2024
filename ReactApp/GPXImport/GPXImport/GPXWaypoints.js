@@ -1,14 +1,37 @@
-import React, { useState, useRef} from 'react';
+import React, { useState, useRef, useEffect} from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import * as Location from 'expo-location';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 
 const GPXWaypoints = () => {
     const [waypoints, setWaypoints] = useState([]);
     const [imported, setImported] = useState(false); // Track if a GPX file has been imported
     const [routes, setRoutes] = useState([]);
+    const [userLocation, setUserLocation] = useState(null);
+    const [mapRegion, setMapRegion] = useState(null);
     const mapRef = useRef(null);
+
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.error('Permission to access location was denied');
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      const userLoc = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      };
+      setUserLocation(userLoc);
+      setMapRegion(userLoc);
+    })();
+  }, []);
 
   const importGPXFile = async () => {
     try {
@@ -72,6 +95,7 @@ return (
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
+        showsUserLocation = {true}
       >
         {routes.length > 0 && (
           <Polyline
