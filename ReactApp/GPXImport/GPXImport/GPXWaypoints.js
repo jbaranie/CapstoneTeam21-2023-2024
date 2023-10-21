@@ -6,8 +6,9 @@ import * as Location from 'expo-location';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 
 //Check how far the user is from a route start.
+//Uses Haversine Formula
 const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
-  const R = 3958.8; // Radius of the earth in miles
+  const R = 3958.8; 
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a =
@@ -23,7 +24,7 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
 
 const GPXWaypoints = () => {
     const [waypoints, setWaypoints] = useState([]);
-    const [imported, setImported] = useState(false); // Track if a GPX file has been imported
+    const [imported, setImported] = useState(false); 
     const [routes, setRoutes] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
     const [mapRegion, setMapRegion] = useState(null);
@@ -156,7 +157,7 @@ return (
         )}
 
         {waypoints.map((waypoint) => {
-            let pinColor = "linen";  // Default color for rating 2
+            let pinColor = "linen";  
             if (waypoint.rating === 1) pinColor = "red"; //
             else if (waypoint.rating === 3) pinColor = "green";
 
@@ -169,19 +170,6 @@ return (
                 />
             );
         })}
-
-        
-        {/*
-        {routes.map((routePoint, index) => (
-            <Marker
-            key={`route-${index}`}
-            coordinate={routePoint}
-            title={`Route Point ${index + 1}`}
-            description={`Lat: ${routePoint.latitude}, Lon: ${routePoint.longitude}`}
-            pinColor="blue" 
-            />
-        ))}
-        */}
             
         {routes.length > 0 && (
           <>
