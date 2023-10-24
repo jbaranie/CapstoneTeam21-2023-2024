@@ -5,6 +5,17 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
+    ],
+    "android": {
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
     ]
   }
 }
