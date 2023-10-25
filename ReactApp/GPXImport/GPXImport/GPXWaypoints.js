@@ -4,7 +4,8 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-import ImageImport from './ImageImport'
+import { pickImage } from './ImageImport';
+
 
 //Check how far the user is from a route start.
 //Uses Haversine Formula
@@ -21,6 +22,9 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const d = R * c;
   return d;
+};
+const importImage = () => {
+  pickImage();
 };
 
 const GPXWaypoints = () => {
@@ -205,6 +209,12 @@ return (
               <Button
                 title="Import GPX File"
                 onPress={importGPXFile}
+              />
+            </View>
+            <View style={styles.optionButton}>
+              <Button
+                title="Import Image"
+                onPress={importImage}  // Call the function when pressed
               />
             </View>
           </View>
