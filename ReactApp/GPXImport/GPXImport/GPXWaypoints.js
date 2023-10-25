@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect} from 'react';
-import { View, Button, StyleSheet, Alert} from 'react-native';
+import { View, Button, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
@@ -29,6 +29,7 @@ const GPXWaypoints = () => {
     const [routes, setRoutes] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
     const [mapRegion, setMapRegion] = useState(null);
+    const [isMenuOpen, setMenuOpen] = useState(false);
     const mapRef = useRef(null);
 
   //Get the user's location.
@@ -106,6 +107,8 @@ const GPXWaypoints = () => {
 
   //Start Jog button has been pressed, check between user and route. 
   const startJog = () => {
+    if (!imported) return;
+
     if (!routes[0] || !userLocation) return;
   
     const distance = getDistanceFromLatLonInMiles(
@@ -118,7 +121,7 @@ const GPXWaypoints = () => {
     if (distance > 1) {
       Alert.alert(
         'Start Jog',
-        'Too far from route!',
+        `Too far from route! You are ${distance.toFixed(2)} miles away.`,
         [
           {text: 'OK'}
         ],
@@ -188,12 +191,30 @@ return (
         )}
       </MapView>
       <View style={styles.buttonContainer}>
-        {imported ? (
-          <Button title="Start Jog" onPress={startJog} />
-        ) : (
-          <Button title="Import GPX File" onPress={importGPXFile} />
+        {isMenuOpen && (
+          <View style={styles.subMenuContainer}>
+            <View style={styles.optionButton}>
+              <Button
+                title="Start Jog"
+                onPress={startJog}
+                color={imported ? '#007aff' : 'grey'}
+                disabled={!imported}
+              />
+            </View>
+            <View style={styles.optionButton}>
+              <Button
+                title="Import GPX File"
+                onPress={importGPXFile}
+              />
+            </View>
+          </View>
         )}
-        <ImageImport></ImageImport>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => setMenuOpen(!isMenuOpen)}
+        >
+          <Text style={styles.menuButtonText}>+</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -209,8 +230,26 @@ const styles = StyleSheet.create({
   buttonContainer: {
     position: 'absolute',
     bottom: 20,
-    left: 10,
     right: 10,
+    alignItems: 'flex-end'
+  },
+  subMenuContainer: {
+    marginBottom: 5,
+  },
+  optionButton: {
+    marginBottom: 10,
+  },
+  menuButton: {
+    backgroundColor: '#007aff',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  menuButtonText: {
+    color: 'white',
+    fontSize: 36,
   },
 });
 
