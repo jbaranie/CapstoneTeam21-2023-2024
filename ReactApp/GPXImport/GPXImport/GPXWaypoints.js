@@ -198,13 +198,14 @@ return (
         {isMenuOpen && (
           <View style={styles.subMenuContainer}>
             <View style={styles.optionButton}>
-              <Button
-                title="Start Jog"
-                onPress={startJog}
-                color={imported ? '#007aff' : 'grey'}
-                disabled={!imported}
-              />
-            </View>
+                <TouchableOpacity
+                  style={[styles.customButton, {backgroundColor: imported ? '#007aff' : 'grey'}]}
+                  onPress={startJog}
+                  disabled={!imported}
+                >
+                  <Text style={styles.customButtonText}>Start Jog</Text>
+                </TouchableOpacity>
+              </View>
             <View style={styles.optionButton}>
               <Button
                 title="Import GPX File"
@@ -264,6 +265,15 @@ const styles = StyleSheet.create({
   menuButtonText: {
     color: 'white',
     fontSize: 36,
+  },
+  customButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    borderRadius: 5,
+  },
+  customButtonText: {
+    color: 'white',
   },
 });
 
