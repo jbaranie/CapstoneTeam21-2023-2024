@@ -212,10 +212,15 @@ return (
               />
             </View>
             <View style={styles.optionButton}>
-              <Button
-                title="Import Image"
-                onPress={importImage}  // Call the function when pressed
-              />
+              {
+                /*
+                  <Button
+                  title="Import Image"
+                  onPress={importImage}  // Call the function when pressed
+                  />
+                */
+              }
+              
             </View>
           </View>
         )}
