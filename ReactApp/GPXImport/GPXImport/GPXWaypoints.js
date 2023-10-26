@@ -211,17 +211,16 @@ return (
                 onPress={importGPXFile}
               />
             </View>
-            <View style={styles.optionButton}>
-              {
-                /*
-                  <Button
+            {
+              /*
+              <View style={styles.optionButton}>
+                <Button
                   title="Import Image"
                   onPress={importImage}  // Call the function when pressed
-                  />
-                */
-              }
-              
-            </View>
+                />
+              </View>
+              */
+            }
           </View>
         )}
         <TouchableOpacity
