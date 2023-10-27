@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect} from 'react';
-import { View, Button, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
@@ -109,7 +109,6 @@ const GPXWaypoints = () => {
     }
   };
 
-  //Start Jog button has been pressed, check between user and route. 
   const startJog = () => {
     if (!imported) return;
 
@@ -159,7 +158,7 @@ return (
         {routes.length > 0 && (
           <Polyline
             coordinates={routes}
-            strokeColor="#000" // black color
+            strokeColor="#000"
             strokeWidth={3}
           />
         )}
@@ -207,16 +206,6 @@ return (
             <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
               <Text style={styles.buttonText}>Import GPX File</Text>
             </TouchableOpacity>
-            {
-              /*
-              <View style={styles.optionButton}>
-                <Button
-                  title="Import Image"
-                  onPress={importImage}  // Call the function when pressed
-                />
-              </View>
-              */
-            }
           </View>
         )}
         <TouchableOpacity
