@@ -223,7 +223,12 @@ return (
           style={styles.menuButton}
           onPress={() => setMenuOpen(!isMenuOpen)}
         >
-          <Text style={styles.menuButtonText}>+</Text>
+          <Text style={[
+            styles.menuButtonText, 
+            { lineHeight: isMenuOpen ? 40 : 50 } 
+          ]}>
+            {isMenuOpen ? 'x' : '+'}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -260,6 +265,8 @@ const styles = StyleSheet.create({
   menuButtonText: {
     color: 'white',
     fontSize: 36,
+    textAlign: 'center', 
+    lineHeight: 50, 
   },
   customButton: {
     backgroundColor: '#007aff',
