@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect} from 'react';
-import { View, Button, StyleSheet, Alert} from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-import ImageImport from './ImageImport'
+import { pickImage } from './ImageImport';
+
 
 //Check how far the user is from a route start.
 //Uses Haversine Formula
@@ -22,6 +23,9 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
   const d = R * c;
   return d;
 };
+const importImage = () => {
+  pickImage();
+};
 
 const GPXWaypoints = () => {
     const [waypoints, setWaypoints] = useState([]);
@@ -29,6 +33,7 @@ const GPXWaypoints = () => {
     const [routes, setRoutes] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
     const [mapRegion, setMapRegion] = useState(null);
+    const [isMenuOpen, setMenuOpen] = useState(false);
     const mapRef = useRef(null);
 
   //Get the user's location.
@@ -104,8 +109,9 @@ const GPXWaypoints = () => {
     }
   };
 
-  //Start Jog button has been pressed, check between user and route. 
   const startJog = () => {
+    if (!imported) return;
+
     if (!routes[0] || !userLocation) return;
   
     const distance = getDistanceFromLatLonInMiles(
@@ -118,7 +124,7 @@ const GPXWaypoints = () => {
     if (distance > 1) {
       Alert.alert(
         'Start Jog',
-        'Too far from route!',
+        `Too far from route! You are ${distance.toFixed(2)} miles away.`,
         [
           {text: 'OK'}
         ],
@@ -152,7 +158,7 @@ return (
         {routes.length > 0 && (
           <Polyline
             coordinates={routes}
-            strokeColor="#000" // black color
+            strokeColor="#000"
             strokeWidth={3}
           />
         )}
@@ -188,12 +194,31 @@ return (
         )}
       </MapView>
       <View style={styles.buttonContainer}>
-        {imported ? (
-          <Button title="Start Jog" onPress={startJog} />
-        ) : (
-          <Button title="Import GPX File" onPress={importGPXFile} />
+        {isMenuOpen && (
+          <View style={styles.subMenuContainer}>
+            <TouchableOpacity 
+              style={[styles.customButton, !imported && styles.disabledButton]} 
+              onPress={startJog} 
+              disabled={!imported}
+            >
+              <Text style={styles.buttonText}>Start Jog</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
+              <Text style={styles.buttonText}>Import GPX File</Text>
+            </TouchableOpacity>
+          </View>
         )}
-        <ImageImport></ImageImport>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => setMenuOpen(!isMenuOpen)}
+        >
+          <Text style={[
+            styles.menuButtonText, 
+            { lineHeight: isMenuOpen ? 40 : 50 } 
+          ]}>
+            {isMenuOpen ? 'x' : '+'}
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -209,8 +234,42 @@ const styles = StyleSheet.create({
   buttonContainer: {
     position: 'absolute',
     bottom: 20,
-    left: 10,
     right: 10,
+    alignItems: 'flex-end'
+  },
+  subMenuContainer: {
+    marginBottom: 5,
+  },
+  optionButton: {
+    marginBottom: 10,
+  },
+  menuButton: {
+    backgroundColor: '#007aff',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  menuButtonText: {
+    color: 'white',
+    fontSize: 36,
+    textAlign: 'center', 
+    lineHeight: 50, 
+  },
+  customButton: {
+    backgroundColor: '#007aff',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  disabledButton: {
+    backgroundColor: 'grey',
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center'
   },
 });
 
