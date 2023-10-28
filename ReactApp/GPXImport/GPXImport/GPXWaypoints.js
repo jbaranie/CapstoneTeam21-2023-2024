@@ -5,7 +5,7 @@ import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { pickImage } from './ImageImport';
-
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 
 //Check how far the user is from a route start.
 //Uses Haversine Formula
@@ -139,6 +139,7 @@ const GPXWaypoints = () => {
         ],
         { cancelable: false }
       );
+      activateKeepAwakeAsync();//deactivate when ending route
     }
   };
 
