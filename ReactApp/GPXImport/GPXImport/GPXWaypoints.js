@@ -28,13 +28,13 @@ const importImage = () => {
 };
 
 const GPXWaypoints = () => {
-    const [waypoints, setWaypoints] = useState([]);
-    const [imported, setImported] = useState(false); 
-    const [routes, setRoutes] = useState([]);
-    const [userLocation, setUserLocation] = useState(null);
-    const [mapRegion, setMapRegion] = useState(null);
-    const [isMenuOpen, setMenuOpen] = useState(false);
-    const mapRef = useRef(null);
+  const [waypoints, setWaypoints] = useState([]);
+  const [imported, setImported] = useState(false);
+  const [routes, setRoutes] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
+  const [mapRegion, setMapRegion] = useState(null);
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const mapRef = useRef(null);
 
   //Get the user's location.
   useEffect(() => {
@@ -109,7 +109,7 @@ const GPXWaypoints = () => {
     }
   };
 
-  const startJog = () => {
+  const startRoute = () => {
     if (!imported) return;
 
     if (!routes[0] || !userLocation) return;
@@ -123,7 +123,7 @@ const GPXWaypoints = () => {
   
     if (distance > 1) {
       Alert.alert(
-        'Start Jog',
+        'Start Route',
         `Too far from route! You are ${distance.toFixed(2)} miles away.`,
         [
           {text: 'OK'}
@@ -132,7 +132,7 @@ const GPXWaypoints = () => {
       );
     } else {
       Alert.alert(
-        'Start Jog',
+        'Start Route',
         'Jog started!',
         [
           {text: 'OK'}
@@ -199,7 +199,7 @@ return (
           <View style={styles.subMenuContainer}>
             <TouchableOpacity 
               style={[styles.customButton, !imported && styles.disabledButton]} 
-              onPress={startJog} 
+              onPress={startRoute}
               disabled={!imported}
             >
               <Text style={styles.buttonText}>Start Jog</Text>
