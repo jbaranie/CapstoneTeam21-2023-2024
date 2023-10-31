@@ -57,11 +57,19 @@ const GPXWaypoints = () => {
     }
   };
 
+  //To Stop Recording a Route
   const stopRoute = () => {
     setIsCycling(false);
     stopTimer(); 
   };
 
+  const goodMarkerPress = () => {
+    Alert.alert('Not Yet Implemented');
+  };
+
+  const badMarkerPress = () => {
+    Alert.alert('Not Yet Implemented');
+  };
 
   //Get the user's location.
   useEffect(() => {
@@ -283,12 +291,18 @@ return (
       </View>
       {isCycling && (
         <View style={styles.goodBadButtonContainer}>
-          <TouchableOpacity style={[styles.customButton, {backgroundColor: 'green', paddingVertical: 20, paddingHorizontal: 40}]}>
-            <Text style={styles.buttonText}>Good</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.customButton, {backgroundColor: 'red', paddingVertical: 20, paddingHorizontal: 40}]}>
-            <Text style={styles.buttonText}>Bad</Text>
-          </TouchableOpacity>
+           <TouchableOpacity
+              style={[styles.customButton, { backgroundColor: 'green', paddingVertical: 20, paddingHorizontal: 40 }]}
+              onPress={goodMarkerPress}
+            >
+              <Text style={styles.buttonText}>Good</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.customButton, { backgroundColor: 'red', paddingVertical: 20, paddingHorizontal: 40 }]}
+              onPress={badMarkerPress}
+            >
+              <Text style={styles.buttonText}>Bad</Text>
+            </TouchableOpacity>
         </View>
       )} 
       {isCycling && (
