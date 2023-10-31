@@ -57,6 +57,11 @@ const GPXWaypoints = () => {
     }
   };
 
+  const stopRoute = () => {
+    setIsCycling(false);
+    stopTimer(); 
+  };
+
 
   //Get the user's location.
   useEffect(() => {
@@ -245,23 +250,7 @@ return (
       <View style={styles.buttonContainer}>
         {isCycling ? (
           <>
-            <TouchableOpacity
-              style={styles.customButton}
-              onPress={() => {
-                setIsCycling(false);
-                stopTimer();
-              }}
-            >
-              <Text style={styles.buttonText}>Stop Route</Text>
-            </TouchableOpacity>
-            <View style={styles.goodBadButtonContainer}>
-              <TouchableOpacity style={[styles.customButton, {backgroundColor: 'green'}]}>
-                <Text style={styles.buttonText}>Good</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.customButton, {backgroundColor: 'red'}]}>
-                <Text style={styles.buttonText}>Bad</Text>
-              </TouchableOpacity>
-            </View>
+
           </>
         ) : (
           isMenuOpen && (
@@ -292,7 +281,26 @@ return (
           </TouchableOpacity>
         )}
       </View>
-
+      {isCycling && (
+        <View style={styles.goodBadButtonContainer}>
+          <TouchableOpacity style={[styles.customButton, {backgroundColor: 'green', paddingVertical: 20, paddingHorizontal: 40}]}>
+            <Text style={styles.buttonText}>Good</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.customButton, {backgroundColor: 'red', paddingVertical: 20, paddingHorizontal: 40}]}>
+            <Text style={styles.buttonText}>Bad</Text>
+          </TouchableOpacity>
+        </View>
+      )} 
+      {isCycling && (
+      <View style={styles.stopRouteContainer}>
+        <TouchableOpacity 
+          style={styles.customButton} 
+          onPress={stopRoute} 
+        >
+          <Text style={styles.buttonText}>Stop Route</Text>
+        </TouchableOpacity>
+      </View>
+    )}
     </View>
   );
 };
@@ -303,12 +311,6 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    right: 10,
-    alignItems: 'flex-end'
   },
   subMenuContainer: {
     marginBottom: 5,
@@ -337,6 +339,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
   },
+  customLargeButton: {
+    backgroundColor: '#007aff',
+    paddingVertical: 20,
+    paddingHorizontal: 40,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
   disabledButton: {
     backgroundColor: 'grey',
   },
@@ -344,13 +353,27 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center'
   },
-   goodBadButtonContainer: {
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    right: 10,
+    alignItems: 'flex-end',
+  },
+  goodBadButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     position: 'absolute',
     left: 10,
     right: 10,
     bottom: 20,
+  },
+  stopRouteContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: -7,
+    paddingVertical: 7,
+    alignItems: 'center',
   },
 });
 
