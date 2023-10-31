@@ -36,6 +36,28 @@ const GPXWaypoints = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const mapRef = useRef(null);
 
+    const [isCycling, setIsCycling] = useState(false);
+    const [elapsedTime, setElapsedTime] =useState(0);
+    const timerRef = useRef(null);
+  
+
+  //Start timer function
+  const startTimer = () => {
+    timerRef.current = setInterval(() => {
+      setElapsedTime(prevTime => prevTime + 1);
+    }, 1000);
+  };
+
+  //Stop the timer function
+  const stopTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+      setElapsedTime(0);
+    }
+  };
+
+
   //Get the user's location.
   useEffect(() => {
     (async () => {
@@ -110,8 +132,28 @@ const GPXWaypoints = () => {
   };
 
   const startJog = () => {
-    if (!imported) return;
-
+    if (!imported) {
+      Alert.alert(
+        'Start Route',
+        'Do you want to start Cycling without a route?',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              setIsCycling(true);
+              startTimer();
+            },
+          },
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+        ],
+        { cancelable: true }
+      );
+      return;
+    }
+  
     if (!routes[0] || !userLocation) return;
   
     const distance = getDistanceFromLatLonInMiles(
@@ -142,8 +184,15 @@ const GPXWaypoints = () => {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      stopTimer();
+    };
+  }, []);
+
 return (
     <View style={styles.container}>
+      {isCycling && <Text style={{ position: 'absolute', top: 10, left: 0, right: 0, textAlign: 'center', fontSize: 36, zIndex: 1 }}>{`${elapsedTime}s`}</Text>}
       <MapView
         ref = {mapRef} 
         style={styles.map}
@@ -194,32 +243,56 @@ return (
         )}
       </MapView>
       <View style={styles.buttonContainer}>
-        {isMenuOpen && (
-          <View style={styles.subMenuContainer}>
-            <TouchableOpacity 
-              style={[styles.customButton, !imported && styles.disabledButton]} 
-              onPress={startJog} 
-              disabled={!imported}
+        {isCycling ? (
+          <>
+            <TouchableOpacity
+              style={styles.customButton}
+              onPress={() => {
+                setIsCycling(false);
+                stopTimer();
+              }}
             >
-              <Text style={styles.buttonText}>Start Jog</Text>
+              <Text style={styles.buttonText}>Stop Route</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
-              <Text style={styles.buttonText}>Import GPX File</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={styles.goodBadButtonContainer}>
+              <TouchableOpacity style={[styles.customButton, {backgroundColor: 'green'}]}>
+                <Text style={styles.buttonText}>Good</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.customButton, {backgroundColor: 'red'}]}>
+                <Text style={styles.buttonText}>Bad</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        ) : (
+          isMenuOpen && (
+            <View style={styles.subMenuContainer}>
+              <TouchableOpacity 
+                style={styles.customButton} 
+                onPress={startJog} 
+              >
+                <Text style={styles.buttonText}>Start Route</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
+                <Text style={styles.buttonText}>Import GPX File</Text>
+              </TouchableOpacity>
+            </View>
+          )
         )}
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => setMenuOpen(!isMenuOpen)}
-        >
-          <Text style={[
-            styles.menuButtonText, 
-            { lineHeight: isMenuOpen ? 40 : 50 } 
-          ]}>
-            {isMenuOpen ? 'x' : '+'}
-          </Text>
-        </TouchableOpacity>
+        {!isCycling && (
+          <TouchableOpacity
+            style={styles.menuButton}
+            onPress={() => setMenuOpen(!isMenuOpen)}
+          >
+            <Text style={[
+              styles.menuButtonText, 
+              { lineHeight: isMenuOpen ? 40 : 50 } 
+            ]}>
+              {isMenuOpen ? 'x' : '+'}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
+
     </View>
   );
 };
@@ -270,6 +343,14 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     textAlign: 'center'
+  },
+   goodBadButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    left: 10,
+    right: 10,
+    bottom: 20,
   },
 });
 
