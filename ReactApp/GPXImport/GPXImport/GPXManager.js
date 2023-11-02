@@ -24,3 +24,18 @@ const addWaypointToGPX = async (latitude, longitude, rating) => {
 };
 
 export { createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH };
+
+const addRouteToGPX = async (routePoints) => {
+  let fileContent = await FileSystem.readAsStringAsync(GPX_FILE_PATH);
+  let routeElement = '<rte>\n';
+
+  routePoints.forEach(point => {
+    routeElement += `<rtept lat="${point.latitude}" lon="${point.longitude}">\n`;
+    routeElement += `<name>${point.name}</name>\n</rtept>\n`;
+  });
+
+  routeElement += '</rte>\n';
+  fileContent = fileContent.replace("</gpx>", `${routeElement}</gpx>`);
+
+  await FileSystem.writeAsStringAsync(GPX_FILE_PATH, fileContent);
+};
