@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import * as FileSystem from 'expo-file-system';
+import { Button } from 'react-native';
 
 const GPXFileList = ({ navigation }) => {
   const [gpxFiles, setGpxFiles] = useState([]);
@@ -37,14 +38,38 @@ const GPXFileList = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
+  
+  const deleteFile = async (fileName) => {
+    try {
+      await FileSystem.deleteAsync(`${FileSystem.documentDirectory}${fileName}`);
+      refreshFileList(); // Refresh the list after deleting the file
+    } catch (error) {
+      console.error('Error deleting GPX file:', error);
+    }
+  };
+
+  const deleteAllFiles = async () => {
+    try {
+      for (const fileName of gpxFiles) {
+        await FileSystem.deleteAsync(`${FileSystem.documentDirectory}${fileName}`);
+      }
+      refreshFileList(); // Refresh the list after deleting all files
+    } catch (error) {
+      console.error('Error deleting all GPX files:', error);
+    }
+  };
+
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate('GPXWaypoints', { fileName: item, refreshFileList: refreshFileList });
-      }}
-    >
-      <Text>{item}</Text>
-    </TouchableOpacity>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('GPXWaypoints', { fileName: item, refreshFileList: refreshFileList });
+        }}
+      >
+        <Text>{item}</Text>
+      </TouchableOpacity>
+      <Button title="Delete" onPress={() => deleteFile(item)} />
+    </View>
   );
 
   return (
@@ -54,6 +79,7 @@ const GPXFileList = ({ navigation }) => {
         renderItem={renderItem}
         keyExtractor={item => item}
       />
+      <Button title="Delete All" onPress={deleteAllFiles} />
     </View>
   );
 };
