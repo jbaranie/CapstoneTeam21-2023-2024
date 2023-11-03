@@ -8,6 +8,7 @@ const GPXFileList = ({ navigation }) => {
 
   useEffect(() => {
     const fetchFiles = async () => {
+      console.log('Fetching files...');
       try {
         const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
         const filteredFiles = files.filter(file => file.endsWith('.gpx'));
@@ -15,6 +16,7 @@ const GPXFileList = ({ navigation }) => {
       } catch (error) {
         console.error('Error reading GPX files:', error);
       }
+      console.log('Files fetched:', files);
     };
 
     fetchFiles();
@@ -24,6 +26,7 @@ const GPXFileList = ({ navigation }) => {
     try {
       const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
       const filteredFiles = files.filter(file => file.endsWith('.gpx'));
+      console.log('Refreshing file list, files to set:', filteredFiles);
       setGpxFiles(filteredFiles);
     } catch (error) {
       console.error('Error reading GPX files:', error);
@@ -32,13 +35,23 @@ const GPXFileList = ({ navigation }) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      console.log('Focus event triggered');
       refreshFileList();
     });
   
     return unsubscribe;
   }, [navigation]);
 
-  
+  const logGPXContent = async (fileName) => {
+    try {
+      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
+      const content = await FileSystem.readAsStringAsync(fileUri);
+      console.log(content); // This will log the content to the console
+    } catch (error) {
+      console.error('Error reading GPX file:', error);
+    }
+  };
+
   const deleteFile = async (fileName) => {
     try {
       await FileSystem.deleteAsync(`${FileSystem.documentDirectory}${fileName}`);
@@ -65,12 +78,17 @@ const GPXFileList = ({ navigation }) => {
         onPress={() => {
           navigation.navigate('GPXWaypoints', { fileName: item, refreshFileList: refreshFileList });
         }}
+        style={{ flex: 1 }}
       >
         <Text>{item}</Text>
       </TouchableOpacity>
-      <Button title="Delete" onPress={() => deleteFile(item)} />
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Button title="Delete" onPress={() => deleteFile(item)} />
+        <Button title="Log Content" onPress={() => logGPXContent(item)} />
+      </View>
     </View>
   );
+  
 
   return (
     <View>

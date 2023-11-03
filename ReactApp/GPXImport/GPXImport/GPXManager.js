@@ -22,14 +22,23 @@ const INITIAL_GPX_CONTENT = `<?xml version="1.0" encoding="UTF-8"?>
 </gpx>`;
 
 const createNewGPXFile = async () => {
-  const newFileName = await getNewGPXFileName();
-  const newFilePath = `${FileSystem.documentDirectory}${newFileName}`;
+  console.log('Creating new GPX file...');
+  try {
+    const newFileName = await getNewGPXFileName();
+    const newFilePath = `${FileSystem.documentDirectory}${newFileName}`;
 
-  await FileSystem.writeAsStringAsync(newFilePath, INITIAL_GPX_CONTENT);
-  return newFilePath; // Return the new file path for further use
+    await FileSystem.writeAsStringAsync(newFilePath, INITIAL_GPX_CONTENT);
+    console.log('GPX file created at:', newFilePath); // Log the new file path
+    return newFilePath; // Return the new file path for further use
+  } catch (error) {
+    console.error('Error creating new GPX file:', error);
+    throw error; // Re-throw the error to handle it in the calling function
+  }
+
 };
 
 const addWaypointToGPX = async (filePath, latitude, longitude, rating) => {
+  console.log(`Adding waypoint to GPX file: ${filePath}`);
   try {
     console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
     let fileContent = await FileSystem.readAsStringAsync(filePath);
@@ -42,13 +51,17 @@ const addWaypointToGPX = async (filePath, latitude, longitude, rating) => {
     fileContent = fileContent.replace("</gpx>", `${waypoint}\n</gpx>`);
 
     await FileSystem.writeAsStringAsync(filePath, fileContent);
-
+    console.log('Waypoint added to GPX file at:', filePath); // Log success
   } catch (error) {
-    console.error('An error occurred while reading the file:', error);
+    console.error(`Error adding waypoint to GPX file at ${filePath}:`, error);
+    throw error; // Re-throw the error to handle it in the calling function
   }
+  console.log('Waypoint added:', { latitude, longitude, rating });
 };
 
+
 const addRouteToGPX = async (filePath, routePoints) => {
+  console.log(`Adding route to GPX file: ${filePath}`);
   try {
     console.log('addRouteToGPX - filePath:', filePath); // Log the filePath
     let fileContent = await FileSystem.readAsStringAsync(filePath);
@@ -66,6 +79,7 @@ const addRouteToGPX = async (filePath, routePoints) => {
   } catch (error) {
     console.error('An error occurred while adding route to GPX file:', error);
   }
+  console.log('Route added:', routePoints);
 };
 
 export { createNewGPXFile, addWaypointToGPX, addRouteToGPX };

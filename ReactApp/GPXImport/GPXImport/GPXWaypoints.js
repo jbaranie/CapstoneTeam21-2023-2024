@@ -62,54 +62,67 @@ const GPXWaypoints = () => {
 
   //To Stop Recording a Route
   const stopRoute = async () => {
-    try{
-    setIsCycling(false);
-    stopTimer(); 
-
-    // Create a new GPX file for the completed route
-    const newFilePath = await createNewGPXFile();
-    console.log('stopRoute - newFilePath:', newFilePath); // Log the newFilePath
-
-    // Save the route and waypoints to the new file
-    await addRouteToGPX(newFilePath, routes);
-    for (const waypoint of waypoints) {
-      await addWaypointToGPX(newFilePath, waypoint.latitude, waypoint.longitude, waypoint.rating);
-    }
+    try {
+      setIsCycling(false);
+      stopTimer(); 
   
-    // Refresh the GPX file list to include the new file
-    navigation.navigate('GPX Files', { refreshFileList: true });
-  } catch (error) {
-    console.error('Error in stopRoute:', error);
-  }
-};
+      if (currentGPXPath) {
+        console.log('Stopping route, current GPX path:', currentGPXPath);
+        console.log('Routes to be saved:', routes);
+        console.log('Waypoints to be saved:', waypoints);
+  
+        // Save the route and waypoints to the current file
+        await addRouteToGPX(currentGPXPath, routes);
+        for (const waypoint of waypoints) {
+          console.log('Saving waypoint:', waypoint);
+          await addWaypointToGPX(currentGPXPath, waypoint.latitude, waypoint.longitude, waypoint.rating);
+        }
+    
+        // Refresh the GPX file list to include the new file
+        navigation.navigate('GPX Files', { refreshFileList: true });
+        setCurrentGPXPath(''); // Reset the current GPX file path
+      } else {
+        console.error('No GPX file path found when trying to stop route');
+      }
+    } catch (error) {
+      console.error('Error in stopRoute:', error);
+    }
+  };
+  
  
   const goodMarkerPress = async () => {
-    await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3);
-    setWaypoints(prevWaypoints => [
-      ...prevWaypoints,
-      {
+    console.log('goodMarkerPress called with currentGPXPath:', currentGPXPath);
+    // Writes to GPX during route: await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3);
+    setWaypoints(prevWaypoints => {
+      const newWaypoint = {
         id: Date.now().toString(), // Generate a unique ID using the current timestamp
         latitude: userLocation.latitude,
         longitude: userLocation.longitude,
         name: "Good Waypoint",
         rating: 3
-      }
-    ]);
+      };
+      console.log('Adding new waypoint:', newWaypoint);
+      return [...prevWaypoints, newWaypoint];
+    });
   };
+  
 
   const badMarkerPress = async () => {
-    await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1);
-    setWaypoints(prevWaypoints => [
-      ...prevWaypoints,
-      {
+    console.log('badMarkerPress called with currentGPXPath:', currentGPXPath);
+    // Writes to gpx during route: await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1);
+    setWaypoints(prevWaypoints => {
+      const newWaypoint = {
         id: Date.now().toString(), // Generate a unique ID using the current timestamp
         latitude: userLocation.latitude,
         longitude: userLocation.longitude,
         name: "Bad Waypoint",
         rating: 1
-      }
-    ]);
+      };
+      console.log('Adding new waypoint:', newWaypoint);
+      return [...prevWaypoints, newWaypoint];
+    });
   };
+  
 
   //Get the user's location.
   useEffect(() => {
@@ -183,8 +196,9 @@ const GPXWaypoints = () => {
       console.error('Error importing GPX file:', error);
     }
   };
-
   const startJog = async () => {
+    console.log('Starting new jog...');
+    setWaypoints([]); // Reset the waypoints
     if (!imported) {
       Alert.alert(
         'Start Route',
@@ -195,8 +209,10 @@ const GPXWaypoints = () => {
             onPress: async () => { // Make sure this function is async
               setIsCycling(true);
               startTimer();
-              const newFilePath = await createNewGPXFile(); // Create the file and get the path
-              setCurrentGPXPath(newFilePath); // Update the current GPX file path
+              if (!currentGPXPath) { 
+                const newFilePath = await createNewGPXFile();
+                setCurrentGPXPath(newFilePath);
+              }
             },
           },
           {
@@ -231,6 +247,7 @@ const GPXWaypoints = () => {
       setIsCycling(true); // Set cycling to true when starting the jog
       startTimer(); // Start the timer
       const newFilePath = await createNewGPXFile(); // Create the file and get the path
+      console.log('New jog started, GPX file path:', newFilePath);
       setCurrentGPXPath(newFilePath); // Update the current GPX file path
       Alert.alert(
         'Start Jog',
@@ -246,6 +263,7 @@ const GPXWaypoints = () => {
 
   useEffect(() => {
     return () => {
+      setWaypoints([]);
       stopTimer();
     };
   }, []);
