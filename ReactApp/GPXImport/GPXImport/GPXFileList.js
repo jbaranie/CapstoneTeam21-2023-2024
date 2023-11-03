@@ -9,15 +9,18 @@ const GPXFileList = ({ navigation }) => {
   useEffect(() => {
     const fetchFiles = async () => {
       console.log('Fetching files...');
+      let files;
       try {
-        const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+        files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
         const filteredFiles = files.filter(file => file.endsWith('.gpx'));
         setGpxFiles(filteredFiles);
       } catch (error) {
         console.error('Error reading GPX files:', error);
       }
+      if (files) {
       console.log('Files fetched:', files);
-    };
+    } 
+  };
 
     fetchFiles();
   }, []);
