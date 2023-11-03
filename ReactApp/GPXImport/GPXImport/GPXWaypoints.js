@@ -5,8 +5,8 @@ import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { pickImage } from './ImageImport';
-import { createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH } from './GPXManager';
-
+import { createNewGPXFile, addWaypointToGPX, addRouteToGPX, GPX_FILE_PATH } from './GPXManager';
+import { useNavigation } from '@react-navigation/native';
 
 
 //Check how far the user is from a route start.
@@ -30,6 +30,7 @@ const importImage = () => {
 };
 
 const GPXWaypoints = () => {
+  const navigation = useNavigation();
     const [waypoints, setWaypoints] = useState([]);
     const [imported, setImported] = useState(false); 
     const [routes, setRoutes] = useState([]);
@@ -41,7 +42,7 @@ const GPXWaypoints = () => {
     const [isCycling, setIsCycling] = useState(false);
     const [elapsedTime, setElapsedTime] =useState(0);
     const timerRef = useRef(null);
-  
+    const [currentGPXPath, setCurrentGPXPath] = useState('');
 
   //Start timer function
   const startTimer = () => {
@@ -60,13 +61,30 @@ const GPXWaypoints = () => {
   };
 
   //To Stop Recording a Route
-  const stopRoute = () => {
+  const stopRoute = async () => {
+    try{
     setIsCycling(false);
     stopTimer(); 
-  };
 
+    // Create a new GPX file for the completed route
+    const newFilePath = await createNewGPXFile();
+    console.log('stopRoute - newFilePath:', newFilePath); // Log the newFilePath
+
+    // Save the route and waypoints to the new file
+    await addRouteToGPX(newFilePath, routes);
+    for (const waypoint of waypoints) {
+      await addWaypointToGPX(newFilePath, waypoint.latitude, waypoint.longitude, waypoint.rating);
+    }
+  
+    // Refresh the GPX file list to include the new file
+    navigation.navigate('GPX Files', { refreshFileList: true });
+  } catch (error) {
+    console.error('Error in stopRoute:', error);
+  }
+};
+ 
   const goodMarkerPress = async () => {
-    await addWaypointToGPX(userLocation.latitude, userLocation.longitude, 3);
+    await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3);
     setWaypoints(prevWaypoints => [
       ...prevWaypoints,
       {
@@ -80,7 +98,7 @@ const GPXWaypoints = () => {
   };
 
   const badMarkerPress = async () => {
-    await addWaypointToGPX(userLocation.latitude, userLocation.longitude, 1);
+    await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1);
     setWaypoints(prevWaypoints => [
       ...prevWaypoints,
       {
@@ -174,9 +192,11 @@ const GPXWaypoints = () => {
         [
           {
             text: 'OK',
-            onPress: () => {
+            onPress: async () => { // Make sure this function is async
               setIsCycling(true);
               startTimer();
+              const newFilePath = await createNewGPXFile(); // Create the file and get the path
+              setCurrentGPXPath(newFilePath); // Update the current GPX file path
             },
           },
           {
@@ -186,7 +206,6 @@ const GPXWaypoints = () => {
         ],
         { cancelable: true }
       );
-      await createNewGPXFile();
       return;
     }
   
@@ -204,21 +223,26 @@ const GPXWaypoints = () => {
         'Start Jog',
         `Too far from route! You are ${distance.toFixed(2)} miles away.`,
         [
-          {text: 'OK'}
+          { text: 'OK' }
         ],
         { cancelable: false }
       );
     } else {
+      setIsCycling(true); // Set cycling to true when starting the jog
+      startTimer(); // Start the timer
+      const newFilePath = await createNewGPXFile(); // Create the file and get the path
+      setCurrentGPXPath(newFilePath); // Update the current GPX file path
       Alert.alert(
         'Start Jog',
         'Jog started!',
         [
-          {text: 'OK'}
+          { text: 'OK' }
         ],
         { cancelable: false }
       );
     }
   };
+  
 
   useEffect(() => {
     return () => {

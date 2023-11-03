@@ -19,11 +19,28 @@ const GPXFileList = ({ navigation }) => {
     fetchFiles();
   }, []);
 
+  const refreshFileList = async () => {
+    try {
+      const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+      const filteredFiles = files.filter(file => file.endsWith('.gpx'));
+      setGpxFiles(filteredFiles);
+    } catch (error) {
+      console.error('Error reading GPX files:', error);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refreshFileList();
+    });
+  
+    return unsubscribe;
+  }, [navigation]);
+
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => {
-        // Handle the file selection, e.g., navigate to a detail screen
-        // navigation.navigate('GPXDetail', { fileName: item });
+        navigation.navigate('GPXWaypoints', { fileName: item, refreshFileList: refreshFileList });
       }}
     >
       <Text>{item}</Text>
