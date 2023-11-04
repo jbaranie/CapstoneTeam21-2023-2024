@@ -36,6 +36,41 @@ const GPXWaypoints = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const mapRef = useRef(null);
 
+    const [isCycling, setIsCycling] = useState(false);
+    const [elapsedTime, setElapsedTime] =useState(0);
+    const timerRef = useRef(null);
+  
+
+  //Start timer function
+  const startTimer = () => {
+    timerRef.current = setInterval(() => {
+      setElapsedTime(prevTime => prevTime + 1);
+    }, 1000);
+  };
+
+  //Stop the timer function
+  const stopTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+      setElapsedTime(0);
+    }
+  };
+
+  //To Stop Recording a Route
+  const stopRoute = () => {
+    setIsCycling(false);
+    stopTimer(); 
+  };
+
+  const goodMarkerPress = () => {
+    Alert.alert('Not Yet Implemented');
+  };
+
+  const badMarkerPress = () => {
+    Alert.alert('Not Yet Implemented');
+  };
+
   //Get the user's location.
   useEffect(() => {
     (async () => {
@@ -110,8 +145,28 @@ const GPXWaypoints = () => {
   };
 
   const startJog = () => {
-    if (!imported) return;
-
+    if (!imported) {
+      Alert.alert(
+        'Start Route',
+        'Do you want to start Cycling without a route?',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              setIsCycling(true);
+              startTimer();
+            },
+          },
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+        ],
+        { cancelable: true }
+      );
+      return;
+    }
+  
     if (!routes[0] || !userLocation) return;
   
     const distance = getDistanceFromLatLonInMiles(
@@ -142,8 +197,15 @@ const GPXWaypoints = () => {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      stopTimer();
+    };
+  }, []);
+
 return (
     <View style={styles.container}>
+      {isCycling && <Text style={{ position: 'absolute', top: 10, left: 0, right: 0, textAlign: 'center', fontSize: 36, zIndex: 1 }}>{`${elapsedTime}s`}</Text>}
       <MapView
         ref = {mapRef} 
         style={styles.map}
@@ -194,32 +256,65 @@ return (
         )}
       </MapView>
       <View style={styles.buttonContainer}>
-        {isMenuOpen && (
-          <View style={styles.subMenuContainer}>
-            <TouchableOpacity 
-              style={[styles.customButton, !imported && styles.disabledButton]} 
-              onPress={startJog} 
-              disabled={!imported}
-            >
-              <Text style={styles.buttonText}>Start Jog</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
-              <Text style={styles.buttonText}>Import GPX File</Text>
-            </TouchableOpacity>
-          </View>
+        {isCycling ? (
+          <>
+
+          </>
+        ) : (
+          isMenuOpen && (
+            <View style={styles.subMenuContainer}>
+              <TouchableOpacity 
+                style={styles.customButton} 
+                onPress={startJog} 
+              >
+                <Text style={styles.buttonText}>Start Route</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
+                <Text style={styles.buttonText}>Import GPX File</Text>
+              </TouchableOpacity>
+            </View>
+          )
         )}
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => setMenuOpen(!isMenuOpen)}
+        {!isCycling && (
+          <TouchableOpacity
+            style={styles.menuButton}
+            onPress={() => setMenuOpen(!isMenuOpen)}
+          >
+            <Text style={[
+              styles.menuButtonText, 
+              { lineHeight: isMenuOpen ? 40 : 50 } 
+            ]}>
+              {isMenuOpen ? 'x' : '+'}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      {isCycling && (
+        <View style={styles.goodBadButtonContainer}>
+           <TouchableOpacity
+              style={[styles.customButton, { backgroundColor: 'green', paddingVertical: 20, paddingHorizontal: 40 }]}
+              onPress={goodMarkerPress}
+            >
+              <Text style={styles.buttonText}>Good</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.customButton, { backgroundColor: 'red', paddingVertical: 20, paddingHorizontal: 40 }]}
+              onPress={badMarkerPress}
+            >
+              <Text style={styles.buttonText}>Bad</Text>
+            </TouchableOpacity>
+        </View>
+      )} 
+      {isCycling && (
+      <View style={styles.stopRouteContainer}>
+        <TouchableOpacity 
+          style={styles.customButton} 
+          onPress={stopRoute} 
         >
-          <Text style={[
-            styles.menuButtonText, 
-            { lineHeight: isMenuOpen ? 40 : 50 } 
-          ]}>
-            {isMenuOpen ? 'x' : '+'}
-          </Text>
+          <Text style={styles.buttonText}>Stop Route</Text>
         </TouchableOpacity>
       </View>
+    )}
     </View>
   );
 };
@@ -230,12 +325,6 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    right: 10,
-    alignItems: 'flex-end'
   },
   subMenuContainer: {
     marginBottom: 5,
@@ -264,12 +353,41 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
   },
+  customLargeButton: {
+    backgroundColor: '#007aff',
+    paddingVertical: 20,
+    paddingHorizontal: 40,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
   disabledButton: {
     backgroundColor: 'grey',
   },
   buttonText: {
     color: 'white',
     textAlign: 'center'
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    right: 10,
+    alignItems: 'flex-end',
+  },
+  goodBadButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    left: 10,
+    right: 10,
+    bottom: 20,
+  },
+  stopRouteContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: -7,
+    paddingVertical: 7,
+    alignItems: 'center',
   },
 });
 
