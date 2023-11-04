@@ -6,7 +6,7 @@ import * as Location from 'expo-location';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { pickImage } from './ImageImport';
 import { useNavigation } from '@react-navigation/native';
-import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX } from './GPXManager';
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, createInitGPX} from './GPXManager';
 
 
 //Check how far the user is from a route start.
@@ -49,7 +49,7 @@ const GPXWaypoints = () => {
     (async () => {
       const gpxExists = await doesGPXFileExist();
       if (gpxExists) {
-        // Load the existing GPX file
+        console.log('GPX File myGPX does exist!')
         await importGPXFileFromPath(GPX_FILE_PATH);
       }
     })();
@@ -84,10 +84,12 @@ const GPXWaypoints = () => {
   
         // Save the route and waypoints to the current file
         await addRouteToGPX(currentGPXPath, routes);
-        for (const waypoint of waypoints) {
-          console.log('Saving waypoint:', waypoint);
-          await addWaypointToGPX(currentGPXPath, waypoint.latitude, waypoint.longitude, waypoint.rating);
-        }
+
+        // for (const waypoint of waypoints) {
+        //   console.log('Saving waypoint:', waypoint);
+        //   //await addWaypointToGPX(currentGPXPath, waypoint.latitude, waypoint.longitude, waypoint.rating);
+        // }
+        
     
         // Refresh the GPX file list to include the new file
         navigation.navigate('GPX Files', { refreshFileList: true });
@@ -103,7 +105,8 @@ const GPXWaypoints = () => {
  
   const goodMarkerPress = async () => {
     console.log('goodMarkerPress called with currentGPXPath:', currentGPXPath);
-    // Writes to GPX during route: await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3);
+    await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3);
+    await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 3);
     setWaypoints(prevWaypoints => {
       const newWaypoint = {
         id: Date.now().toString(), // Generate a unique ID using the current timestamp
@@ -120,7 +123,8 @@ const GPXWaypoints = () => {
 
   const badMarkerPress = async () => {
     console.log('badMarkerPress called with currentGPXPath:', currentGPXPath);
-    // Writes to gpx during route: await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1);
+    await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1);
+    await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 1);
     setWaypoints(prevWaypoints => {
       const newWaypoint = {
         id: Date.now().toString(), // Generate a unique ID using the current timestamp
@@ -254,8 +258,8 @@ const importGPXFileFromPath = async (path) => {
   
   const startJog = async () => {
     const gpxExists = await doesGPXFileExist();
-    if (!imported || !gpxExists) {
-      await createNewGPXFile();
+    if (!gpxExists) {
+      await createInitGPX();
     }
     setWaypoints([]);
     

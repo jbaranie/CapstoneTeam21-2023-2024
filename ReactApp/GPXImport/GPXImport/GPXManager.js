@@ -26,6 +26,14 @@ const doesGPXFileExist = async () => {
   return fileInfo.exists;
 };
 
+const createInitGPX = async () => {
+  const initialContent = `<?xml version="1.0" encoding="UTF-8"?>
+  <gpx version="1.1" creator="YourApp">
+  </gpx>`;
+
+  await FileSystem.writeAsStringAsync(GPX_FILE_PATH, initialContent);
+};
+
 const createNewGPXFile = async () => {
   console.log('Creating new GPX file...');
   try {
@@ -87,5 +95,5 @@ const addRouteToGPX = async (filePath, routePoints) => {
   console.log('Route added:', routePoints);
 };
 
-export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX};
+export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX, createInitGPX};
 
