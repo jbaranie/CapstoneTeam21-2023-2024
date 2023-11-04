@@ -79,7 +79,7 @@ const GPXFileList = ({ navigation }) => {
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('GPXWaypoints', { fileName: item, refreshFileList: refreshFileList });
+          // We might need on press functionality for the list items in the future. But empty for now. 
         }}
         style={{ flex: 1 }}
       >
