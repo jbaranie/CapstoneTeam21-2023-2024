@@ -6,6 +6,7 @@ import * as Location from 'expo-location';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { pickImage } from './ImageImport';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH } from './GPXManager';
 
 //Check how far the user is from a route start.
 //Uses Haversine Formula
@@ -36,6 +37,72 @@ const GPXWaypoints = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const mapRef = useRef(null);
 
+    const [isCycling, setIsCycling] = useState(false);
+    const [elapsedTime, setElapsedTime] =useState(0);
+    const timerRef = useRef(null);
+  
+
+
+  useEffect(() => {
+    (async () => {
+      const gpxExists = await doesGPXFileExist();
+      if (gpxExists) {
+        // Load the existing GPX file
+        await importGPXFileFromPath(GPX_FILE_PATH);
+      }
+    })();
+  }, []);
+
+  //Start timer function
+  const startTimer = () => {
+    timerRef.current = setInterval(() => {
+      setElapsedTime(prevTime => prevTime + 1);
+    }, 1000);
+  };
+
+  //Stop the timer function
+  const stopTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+      setElapsedTime(0);
+    }
+  };
+
+  //To Stop Recording a Route
+  const stopRoute = () => {
+    setIsCycling(false);
+    stopTimer(); 
+  };
+
+  const goodMarkerPress = async () => {
+    await addWaypointToGPX(userLocation.latitude, userLocation.longitude, 3);
+    setWaypoints(prevWaypoints => [
+      ...prevWaypoints,
+      {
+        id: Date.now().toString(), // Generate a unique ID using the current timestamp
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+        name: "Good Waypoint",
+        rating: 3
+      }
+    ]);
+  };
+
+  const badMarkerPress = async () => {
+    await addWaypointToGPX(userLocation.latitude, userLocation.longitude, 1);
+    setWaypoints(prevWaypoints => [
+      ...prevWaypoints,
+      {
+        id: Date.now().toString(), // Generate a unique ID using the current timestamp
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+        name: "Bad Waypoint",
+        rating: 1
+      }
+    ]);
+  };
+
   //Get the user's location.
   useEffect(() => {
     (async () => {
@@ -53,6 +120,10 @@ const GPXWaypoints = () => {
       };
       setUserLocation(userLoc);
       setMapRegion(userLoc);
+
+      if (mapRef.current) {
+        mapRef.current.animateToRegion(userLoc);
+      }
     })();
   }, []);
 
@@ -109,9 +180,75 @@ const GPXWaypoints = () => {
     }
   };
 
-  const startRoute = () => {
-    if (!imported) return;
+  const importGPXFileFromPath = async (path) => {
+    try {
+      const fileContent = await FileSystem.readAsStringAsync(path);
+      // Extracting waypoints
+      const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)".*?<name>([^<]+)<\/name>(?:.*?<rating>(\d)<\/rating>)?/gs;
+      const matches = Array.from(fileContent.matchAll(waypointRegex));
+      const newWaypoints = matches.map((match, index) => ({
+          id: index.toString(),
+          latitude: parseFloat(match[1]),
+          longitude: parseFloat(match[2]),
+          name: match[3] || 'Unnamed Waypoint',
+          rating: match[4] ? parseInt(match[4]) : 2
+        }));
 
+      // Extracting routes
+      const routeRegex = /<rtept[^>]*lat="([-.\d]+)"[^>]*lon="([-.\d]+)"[^>]*>/g;
+      const routeMatches = Array.from(fileContent.matchAll(routeRegex));
+      const newRoutes = routeMatches.map(match => ({
+        latitude: parseFloat(match[1]),
+        longitude: parseFloat(match[2]),
+      }));
+
+  
+      setWaypoints(newWaypoints);
+      setRoutes(newRoutes);
+
+      if (newRoutes.length > 0) {
+        const startCoordinate = newRoutes[0];
+        mapRef.current.animateToRegion({
+          latitude: startCoordinate.latitude,
+          longitude: startCoordinate.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        });
+      }
+    } catch (error) {
+      console.error('Error importing GPX file:', error);
+    }
+  };
+
+  const startJog = async () => {
+    const gpxExists = await doesGPXFileExist();
+    if (!imported || !gpxExists) {
+      await createNewGPXFile();
+    }
+
+    if (!imported) {
+      Alert.alert(
+        'Start Route',
+        'Do you want to start Cycling without a route?',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              setIsCycling(true);
+              startTimer();
+            },
+          },
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+        ],
+        { cancelable: true }
+      );
+      await createNewGPXFile();
+      return;
+    }
+  
     if (!routes[0] || !userLocation) return;
   
     const distance = getDistanceFromLatLonInMiles(
@@ -131,9 +268,11 @@ const GPXWaypoints = () => {
         { cancelable: false }
       );
     } else {
+      setIsCycling(true);
+      startTimer();
       Alert.alert(
         'Start Route',
-        'Jog started!',
+        'Route started!',
         [
           {text: 'OK'}
         ],
@@ -143,8 +282,15 @@ const GPXWaypoints = () => {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      stopTimer();
+    };
+  }, []);
+
 return (
     <View style={styles.container}>
+      {isCycling && <Text style={{ position: 'absolute', top: 10, left: 0, right: 0, textAlign: 'center', fontSize: 36, zIndex: 1 }}>{`${elapsedTime}s`}</Text>}
       <MapView
         ref = {mapRef} 
         style={styles.map}
@@ -195,32 +341,65 @@ return (
         )}
       </MapView>
       <View style={styles.buttonContainer}>
-        {isMenuOpen && (
-          <View style={styles.subMenuContainer}>
-            <TouchableOpacity 
-              style={[styles.customButton, !imported && styles.disabledButton]} 
-              onPress={startRoute}
-              disabled={!imported}
-            >
-              <Text style={styles.buttonText}>Start Jog</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
-              <Text style={styles.buttonText}>Import GPX File</Text>
-            </TouchableOpacity>
-          </View>
+        {isCycling ? (
+          <>
+
+          </>
+        ) : (
+          isMenuOpen && (
+            <View style={styles.subMenuContainer}>
+              <TouchableOpacity 
+                style={styles.customButton} 
+                onPress={startJog} 
+              >
+                <Text style={styles.buttonText}>Start Route</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
+                <Text style={styles.buttonText}>Import GPX File</Text>
+              </TouchableOpacity>
+            </View>
+          )
         )}
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => setMenuOpen(!isMenuOpen)}
+        {!isCycling && (
+          <TouchableOpacity
+            style={styles.menuButton}
+            onPress={() => setMenuOpen(!isMenuOpen)}
+          >
+            <Text style={[
+              styles.menuButtonText, 
+              { lineHeight: isMenuOpen ? 40 : 50 } 
+            ]}>
+              {isMenuOpen ? 'x' : '+'}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      {isCycling && (
+        <View style={styles.goodBadButtonContainer}>
+           <TouchableOpacity
+              style={[styles.customButton, { backgroundColor: 'green', paddingVertical: 20, paddingHorizontal: 40 }]}
+              onPress={goodMarkerPress}
+            >
+              <Text style={styles.buttonText}>Good</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.customButton, { backgroundColor: 'red', paddingVertical: 20, paddingHorizontal: 40 }]}
+              onPress={badMarkerPress}
+            >
+              <Text style={styles.buttonText}>Bad</Text>
+            </TouchableOpacity>
+        </View>
+      )} 
+      {isCycling && (
+      <View style={styles.stopRouteContainer}>
+        <TouchableOpacity 
+          style={styles.customButton} 
+          onPress={stopRoute} 
         >
-          <Text style={[
-            styles.menuButtonText, 
-            { lineHeight: isMenuOpen ? 40 : 50 } 
-          ]}>
-            {isMenuOpen ? 'x' : '+'}
-          </Text>
+          <Text style={styles.buttonText}>Stop Route</Text>
         </TouchableOpacity>
       </View>
+    )}
     </View>
   );
 };
@@ -231,12 +410,6 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    right: 10,
-    alignItems: 'flex-end'
   },
   subMenuContainer: {
     marginBottom: 5,
@@ -265,12 +438,41 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
   },
+  customLargeButton: {
+    backgroundColor: '#007aff',
+    paddingVertical: 20,
+    paddingHorizontal: 40,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
   disabledButton: {
     backgroundColor: 'grey',
   },
   buttonText: {
     color: 'white',
     textAlign: 'center'
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    right: 10,
+    alignItems: 'flex-end',
+  },
+  goodBadButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    left: 10,
+    right: 10,
+    bottom: 20,
+  },
+  stopRouteContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: -7,
+    paddingVertical: 7,
+    alignItems: 'center',
   },
 });
 
