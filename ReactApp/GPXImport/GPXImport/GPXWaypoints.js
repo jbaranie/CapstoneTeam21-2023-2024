@@ -31,6 +31,7 @@ const importImage = () => {
 
 const GPXWaypoints = () => {
     const [waypoints, setWaypoints] = useState([]);
+    const [showWaypoints, setShowWaypoints] = useState(true);
     const [imported, setImported] = useState(false); 
     const [routes, setRoutes] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
@@ -311,7 +312,7 @@ return (
           />
         )}
 
-        {waypoints.map((waypoint) => {
+        {showWaypoints && waypoints.map((waypoint) => {
             let pinColor = "linen";  
             if (waypoint.rating === 1) pinColor = "red"; //
             else if (waypoint.rating === 3) pinColor = "green";
@@ -373,8 +374,18 @@ return (
               {isMenuOpen ? 'x' : '+'}
             </Text>
           </TouchableOpacity>
+          
         )}
       </View>
+      
+      {!isCycling && (
+          <View style={styles.toggleWaypointsContainer}>
+              <TouchableOpacity style={styles.toggleWaypointsButton} onPress={() => setShowWaypoints(!showWaypoints)}>
+                  <Text>{showWaypoints ? 'Hide Waypoints' : 'Show Waypoints'}</Text>
+              </TouchableOpacity>
+          </View>
+      )}
+
       {isCycling && (
         <View style={styles.goodBadButtonContainer}>
            <TouchableOpacity
@@ -474,6 +485,16 @@ const styles = StyleSheet.create({
     right: -7,
     paddingVertical: 7,
     alignItems: 'center',
+  },
+  toggleWaypointsContainer: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+  },
+  toggleWaypointsButton: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 5,
   },
 });
 
