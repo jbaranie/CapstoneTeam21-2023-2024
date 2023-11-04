@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
+import * as MediaLibrary from 'expo-media-library'; 
 
 const GPXFileList = ({ navigation }) => {
   const [gpxFiles, setGpxFiles] = useState([]);
@@ -75,6 +76,29 @@ const GPXFileList = ({ navigation }) => {
     }
   };
 
+   // Function that handles file download
+   const downloadFile = async (fileName) => {
+    try {
+      // Request permissions to access the media library
+      const permissions = await MediaLibrary.requestPermissionsAsync();
+      if (permissions.status !== 'granted') {
+        alert('You need to grant storage permissions to download files.');
+        return;
+      }
+  
+      // Get the URI for the file in the app's file system
+      const uri = `${FileSystem.documentDirectory}${fileName}`;
+  
+      // Create an asset for the file in the media library
+      await MediaLibrary.createAssetAsync(uri);
+  
+      alert('File saved!');
+    } catch (error) {
+      console.error('Error saving GPX file:', error);
+      alert('Error saving file!');
+    }
+  };  
+
   const renderItem = ({ item }) => (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
       <TouchableOpacity
@@ -88,6 +112,7 @@ const GPXFileList = ({ navigation }) => {
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Button title="Delete" onPress={() => deleteFile(item)} />
         <Button title="Log Content" onPress={() => logGPXContent(item)} />
+        <Button title="Download" onPress={() => downloadFile(item)} />
       </View>
     </View>
   );
