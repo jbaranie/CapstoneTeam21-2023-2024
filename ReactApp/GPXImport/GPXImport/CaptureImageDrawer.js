@@ -5,16 +5,28 @@ import { Camera, CameraType } from 'expo-camera';
 const CaptureImageDrawer = () => {
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
+
   const toggleCameraType = () => {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   }
   const captureImage = async () => {
-    //TODO
+    if (this.camera) {
+      let photo = await this.camera.takePictureAsync({
+        exif:true,
+        additionalExif:{LocationInfo:"Must be added with additional code; camera API lacks it"}
+        //TODO in the future, this needs to integrate location data in order to capture location info
+        //Currently, the API intentionally excludes GPS data due to system limits & simplicity/privacy concerns
+        //write it in using additionalExif:{_data_} here
+      });
+      console.log(photo);
+    } else {
+      console.log("No camera is active!");
+    }
   }
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} type={type}>
+      <Camera style={styles.camera} ref={(r) => {camera = r}} type={type}>
         <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
             <Text style={styles.text}>Flip Camera</Text>
