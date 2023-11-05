@@ -95,6 +95,8 @@
     </style>
 </head>
 <body>
+    <input type="file" accept=".gpx" id="fileInput" style="display: none;">
+
     <div id="menu">
         <h2>The Experimental Route App</h2>
         <ul>
@@ -147,8 +149,17 @@
             contentDiv.innerHTML = `
                 <h1>Import GPX File</h1>
                 <p>This is the Import GPX File section content.</p>
-                <!-- You can add more content or load content from an external source as needed -->
+                <button id="importGPXButton" class="button">Process GPX</button>
             `;
+               //ImportGPXButton
+            const importGPXButton = document.getElementById("importGPXButton");
+            importGPXButton.addEventListener("click", function() {
+             
+               // alert("Processing GPX file...");
+                 document.getElementById('fileInput').click();
+             
+             
+            });
         });
         
        // Export GPX Button Listener
@@ -161,8 +172,41 @@
             contentDiv.innerHTML = `
                 <h1>Export GPX File</h1>
                 <p>This is the Export GPX File section content.</p>
-                <!-- You can add more content or load content from an external source as needed -->
+               <button id="exportGPXButton" class="button">Export GPX File</button>
             `;
+               //ImportGPXButton
+            const exportGPXButton = document.getElementById("exportGPXButton");
+            exportGPXButton.addEventListener("click", function() {
+             
+               //alert("Processing GPX file...");
+              const content = 'This is the content of the file.';
+
+              // Create a Blob object with the content
+              const blob = new Blob([content], { type: 'text/plain' });
+
+              // Create an <a> element
+              const a = document.createElement('a');
+              a.style.display = 'none';
+
+              // Create a URL for the Blob
+              const url = window.URL.createObjectURL(blob);
+
+              // Set the <a> element's attributes
+              a.href = url;
+              a.download = 'example.txt'; // Specify the default file name
+
+              // Append the <a> element to the body
+              document.body.appendChild(a);
+
+              // Trigger a click event on the <a> element
+              a.click();
+
+              // Clean up: remove the <a> element and revoke the URL
+              window.URL.revokeObjectURL(url);
+              document.body.removeChild(a);
+                         
+             
+            });
         });
         
          // Landing Page Button Listener
@@ -175,7 +219,7 @@
             contentDiv.innerHTML = `
                 <h1>A New Experimental Route App</h1>
                 <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p>
-                <!-- You can add more content or load content from an external source as needed -->
+               
             `;
         });
         
@@ -196,6 +240,9 @@
             setAppTitleMargin();
             window.onresize = setAppTitleMargin;
         };
+        
+      
+       
         
         
         
