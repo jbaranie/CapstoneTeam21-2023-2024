@@ -137,6 +137,7 @@
             }
         }
         
+        //Import GPX Button Listener
         const importLink = document.querySelector('li a[href="#import"]');
         importLink.addEventListener('click', function (e) {
             e.preventDefault(); // Prevent the default behavior of the link
@@ -150,9 +151,36 @@
             `;
         });
         
+       // Export GPX Button Listener
+        const exportLink = document.querySelector('li a[href="#export"]');
+        exportLink.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent the default behavior of the link
+
+            // Here, you can update the content in the center area with the "Export GPX File" section content.
+            const contentDiv = document.getElementById('background');
+            contentDiv.innerHTML = `
+                <h1>Export GPX File</h1>
+                <p>This is the Export GPX File section content.</p>
+                <!-- You can add more content or load content from an external source as needed -->
+            `;
+        });
         
+         // Landing Page Button Listener
+        const landingLink = document.querySelector('li a[href="#main"]');
+        landingLink.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent the default behavior of the link
+
+            // Here, you can update the content in the center area with the "Export GPX File" section content.
+            const contentDiv = document.getElementById('background');
+            contentDiv.innerHTML = `
+                <h1>A New Experimental Route App</h1>
+                <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p>
+                <!-- You can add more content or load content from an external source as needed -->
+            `;
+        });
         
-          window.onload = function () {
+        //Reload Function
+        window.onload = function () {
             // Function to set the margin of the app title relative to the Main Page menu item
             function setAppTitleMargin() {
                 const appTitle = document.getElementById("menu").getElementsByTagName("h2")[0];
@@ -168,6 +196,9 @@
             setAppTitleMargin();
             window.onresize = setAppTitleMargin;
         };
+        
+        
+        
     </script>
 </body>
 </html>
