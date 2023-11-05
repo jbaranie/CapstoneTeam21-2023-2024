@@ -5,9 +5,9 @@ import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { pickImage } from './ImageImport';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, createInitGPX} from './GPXManager';
-
 
 //Check how far the user is from a route start.
 //Uses Haversine Formula
@@ -30,20 +30,18 @@ const importImage = () => {
 };
 
 const GPXWaypoints = () => {
-  const navigation = useNavigation();
-    const [waypoints, setWaypoints] = useState([]);
-    const [imported, setImported] = useState(false); 
-    const [routes, setRoutes] = useState([]);
-    const [userLocation, setUserLocation] = useState(null);
-    const [mapRegion, setMapRegion] = useState(null);
-    const [isMenuOpen, setMenuOpen] = useState(false);
-    const mapRef = useRef(null);
+  const [waypoints, setWaypoints] = useState([]);
+  const [imported, setImported] = useState(false);
+  const [routes, setRoutes] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
+  const [mapRegion, setMapRegion] = useState(null);
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const mapRef = useRef(null);
 
-    const [isCycling, setIsCycling] = useState(false);
-    const [elapsedTime, setElapsedTime] =useState(0);
-    const timerRef = useRef(null);
-    const [currentGPXPath, setCurrentGPXPath] = useState('');
-
+  const [isCycling, setIsCycling] = useState(false);
+  const [elapsedTime, setElapsedTime] =useState(0);
+  const timerRef = useRef(null);
+  const [currentGPXPath, setCurrentGPXPath] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -255,7 +253,7 @@ const importGPXFileFromPath = async (path) => {
       console.error('Error importing GPX file:', error);
     }
   };
-  
+
   const startJog = async () => {
     const gpxExists = await doesGPXFileExist();
     if (!gpxExists) {
@@ -300,7 +298,7 @@ const importGPXFileFromPath = async (path) => {
   
     if (distance > 1) {
       Alert.alert(
-        'Start Jog',
+        'Start Route',
         `Too far from route! You are ${distance.toFixed(2)} miles away.`,
         [
           { text: 'OK' }
@@ -314,13 +312,14 @@ const importGPXFileFromPath = async (path) => {
       console.log('New jog started, GPX file path:', newFilePath);
       setCurrentGPXPath(newFilePath); // Update the current GPX file path
       Alert.alert(
-        'Start Jog',
+        'Start Route',
         'Route started!',
         [
           { text: 'OK' }
         ],
         { cancelable: false }
       );
+      activateKeepAwakeAsync();//deactivate when ending route
     }
   };
   
