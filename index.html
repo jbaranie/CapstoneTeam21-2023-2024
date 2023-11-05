@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cycling Page</title>
     <style>
-        /* Modern CSS styles */
+        /* CSS styles */
         body {
             background-color: #3d7537; /* Dark green background */
             font-family: Arial, sans-serif;
@@ -119,11 +119,11 @@
             </div>
         </section>
 
-        <!-- You can add more content sections here -->
     </div>
+    
 
     <script>
-        // You can add JavaScript functionality here
+        //JavaScript functionality here
         window.onscroll = function() { makeStickyMenu() };
 
         var menu = document.getElementById("menu");
@@ -136,6 +136,21 @@
                 menu.classList.remove("sticky");
             }
         }
+        
+        const importLink = document.querySelector('li a[href="#import"]');
+        importLink.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent the default behavior of the link
+
+            // Here, you can update the content in the center area with the "Import GPX File" section content.
+            const contentDiv = document.getElementById('background');
+            contentDiv.innerHTML = `
+                <h1>Import GPX File</h1>
+                <p>This is the Import GPX File section content.</p>
+                <!-- You can add more content or load content from an external source as needed -->
+            `;
+        });
+        
+        
         
           window.onload = function () {
             // Function to set the margin of the app title relative to the Main Page menu item
