@@ -95,6 +95,8 @@
     </style>
 </head>
 <body>
+    <input type="file" accept=".gpx" id="fileInput" style="display: none;">
+
     <div id="menu">
         <h2>The Experimental Route App</h2>
         <ul>
@@ -147,8 +149,17 @@
             contentDiv.innerHTML = `
                 <h1>Import GPX File</h1>
                 <p>This is the Import GPX File section content.</p>
-                <!-- You can add more content or load content from an external source as needed -->
+                <button id="importGPXButton" class="button">Process GPX</button>
             `;
+               //ImportGPXButton
+            const importGPXButton = document.getElementById("importGPXButton");
+            importGPXButton.addEventListener("click", function() {
+             
+               // alert("Processing GPX file...");
+                 document.getElementById('fileInput').click();
+             
+             
+            });
         });
         
        // Export GPX Button Listener
@@ -161,7 +172,7 @@
             contentDiv.innerHTML = `
                 <h1>Export GPX File</h1>
                 <p>This is the Export GPX File section content.</p>
-                <!-- You can add more content or load content from an external source as needed -->
+              
             `;
         });
         
@@ -175,7 +186,7 @@
             contentDiv.innerHTML = `
                 <h1>A New Experimental Route App</h1>
                 <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p>
-                <!-- You can add more content or load content from an external source as needed -->
+               
             `;
         });
         
@@ -196,6 +207,9 @@
             setAppTitleMargin();
             window.onresize = setAppTitleMargin;
         };
+        
+      
+       
         
         
         
