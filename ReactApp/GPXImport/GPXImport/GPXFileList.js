@@ -3,9 +3,44 @@ import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
+import * as DocumentPicker from 'expo-document-picker';
+
 
 const GPXFileList = ({ navigation }) => {
   const [gpxFiles, setGpxFiles] = useState([]);
+
+  const importGPXFile = async () => {
+    try {
+      // Open the document picker for .gpx files
+      const result = await DocumentPicker.getDocumentAsync({ type: '*/*' }); // Change the type to 'application/gpx+xml' to only allow GPX files
+      console.log('Document Picker Result:', result);
+  
+      // Check if a file was selected and not canceled
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        // Extract the file URI from the first asset
+        const fileUri = result.assets[0].uri;
+        console.log('GPX File URI:', fileUri);
+  
+        // Copy the file from the temporary cache to the app's document directory
+        const newFileUri = `${FileSystem.documentDirectory}${result.assets[0].name}`;
+        await FileSystem.copyAsync({
+          from: fileUri,
+          to: newFileUri,
+        });
+  
+        // Refresh the file list to show the new file
+        refreshFileList();
+      } else {
+        // If no file was selected, log an error or handle it appropriately. It currently logs an error. 
+        console.error('No file selected.');
+      }
+    } catch (error) {
+      // If there was an error during the process, log it
+      console.error('Error importing GPX file:', error);
+    }
+  };
+  
+  
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -125,6 +160,7 @@ const GPXFileList = ({ navigation }) => {
         renderItem={renderItem}
         keyExtractor={item => item}
       />
+       <Button title="Import GPX File" onPress={importGPXFile} />
       <Button title="Delete All" onPress={deleteAllFiles} />
     </View>
   );
