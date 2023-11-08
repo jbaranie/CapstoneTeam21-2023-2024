@@ -42,6 +42,7 @@ const GPXWaypoints = () => {
   const [elapsedTime, setElapsedTime] =useState(0);
   const timerRef = useRef(null);
   const [currentGPXPath, setCurrentGPXPath] = useState('');
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {
