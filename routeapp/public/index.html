@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cycling Page</title>
+    <style>
+        /* CSS styles */
+        body {
+            background-color: #3d7537; /* Dark green background */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #menu {
+            background-color: #1d451b; /* Darker green menu background */
+            color: #fff; /* White text color */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100; /* Make it appear above other content */
+            padding-top: 10px; /* Adjust top padding */
+        }
+
+        #menu h2 {
+            font-size: 2rem;
+
+        }
+
+        #menu ul {
+            list-style: none;
+            padding: 0;
+            display: flex; /* Display menu items horizontally */
+            justify-content: space-around; /* Space them evenly */
+            align-items: center; /* Center items vertically */
+            padding-top: 10px; /* Adjust top padding */
+        }
+
+        #menu li {
+            margin-bottom: 10px;
+        }
+
+        #menu a {
+            color: #fff; /* White text color for menu items */
+            text-decoration: none;
+            font-size: 1.3rem; /* Larger font size */
+            font-weight: bold; /* Bold text */
+        }
+
+        #menu a:hover {
+            text-decoration: underline;
+        }
+
+        #content {
+            margin-top: 150px; /* Adjust margin to align with Main Page */
+            padding: 20px;
+        }
+
+        /* Add more custom styles here */
+
+        /* Modern button style */
+        .button {
+            background-color: #1d451b; /* Darker green */
+            color: #fff; /* White text color */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #3d7537; /* Dark green on hover */
+        }
+
+        /* Sticky menu on scroll */
+        .sticky {
+            position: fixed;
+            top: 0;
+            width: 100%;
+        }
+
+        /* Background with white color */
+        #background {
+            background-color: #F5F4E9; /* Light gray background */
+            color: #000; /* Black font color */
+            padding: 20px;
+            overflow-y: scroll;
+            height: 100vh; /* Make it fill the viewport height */
+            width: 70%; /* Even narrower width */
+            margin: 0 auto; /* Centered */
+        }
+    </style>
+</head>
+<body>
+    <input type="file" accept=".gpx" id="fileInput" style="display: none;">
+
+    <div id="menu">
+        <h2>The Experimental Route App</h2>
+        <ul>
+            <li id="main-page-link"><a href="#main">Landing Page</a></li>
+            <li><a href="#modify">Modify GPX File</a></li>
+            <li><a href="#import">Import GPX File</a></li>
+            <li><a href="#export">Export GPX File</a></li>
+            <li><a href="#routes">View Routes</a></li>
+            <li><a href="#images">View Images</a></li>
+            <li><a href="#highlights">View Highlights</a></li>
+            <li><a href="#about">About Page</a></li>
+        </ul>
+    </div>
+
+    <div id="content">
+        <!-- Landing Page Content -->
+        <section id="main">
+            <div id="background">
+                <h1>A New Experimental Route App</h1>
+                <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p>
+        
+            </div>
+        </section>
+
+    </div>
+    
+
+    <script>
+        //JavaScript functionality here
+        window.onscroll = function() { makeStickyMenu() };
+
+        var menu = document.getElementById("menu");
+        var sticky = menu.offsetTop;
+
+        function makeStickyMenu() {
+            if (window.pageYOffset >= sticky) {
+                menu.classList.add("sticky");
+            } else {
+                menu.classList.remove("sticky");
+            }
+        }
+        
+        //Import GPX Button Listener
+        const importLink = document.querySelector('li a[href="#import"]');
+        importLink.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent the default behavior of the link
+
+            // Here, you can update the content in the center area with the "Import GPX File" section content.
+            const contentDiv = document.getElementById('background');
+            contentDiv.innerHTML = `
+                <h1>Import GPX File</h1>
+                <p>This is the Import GPX File section content.</p>
+                <button id="importGPXButton" class="button">Process GPX</button>
+            `;
+               //ImportGPXButton
+            const importGPXButton = document.getElementById("importGPXButton");
+            importGPXButton.addEventListener("click", function() {
+             
+               // alert("Processing GPX file...");
+                 document.getElementById('fileInput').click();
+             
+             
+            });
+        });
+        
+       // Export GPX Button Listener
+        const exportLink = document.querySelector('li a[href="#export"]');
+        exportLink.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent the default behavior of the link
+
+            // Here, you can update the content in the center area with the "Export GPX File" section content.
+            const contentDiv = document.getElementById('background');
+            contentDiv.innerHTML = `
+                <h1>Export GPX File</h1>
+                <p>This is the Export GPX File section content.</p>
+               <button id="exportGPXButton" class="button">Export GPX File</button>
+            `;
+               //ImportGPXButton
+            const exportGPXButton = document.getElementById("exportGPXButton");
+            exportGPXButton.addEventListener("click", function() {
+             
+               //alert("Processing GPX file...");
+              const content = 'This is the content of the file.';
+
+              // Create a Blob object with the content
+              const blob = new Blob([content], { type: 'text/plain' });
+
+              // Create an <a> element
+              const a = document.createElement('a');
+              a.style.display = 'none';
+
+              // Create a URL for the Blob
+              const url = window.URL.createObjectURL(blob);
+
+              // Set the <a> element's attributes
+              a.href = url;
+              a.download = 'example.txt'; // Specify the default file name
+
+              // Append the <a> element to the body
+              document.body.appendChild(a);
+
+              // Trigger a click event on the <a> element
+              a.click();
+
+              // Clean up: remove the <a> element and revoke the URL
+              window.URL.revokeObjectURL(url);
+              document.body.removeChild(a);
+                         
+             
+            });
+        });
+        
+         // Landing Page Button Listener
+        const landingLink = document.querySelector('li a[href="#main"]');
+        landingLink.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent the default behavior of the link
+
+            // Here, you can update the content in the center area with the "Export GPX File" section content.
+            const contentDiv = document.getElementById('background');
+            contentDiv.innerHTML = `
+                <h1>A New Experimental Route App</h1>
+                <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p>
+               
+            `;
+        });
+        
+        //Reload Function
+        window.onload = function () {
+            // Function to set the margin of the app title relative to the Main Page menu item
+            function setAppTitleMargin() {
+                const appTitle = document.getElementById("menu").getElementsByTagName("h2")[0];
+                const mainPageLink = document.getElementById("main-page-link");
+
+                if (appTitle && mainPageLink) {
+                    const mainPageLinkRect = mainPageLink.getBoundingClientRect();
+                    appTitle.style.marginLeft = mainPageLinkRect.left + "px";
+                }
+            }
+
+            // Call the function on page load and when the window is resized
+            setAppTitleMargin();
+            window.onresize = setAppTitleMargin;
+        };
+        
+      
+       
+        
+        
+        
+    </script>
+</body>
+</html>
