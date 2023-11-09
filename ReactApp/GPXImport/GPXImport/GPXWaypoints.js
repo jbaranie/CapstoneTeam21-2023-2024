@@ -7,7 +7,7 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 import { pickImage } from './ImageImport';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
-import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, createInitGPX} from './GPXManager';
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX} from './GPXManager';
 
 //Check how far the user is from a route start.
 //Uses Haversine Formula
@@ -33,6 +33,7 @@ const GPXWaypoints = () => {
   const [waypoints, setWaypoints] = useState([]);
   const [imported, setImported] = useState(false);
   const [routes, setRoutes] = useState([]);
+  const [currentRoute, setCurrentRoute] = useState('');
   const [userLocation, setUserLocation] = useState(null);
   const [mapRegion, setMapRegion] = useState(null);
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -82,7 +83,6 @@ const GPXWaypoints = () => {
         console.log('Waypoints to be saved:', waypoints);
   
         // Save the route and waypoints to the current file
-        await addRouteToGPX(currentGPXPath, routes);
 
         // for (const waypoint of waypoints) {
         //   console.log('Saving waypoint:', waypoint);
@@ -275,7 +275,9 @@ const importGPXFileFromPath = async (path) => {
               if (!currentGPXPath) { 
                 const newFilePath = await createNewGPXFile();
                 setCurrentGPXPath(newFilePath);
+                setCurrentRoute(await addRouteToGPX(GPX_FILE_PATH));
               }
+              
             },
           },
           {
@@ -312,6 +314,7 @@ const importGPXFileFromPath = async (path) => {
       const newFilePath = await createNewGPXFile(); // Create the file and get the path
       console.log('New jog started, GPX file path:', newFilePath);
       setCurrentGPXPath(newFilePath); // Update the current GPX file path
+      setCurrentRoute(await addRouteToGPX(GPX_FILE_PATH));
       Alert.alert(
         'Start Route',
         'Route started!',
@@ -320,7 +323,7 @@ const importGPXFileFromPath = async (path) => {
         ],
         { cancelable: false }
       );
-      activateKeepAwakeAsync();//deactivate when ending route
+      activateKeepAwakeAsync();
     }
   };
   
@@ -332,6 +335,23 @@ const importGPXFileFromPath = async (path) => {
     };
   }, []);
 
+  const addRoutePoint = async (routeId) => {
+    if (userLocation) {
+      const point = {
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+        name: new Date().toLocaleTimeString(),
+      };
+      try {
+        await addRoutePointToGPX(currentGPXPath, routeId, point);
+        setRoutes(prevRoutes => [...prevRoutes, point]);
+        console.log('Route Point added to: ' + currentGPXPath + 'Point info: ' + point);
+      } catch (error) {
+        console.error('Error adding route point to GPX:', error);
+      }
+    }
+  };
+  
 return (
     <View style={styles.container}>
       {isCycling && <Text style={{ position: 'absolute', top: 10, left: 0, right: 0, textAlign: 'center', fontSize: 36, zIndex: 1 }}>{`${elapsedTime}s`}</Text>}
@@ -348,7 +368,11 @@ return (
       >
         {routes.length > 0 && (
           <Polyline
-            coordinates={routes}
+            coordinates={routes.map(route => ({
+              ...route,
+              latitude: parseFloat(route.latitude) || DEFAULT_LATITUDE,
+              longitude: parseFloat(route.longitude) || DEFAULT_LONGITUDE,
+            }))}
             strokeColor="#000"
             strokeWidth={3}
           />
