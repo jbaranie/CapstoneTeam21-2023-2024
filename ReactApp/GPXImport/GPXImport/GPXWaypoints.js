@@ -351,6 +351,26 @@ const importGPXFileFromPath = async (path) => {
       }
     }
   };
+
+  useEffect(() => {
+    let interval;
+    if (isCycling) {
+      interval = setInterval(() => {
+        console.log('Interval Up');
+        const routeId = currentRoute;
+        if (routeId) {
+          addRoutePoint(routeId);
+        } else {
+          console.log('No route found to add point to!');
+        }
+      }, 30000);
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isCycling, userLocation, currentGPXPath, routes, currentRoute]);
   
 return (
     <View style={styles.container}>
