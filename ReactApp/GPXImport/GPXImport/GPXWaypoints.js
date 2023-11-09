@@ -38,6 +38,7 @@ const GPXWaypoints = () => {
   const [mapRegion, setMapRegion] = useState(null);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const mapRef = useRef(null);
+  const userLocationRef = useRef(userLocation);
 
   const [isCycling, setIsCycling] = useState(false);
   const [elapsedTime, setElapsedTime] =useState(0);
@@ -54,6 +55,11 @@ const GPXWaypoints = () => {
       }
     })();
   }, []);
+
+  //Update the userLocRef
+  useEffect(() => {
+    userLocationRef.current = userLocation; 
+  }, [userLocation]);
 
   //Start timer function
   const startTimer = () => {
@@ -336,14 +342,20 @@ const importGPXFileFromPath = async (path) => {
   }, []);
 
   const addRoutePoint = async (routeId) => {
-    if (userLocation) {
-      const lastPoint = routes[routes.length - 1];
+    const currentLocation = userLocationRef.current;
+    if (currentLocation) {
       const point = {
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude,
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude,
         name: new Date().toLocaleTimeString(),
       };  
 
+      const lastPoint = routes[routes.length - 1];
+      if(lastPoint){
+        console.log('Last Point info: ' + '\nname: ' + lastPoint.name + '\nlat: ' + lastPoint.latitude + 'lon: ' + lastPoint.longitude);
+        console.log('Current Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude);
+      }
+      console
       if (lastPoint && lastPoint.latitude === point.latitude && lastPoint.longitude === point.longitude) {
         console.log('New route point is the same as the last one. Skipping addition.');
         return; 
@@ -370,14 +382,14 @@ const importGPXFileFromPath = async (path) => {
         } else {
           console.log('No route found to add point to!');
         }
-      }, 30000);
+      }, 3000);
     }
     return () => {
       if (interval) {
         clearInterval(interval);
       }
     };
-  }, [isCycling, userLocation, currentGPXPath, routes, currentRoute]);
+  }, [isCycling, currentGPXPath, routes, currentRoute]);
   
 return (
     <View style={styles.container}>
@@ -395,14 +407,16 @@ return (
       >
         {routes.length > 0 && (
           <Polyline
-            coordinates={routes.map(route => ({
-              ...route,
-              latitude: parseFloat(route.latitude) || DEFAULT_LATITUDE,
-              longitude: parseFloat(route.longitude) || DEFAULT_LONGITUDE,
-            }))}
-            strokeColor="#000"
-            strokeWidth={3}
-          />
+          coordinates={[
+            ...routes.map(route => ({
+              latitude: parseFloat(route.latitude),
+              longitude: parseFloat(route.longitude),
+            })),
+            userLocation && isCycling ? { latitude: userLocation.latitude, longitude: userLocation.longitude } : null,
+          ].filter(Boolean)}
+          strokeColor="#000"
+          strokeWidth={3}
+        />
         )}
 
         {waypoints.map((waypoint) => {
