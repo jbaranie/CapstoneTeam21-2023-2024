@@ -337,15 +337,22 @@ const importGPXFileFromPath = async (path) => {
 
   const addRoutePoint = async (routeId) => {
     if (userLocation) {
+      const lastPoint = routes[routes.length - 1];
       const point = {
         latitude: userLocation.latitude,
         longitude: userLocation.longitude,
         name: new Date().toLocaleTimeString(),
-      };
+      };  
+
+      if (lastPoint && lastPoint.latitude === point.latitude && lastPoint.longitude === point.longitude) {
+        console.log('New route point is the same as the last one. Skipping addition.');
+        return; 
+      }
+  
       try {
         await addRoutePointToGPX(currentGPXPath, routeId, point);
         setRoutes(prevRoutes => [...prevRoutes, point]);
-        console.log('Route Point added to: ' + currentGPXPath + 'Point info: ' + point);
+        console.log('Route Point added to: ' + currentGPXPath + 'Point info: ' + JSON.stringify(point));
       } catch (error) {
         console.error('Error adding route point to GPX:', error);
       }
