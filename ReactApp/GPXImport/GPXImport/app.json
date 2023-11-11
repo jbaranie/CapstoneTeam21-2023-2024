@@ -7,7 +7,7 @@
       "**/*"
     ],
     "android": {
-      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "HIGH_SAMPLING_RATE_SENSORS"]
     },
     "plugins": [
       [
