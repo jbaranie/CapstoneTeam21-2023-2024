@@ -61,6 +61,48 @@ const GPXWaypoints = () => {
     userLocationRef.current = userLocation; 
   }, [userLocation]);
 
+  //Update the user location oin real-time
+  useEffect(() => {
+    let locationSubscription;
+
+    const startLocationTracking = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.error('Permission to access location was denied');
+        return;
+      }
+
+      locationSubscription = await Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.BestForNavigation,
+          timeInterval: 1000,
+          distanceInterval: 1,
+        },
+        (newLocation) => {
+          const userLoc = {
+            latitude: newLocation.coords.latitude,
+            longitude: newLocation.coords.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          };
+          setUserLocation(userLoc);
+
+          if (mapRef.current) {
+            mapRef.current.animateToRegion(userLoc);
+          }
+        }
+      );
+    };
+
+    startLocationTracking();
+
+    return () => {
+      if (locationSubscription) {
+        locationSubscription.remove();
+      }
+    };
+  }, []);
+
   //Start timer function
   const startTimer = () => {
     timerRef.current = setInterval(() => {
