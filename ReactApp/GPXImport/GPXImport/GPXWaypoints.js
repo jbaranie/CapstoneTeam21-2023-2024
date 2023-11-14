@@ -86,10 +86,7 @@ const GPXWaypoints = () => {
             longitudeDelta: 0.0421,
           };
           setUserLocation(userLoc);
-
-          if (mapRef.current) {
-            mapRef.current.animateToRegion(userLoc);
-          }
+          
         }
       );
     };
