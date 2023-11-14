@@ -12,7 +12,8 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.RECORD_AUDIO",
         "android.permission.CAMERA"
-      ]
+      ],
+      "package": "com.lhuan130.GPXImport"
     },
     "plugins": [
       [
@@ -32,6 +33,9 @@
       "eas": {
         "projectId": "91f0be04-f2a7-433e-b2f9-3cdaefb99dab"
       }
+    },
+    "ios": {
+      "bundleIdentifier": "com.lhuan130.GPXImport"
     }
   }
 }
