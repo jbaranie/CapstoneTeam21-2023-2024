@@ -137,10 +137,8 @@ const GPXFileList = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
       <TouchableOpacity
-        onPress={() => {
-          // We might need on press functionality for the list items in the future. But empty for now. 
-        }}
-        style={{ flex: 1 }}
+                onPress={() => navigation.navigate('Home', { selectedFile: item })}
+                style={{ flex: 1 }}
       >
         <Text>{item}</Text>
       </TouchableOpacity>
