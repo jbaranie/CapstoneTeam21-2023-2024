@@ -7,7 +7,7 @@
       "**/*"
     ],
     "android": {
-      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "HIGH_SAMPLING_RATE_SENSORS"]
     },
     "plugins": [
       [
@@ -20,6 +20,12 @@
 	      "expo-camera",
         {
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ],
+      [
+        "expo-sensors",
+        {
+          "motionPermission": "Allow $(PRODUCT_NAME) to access your device motion."
         }
       ]
     ]
