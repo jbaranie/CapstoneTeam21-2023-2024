@@ -162,7 +162,8 @@ const GPXWaypoints = () => {
     })();
   }, []);
 
-  //Importing the GPX File
+  //Importing the GPX File. Currently Deprecated due to it being implemented in another area.
+  /*
   const importGPXFile = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({ type: 'application/gpx+xml' });
@@ -214,7 +215,7 @@ const GPXWaypoints = () => {
       console.error('Error importing GPX file:', error);
     }
   };
-  
+  */
 const importGPXFileFromPath = async (path) => {
     try {
       const fileContent = await FileSystem.readAsStringAsync(path);
@@ -398,9 +399,14 @@ return (
               >
                 <Text style={styles.buttonText}>Start Route</Text>
               </TouchableOpacity>
+              
+              {
+              /*
               <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
                 <Text style={styles.buttonText}>Import GPX File</Text>
               </TouchableOpacity>
+              */
+              }
             </View>
           )
         )}
