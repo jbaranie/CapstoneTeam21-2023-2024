@@ -29,7 +29,7 @@ const importImage = () => {
   pickImage();
 };
 
-const GPXWaypoints = () => {
+const GPXWaypoints = ({ route }) => {
   const [waypoints, setWaypoints] = useState([]);
   const [imported, setImported] = useState(false);
   const [routes, setRoutes] = useState([]);
@@ -43,6 +43,15 @@ const GPXWaypoints = () => {
   const timerRef = useRef(null);
   const [currentGPXPath, setCurrentGPXPath] = useState('');
   const navigation = useNavigation();
+
+  const selectedFile = route.params?.selectedFile;
+
+
+  useEffect(() => {
+    if (selectedFile) {
+        importGPXFile(selectedFile);
+    }
+  }, [selectedFile]);
 
   useEffect(() => {
     (async () => {
@@ -163,19 +172,15 @@ const GPXWaypoints = () => {
   }, []);
 
   //Importing the GPX File. Currently Deprecated due to it being implemented in another area.
-  /*
-  const importGPXFile = async () => {
+
+  const importGPXFile = async (file) => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({ type: 'application/gpx+xml' });
+      //const result = await DocumentPicker.getDocumentAsync({ type: 'application/gpx+xml' });
       
-      if (result.canceled) {
-        console.log('Document Picker operation was canceled');
-        return;
-      }
   
-      if (result.assets && result.assets.length > 0) {
-        const { uri } = result.assets[0];
-        const fileContent = await FileSystem.readAsStringAsync(uri);
+      if (file.assets && file.assets.length > 0) {
+        const { uri } = file.assets[0];
+        const fileContent = await FileSystem.readAsStringAsync(file.uri);
   
         // Extracting waypoints
         const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)".*?<name>([^<]+)<\/name>(?:.*?<rating>(\d)<\/rating>)?/gs;
@@ -215,7 +220,7 @@ const GPXWaypoints = () => {
       console.error('Error importing GPX file:', error);
     }
   };
-  */
+
 const importGPXFileFromPath = async (path) => {
     try {
       const fileContent = await FileSystem.readAsStringAsync(path);
