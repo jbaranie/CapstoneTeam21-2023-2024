@@ -27,6 +27,12 @@
         {
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera and save to your Photos library."
         }
+      ],
+      [
+        "expo-sensors",
+        {
+          "motionPermission": "Allow $(PRODUCT_NAME) to access your device motion."
+        }
       ]
     ],
     "extra": {
