@@ -85,7 +85,10 @@ const GPXWaypoints = () => {
         //   //await addWaypointToGPX(currentGPXPath, waypoint.latitude, waypoint.longitude, waypoint.rating);
         // }
         
-    
+        // Log the content of the GPX file
+        const fileContent = await FileSystem.readAsStringAsync(currentGPXPath);
+        console.log('GPX File Content:', fileContent);
+        
         // Refresh the GPX file list to include the new file
         navigation.navigate('GPX Files', { refreshFileList: true });
         setCurrentGPXPath(''); // Reset the current GPX file path
