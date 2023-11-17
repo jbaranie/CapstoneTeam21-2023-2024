@@ -4,7 +4,7 @@ import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
 import * as DocumentPicker from 'expo-document-picker';
-
+import { PermissionsAndroid } from 'react-native';
 
 const GPXFileList = ({ navigation }) => {
   const [gpxFiles, setGpxFiles] = useState([]);
@@ -115,8 +115,8 @@ const GPXFileList = ({ navigation }) => {
    const downloadFile = async (fileName) => {
     try {
       // Request permissions to access the media library
-      const permissions = await MediaLibrary.requestPermissionsAsync();
-      if (permissions.status !== 'granted') {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== 'granted') {
         alert('You need to grant storage permissions to download files.');
         return;
       }
@@ -124,16 +124,70 @@ const GPXFileList = ({ navigation }) => {
       // Get the URI for the file in the app's file system
       const uri = `${FileSystem.documentDirectory}${fileName}`;
   
-      // Create an asset for the file in the media library
-      await MediaLibrary.createAssetAsync(uri);
+      // Check if the file exists
+      const fileInfo = await FileSystem.getInfoAsync(uri);
+      if (!fileInfo.exists) {
+        console.error('File does not exist:', uri);
+        alert('File does not exist!');
+        return;
+      }
   
-      alert('File saved!');
+      // Create an asset for the file in the media library
+      const asset = await MediaLibrary.createAssetAsync(uri);
+  
+      // Create an album and add the asset to it
+      const album = await MediaLibrary.getAlbumAsync('YourAlbumName');
+      if (album) {
+        await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+      } else {
+        await MediaLibrary.createAlbumAsync('YourAlbumName', asset, false);
+      }
+  
+      alert('File saved to device!');
     } catch (error) {
       console.error('Error saving GPX file:', error);
       alert('Error saving file!');
     }
-  };  
+  };
 
+  const requestFileSystemPermissions = async () => {
+    try {
+      const grantedRead = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: "File System Permission",
+          message: "App needs access to your file system",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      const grantedWrite = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: "File System Permission",
+          message: "App needs access to your file system",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      if (grantedRead === PermissionsAndroid.RESULTS.GRANTED && grantedWrite === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("File system permissions granted");
+      } else {
+        console.log("File system permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+  useEffect(() => {
+    requestFileSystemPermissions();
+  }, []);
+  
+
+  
+  
   const renderItem = ({ item }) => (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
       <TouchableOpacity
