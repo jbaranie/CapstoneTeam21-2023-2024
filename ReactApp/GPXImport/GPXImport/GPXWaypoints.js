@@ -322,7 +322,6 @@ const importGPXFileFromPath = async (path) => {
                 setCurrentGPXPath(newFilePath);
                 setCurrentRoute(await addRouteToGPX(GPX_FILE_PATH));
               }
-              
             },
           },
           {
@@ -401,9 +400,17 @@ const importGPXFileFromPath = async (path) => {
       }
   
       try {
-        await addRoutePointToGPX(currentGPXPath, routeId, point);
+        await addRoutePointToGPX(GPX_FILE_PATH, routeId, point);
         setRoutes(prevRoutes => [...prevRoutes, point]);
-        console.log('Route Point added to: ' + currentGPXPath + 'Point info: ' + JSON.stringify(point));
+        console.log('Route Point added to: ' + GPX_FILE_PATH + 'Point info: ' + JSON.stringify(point));
+
+        if(GPX_FILE_PATH != currentGPXPath){
+          // Debugging issues with currentGPXPath and async functions
+          //await addRoutePointToGPX(currentGPXPath, routeId, point);
+          //console.log('Route Point added to: ' + GPX_FILE_PATH + 'Point info: ' + JSON.stringify(point));
+        }
+        
+
       } catch (error) {
         console.error('Error adding route point to GPX:', error);
       }
