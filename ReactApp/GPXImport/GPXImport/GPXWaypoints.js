@@ -480,11 +480,13 @@ return (
               title="Start"
               pinColor="lightblue"
             />
-            <Marker
-              coordinate={routes[routes.length - 1]}
-              title="End"
-              pinColor="lightblue"
-            />
+            {imported && (
+              <Marker
+                coordinate={routes[routes.length - 1]}
+                title="End"
+                pinColor="lightblue"
+              />
+            )}
           </>
         )}
       </MapView>
