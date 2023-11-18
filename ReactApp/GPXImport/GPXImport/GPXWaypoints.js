@@ -50,15 +50,15 @@ const GPXWaypoints = ({route}) => {
     }
   }, [route.params?.gpxFilePath]);
 
-  useEffect(() => {
-    (async () => {
-      const gpxExists = await doesGPXFileExist();
-      if (gpxExists) {
-        console.log('GPX File myGPX does exist!')
-        await importGPXFileFromPath(GPX_FILE_PATH);
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const gpxExists = await doesGPXFileExist();
+  //     if (gpxExists) {
+  //       console.log('GPX File myGPX does exist!')
+  //       await importGPXFileFromPath(GPX_FILE_PATH);
+  //     }
+  //   })();
+  // }, []);
 
   //Update the userLocRef
   useEffect(() => {
@@ -211,6 +211,7 @@ const GPXWaypoints = ({route}) => {
     })();
   }, []);
 
+    
   //Importing the GPX File
   const importGPXFile = async () => {
     try {
@@ -263,11 +264,11 @@ const GPXWaypoints = ({route}) => {
       console.error('Error importing GPX file:', error);
     }
   };
-  
+
   const importGPXFileFromPath = async (filename) => {
     try {
-      // Assuming the file is in the document directory
-      const fullPath = FileSystem.documentDirectory + filename;
+      // File is in the document directory
+      const fullPath = filename.startsWith('file://') ? filename : FileSystem.documentDirectory + filename;
       console.log('Attempting to import GPX file from path:', fullPath);
   
       // Check if the file exists at the given path
@@ -302,13 +303,13 @@ const GPXWaypoints = ({route}) => {
       setWaypoints(newWaypoints);
       setRoutes(newRoutes);
   
-      if (newRoutes.length > 0) {
-        const startCoordinate = newRoutes[0];
-        mapRef.current.animateToRegion({
-          latitude: startCoordinate.latitude,
-          longitude: startCoordinate.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+      if (newWaypoints.length > 0) {
+        mapRef.current.fitToCoordinates(newWaypoints.map(wp => ({
+          latitude: wp.latitude,
+          longitude: wp.longitude,
+        })), {
+          edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
+          animated: true,
         });
       }
     } catch (error) {
