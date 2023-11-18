@@ -6,7 +6,7 @@ import * as Location from 'expo-location';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
-import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, createInitGPX} from './GPXManager';
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX} from './GPXManager';
 
 //Check how far the user is from a route start.
 //Uses Haversine Formula
@@ -29,10 +29,12 @@ const GPXWaypoints = () => {
   const [waypoints, setWaypoints] = useState([]);
   const [imported, setImported] = useState(false);
   const [routes, setRoutes] = useState([]);
+  const [currentRoute, setCurrentRoute] = useState('');
   const [userLocation, setUserLocation] = useState(null);
   const [mapRegion, setMapRegion] = useState(null);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const mapRef = useRef(null);
+  const userLocationRef = useRef(userLocation);
 
   const [isCycling, setIsCycling] = useState(false);
   const [elapsedTime, setElapsedTime] =useState(0);
@@ -48,6 +50,50 @@ const GPXWaypoints = () => {
         await importGPXFileFromPath(GPX_FILE_PATH);
       }
     })();
+  }, []);
+
+  //Update the userLocRef
+  useEffect(() => {
+    userLocationRef.current = userLocation; 
+  }, [userLocation]);
+
+  //Update the user location oin real-time
+  useEffect(() => {
+    let locationSubscription;
+
+    const startLocationTracking = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.error('Permission to access location was denied');
+        return;
+      }
+
+      locationSubscription = await Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.BestForNavigation,
+          timeInterval: 1000,
+          distanceInterval: 1,
+        },
+        (newLocation) => {
+          const userLoc = {
+            latitude: newLocation.coords.latitude,
+            longitude: newLocation.coords.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          };
+          setUserLocation(userLoc);
+          
+        }
+      );
+    };
+
+    startLocationTracking();
+
+    return () => {
+      if (locationSubscription) {
+        locationSubscription.remove();
+      }
+    };
   }, []);
 
   //Start timer function
@@ -78,7 +124,6 @@ const GPXWaypoints = () => {
         console.log('Waypoints to be saved:', waypoints);
   
         // Save the route and waypoints to the current file
-        await addRouteToGPX(currentGPXPath, routes);
 
         // for (const waypoint of waypoints) {
         //   console.log('Saving waypoint:', waypoint);
@@ -271,6 +316,7 @@ const importGPXFileFromPath = async (path) => {
               if (!currentGPXPath) { 
                 const newFilePath = await createNewGPXFile();
                 setCurrentGPXPath(newFilePath);
+                setCurrentRoute(await addRouteToGPX(GPX_FILE_PATH));
               }
             },
           },
@@ -308,6 +354,7 @@ const importGPXFileFromPath = async (path) => {
       const newFilePath = await createNewGPXFile(); // Create the file and get the path
       console.log('New jog started, GPX file path:', newFilePath);
       setCurrentGPXPath(newFilePath); // Update the current GPX file path
+      setCurrentRoute(await addRouteToGPX(GPX_FILE_PATH));
       Alert.alert(
         'Start Route',
         'Route started!',
@@ -316,7 +363,7 @@ const importGPXFileFromPath = async (path) => {
         ],
         { cancelable: false }
       );
-      activateKeepAwakeAsync();//deactivate when ending route
+      activateKeepAwakeAsync();
     }
   };
   
@@ -328,6 +375,64 @@ const importGPXFileFromPath = async (path) => {
     };
   }, []);
 
+  const addRoutePoint = async (routeId) => {
+    const currentLocation = userLocationRef.current;
+    if (currentLocation) {
+      const point = {
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude,
+        name: new Date().toLocaleTimeString(),
+      };  
+
+      const lastPoint = routes[routes.length - 1];
+      if(lastPoint){
+        console.log('Last Point info: ' + '\nname: ' + lastPoint.name + '\nlat: ' + lastPoint.latitude + 'lon: ' + lastPoint.longitude);
+        console.log('Current Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude);
+      }
+      console
+      if (lastPoint && lastPoint.latitude === point.latitude && lastPoint.longitude === point.longitude) {
+        console.log('New route point is the same as the last one. Skipping addition.');
+        return; 
+      }
+  
+      try {
+        await addRoutePointToGPX(GPX_FILE_PATH, routeId, point);
+        setRoutes(prevRoutes => [...prevRoutes, point]);
+        console.log('Route Point added to: ' + GPX_FILE_PATH + 'Point info: ' + JSON.stringify(point));
+
+        if(GPX_FILE_PATH != currentGPXPath){
+          // Debugging issues with currentGPXPath and async functions
+          //await addRoutePointToGPX(currentGPXPath, routeId, point);
+          //console.log('Route Point added to: ' + GPX_FILE_PATH + 'Point info: ' + JSON.stringify(point));
+        }
+        
+
+      } catch (error) {
+        console.error('Error adding route point to GPX:', error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    let interval;
+    if (isCycling) {
+      interval = setInterval(() => {
+        console.log('Interval Up');
+        const routeId = currentRoute;
+        if (routeId) {
+          addRoutePoint(routeId);
+        } else {
+          console.log('No route found to add point to!');
+        }
+      }, 3000);
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isCycling, currentGPXPath, routes, currentRoute]);
+  
 return (
     <View style={styles.container}>
       {isCycling && <Text style={{ position: 'absolute', top: 10, left: 0, right: 0, textAlign: 'center', fontSize: 36, zIndex: 1 }}>{`${elapsedTime}s`}</Text>}
@@ -344,10 +449,16 @@ return (
       >
         {routes.length > 0 && (
           <Polyline
-            coordinates={routes}
-            strokeColor="#000"
-            strokeWidth={3}
-          />
+          coordinates={[
+            ...routes.map(route => ({
+              latitude: parseFloat(route.latitude),
+              longitude: parseFloat(route.longitude),
+            })),
+            userLocation && isCycling ? { latitude: userLocation.latitude, longitude: userLocation.longitude } : null,
+          ].filter(Boolean)}
+          strokeColor="#000"
+          strokeWidth={3}
+        />
         )}
 
         {waypoints.map((waypoint) => {
@@ -372,11 +483,13 @@ return (
               title="Start"
               pinColor="lightblue"
             />
-            <Marker
-              coordinate={routes[routes.length - 1]}
-              title="End"
-              pinColor="lightblue"
-            />
+            {imported && (
+              <Marker
+                coordinate={routes[routes.length - 1]}
+                title="End"
+                pinColor="lightblue"
+              />
+            )}
           </>
         )}
       </MapView>
