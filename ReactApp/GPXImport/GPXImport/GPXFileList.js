@@ -81,15 +81,20 @@ const GPXFileList = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
-  const logGPXContent = async (fileName) => {
-    try {
-      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
-      const content = await FileSystem.readAsStringAsync(fileUri);
-      console.log(content); // This will log the content to the console
-    } catch (error) {
-      console.error('Error reading GPX file:', error);
-    }
-  };
+  //  /* 
+  //   Log the content of a GPX file to the console when the 'Log Content' button is pressed. 
+  //   This is currently disabled as the user does not need this. Might be useful again in 
+  //   the future so I am just commenting it out. 
+  //  */
+  // const logGPXContent = async (fileName) => {
+  //   try {
+  //     const fileUri = `${FileSystem.documentDirectory}${fileName}`;
+  //     const content = await FileSystem.readAsStringAsync(fileUri);
+  //     console.log(content); 
+  //   } catch (error) {
+  //     console.error('Error reading GPX file:', error);
+  //   }
+  // };
 
   const deleteFile = async (fileName) => {
     try {
@@ -145,8 +150,10 @@ const GPXFileList = ({ navigation }) => {
         <Text>{item}</Text>
       </TouchableOpacity>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Button title="Delete" onPress={() => deleteFile(item)} />
+        <Button title="Delete" onPress={() => deleteFile(item)} /> 
+        {/*}
         <Button title="Log Content" onPress={() => logGPXContent(item)} />
+        */}
         <Button title="Download" onPress={() => downloadFile(item)} />
       </View>
     </View>
