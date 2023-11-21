@@ -5,7 +5,6 @@ import GPXWaypoints from './GPXWaypoints';
 import ImageImportDrawer from './ImageImportDrawer';
 import CaptureImageDrawer from './CaptureImageDrawer';
 import GPXFileList from './GPXFileList';
-import 'expo-dev-client';
 
 const Drawer = createDrawerNavigator();
 
