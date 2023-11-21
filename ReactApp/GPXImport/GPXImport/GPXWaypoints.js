@@ -25,7 +25,7 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
   return d;
 };
 
-const GPXWaypoints = () => {
+const GPXWaypoints = ({route}) => {
   const [waypoints, setWaypoints] = useState([]);
   const [imported, setImported] = useState(false);
   const [routes, setRoutes] = useState([]);
@@ -43,14 +43,22 @@ const GPXWaypoints = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    (async () => {
-      const gpxExists = await doesGPXFileExist();
-      if (gpxExists) {
-        console.log('GPX File myGPX does exist!')
-        await importGPXFileFromPath(GPX_FILE_PATH);
-      }
-    })();
-  }, []);
+    if (route.params?.gpxFilePath) {
+      const filePath = route.params.gpxFilePath;
+      importGPXFileFromPath(filePath);
+      navigation.setParams({ gpxFilePath: null }); // Reset the parameter
+    }
+  }, [route.params?.gpxFilePath]);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const gpxExists = await doesGPXFileExist();
+  //     if (gpxExists) {
+  //       console.log('GPX File myGPX does exist!')
+  //       await importGPXFileFromPath(GPX_FILE_PATH);
+  //     }
+  //   })();
+  // }, []);
 
   //Update the userLocRef
   useEffect(() => {
@@ -130,7 +138,10 @@ const GPXWaypoints = () => {
         //   //await addWaypointToGPX(currentGPXPath, waypoint.latitude, waypoint.longitude, waypoint.rating);
         // }
         
-    
+        // Log the content of the GPX file
+        const fileContent = await FileSystem.readAsStringAsync(currentGPXPath);
+        console.log('GPX File Content:', fileContent);
+        
         // Refresh the GPX file list to include the new file
         navigation.navigate('GPX Files', { refreshFileList: true });
         setCurrentGPXPath(''); // Reset the current GPX file path
@@ -203,6 +214,7 @@ const GPXWaypoints = () => {
     })();
   }, []);
 
+    
   //Importing the GPX File
   const importGPXFile = async () => {
     try {
@@ -255,21 +267,34 @@ const GPXWaypoints = () => {
       console.error('Error importing GPX file:', error);
     }
   };
-  
-const importGPXFileFromPath = async (path) => {
+
+  const importGPXFileFromPath = async (filename) => {
     try {
-      const fileContent = await FileSystem.readAsStringAsync(path);
+      // File is in the document directory
+      const fullPath = filename.startsWith('file://') ? filename : FileSystem.documentDirectory + filename;
+      console.log('Attempting to import GPX file from path:', fullPath);
+  
+      // Check if the file exists at the given path
+      const fileInfo = await FileSystem.getInfoAsync(fullPath);
+      if (!fileInfo.exists) {
+        console.error('File does not exist at path:', fullPath);
+        return;
+      }
+  
+      // Read the file content
+      const fileContent = await FileSystem.readAsStringAsync(fullPath);
+  
       // Extracting waypoints
       const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)".*?<name>([^<]+)<\/name>(?:.*?<rating>(\d)<\/rating>)?/gs;
       const matches = Array.from(fileContent.matchAll(waypointRegex));
       const newWaypoints = matches.map((match, index) => ({
-          id: index.toString(),
-          latitude: parseFloat(match[1]),
-          longitude: parseFloat(match[2]),
-          name: match[3] || 'Unnamed Waypoint',
-          rating: match[4] ? parseInt(match[4]) : 2
-        }));
-
+        id: index.toString(),
+        latitude: parseFloat(match[1]),
+        longitude: parseFloat(match[2]),
+        name: match[3] || 'Unnamed Waypoint',
+        rating: match[4] ? parseInt(match[4]) : 2
+      }));
+  
       // Extracting routes
       const routeRegex = /<rtept[^>]*lat="([-.\d]+)"[^>]*lon="([-.\d]+)"[^>]*>/g;
       const routeMatches = Array.from(fileContent.matchAll(routeRegex));
@@ -277,24 +302,25 @@ const importGPXFileFromPath = async (path) => {
         latitude: parseFloat(match[1]),
         longitude: parseFloat(match[2]),
       }));
-
   
       setWaypoints(newWaypoints);
       setRoutes(newRoutes);
-
-      if (newRoutes.length > 0) {
-        const startCoordinate = newRoutes[0];
-        mapRef.current.animateToRegion({
-          latitude: startCoordinate.latitude,
-          longitude: startCoordinate.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+  
+      if (newWaypoints.length > 0) {
+        mapRef.current.fitToCoordinates(newWaypoints.map(wp => ({
+          latitude: wp.latitude,
+          longitude: wp.longitude,
+        })), {
+          edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
+          animated: true,
         });
       }
     } catch (error) {
       console.error('Error importing GPX file:', error);
     }
   };
+  
+  
 
   const startJog = async () => {
     const gpxExists = await doesGPXFileExist();
