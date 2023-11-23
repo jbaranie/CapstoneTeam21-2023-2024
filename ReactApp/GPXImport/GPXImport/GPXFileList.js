@@ -121,32 +121,33 @@ const GPXFileList = ({ navigation }) => {
         return;
       }
   
-      // Get the URI for the file in the app's file system
-      const uri = `${FileSystem.documentDirectory}${fileName}`;
+      // Define the path for the file in the local app storage
+      const localUri = `${FileSystem.documentDirectory}${fileName}`;
   
-      // Check if the file exists
-      const fileInfo = await FileSystem.getInfoAsync(uri);
-      if (!fileInfo.exists) {
-        console.error('File does not exist:', uri);
-        alert('File does not exist!');
-        return;
-      }
+      // Define the destination path in the system's storage
+      const systemUri = `${FileSystem.cacheDirectory}${fileName}`;
+  
+      // Copy the file from the local app storage to the system storage
+      await FileSystem.copyAsync({
+        from: localUri,
+        to: systemUri,
+      });
   
       // Create an asset for the file in the media library
-      const asset = await MediaLibrary.createAssetAsync(uri);
+      const asset = await MediaLibrary.createAssetAsync(systemUri);
   
-      // Create an album and add the asset to it
-      const album = await MediaLibrary.getAlbumAsync('YourAlbumName');
-      if (album) {
-        await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+      // Get or create the album
+      let album = await MediaLibrary.getAlbumAsync('GPX Files');
+      if (!album) {
+        album = await MediaLibrary.createAlbumAsync('GPX Files', asset, false);
       } else {
-        await MediaLibrary.createAlbumAsync('YourAlbumName', asset, false);
+        await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
       }
   
-      alert('File saved to device!');
+      console.log(`File saved to ${systemUri} in the 'GPX Files' album`);
+      return systemUri;
     } catch (error) {
-      console.error('Error saving GPX file:', error);
-      alert('Error saving file!');
+      console.error('Error saving file to system storage:', error.message);
     }
   };
 
