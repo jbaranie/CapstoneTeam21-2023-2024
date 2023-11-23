@@ -7,10 +7,10 @@ function initMap() {
     });
 
     // Replace 'YOUR_API_KEY' with your actual Google Maps API key
-    var apiKey = 'YOUR_API_KEY';
+    var apiKey = 'AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0';
 
     // Load the GPX file and parse it
-    loadGPXFileIntoGoogleMap(map, 'path/to/your/file.gpx', apiKey);
+    loadGPXFileIntoGoogleMap(map, 'sample.gpx', apiKey);
 }
 
 function loadGPXFileIntoGoogleMap(map, filename, apiKey) {
