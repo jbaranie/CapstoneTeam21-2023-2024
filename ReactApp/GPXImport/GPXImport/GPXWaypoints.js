@@ -643,13 +643,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 10,
     right: 10,
-    bottom: 20,
+    bottom: 80, // Adjusted to create space between the buttons
   },
   stopRouteContainer: {
     position: 'absolute',
     bottom: 20,
     left: 0,
-    right: -7,
+    right: 0, // Changed from -7 to 0 for symmetry
     paddingVertical: 7,
     alignItems: 'center',
   },
