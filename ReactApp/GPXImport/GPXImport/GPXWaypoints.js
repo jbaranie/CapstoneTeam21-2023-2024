@@ -65,7 +65,7 @@ const GPXWaypoints = ({route}) => {
     userLocationRef.current = userLocation; 
   }, [userLocation]);
 
-  //Update the user location oin real-time
+  //Update the user location in real-time
   useEffect(() => {
     let locationSubscription;
 
