@@ -466,7 +466,7 @@ const GPXWaypoints = ({route}) => {
   
 return (
     <View style={styles.container}>
-      {isCycling && <Text style={{ position: 'absolute', top: 10, left: 50, right: 50, textAlign: 'center', fontSize: 36, zIndex: 1 }}>{`${elapsedTime}s`}</Text>}
+      {isCycling && <Text style={{ position: 'absolute', top: 10, alignSelf: 'center', fontSize: 36, zIndex: 1 , maxWidth: 150}}>{`${elapsedTime}s`}</Text>}
       <MapView
         ref = {mapRef} 
         style={styles.map}
