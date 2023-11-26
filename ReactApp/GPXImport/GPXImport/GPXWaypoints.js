@@ -554,31 +554,31 @@ return (
         )}
       </View>
       {isCycling && (
-        <View style={styles.goodBadButtonContainer}>
-           <TouchableOpacity
-              style={[styles.customButton, { backgroundColor: 'green', paddingVertical: 20, paddingHorizontal: 40 }]}
+        <View style={styles.actionContainer}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+            <TouchableOpacity
+              style={[styles.customLargeButton, { backgroundColor: 'green', flex: 1, marginRight: 5 }]}
               onPress={goodMarkerPress}
             >
               <Text style={styles.buttonText}>Good</Text>
             </TouchableOpacity>
+
             <TouchableOpacity
-              style={[styles.customButton, { backgroundColor: 'red', paddingVertical: 20, paddingHorizontal: 40 }]}
+              style={[styles.customLargeButton, { backgroundColor: 'red', flex: 1, marginLeft: 5 }]}
               onPress={badMarkerPress}
             >
               <Text style={styles.buttonText}>Bad</Text>
             </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity 
+            style={[styles.customButton, { marginTop: 10, width: '100%'}]} 
+            onPress={stopRoute} 
+          >
+            <Text style={styles.buttonText}>Stop Route</Text>
+          </TouchableOpacity>
         </View>
-      )} 
-      {isCycling && (
-      <View style={styles.stopRouteContainer}>
-        <TouchableOpacity 
-          style={styles.customButton} 
-          onPress={stopRoute} 
-        >
-          <Text style={styles.buttonText}>Stop Route</Text>
-        </TouchableOpacity>
-      </View>
-    )}
+      )}
     </View>
   );
 };
@@ -637,14 +637,6 @@ const styles = StyleSheet.create({
     right: 10,
     alignItems: 'flex-end',
   },
-  goodBadButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    position: 'absolute',
-    left: 10,
-    right: 10,
-    bottom: 20,
-  },
   stopRouteContainer: {
     position: 'absolute',
     bottom: 20,
@@ -653,6 +645,18 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     alignItems: 'center',
   },
+  actionContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    position: 'absolute',
+    left: 10,
+    right: 10,
+    bottom: 20,
+    alignItems: 'center',
+  },
+  actionButton: {
+    flex: 1,
+  }
 });
 
 export default GPXWaypoints;
