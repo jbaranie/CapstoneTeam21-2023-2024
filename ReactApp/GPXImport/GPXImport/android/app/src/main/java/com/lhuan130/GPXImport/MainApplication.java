@@ -1,4 +1,4 @@
-package com.gpximport;
+package com.lhuan130.GPXImport;
 
 import android.app.Application;
 import android.content.res.Configuration;
