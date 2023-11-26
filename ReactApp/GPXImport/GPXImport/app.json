@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "GPXImport",
+    "name": "GPXImport-t125",
     "slug": "GPXImport",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -10,6 +10,7 @@
       "permissions": [
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_MEDIA_LOCATION",
         "android.permission.RECORD_AUDIO",
         "android.permission.CAMERA"
       ],
@@ -26,6 +27,14 @@
         "expo-camera",
         {
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera and save to your Photos library."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+          "isAccessMediaLocationEnabled": true
         }
       ]
     ],
