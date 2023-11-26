@@ -654,9 +654,6 @@ const styles = StyleSheet.create({
     bottom: 20,
     alignItems: 'center',
   },
-  actionButton: {
-    flex: 1,
-  }
 });
 
 export default GPXWaypoints;
