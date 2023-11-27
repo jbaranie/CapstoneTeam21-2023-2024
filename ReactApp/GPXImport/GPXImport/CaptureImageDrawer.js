@@ -83,6 +83,7 @@ const CaptureImageDrawer = () => {
     <Text style={styles.topText}>Media Library Permission not granted; images not saved. Waypoints are still viable.</Text>
   );
 
+  //render returns
   if (hasCameraPermission === undefined ||
       hasLocationPermission === undefined ||
       hasMediaLibraryPermission === undefined) {//Permission request in-progress
@@ -104,7 +105,6 @@ const CaptureImageDrawer = () => {
       </View>
     )
   } else if (photo) {
-    //TODO figure out what original uri of ("data:image/jpg;base64," + photo.base64) means
     return (
       <View style={styles.container}>
         <Image style={styles.preview} source={{ uri: photo.uri }} />
