@@ -21,10 +21,8 @@ const CaptureImageDrawer = () => {
     (async () => {
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
       setHasCameraPermission(cameraPermission.status === "granted");
-      
       const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
       setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
-      
       const locationPermission = await Location.getForegroundPermissionsAsync();
       setHasLocationPermission(locationPermission.status === "granted");
 
@@ -73,15 +71,6 @@ const CaptureImageDrawer = () => {
       setPhoto(undefined);
     });
   }
-  //constants for toggled components
-  const saveButton = (
-    <TouchableOpacity style={styles.button} onPress={savePhoto}>
-      <Text style={styles.text}>Save</Text>
-    </TouchableOpacity>
-  );
-  const mediaWarning = (
-    <Text style={styles.topText}>Media Library Permission not granted; images not saved. Waypoints are still viable.</Text>
-  );
 
   //render returns
   if (hasCameraPermission === undefined ||
@@ -105,18 +94,26 @@ const CaptureImageDrawer = () => {
       </View>
     )
   } else if (photo) {
+    const saveButton = (
+      <TouchableOpacity style={styles.button} onPress={savePhoto}>
+        <Text style={styles.text}>Save Image</Text>
+      </TouchableOpacity>
+    );
     return (
       <View style={styles.container}>
         <Image style={styles.preview} source={{ uri: photo.uri }} />
         <View style={styles.buttonContainer}>
           {hasMediaLibraryPermission ? saveButton : null}
           <TouchableOpacity style={styles.button} onPress={() => setPhoto(undefined)}>
-            <Text style={styles.text}>Discard</Text>
+            <Text style={styles.text}>Discard Image</Text>
           </TouchableOpacity>
         </View>
       </View>
     );
   } else {//Camera view
+    const mediaWarning = (
+      <Text style={styles.topText}>Media Library Permission not granted; images not saved. Waypoints are still viable.</Text>
+    );
     return (
       <View style={styles.container}>
         <Camera style={styles.camera} ref={(r) => {camera = r}} type={type}>
@@ -142,7 +139,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     marginBottom: 10,
-    width: 130
+    width: 240
   },
   buttonContainer:{
     position: 'absolute',
