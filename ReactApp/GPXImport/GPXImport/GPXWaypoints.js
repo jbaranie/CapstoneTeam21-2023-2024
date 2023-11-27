@@ -8,6 +8,7 @@ import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX} from './GPXManager';
 
+import { styles } from './styles';
 //Check how far the user is from a route start.
 //Uses Haversine Formula
 const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
@@ -49,16 +50,6 @@ const GPXWaypoints = ({route}) => {
       navigation.setParams({ gpxFilePath: null }); // Reset the parameter
     }
   }, [route.params?.gpxFilePath]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const gpxExists = await doesGPXFileExist();
-  //     if (gpxExists) {
-  //       console.log('GPX File myGPX does exist!')
-  //       await importGPXFileFromPath(GPX_FILE_PATH);
-  //     }
-  //   })();
-  // }, []);
 
   //Update the userLocRef
   useEffect(() => {
@@ -322,7 +313,7 @@ const GPXWaypoints = ({route}) => {
   
   
 
-  const startJog = async () => {
+  const startRoute = async () => {
     const gpxExists = await doesGPXFileExist();
     if (!gpxExists) {
       await createInitGPX();
@@ -534,7 +525,7 @@ return (
             <View style={styles.subMenuContainer}>
               <TouchableOpacity 
                 style={styles.customButton} 
-                onPress={startJog} 
+                onPress={startRoute} 
               >
                 <Text style={styles.buttonText}>Start Route</Text>
               </TouchableOpacity>
@@ -588,77 +579,6 @@ return (
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    flex: 1,
-  },
-  subMenuContainer: {
-    marginBottom: 5,
-  },
-  optionButton: {
-    marginBottom: 10,
-  },
-  menuButton: {
-    backgroundColor: '#007aff',
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  menuButtonText: {
-    color: 'white',
-    fontSize: 36,
-    textAlign: 'center', 
-    lineHeight: 50, 
-  },
-  customButton: {
-    backgroundColor: '#007aff',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  customLargeButton: {
-    backgroundColor: '#007aff',
-    paddingVertical: 20,
-    paddingHorizontal: 40,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  disabledButton: {
-    backgroundColor: 'grey',
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center'
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    right: 10,
-    alignItems: 'flex-end',
-  },
-  stopRouteContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 0,
-    right: -7,
-    paddingVertical: 7,
-    alignItems: 'center',
-  },
-  actionContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    position: 'absolute',
-    left: 10,
-    right: 10,
-    bottom: 20,
-    alignItems: 'center',
-  },
-});
+
 
 export default GPXWaypoints;
