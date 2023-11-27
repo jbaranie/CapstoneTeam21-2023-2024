@@ -455,9 +455,100 @@ const GPXWaypoints = ({route}) => {
     };
   }, [isCycling, currentGPXPath, routes, currentRoute]);
   
-return (
+
+//Seperated Rendering Components --------------------------------
+
+//Route Timer Component 
+const TimerComponent = ({ isCycling, elapsedTime }) => {
+  if (!isCycling) return null;
+
+  return (
+    <Text style={{
+      position: 'absolute',
+      top: 10,
+      alignSelf: 'center',
+      fontSize: 36,
+      zIndex: 1,
+      maxWidth: 150
+    }}>
+      {`${elapsedTime}s`}
+    </Text>
+  );
+};
+
+//Main Menu Expanding Button Component
+const SubMenuComponent = ({ isCycling, isMenuOpen, startRoute, importGPXFile, setMenuOpen }) => {
+  if (isCycling) return null;
+
+  return (
+    <View style={styles.buttonContainer}>
+      {isMenuOpen && (
+        <View style={styles.subMenuContainer}>
+          <View style={styles.subMenuContainer}>
+              <TouchableOpacity 
+                style={styles.customButton} 
+                onPress={startRoute} 
+              >
+                <Text style={styles.buttonText}>Start Route</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
+                <Text style={styles.buttonText}>Import GPX File</Text>
+              </TouchableOpacity>
+            </View>
+        </View>
+      )}
+      <TouchableOpacity
+        style={styles.menuButton}
+        onPress={() => setMenuOpen(!isMenuOpen)}
+      >
+        <Text style={[
+          styles.menuButtonText, 
+          { lineHeight: isMenuOpen ? 40 : 50 } 
+        ]}>
+          {isMenuOpen ? 'x' : '+'}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+//Active Route View and Buttons
+const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, stopRoute }) => {
+  if (!isCycling) return null;
+
+  return (
+    <View style={styles.actionContainer}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+        <TouchableOpacity
+          style={[styles.customLargeButton, { backgroundColor: 'green', flex: 1, marginRight: 5 }]}
+          onPress={goodMarkerPress}
+        >
+          <Text style={styles.buttonText}>Good</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.customLargeButton, { backgroundColor: 'red', flex: 1, marginLeft: 5 }]}
+          onPress={badMarkerPress}
+        >
+          <Text style={styles.buttonText}>Bad</Text>
+        </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity 
+        style={[styles.customButton, { marginTop: 10, width: '100%'}]} 
+        onPress={stopRoute} 
+      >
+        <Text style={styles.buttonText}>Stop Route</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+//Actual Rendering Function
+  return (
     <View style={styles.container}>
-      {isCycling && <Text style={{ position: 'absolute', top: 10, alignSelf: 'center', fontSize: 36, zIndex: 1 , maxWidth: 150}}>{`${elapsedTime}s`}</Text>}
+      <TimerComponent isCycling={isCycling} elapsedTime={elapsedTime} />
+      {/*Map Component. Could not be seperated due to constnt refreshing issue*/}
       <MapView
         ref = {mapRef} 
         style={styles.map}
@@ -515,70 +606,23 @@ return (
           </>
         )}
       </MapView>
-      <View style={styles.buttonContainer}>
-        {isCycling ? (
-          <>
-
-          </>
-        ) : (
-          isMenuOpen && (
-            <View style={styles.subMenuContainer}>
-              <TouchableOpacity 
-                style={styles.customButton} 
-                onPress={startRoute} 
-              >
-                <Text style={styles.buttonText}>Start Route</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
-                <Text style={styles.buttonText}>Import GPX File</Text>
-              </TouchableOpacity>
-            </View>
-          )
-        )}
-        {!isCycling && (
-          <TouchableOpacity
-            style={styles.menuButton}
-            onPress={() => setMenuOpen(!isMenuOpen)}
-          >
-            <Text style={[
-              styles.menuButtonText, 
-              { lineHeight: isMenuOpen ? 40 : 50 } 
-            ]}>
-              {isMenuOpen ? 'x' : '+'}
-            </Text>
-          </TouchableOpacity>
-        )}
-      </View>
-      {isCycling && (
-        <View style={styles.actionContainer}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
-            <TouchableOpacity
-              style={[styles.customLargeButton, { backgroundColor: 'green', flex: 1, marginRight: 5 }]}
-              onPress={goodMarkerPress}
-            >
-              <Text style={styles.buttonText}>Good</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.customLargeButton, { backgroundColor: 'red', flex: 1, marginLeft: 5 }]}
-              onPress={badMarkerPress}
-            >
-              <Text style={styles.buttonText}>Bad</Text>
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity 
-            style={[styles.customButton, { marginTop: 10, width: '100%'}]} 
-            onPress={stopRoute} 
-          >
-            <Text style={styles.buttonText}>Stop Route</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      {/* End of Map Component*/}
+      <SubMenuComponent
+        isCycling={isCycling}
+        isMenuOpen={isMenuOpen}
+        startRoute={startRoute}
+        importGPXFile={importGPXFile}
+        setMenuOpen={setMenuOpen}
+      />
+      <RouteActionsComponent
+        isCycling={isCycling}
+        goodMarkerPress={goodMarkerPress}
+        badMarkerPress={badMarkerPress}
+        stopRoute={stopRoute}
+      />
     </View>
   );
 };
-
 
 
 export default GPXWaypoints;

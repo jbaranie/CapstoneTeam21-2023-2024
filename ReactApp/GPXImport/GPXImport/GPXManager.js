@@ -38,7 +38,7 @@ const createInitGPX = async () => {
 };
 
 const createNewGPXFile = async () => {
-  console.log('Creating new GPX file...');
+  //console.log('Creating new GPX file...');
   try {
     const newFileName = await getNewGPXFileName();
     const newFilePath = `${FileSystem.documentDirectory}${newFileName}`;
@@ -77,7 +77,7 @@ const addWaypointToGPX = async (filePath, latitude, longitude, rating) => {
 
 
 const addRouteToGPX = async (filePath) => {
-  console.log(`Creating new route in GPX file: ${filePath}`);
+  //console.log(`Creating new route in GPX file: ${filePath}`);
   //uuid is useid to create a unique ID
   const routeId = uuidv4();
   try {
@@ -95,7 +95,7 @@ const addRouteToGPX = async (filePath) => {
 
 
 const addRoutePointToGPX = async (filePath, routeId, routePoint) => {
-  console.log(`Adding point to route ID ${routeId} in GPX file: ${filePath}`);
+  //console.log(`Adding point to route ID ${routeId} in GPX file: ${filePath}`);
   try {
     let fileContent = await FileSystem.readAsStringAsync(filePath);
     
