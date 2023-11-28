@@ -237,28 +237,41 @@
         });
         
          <!-- Landing Page Button Listener-->
-        const landingLink = document.querySelector('li a[href="#main"]');
-        landingLink.addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent the default behavior of the link
+       const landingLink = document.querySelector('li a[href="#main"]');
+landingLink.addEventListener('click', function (e) {
+    e.preventDefault(); // Prevent the default behavior of the link
 
-            // Here, you can update the content in the center area with the "Export GPX File" section content.
-            const contentDiv = document.getElementById('background');
-            contentDiv.innerHTML = `
-                <h1>A New Experimental Route App</h1>
-                <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p>
-               
-                <div id="map" style="height: 500px;"></div> <!-- Set a height for the map container -->
-                    <!-- Include your JavaScript files -->
-                    <script src="gpxParser.js"></script>
-                    <script src="main.js"></script>
+    // Update the content in the center area with the "Export GPX File" section content.
+    const contentDiv = document.getElementById('background');
+    contentDiv.innerHTML = `
+        <h1>A New Experimental Route App</h1>
+        <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p>
+        <div id="map" style="height: 500px;"></div> <!-- Set a height for the map container -->
+    `;
 
-                    <!-- Google Maps API -->
-                    <script async defer
-                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0&callback=initMap">
-                    </script>
-               
-            `;
-        });
+    // Function to load a script dynamically
+    function loadScript(src, callback) {
+        let script = document.createElement('script');
+        script.src = src;
+        script.onload = callback;
+        document.head.appendChild(script);
+    }
+
+    // Load the gpxParser.js script
+    loadScript("gpxParser.js", function() {
+        console.log("gpxParser.js loaded");
+    });
+
+    // Load the main.js script
+    loadScript("main.js", function() {
+        console.log("main.js loaded");
+    });
+
+    // Load the Google Maps API and initialize the map
+    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0&callback=initMap", function() {
+        console.log("Google Maps API loaded");
+    });
+});
         
         //Reload Function
         window.onload = function () {
