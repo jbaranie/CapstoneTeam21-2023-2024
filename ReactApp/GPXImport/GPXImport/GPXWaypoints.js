@@ -56,6 +56,7 @@ const GPXWaypoints = ({route}) => {
     userLocationRef.current = userLocation; 
   }, [userLocation]);
 
+
   //Update the user location oin real-time
   useEffect(() => {
     let locationSubscription;
@@ -95,6 +96,7 @@ const GPXWaypoints = ({route}) => {
     };
   }, []);
 
+  
   //Start timer function
   const startTimer = () => {
     timerRef.current = setInterval(() => {
@@ -180,30 +182,6 @@ const GPXWaypoints = ({route}) => {
     });
   };
   
-
-  //Get the user's location.
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.error('Permission to access location was denied');
-        return;
-      }
-      let location = await Location.getCurrentPositionAsync({});
-      const userLoc = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      };
-      setUserLocation(userLoc);
-      setMapRegion(userLoc);
-
-      if (mapRef.current) {
-        mapRef.current.animateToRegion(userLoc);
-      }
-    })();
-  }, []);
 
     
   //Importing the GPX File
@@ -548,7 +526,7 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
   return (
     <View style={styles.container}>
       <TimerComponent isCycling={isCycling} elapsedTime={elapsedTime} />
-      {/*Map Component. Could not be seperated due to constnt refreshing issue*/}
+      {/*Map Component. Could not be seperated due to constant refreshing issue*/}
       <MapView
         ref = {mapRef} 
         style={styles.map}
@@ -606,7 +584,6 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
           </>
         )}
       </MapView>
-      {/* End of Map Component*/}
       <SubMenuComponent
         isCycling={isCycling}
         isMenuOpen={isMenuOpen}
@@ -623,6 +600,5 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
     </View>
   );
 };
-
 
 export default GPXWaypoints;
