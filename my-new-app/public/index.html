@@ -92,6 +92,11 @@
             width: 70%; /* Even narrower width */
             margin: 0 auto; /* Centered */
         }
+        
+        #map {
+          height: 800px;
+          width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -122,9 +127,16 @@
                 <h1>A New Experimental Route App</h1>
                 <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p>
                 
+                <div id="map" style="height: 500px;"></div> <!-- Set a height for the map container -->
+                    <!-- Include your JavaScript files -->
                     <script src="gpxParser.js"></script>
                     <script src="main.js"></script>
-                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0&callback=initMap" defer async></script>
+
+                    <!-- Google Maps API -->
+                    <script async defer
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0&callback=initMap">
+                    </script>
+
             </div>
         </section>
 
