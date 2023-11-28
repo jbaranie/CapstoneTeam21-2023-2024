@@ -99,7 +99,7 @@
     <input type="file" accept=".gpx" id="fileInput" style="display: none;">
     <script src="gpxParser.js"></script>
     <script src="main.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0&callback=initMap" defer async></script>
+    
     
     
     <div id="menu">
@@ -122,12 +122,7 @@
             <div id="background">
                 <h1>A New Experimental Route App</h1>
                 <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        initMap(); // Call initMap only after the DOM is fully loaded
-                    });
-                </script>
-
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0&callback=initMap" defer async></script>
             </div>
         </section>
 
