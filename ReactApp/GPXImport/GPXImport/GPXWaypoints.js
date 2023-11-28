@@ -155,7 +155,7 @@ const GPXWaypoints = ({route}) => {
   
  
   const goodMarkerPress = async () => {
-    console.log('goodMarkerPress called with currentGPXPath:', currentGPXPath);
+    //console.log('goodMarkerPress called with currentGPXPath:', currentGPXPath);
     await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3);
     await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 3);
     setWaypoints(prevWaypoints => {
@@ -173,7 +173,7 @@ const GPXWaypoints = ({route}) => {
   
 
   const badMarkerPress = async () => {
-    console.log('badMarkerPress called with currentGPXPath:', currentGPXPath);
+    //console.log('badMarkerPress called with currentGPXPath:', currentGPXPath);
     await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1);
     await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 1);
     setWaypoints(prevWaypoints => {
@@ -412,8 +412,14 @@ const GPXWaypoints = ({route}) => {
 
       const lastPoint = routes[routes.length - 1];
       if(lastPoint){
-        console.log('Last Point info: ' + '\nname: ' + lastPoint.name + '\nlat: ' + lastPoint.latitude + 'lon: ' + lastPoint.longitude);
-        console.log('Current Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude);
+        console.log('POINT INFO \n--------------\n' 
+        + 'Last Point info: ' + '\nname: ' + lastPoint.name + '\nlat: ' + lastPoint.latitude + 'lon: ' + lastPoint.longitude 
+        + '\n\nCurrent Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude 
+        + '\n--------------\n');
+        
+        //console.log('Last Point info: ' + '\nname: ' + lastPoint.name + '\nlat: ' + lastPoint.latitude + 'lon: ' + lastPoint.longitude);
+        //console.log('Current Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude);
+        //console.log('\n--------------\n');
       }
       console
       if (lastPoint && lastPoint.latitude === point.latitude && lastPoint.longitude === point.longitude) {
@@ -443,12 +449,11 @@ const GPXWaypoints = ({route}) => {
     let interval;
     if (isCycling) {
       interval = setInterval(() => {
-        console.log('Interval Up');
         const routeId = currentRoute;
         if (routeId) {
           addRoutePoint(routeId);
         } else {
-          console.log('No route found to add point to!');
+          console.log('UNEXPECTED: No route found to add point to!');
         }
       }, 3000);
     }
@@ -461,7 +466,7 @@ const GPXWaypoints = ({route}) => {
   
 return (
     <View style={styles.container}>
-      {isCycling && <Text style={{ position: 'absolute', top: 10, left: 0, right: 0, textAlign: 'center', fontSize: 36, zIndex: 1 }}>{`${elapsedTime}s`}</Text>}
+      {isCycling && <Text style={{ position: 'absolute', top: 10, alignSelf: 'center', fontSize: 36, zIndex: 1 , maxWidth: 150}}>{`${elapsedTime}s`}</Text>}
       <MapView
         ref = {mapRef} 
         style={styles.map}
@@ -554,31 +559,31 @@ return (
         )}
       </View>
       {isCycling && (
-        <View style={styles.goodBadButtonContainer}>
-           <TouchableOpacity
-              style={[styles.customButton, { backgroundColor: 'green', paddingVertical: 20, paddingHorizontal: 40 }]}
+        <View style={styles.actionContainer}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+            <TouchableOpacity
+              style={[styles.customLargeButton, { backgroundColor: 'green', flex: 1, marginRight: 5 }]}
               onPress={goodMarkerPress}
             >
               <Text style={styles.buttonText}>Good</Text>
             </TouchableOpacity>
+
             <TouchableOpacity
-              style={[styles.customButton, { backgroundColor: 'red', paddingVertical: 20, paddingHorizontal: 40 }]}
+              style={[styles.customLargeButton, { backgroundColor: 'red', flex: 1, marginLeft: 5 }]}
               onPress={badMarkerPress}
             >
               <Text style={styles.buttonText}>Bad</Text>
             </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity 
+            style={[styles.customButton, { marginTop: 10, width: '100%'}]} 
+            onPress={stopRoute} 
+          >
+            <Text style={styles.buttonText}>Stop Route</Text>
+          </TouchableOpacity>
         </View>
-      )} 
-      {isCycling && (
-      <View style={styles.stopRouteContainer}>
-        <TouchableOpacity 
-          style={styles.customButton} 
-          onPress={stopRoute} 
-        >
-          <Text style={styles.buttonText}>Stop Route</Text>
-        </TouchableOpacity>
-      </View>
-    )}
+      )}
     </View>
   );
 };
@@ -637,20 +642,21 @@ const styles = StyleSheet.create({
     right: 10,
     alignItems: 'flex-end',
   },
-  goodBadButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    position: 'absolute',
-    left: 10,
-    right: 10,
-    bottom: 20,
-  },
   stopRouteContainer: {
     position: 'absolute',
     bottom: 20,
     left: 0,
     right: -7,
     paddingVertical: 7,
+    alignItems: 'center',
+  },
+  actionContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    position: 'absolute',
+    left: 10,
+    right: 10,
+    bottom: 20,
     alignItems: 'center',
   },
 });

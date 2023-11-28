@@ -54,11 +54,11 @@ const createNewGPXFile = async () => {
 };
 
 const addWaypointToGPX = async (filePath, latitude, longitude, rating) => {
-  console.log(`Adding waypoint to GPX file: ${filePath}`);
+  //console.log(`Adding waypoint to GPX file: ${filePath}`);
   try {
-    console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
+    //console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
     let fileContent = await FileSystem.readAsStringAsync(filePath);
-
+    
     const waypoint = `<wpt lat="${latitude}" lon="${longitude}">
       <name>Waypoint</name>
       <rating>${rating}</rating>
@@ -67,7 +67,7 @@ const addWaypointToGPX = async (filePath, latitude, longitude, rating) => {
     fileContent = fileContent.replace("</gpx>", `${waypoint}\n</gpx>`);
 
     await FileSystem.writeAsStringAsync(filePath, fileContent);
-    console.log('Waypoint added to GPX file at:', filePath); // Log success
+    //console.log('Waypoint added to GPX file at:', filePath); // Log success
   } catch (error) {
     console.error(`Error adding waypoint to GPX file at ${filePath}:`, error);
     throw error; // Re-throw the error to handle it in the calling function
