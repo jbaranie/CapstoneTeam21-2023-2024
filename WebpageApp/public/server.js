@@ -3,10 +3,16 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const cors = require('cors');
 
+const express = require('express');
+const cors = require('cors');
 const app = express();
 app.use(cors());
+
+const port = 4000;
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
 
 const server = http.createServer((req, res) => {
     if (req.method === 'POST' && req.url === '/upload') {
