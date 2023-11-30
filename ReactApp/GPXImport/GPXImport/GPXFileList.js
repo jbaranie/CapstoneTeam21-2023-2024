@@ -185,7 +185,9 @@ const GPXFileList = ({ navigation }) => {
         keyExtractor={item => item}
       />
        <Button title="Import GPX File" onPress={importGPXFile} />
+       {gpxFiles.length >= 2 && (
       <Button title="Delete All" onPress={deleteAllFiles} />
+       )}
     </View>
   );
 };
