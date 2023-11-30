@@ -4,17 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cycling Page</title>
+    
+    <!--Pulls Styles for Html Page-->
     <link rel="stylesheet" href="styles.css">
-
+    
+    <!--Load JScripts-->
+    <script src="stickyMenu.js"></script> <!--Makes Main Menu Stick to the top when the user scrolls-->
+    
 </head>
+
 <body>
     <!--Background Declarations-->
     <input type="file" accept=".gpx" id="fileInput" style="display: none;">
 
     
     
-    
+    <!--Sets up the Main Menu Bar with Styles from styles.cc-->
     <div id="menu">
+        <!--Main Title In Webpage-->
         <h2>The Experimental Route App</h2>
         <ul>
             <li id="main-page-link"><a href="#main">Landing Page</a></li>
@@ -28,6 +35,7 @@
         </ul>
     </div>
 
+    <!--Region Directly Below the Menu Bar-->
     <div id="content">
         <!-- Landing Page Content -->
         <section id="main">
@@ -50,29 +58,22 @@
 
     </div>
     
-    <!-- Border To Let Tester Know Its a Prototype point.-->
+    
+    
+    
+    
+    
+    
+    <!-- Border To Let Tester Know Everything below is a Prototype testing zone.-->
     <div id="reactEntryBorder">
-      <h1 style="color: white;">Temporary Container to Test React Code </h1>
+      <h3 style="color: white;">Temporary Container to Test React Code </h3>
     </div>
     
-    <!-- Entry point for React to render React things, not used atm.-->
+    <!-- Entry point for React to render React things, not used atm.  This must be included to avoid bugs. Ideally All coding below is using Reactjs with reactEntry div-->
     <div id="reactEntry">
     </div>
 
     <script>
-        //JavaScript functionality here
-        window.onscroll = function() { makeStickyMenu() };
-
-        var menu = document.getElementById("menu");
-        var sticky = menu.offsetTop;
-
-        function makeStickyMenu() {
-            if (window.pageYOffset >= sticky) {
-                menu.classList.add("sticky");
-            } else {
-                menu.classList.remove("sticky");
-            }
-        }
         
         //Import GPX Button Listener
         const importLink = document.querySelector('li a[href="#import"]');
