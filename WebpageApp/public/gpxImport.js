@@ -5,7 +5,7 @@ const importLink = document.querySelector('li a[href="#import"]');
 importLink.addEventListener('click', function(e) {
     
     e.preventDefault(); // Prevent the default behavior of the link
-     console.log("Import GPX File link clicked");
+    //console.log("Import GPX File link clicked");
     // Update the content in the center area with the "Import GPX File" section content.
     const contentDiv = document.getElementById('background');
     
@@ -14,6 +14,8 @@ importLink.addEventListener('click', function(e) {
         <h1>Import GPX File</h1>
         <p>This is the Import GPX File section content.</p>
         <button id="importGPXButton" class="button">Process GPX</button>
+        <div id="uploadStatus"></div>
+
     `;
 
     // Event listener for the Process GPX button in the background container.
@@ -36,12 +38,21 @@ importLink.addEventListener('click', function(e) {
                     method: 'POST',
                     body: formData,
                 })
-                .then(response => response.text())
+                .then(response => {
+                    if(response.ok) {
+                        return response.text(); // Assuming the server sends a text response
+                    } else {
+                        // If server response is not OK, throw an error
+                        throw new Error('Upload failed');
+                    }
+                })
                 .then(data => {
-                    console.log(data);  // Log the server response
+                    // Update UI with success message
+                    document.getElementById('uploadStatus').innerHTML = `<p style="color: green;">Success: ${data}</p>`;
                 })
                 .catch(error => {
-                    console.error('Error uploading the file:', error);
+                    // Update UI with error message
+                    document.getElementById('uploadStatus').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
                 });
             }
         }, { once: true }); // This ensures the event listener is added only once
