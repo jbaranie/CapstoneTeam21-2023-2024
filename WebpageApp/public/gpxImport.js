@@ -1,6 +1,6 @@
 //gpxImport.js
 
-// Event Listener for Import GPX Button
+// Event Listener for Import GPX Button from the Main Menu
 const importLink = document.querySelector('li a[href="#import"]');
 importLink.addEventListener('click', function(e) {
     
@@ -16,10 +16,34 @@ importLink.addEventListener('click', function(e) {
         <button id="importGPXButton" class="button">Process GPX</button>
     `;
 
-    // Event listener for the Process GPX button
+    // Event listener for the Process GPX button in the background container.
     const importGPXButton = document.getElementById("importGPXButton");
     importGPXButton.addEventListener("click", function() {
         // Trigger file input click to select GPX file
-        document.getElementById('fileInput').click();
+        const fileInput = document.getElementById('fileInput');
+        fileInput.click();
+
+        // Add change event listener to the file input
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Create FormData and append the file
+                const formData = new FormData();
+                formData.append('gpxFile', file);
+
+                // Send the file to the server
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);  // Log the server response
+                })
+                .catch(error => {
+                    console.error('Error uploading the file:', error);
+                });
+            }
+        }, { once: true }); // This ensures the event listener is added only once
     });
 });
