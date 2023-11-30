@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Configure a route to handle file uploads
-app.post('/upload', upload.single('file'), (req, res) => {
+app.post('/upload', upload.single('gpxFile'), (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
