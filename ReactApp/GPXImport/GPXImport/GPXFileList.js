@@ -96,6 +96,22 @@ const GPXFileList = ({ navigation }) => {
   //   }
   // };
 
+  const confirmDeleteFile = (fileName) => {
+    Alert.alert(
+      "Confirm Delete",
+      `Are you sure you want to delete "${fileName}"?`,
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log(`Deletion of ${fileName} cancelled`),
+          style: "cancel"
+        },
+        { text: "Yes", onPress: () => deleteFile(fileName) }
+      ],
+      { cancelable: false }
+    );
+  };
+  
   const deleteFile = async (fileName) => {
     try {
       await FileSystem.deleteAsync(`${FileSystem.documentDirectory}${fileName}`);
@@ -167,7 +183,7 @@ const GPXFileList = ({ navigation }) => {
         <Text>{item}</Text>
       </TouchableOpacity>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Button title="Delete" onPress={() => deleteFile(item)} /> 
+        <Button title="Delete" onPress={() => confirmDeleteFile(item)} /> 
         {/*}
         <Button title="Log Content" onPress={() => logGPXContent(item)} />
         */}
