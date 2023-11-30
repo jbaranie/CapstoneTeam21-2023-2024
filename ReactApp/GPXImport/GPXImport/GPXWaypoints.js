@@ -67,11 +67,11 @@ const GPXWaypoints = ({route}) => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         console.error('Permission to access location was denied');
-        setHasLocationPermission(false);
+        setLocationPerm(false);
         return;
       }
 
-      setHasLocationPermission(true);
+      setLocationPerm(true);
 
       locationSubscription = await Location.watchPositionAsync(
         {
@@ -304,7 +304,7 @@ const GPXWaypoints = ({route}) => {
     setWaypoints([]);
     
     //Check if the user has location permissions.
-    if(locationPerm){
+    if(!locationPerm){
       Alert.alert(
         "Location Permission Required",
         "You do not have the proper location permissions set. Please check your settings.",
