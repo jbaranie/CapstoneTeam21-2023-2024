@@ -10,7 +10,7 @@
     
     <!--Load JScripts-->
     <script src="stickyMenu.js"></script> <!--Makes Main Menu Stick to the top when the user scrolls-->
-    
+    <script src="gpxImport.js"></script>
 </head>
 
 <body>
@@ -74,137 +74,60 @@
     </div>
 
     <script>
-        
-        //Import GPX Button Listener
-        const importLink = document.querySelector('li a[href="#import"]');
-        importLink.addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent the default behavior of the link
+ 
 
-            // Here, you can update the content in the center area with the "Import GPX File" section content.
-            const contentDiv = document.getElementById('background');
-            contentDiv.innerHTML = `
-                <h1>Import GPX File</h1>
-                <p>This is the Import GPX File section content.</p>
-                <button id="importGPXButton" class="button">Process GPX</button>
-            `;
-               //ImportGPXButton
-            const importGPXButton = document.getElementById("importGPXButton");
-            importGPXButton.addEventListener("click", function() {
-             
-               // alert("Processing GPX file...");
-                 document.getElementById('fileInput').click();
-             
-             
-            });
+    // Export GPX Button Listener
+    const exportLink = document.querySelector('li a[href="#export"]');
+    exportLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        const contentDiv = document.getElementById('background');
+        contentDiv.innerHTML = `<h1>Export GPX File</h1><p>This is the Export GPX File section content.</p><button id="exportGPXButton" class="button">Export GPX File</button>`;
+        const exportGPXButton = document.getElementById("exportGPXButton");
+        exportGPXButton.addEventListener("click", function() {
+            const content = 'This is the content of the file.';
+            const blob = new Blob([content], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            const url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = 'example.txt';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
         });
-        
-       // Export GPX Button Listener
-        const exportLink = document.querySelector('li a[href="#export"]');
-        exportLink.addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent the default behavior of the link
-
-            // Here, you can update the content in the center area with the "Export GPX File" section content.
-            const contentDiv = document.getElementById('background');
-            contentDiv.innerHTML = `
-                <h1>Export GPX File</h1>
-                <p>This is the Export GPX File section content.</p>
-               <button id="exportGPXButton" class="button">Export GPX File</button>
-            `;
-               //ImportGPXButton
-            const exportGPXButton = document.getElementById("exportGPXButton");
-            exportGPXButton.addEventListener("click", function() {
-             
-               //alert("Processing GPX file...");
-              const content = 'This is the content of the file.';
-
-              // Create a Blob object with the content
-              const blob = new Blob([content], { type: 'text/plain' });
-
-              // Create an <a> element
-              const a = document.createElement('a');
-              a.style.display = 'none';
-
-              // Create a URL for the Blob
-              const url = window.URL.createObjectURL(blob);
-
-              // Set the <a> element's attributes
-              a.href = url;
-              a.download = 'example.txt'; // Specify the default file name
-
-              // Append the <a> element to the body
-              document.body.appendChild(a);
-
-              // Trigger a click event on the <a> element
-              a.click();
-
-              // Clean up: remove the <a> element and revoke the URL
-              window.URL.revokeObjectURL(url);
-              document.body.removeChild(a);
-                         
-             
-            });
-        });
-        
-         <!-- Landing Page Button Listener-->
-       const landingLink = document.querySelector('li a[href="#main"]');
-landingLink.addEventListener('click', function (e) {
-    e.preventDefault(); // Prevent the default behavior of the link
-
-    // Update the content in the center area with the "Export GPX File" section content.
-    const contentDiv = document.getElementById('background');
-    contentDiv.innerHTML = `
-        <h1>A New Experimental Route App</h1>
-        <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p>
-        <div id="map" style="height: 500px;"></div> <!-- Set a height for the map container -->
-    `;
-
-    // Function to load a script dynamically
-    function loadScript(src, callback) {
-        let script = document.createElement('script');
-        script.src = src;
-        script.onload = callback;
-        document.head.appendChild(script);
-    }
-
-    // Load the gpxParser.js script
-    loadScript("gpxParser.js", function() {
-        console.log("gpxParser.js loaded");
     });
 
-    // Load the main.js script
-    loadScript("main.js", function() {
-        console.log("main.js loaded");
+    // Landing Page Button Listener
+    const landingLink = document.querySelector('li a[href="#main"]');
+    landingLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        const contentDiv = document.getElementById('background');
+        contentDiv.innerHTML = `<h1>A New Experimental Route App</h1><p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p><div id="map" style="height: 500px;"></div>`;
+        function loadScript(src, callback) {
+            let script = document.createElement('script');
+            script.src = src;
+            script.onload = callback;
+            document.head.appendChild(script);
+        }
+        loadScript("gpxParser.js", function() { console.log("gpxParser.js loaded"); });
+        loadScript("main.js", function() { console.log("main.js loaded"); });
+        loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0&callback=initMap", function() { console.log("Google Maps API loaded"); });
     });
 
-    // Load the Google Maps API and initialize the map
-    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0&callback=initMap", function() {
-        console.log("Google Maps API loaded");
-    });
-});
-        
-        //Reload Function
-        window.onload = function () {
-            // Function to set the margin of the app title relative to the Main Page menu item
-            function setAppTitleMargin() {
-                const appTitle = document.getElementById("menu").getElementsByTagName("h2")[0];
-                const mainPageLink = document.getElementById("main-page-link");
-
-                if (appTitle && mainPageLink) {
-                    const mainPageLinkRect = mainPageLink.getBoundingClientRect();
-                    appTitle.style.marginLeft = mainPageLinkRect.left + "px";
-                }
+    // Reload Function
+    window.onload = function() {
+        function setAppTitleMargin() {
+            const appTitle = document.getElementById("menu").getElementsByTagName("h2")[0];
+            const mainPageLink = document.getElementById("main-page-link");
+            if (appTitle && mainPageLink) {
+                const mainPageLinkRect = mainPageLink.getBoundingClientRect();
+                appTitle.style.marginLeft = mainPageLinkRect.left + "px";
             }
-
-            // Call the function on page load and when the window is resized
-            setAppTitleMargin();
-            window.onresize = setAppTitleMargin;
-        };
-        
-      
-       
-        
-        
-        
-    </script>
+        }
+        setAppTitleMargin();
+        window.onresize = setAppTitleMargin;
+    };
+</script>
 </body>
 </html>
