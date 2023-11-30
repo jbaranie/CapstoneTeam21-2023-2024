@@ -20,6 +20,10 @@ const server = http.createServer((req, res) => {
         console.log('POST');
         console.log(req.method);
         handleFileUpload(req, res);
+    } else if (req.method === 'GET' && req.url === '/upload') {
+        // Handle GET request for /upload (if needed)
+        console.log('Received GET request:', req.method, req.url);
+        // Respond to GET request as needed    
     } else {
         console.log('NOT POST');
         // Map request URLs to local file paths
