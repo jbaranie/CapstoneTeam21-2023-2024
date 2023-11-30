@@ -21,6 +21,9 @@ importLink.addEventListener('click', function(e) {
     // Event listener for the Process GPX button in the background container.
     const importGPXButton = document.getElementById("importGPXButton");
     importGPXButton.addEventListener("click", function() {
+        // Clear error Screen
+        document.getElementById('uploadStatus').innerHTML = '';
+        
         // Trigger file input click to select GPX file
         const fileInput = document.getElementById('fileInput');
         fileInput.click();
@@ -34,7 +37,7 @@ importLink.addEventListener('click', function(e) {
                 formData.append('gpxFile', file);
 
                 // Send the file to the server
-                fetch('/upload', {
+                fetch('http://52.15.57.219:4000/upload', {
                     method: 'POST',
                     body: formData,
                 })

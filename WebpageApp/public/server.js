@@ -3,6 +3,10 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors');
+
+const app = express();
+app.use(cors());
 
 const server = http.createServer((req, res) => {
     if (req.method === 'POST' && req.url === '/upload') {
