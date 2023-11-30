@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, FlatList } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
@@ -106,6 +106,22 @@ const GPXFileList = ({ navigation }) => {
   };
 
   const deleteAllFiles = async () => {
+    Alert.alert(
+      "Confirm Delete",
+      "Are you sure you want to delete all GPX files?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Deletion cancelled"),
+          style: "cancel"
+        },
+        { text: "Yes", onPress: () => deleteAllFilesConfirmed() }
+      ],
+      { cancelable: false }
+    );
+  };
+  
+  const deleteAllFilesConfirmed = async () => {
     try {
       for (const fileName of gpxFiles) {
         await FileSystem.deleteAsync(`${FileSystem.documentDirectory}${fileName}`);
@@ -115,6 +131,7 @@ const GPXFileList = ({ navigation }) => {
       console.error('Error deleting all GPX files:', error);
     }
   };
+  
 
    // Function that handles file download
    const downloadFile = async (fileName) => {
