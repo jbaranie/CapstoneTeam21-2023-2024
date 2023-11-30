@@ -5,9 +5,11 @@ import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
 import * as DocumentPicker from 'expo-document-picker';
 
-
 const GPXFileList = ({ navigation }) => {
+  //File action state
   const [gpxFiles, setGpxFiles] = useState([]);
+  //Media library state
+  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
 
   const importGPXFile = async () => {
     try {
@@ -39,8 +41,6 @@ const GPXFileList = ({ navigation }) => {
       console.error('Error importing GPX file:', error);
     }
   };
-  
-  
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -54,10 +54,9 @@ const GPXFileList = ({ navigation }) => {
         console.error('Error reading GPX files:', error);
       }
       if (files) {
-      console.log('Files fetched:', files);
-    } 
-  };
-
+        console.log('Files fetched:', files);
+      } 
+    };
     fetchFiles();
   }, []);
 
@@ -118,11 +117,12 @@ const GPXFileList = ({ navigation }) => {
 
    // Function that handles file download
    const downloadFile = async (fileName) => {
+    // Request permissions to access the media library
+    const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
+    setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
     try {
-      // Request permissions to access the media library
-      const permissions = await MediaLibrary.requestPermissionsAsync();
-      if (permissions.status !== 'granted') {
-        alert('You need to grant storage permissions to download files.');
+      if (!hasMediaLibraryPermission) {
+        alert('You need to grant media library permissions to download files.');
         return;
       }
   

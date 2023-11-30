@@ -26,6 +26,7 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
 };
 
 const GPXWaypoints = ({route}) => {
+  //Location and map state/refs
   const [waypoints, setWaypoints] = useState([]);
   const [imported, setImported] = useState(false);
   const [routes, setRoutes] = useState([]);
@@ -36,11 +37,15 @@ const GPXWaypoints = ({route}) => {
   const mapRef = useRef(null);
   const userLocationRef = useRef(userLocation);
 
+  //Active route/nav state
   const [isCycling, setIsCycling] = useState(false);
   const [elapsedTime, setElapsedTime] =useState(0);
   const timerRef = useRef(null);
   const [currentGPXPath, setCurrentGPXPath] = useState('');
   const navigation = useNavigation();
+
+  //Permission states
+  const [hasLocationPermission, setHasLocationPermission] = useState(null);
 
   useEffect(() => {
     if (route.params?.gpxFilePath) {
@@ -70,8 +75,10 @@ const GPXWaypoints = ({route}) => {
     let locationSubscription;
 
     const startLocationTracking = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
+      const locationPermission = await Location.getForegroundPermissionsAsync();
+      setHasLocationPermission(locationPermission.status === "granted");
+
+      if (!hasLocationPermission) {
         console.error('Permission to access location was denied');
         return;
       }
@@ -193,8 +200,7 @@ const GPXWaypoints = ({route}) => {
   //Get the user's location.
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
+      if (!hasLocationPermission) {
         console.error('Permission to access location was denied');
         return;
       }
