@@ -56,7 +56,8 @@ function handleFileUpload(req, res) {
                 res.end('Error uploading the file');
                 return;
             }
-            res.writeHead(200);
+            // After successfully saving the file
+            res.writeHead(200, { 'Content-Type': 'text/plain' });
             res.end('File uploaded successfully');
         });
     });
