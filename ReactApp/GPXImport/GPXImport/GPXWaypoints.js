@@ -34,6 +34,7 @@ const GPXWaypoints = ({route}) => {
   const [userLocation, setUserLocation] = useState(null);
   const [mapRegion, setMapRegion] = useState(null);
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [locationPerm, setLocationPerm] = useState(false);
   const mapRef = useRef(null);
   const userLocationRef = useRef(userLocation);
 
@@ -43,6 +44,7 @@ const GPXWaypoints = ({route}) => {
   const [currentGPXPath, setCurrentGPXPath] = useState('');
   const navigation = useNavigation();
 
+  
   useEffect(() => {
     if (route.params?.gpxFilePath) {
       const filePath = route.params.gpxFilePath;
@@ -65,8 +67,11 @@ const GPXWaypoints = ({route}) => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         console.error('Permission to access location was denied');
+        setHasLocationPermission(false);
         return;
       }
+
+      setHasLocationPermission(true);
 
       locationSubscription = await Location.watchPositionAsync(
         {
@@ -298,6 +303,18 @@ const GPXWaypoints = ({route}) => {
     }
     setWaypoints([]);
     
+    //Check if the user has location permissions.
+    if(locationPerm){
+      Alert.alert(
+        "Location Permission Required",
+        "You do not have the proper location permissions set. Please check your settings.",
+        [
+          { text: "OK :("}
+        ]
+      );
+      return;
+    }
+
     if (!imported) {
       Alert.alert(
         'Start Route',
