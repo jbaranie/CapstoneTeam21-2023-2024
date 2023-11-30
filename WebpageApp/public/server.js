@@ -62,7 +62,3 @@ function handleFileUpload(req, res) {
     });
 }
 
-const port = 4000; // Specify the port you want to use
-server.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
