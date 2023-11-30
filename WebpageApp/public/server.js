@@ -21,6 +21,7 @@ const server = http.createServer((req, res) => {
         console.log(req.method);
         handleFileUpload(req, res);
     } else {
+        console.log('NOT POST');
         // Map request URLs to local file paths
         const filePath = req.url === '/' ? '/index.html' : req.url;
         const fileFullPath = path.join(__dirname, filePath);
