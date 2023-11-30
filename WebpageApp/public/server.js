@@ -17,6 +17,8 @@ app.listen(port, () => {
 const server = http.createServer((req, res) => {
     if (req.method === 'POST' && req.url === '/upload') {
         // Handle file upload
+        console.log('POST');
+        console.log(req.method);
         handleFileUpload(req, res);
     } else {
         // Map request URLs to local file paths
