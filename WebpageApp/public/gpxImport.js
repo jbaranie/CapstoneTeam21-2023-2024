@@ -46,6 +46,7 @@ importLink.addEventListener('click', function(e) {
                         return response.text(); // Assuming the server sends a text response
                     } else {
                         // If server response is not OK, throw an error
+                        console.log(response.text());
                         throw new Error('Upload failed');
                     }
                 })
