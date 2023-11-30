@@ -18,6 +18,3 @@
 .env.test.local
 .env.production.local
 
-
-yarn-debug.log*
-yarn-error.log*
