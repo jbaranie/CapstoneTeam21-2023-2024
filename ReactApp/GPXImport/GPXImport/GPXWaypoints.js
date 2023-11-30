@@ -3,6 +3,9 @@ import { View, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
+import FlashMessage from 'react-native-flash-message';
+import { showMessage } from 'react-native-flash-message';
+
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
@@ -125,10 +128,16 @@ const GPXWaypoints = ({route}) => {
       stopTimer(); 
   
       if (currentGPXPath) {
-        console.log('Stopping route, current GPX path:', currentGPXPath);
-        console.log('Routes to be saved:', routes);
-        console.log('Waypoints to be saved:', waypoints);
-  
+        //console.log('Stopping route, current GPX path:', currentGPXPath);
+        //console.log('Routes to be saved:', routes);
+        //console.log('Waypoints to be saved:', waypoints);
+        
+        showMessage({
+          message: "Route has ended.",
+          hideOnPress: true,
+          type: "info",
+          duration: 2000
+        });
         // Save the route and waypoints to the current file
 
         // for (const waypoint of waypoints) {
@@ -164,8 +173,15 @@ const GPXWaypoints = ({route}) => {
         name: "Good Waypoint",
         rating: 3
       };
-      console.log('Adding new waypoint:', newWaypoint);
+      //console.log('Adding new waypoint:', newWaypoint);
       return [...prevWaypoints, newWaypoint];
+    });
+
+    showMessage({
+      message: "Good Waypoint Added!",
+      hideOnPress: true,
+      type: "success",
+      duration: 3000 
     });
   };
   
@@ -185,6 +201,13 @@ const GPXWaypoints = ({route}) => {
       console.log('Adding new waypoint:', newWaypoint);
       return [...prevWaypoints, newWaypoint];
     });
+
+    showMessage({
+      message: "Bad Waypoint Added!",
+      hideOnPress: true,
+      type: "success",
+      duration: 3000 
+    });
   };
   
 
@@ -195,7 +218,15 @@ const GPXWaypoints = ({route}) => {
       const result = await DocumentPicker.getDocumentAsync({ type: 'application/gpx+xml' });
       
       if (result.canceled) {
-        console.log('Document Picker operation was canceled');
+        //console.log('Document Picker operation was canceled');
+        
+        showMessage({
+          message: "Operation Canceled",
+          description: "The document picker operation was canceled.",
+          hideOnPress: true,
+          type: "info",
+          duration: 3000 
+        });
         return;
       }
   
@@ -238,7 +269,15 @@ const GPXWaypoints = ({route}) => {
         }
       }
     } catch (error) {
-      console.error('Error importing GPX file:', error);
+      //console.error('Error importing GPX file:', error);
+      
+      showMessage({
+        message: "Error importing GPX file",
+        description: "Check the file you are trying to import, and try again.",
+        hideOnPress: true,
+        type: "error",
+        duration: 3000 
+      });
     }
   };
 
@@ -246,7 +285,7 @@ const GPXWaypoints = ({route}) => {
     try {
       // File is in the document directory
       const fullPath = filename.startsWith('file://') ? filename : FileSystem.documentDirectory + filename;
-      console.log('Attempting to import GPX file from path:', fullPath);
+      //console.log('Attempting to import GPX file from path:', fullPath);
   
       // Check if the file exists at the given path
       const fileInfo = await FileSystem.getInfoAsync(fullPath);
@@ -290,7 +329,14 @@ const GPXWaypoints = ({route}) => {
         });
       }
     } catch (error) {
-      console.error('Error importing GPX file:', error);
+      //console.error('Error importing GPX file:', error);
+      showMessage({
+        message: "Error importing GPX file",
+        description: "Check the file you are trying to import, and try again.",
+        hideOnPress: true,
+        type: "error",
+        duration: 30000
+      });
     }
   };
   
@@ -375,8 +421,16 @@ const GPXWaypoints = ({route}) => {
         ],
         { cancelable: false }
       );
+
       activateKeepAwakeAsync();
     }
+
+    showMessage({
+      message: "Route Started!",
+      hideOnPress: true,
+      type: "info",
+      duration: 3000 
+    });
   };
   
 
@@ -427,6 +481,14 @@ const GPXWaypoints = ({route}) => {
 
       } catch (error) {
         console.error('Error adding route point to GPX:', error);
+
+        showMessage({
+          message: "Error adding route point to GPX File",
+          description: "There could be an issue with the GPX file.",
+          hideOnPress: true,
+          type: "error",
+          duration: 30000 
+        });
       }
     }
   };
@@ -614,6 +676,7 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
         badMarkerPress={badMarkerPress}
         stopRoute={stopRoute}
       />
+      <FlashMessage position="top" />
     </View>
   );
 };
