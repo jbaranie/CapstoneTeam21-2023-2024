@@ -5,7 +5,6 @@ import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
 import FlashMessage from 'react-native-flash-message';
 import { showMessage } from 'react-native-flash-message';
-
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
@@ -519,17 +518,29 @@ const GPXWaypoints = ({route}) => {
 const TimerComponent = ({ isCycling, elapsedTime }) => {
   if (!isCycling) return null;
 
+  const hours = Math.floor(elapsedTime / 3600);
+  const minutes = Math.floor((elapsedTime % 3600) / 60);
+  const seconds = elapsedTime % 60;
+
+  const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   return (
-    <Text style={{
+    <View style={{
       position: 'absolute',
-      top: 10,
+      top: 50,
       alignSelf: 'center',
-      fontSize: 36,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      padding: 10,
+      borderRadius: 10,
       zIndex: 1,
       maxWidth: 150
     }}>
-      {`${elapsedTime}s`}
-    </Text>
+      <Text style={{
+        fontSize: 36,
+        color: 'white'
+      }}>
+        {formattedTime}
+      </Text>
+    </View>
   );
 };
 
