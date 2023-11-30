@@ -2,10 +2,10 @@
 
 // Event Listener for Import GPX Button
 const importLink = document.querySelector('li a[href="#import"]');
-
 importLink.addEventListener('click', function(e) {
+    
     e.preventDefault(); // Prevent the default behavior of the link
-
+     console.log("Import GPX File link clicked");
     // Update the content in the center area with the "Import GPX File" section content.
     const contentDiv = document.getElementById('background');
     
