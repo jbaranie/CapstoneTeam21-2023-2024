@@ -96,6 +96,7 @@ const GPXFileList = ({ navigation }) => {
   //   }
   // };
 
+  // Asks user to confirm deletion of a single file
   const confirmDeleteFile = (fileName) => {
     Alert.alert(
       "Confirm Delete",
@@ -112,6 +113,7 @@ const GPXFileList = ({ navigation }) => {
     );
   };
   
+  // Deletes a single file
   const deleteFile = async (fileName) => {
     try {
       await FileSystem.deleteAsync(`${FileSystem.documentDirectory}${fileName}`);
@@ -121,6 +123,7 @@ const GPXFileList = ({ navigation }) => {
     }
   };
 
+  // Asks user to confirm deletion of all files
   const deleteAllFiles = async () => {
     Alert.alert(
       "Confirm Delete",
@@ -137,6 +140,7 @@ const GPXFileList = ({ navigation }) => {
     );
   };
   
+  // Deletes all files
   const deleteAllFilesConfirmed = async () => {
     try {
       for (const fileName of gpxFiles) {
