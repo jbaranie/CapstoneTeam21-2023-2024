@@ -3,6 +3,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const multer = require('multer');
 
 const express = require('express');
 const cors = require('cors');
@@ -14,59 +15,32 @@ app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
-const server = http.createServer((req, res) => {
-    if (req.method === 'POST' && req.url === '/upload') {
-        // Handle file upload
-        console.log('POST');
-        console.log(req.method);
-        handleFileUpload(req, res);
-    } else if (req.method === 'GET' && req.url === '/upload') {
-        // Handle GET request for /upload (if needed)
-        console.log('Received GET request:', req.method, req.url);
-        // Respond to GET request as needed    
-    } else {
-        console.log('NOT POST');
-        // Map request URLs to local file paths
-        const filePath = req.url === '/' ? '/index.html' : req.url;
-        const fileFullPath = path.join(__dirname, filePath);
-
-        // Check if the file exists
-        fs.access(fileFullPath, fs.constants.F_OK, (err) => {
-            if (err) {
-                // If the file doesn't exist, return a 404 response
-                res.writeHead(404, { 'Content-Type': 'text/plain' });
-                res.end('404 Not Found');
-            } else {
-                // If the file exists, serve it
-                const fileStream = fs.createReadStream(fileFullPath);
-                res.writeHead(200);
-                fileStream.pipe(res);
-            }
-        });
-    }    
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Specify the directory where uploaded files will be saved
+    cb(null, './uploads/');
+  },
+  filename: function (req, file, cb) {
+    // Generate a unique filename for the uploaded file
+    cb(null, Date.now() + '-' + file.originalname);
+  },
 });
 
-function handleFileUpload(req, res) {
-    const chunks = [];
-    
-    req.on('data', chunk => {
-        chunks.push(chunk);
-    });
+// Create a Multer instance with the storage engine
+const upload = multer({ storage: storage });
 
-    req.on('end', () => {
-        // Here, 'chunks' contains the raw data of the request
-        // For simplicity, write this data to a file
-        const data = Buffer.concat(chunks);
-        fs.writeFile('uploadedfile', data, (err) => {
-            if (err) {
-                res.writeHead(500);
-                res.end('Error uploading the file');
-                return;
-            }
-            // After successfully saving the file
-            res.writeHead(200, { 'Content-Type': 'text/plain' });
-            res.end('File uploaded successfully');
-        });
-    });
-}
+// Configure a route to handle file uploads
+app.post('/upload', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
+
+  // Successfully received and saved the file
+  res.status(200).send('File uploaded successfully.');
+});
+
+// Start the Express server
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
 
