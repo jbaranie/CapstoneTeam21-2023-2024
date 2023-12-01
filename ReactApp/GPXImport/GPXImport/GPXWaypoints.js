@@ -122,6 +122,23 @@ const GPXWaypoints = ({route}) => {
     }
   };
 
+  // Asks user to confirm stopping the route with dialog box
+  const confirmStopRoute = () => {
+    Alert.alert(
+      "Confirm Stop",
+      "Are you sure you want to stop the route?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Route stopping cancelled"),
+          style: "cancel"
+        },
+        { text: "Yes", onPress: () => stopRoute() }
+      ],
+      { cancelable: false }
+    );
+  };
+
   //To Stop Recording a Route
   const stopRoute = async () => {
     try {
@@ -716,5 +733,4 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
     </View>
   );
 };
-
 export default GPXWaypoints;
