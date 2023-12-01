@@ -50,6 +50,7 @@ const GPXWaypoints = ({route}) => {
 
   //Permission states
   const [hasLocationPermission, setHasLocationPermission] = useState(null);
+
   useEffect(() => {
     if (route.params?.gpxFilePath) {
       const filePath = route.params.gpxFilePath;
@@ -68,14 +69,17 @@ const GPXWaypoints = ({route}) => {
     let locationSubscription;
 
     const startLocationTracking = async () => {
-      const locationPermission = await Location.getForegroundPermissionsAsync();
-      setHasLocationPermission(locationPermission.status === "granted");
+      let { status } = await Location.getForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        const response = await Location.requestForegroundPermissionsAsync();
+        status = response.status;
+      }
+      setHasLocationPermission(status === 'granted');
 
-      if (!hasLocationPermission) {
-        //console.error('Permission to access location was denied');
+      if (status !== 'granted') {
+        console.error('Permission to access location was denied');
         return;
       }
-
 
       locationSubscription = await Location.watchPositionAsync(
         {
@@ -91,7 +95,9 @@ const GPXWaypoints = ({route}) => {
             longitudeDelta: 0.0421,
           };
           setUserLocation(userLoc);
-          
+          if (mapRef.current && !userLocationRef.current) { // Check if mapRef is set and if userLocationRef is not set yet
+            mapRef.current.animateToRegion(userLoc, 1000); // Animate to user location on first location update
+          }
         }
       );
     };
