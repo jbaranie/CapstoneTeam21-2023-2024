@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, FlatList } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
@@ -96,6 +96,24 @@ const GPXFileList = ({ navigation }) => {
   //   }
   // };
 
+  // Asks user to confirm deletion of a single file
+  const confirmDeleteFile = (fileName) => {
+    Alert.alert(
+      "Confirm Delete",
+      `Are you sure you want to delete "${fileName}"?`,
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log(`Deletion of ${fileName} cancelled`),
+          style: "cancel"
+        },
+        { text: "Yes", onPress: () => deleteFile(fileName) }
+      ],
+      { cancelable: false }
+    );
+  };
+  
+  // Deletes a single file
   const deleteFile = async (fileName) => {
     try {
       await FileSystem.deleteAsync(`${FileSystem.documentDirectory}${fileName}`);
@@ -105,7 +123,25 @@ const GPXFileList = ({ navigation }) => {
     }
   };
 
+  // Asks user to confirm deletion of all files
   const deleteAllFiles = async () => {
+    Alert.alert(
+      "Confirm Delete",
+      "Are you sure you want to delete all GPX files?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Deletion cancelled"),
+          style: "cancel"
+        },
+        { text: "Yes", onPress: () => deleteAllFilesConfirmed() }
+      ],
+      { cancelable: false }
+    );
+  };
+  
+  // Deletes all files
+  const deleteAllFilesConfirmed = async () => {
     try {
       for (const fileName of gpxFiles) {
         await FileSystem.deleteAsync(`${FileSystem.documentDirectory}${fileName}`);
@@ -115,6 +151,7 @@ const GPXFileList = ({ navigation }) => {
       console.error('Error deleting all GPX files:', error);
     }
   };
+  
 
    // Function that handles file download
    const downloadFile = async (fileName) => {
@@ -150,7 +187,7 @@ const GPXFileList = ({ navigation }) => {
         <Text>{item}</Text>
       </TouchableOpacity>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Button title="Delete" onPress={() => deleteFile(item)} /> 
+        <Button title="Delete" onPress={() => confirmDeleteFile(item)} /> 
         {/*}
         <Button title="Log Content" onPress={() => logGPXContent(item)} />
         */}
@@ -168,7 +205,9 @@ const GPXFileList = ({ navigation }) => {
         keyExtractor={item => item}
       />
        <Button title="Import GPX File" onPress={importGPXFile} />
+       {gpxFiles.length >= 2 && (
       <Button title="Delete All" onPress={deleteAllFiles} />
+       )}
     </View>
   );
 };
