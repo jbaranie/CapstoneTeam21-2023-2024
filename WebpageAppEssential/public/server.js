@@ -62,4 +62,4 @@ app.get('/files', (req, res) => {
 });
 
 // Serve static files from 'uploads' directory
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
