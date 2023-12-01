@@ -76,4 +76,9 @@ export const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
     },
+    loadingText: {
+      marginTop: 20,
+      fontSize: 16,
+      color: 'gray'
+    }
   });

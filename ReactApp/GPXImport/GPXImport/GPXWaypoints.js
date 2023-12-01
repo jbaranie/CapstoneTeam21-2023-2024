@@ -587,6 +587,7 @@ const GPXWaypoints = ({route}) => {
 const LoadingScreen = () => (
   <View style={styles.loadingContainer}>
     <ActivityIndicator size="large" color="#0000ff" />
+    <Text style={styles.loadingText}>Gathering user location data . . .</Text>
   </View>
 );
 
