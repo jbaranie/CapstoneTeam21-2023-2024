@@ -71,32 +71,12 @@
     <!--Post-Load JScripts---------------------------------------------------------------------------------------------------------------->
     <script src="stickyMenu.js"></script> <!--Makes Main Menu Stick to the top when the user scrolls-->
     <script src="importGPXTab.js"></script>
+    <script src="exportGPXTab.js"></script>
     
     <script>
  
 
-    // Export GPX Button Listener
-    const exportLink = document.querySelector('li a[href="#export"]');
-    exportLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        const contentDiv = document.getElementById('background');
-        contentDiv.innerHTML = `<h1>Export GPX File</h1><p>This is the Export GPX File section content.</p><button id="exportGPXButton" class="button">Export GPX File</button>`;
-        const exportGPXButton = document.getElementById("exportGPXButton");
-        exportGPXButton.addEventListener("click", function() {
-            const content = 'This is the content of the file.';
-            const blob = new Blob([content], { type: 'text/plain' });
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            const url = window.URL.createObjectURL(blob);
-            a.href = url;
-            a.download = 'example.txt';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        });
-    });
-
+   
     // Landing Page Button Listener
     const landingLink = document.querySelector('li a[href="#main"]');
     landingLink.addEventListener('click', function(e) {
