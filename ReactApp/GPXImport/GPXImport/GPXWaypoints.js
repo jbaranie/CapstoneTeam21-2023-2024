@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect} from 'react';
-import { View, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity, Text, ActivityIndicator} from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
@@ -8,6 +8,7 @@ import { showMessage } from 'react-native-flash-message';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
+
 import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX} from './GPXManager';
 import { deleteFile } from './GPXFileList';
 
@@ -41,6 +42,7 @@ const GPXWaypoints = ({route}) => {
   //const [locationPerm, setLocationPerm] = useState(false);
   const mapRef = useRef(null);
   const userLocationRef = useRef(userLocation);
+  const [hasAnimatedToUserLocation, setHasAnimatedToUserLocation] = useState(false);
 
   //Active route/nav state
   const [isCycling, setIsCycling] = useState(false);
@@ -51,6 +53,7 @@ const GPXWaypoints = ({route}) => {
 
   //Permission states
   const [hasLocationPermission, setHasLocationPermission] = useState(null);
+  const [isMapReady, setIsMapReady] = useState(false);
 
   useEffect(() => {
     if (route.params?.gpxFilePath) {
@@ -96,9 +99,7 @@ const GPXWaypoints = ({route}) => {
             longitudeDelta: 0.0421,
           };
           setUserLocation(userLoc);
-          if (mapRef.current && !userLocationRef.current) { // Check if mapRef is set and if userLocationRef is not set yet
-            mapRef.current.animateToRegion(userLoc, 1000); // Animate to user location on first location update
-          }
+          setIsMapReady(true);
         }
       );
     };
@@ -112,6 +113,14 @@ const GPXWaypoints = ({route}) => {
     };
   }, []);
 
+  //Animate to the user's location
+  const onMapReady = () => {
+    if (userLocation && mapRef.current && !hasAnimatedToUserLocation) {
+      mapRef.current.animateToRegion(userLocation, 1);
+      setHasAnimatedToUserLocation(true); 
+      setIsMapReady(true);
+    }
+  };
   
   //Start timer function
   const startTimer = () => {
@@ -160,7 +169,7 @@ const GPXWaypoints = ({route}) => {
         if (routes.length === 0 && waypoints.length === 0) {
           // No waypoints or routes to add, delete the file
           deleteFile(currentGPXPath);
-          console.log('No waypoints or routes. File deleted.');
+          //console.log('No waypoints or routes. File deleted.');
 
           showMessage({
             message: "Route Not Saved",
@@ -574,6 +583,13 @@ const GPXWaypoints = ({route}) => {
 
 //Seperated Rendering Components --------------------------------
 
+//Loading Screen Component
+const LoadingScreen = () => (
+  <View style={styles.loadingContainer}>
+    <ActivityIndicator size="large" color="#0000ff" />
+  </View>
+);
+
 //Route Timer Component 
 const TimerComponent = ({ isCycling, elapsedTime }) => {
   if (!isCycling) return null;
@@ -606,8 +622,7 @@ const TimerComponent = ({ isCycling, elapsedTime }) => {
 
 //Main Menu Expanding Button Component
 const SubMenuComponent = ({ isCycling, isMenuOpen, startRoute, importGPXFile, setMenuOpen }) => {
-  if (isCycling) return null;
-
+  if (isCycling || !isMapReady) return null;
   return (
     <View style={styles.buttonContainer}>
       {isMenuOpen && (
@@ -679,6 +694,7 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
     <View style={styles.container}>
       <TimerComponent isCycling={isCycling} elapsedTime={elapsedTime} />
       {/*Map Component. Could not be seperated due to constant refreshing issue*/}
+      {isMapReady ? (
       <MapView
         ref = {mapRef} 
         style={styles.map}
@@ -689,6 +705,7 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
           longitudeDelta: 0.0421,
         }}
         showsUserLocation = {true}
+        onMapReady={onMapReady}
       >
         {routes.length > 0 && (
           <Polyline
@@ -736,6 +753,10 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
           </>
         )}
       </MapView>
+      ) : (
+        <LoadingScreen />
+      )}
+      {/*End of Map Component.*/}
       <SubMenuComponent
         isCycling={isCycling}
         isMenuOpen={isMenuOpen}

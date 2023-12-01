@@ -71,4 +71,9 @@ export const styles = StyleSheet.create({
       bottom: 20,
       alignItems: 'center',
     },
+    loadingContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   });
