@@ -161,6 +161,14 @@ const GPXWaypoints = ({route}) => {
           // No waypoints or routes to add, delete the file
           deleteFile(currentGPXPath);
           console.log('No waypoints or routes. File deleted.');
+
+          showMessage({
+            message: "Route Not Saved",
+            description: "Route wasn't long enough to be saved. Try adding waypoints!",
+            hideOnPress: true,
+            type: "info",
+            duration: 3000 
+          });
         } else {
           // Save the route and waypoints to the current file
           // (Uncomment and implement the logic for saving waypoints and routes)
@@ -611,9 +619,11 @@ const SubMenuComponent = ({ isCycling, isMenuOpen, startRoute, importGPXFile, se
               >
                 <Text style={styles.buttonText}>Start Route</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
-                <Text style={styles.buttonText}>Import GPX File</Text>
-              </TouchableOpacity>
+              {/*
+                <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
+                  <Text style={styles.buttonText}>Import GPX File</Text>
+                </TouchableOpacity>
+              */}
             </View>
         </View>
       )}
@@ -656,7 +666,7 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
 
       <TouchableOpacity 
         style={[styles.customButton, { marginTop: 10, width: '100%'}]} 
-        onPress={stopRoute} 
+        onPress={confirmStopRoute} 
       >
         <Text style={styles.buttonText}>Stop Route</Text>
       </TouchableOpacity>
