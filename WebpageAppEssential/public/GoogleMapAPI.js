@@ -1,4 +1,4 @@
-// main.js
+// GoogleMapAPI.js
 // Loads the Google Map onto the webpage.
 //Coder: Jan Baraniecki
 function initMap() {
