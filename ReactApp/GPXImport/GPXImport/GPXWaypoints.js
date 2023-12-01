@@ -170,52 +170,70 @@ const GPXWaypoints = ({route}) => {
   
  
   const goodMarkerPress = async () => {
-    //console.log('goodMarkerPress called with currentGPXPath:', currentGPXPath);
-    await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3);
-    await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 3);
-    setWaypoints(prevWaypoints => {
-      const newWaypoint = {
-        id: Date.now().toString(), // Generate a unique ID using the current timestamp
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude,
-        name: "Good Waypoint",
-        rating: 3
-      };
-      //console.log('Adding new waypoint:', newWaypoint);
-      return [...prevWaypoints, newWaypoint];
-    });
-
-    showMessage({
-      message: "Good Waypoint Added!",
-      hideOnPress: true,
-      type: "success",
-      duration: 3000 
-    });
+    try {
+      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3);
+      await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 3);
+      setWaypoints(prevWaypoints => {
+        const newWaypoint = {
+          id: Date.now().toString(), // Generate a unique ID using the current timestamp
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude,
+          name: "Good Waypoint",
+          rating: 3
+        };
+        //console.log('Adding new waypoint:', newWaypoint);
+        showMessage({
+          message: "Good Waypoint Added!",
+          hideOnPress: true,
+          type: "success",
+          duration: 3000 
+        });
+        return [...prevWaypoints, newWaypoint];
+      });
+    } catch (err) {
+      showMessage({
+        message: "Could not add new waypoint",
+        description: err.message,
+        hideOnPress: true,
+        type: "error",
+        duration: 3000 
+      });
+    }
   };
   
 
   const badMarkerPress = async () => {
     //console.log('badMarkerPress called with currentGPXPath:', currentGPXPath);
-    await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1);
-    await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 1);
-    setWaypoints(prevWaypoints => {
-      const newWaypoint = {
-        id: Date.now().toString(), // Generate a unique ID using the current timestamp
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude,
-        name: "Bad Waypoint",
-        rating: 1
-      };
-      console.log('Adding new waypoint:', newWaypoint);
-      return [...prevWaypoints, newWaypoint];
-    });
+    try {
+      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1);
+      await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 1);
+      setWaypoints(prevWaypoints => {
+        const newWaypoint = {
+          id: Date.now().toString(), // Generate a unique ID using the current timestamp
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude,
+          name: "Bad Waypoint",
+          rating: 1
+        };
+        console.log('Adding new waypoint:', newWaypoint);
+        return [...prevWaypoints, newWaypoint];
+      });
 
-    showMessage({
-      message: "Bad Waypoint Added!",
-      hideOnPress: true,
-      type: "success",
-      duration: 3000 
-    });
+      showMessage({
+        message: "Bad Waypoint Added!",
+        hideOnPress: true,
+        type: "success",
+        duration: 3000 
+      });
+    } catch (err) {
+      showMessage({
+        message: "Could not add new waypoint",
+        description: err.message,
+        hideOnPress: true,
+        type: "error",
+        duration: 3000 
+      });
+    }
   };
     
   //Importing the GPX File
