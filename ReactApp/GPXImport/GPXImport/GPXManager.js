@@ -4,12 +4,24 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
 
-const GPX_FILE_PATH = `${FileSystem.documentDirectory}myGPXFile.gpx`;
+const GPX_FILE_PATH = `${FileSystem.documentDirectory}mainGPXFile.gpx`;
 const FILE_COUNTER_KEY = 'FILE_COUNTER_KEY';
 
 const getNewGPXFileName = async () => {
-  const fileCounter = await incrementFileCounter();
-  return `File${fileCounter}.gpx`; // Return a unique file name
+
+  const currDate = new Date();
+
+  const fileNameDateTime = currDate.getFullYear() + "-" +
+                           String(currDate.getMonth() + 1).padStart(2, '0') + "-" +
+                           String(currDate.getDate()).padStart(2, '0') + "_" +
+                           String(currDate.getHours()).padStart(2, '0') + "-" +
+                           String(currDate.getMinutes()).padStart(2, '0') + "-" +
+                           String(currDate.getSeconds()).padStart(2, '0');
+
+  //const fileCounter = await incrementFileCounter();
+  //return `File${fileCounter}.gpx`; // Return a unique file name
+
+  return `${fileNameDateTime}.gpx`
 };
 
 const incrementFileCounter = async () => {

@@ -5,6 +5,18 @@ import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
 import * as DocumentPicker from 'expo-document-picker';
 
+// Deletes a single file
+export const deleteFile = async (fileName) => {
+  try {
+    const fullPath = fileName.startsWith('file://') ? fileName : `${FileSystem.documentDirectory}${fileName}`;
+    
+    await FileSystem.deleteAsync(fullPath);
+    //refreshFileList(); // Refresh the list after deleting the file
+  } catch (error) {
+    console.error('Error deleting GPX file:', error);
+  }
+};
+
 const GPXFileList = ({ navigation }) => {
   //File action state
   const [gpxFiles, setGpxFiles] = useState([]);
@@ -106,21 +118,16 @@ const GPXFileList = ({ navigation }) => {
           onPress: () => console.log(`Deletion of ${fileName} cancelled`),
           style: "cancel"
         },
-        { text: "Yes", onPress: () => deleteFile(fileName) }
+        { text: "Yes", onPress: () => {
+          deleteFile(fileName)
+          refreshFileList();} 
+        }
       ],
       { cancelable: false }
     );
   };
   
-  // Deletes a single file
-  const deleteFile = async (fileName) => {
-    try {
-      await FileSystem.deleteAsync(`${FileSystem.documentDirectory}${fileName}`);
-      refreshFileList(); // Refresh the list after deleting the file
-    } catch (error) {
-      console.error('Error deleting GPX file:', error);
-    }
-  };
+  
 
   // Asks user to confirm deletion of all files
   const deleteAllFiles = async () => {

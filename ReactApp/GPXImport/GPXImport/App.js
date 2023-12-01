@@ -14,8 +14,11 @@ export default function App() {
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={GPXWaypoints} />
+        {/*
+        Currently unused features in build
         <Drawer.Screen name="Import Image" component={ImageImportDrawer} />
         <Drawer.Screen name="Camera Waypoint" component={CaptureImageDrawer}/>
+        */}
         <Drawer.Screen name="GPX Files" component={GPXFileList} />
       </Drawer.Navigator>
     </NavigationContainer>
