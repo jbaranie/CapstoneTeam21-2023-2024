@@ -72,12 +72,10 @@ const GPXWaypoints = ({route}) => {
       setHasLocationPermission(locationPermission.status === "granted");
 
       if (!hasLocationPermission) {
-        console.error('Permission to access location was denied');
-        setLocationPerm(false);
+        //console.error('Permission to access location was denied');
         return;
       }
 
-      setLocationPerm(true);
 
       locationSubscription = await Location.watchPositionAsync(
         {
@@ -157,6 +155,13 @@ const GPXWaypoints = ({route}) => {
         setCurrentGPXPath(''); // Reset the current GPX file path
       } else {
         console.error('No GPX file path found when trying to stop route');
+
+        showMessage({
+          message: "Could not save created route to GPX File",
+          hideOnPress: true,
+          type: "error",
+          duration: 3000 
+        });
       }
     } catch (error) {
       console.error('Error in stopRoute:', error);
