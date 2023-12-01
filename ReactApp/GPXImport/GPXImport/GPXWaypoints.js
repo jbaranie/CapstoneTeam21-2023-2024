@@ -9,7 +9,7 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 
-import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX} from './GPXManager';
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX} from './GPXManager';
 import { deleteFile } from './GPXFileList';
 
 import { styles } from './styles';
@@ -214,71 +214,58 @@ const GPXWaypoints = ({route}) => {
   
  
   const goodMarkerPress = async () => {
+    const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
     try {
-      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3);
-      await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 3);
-      setWaypoints(prevWaypoints => {
-        const newWaypoint = {
-          id: Date.now().toString(), // Generate a unique ID using the current timestamp
-          latitude: userLocation.latitude,
-          longitude: userLocation.longitude,
-          name: "Good Waypoint",
-          rating: 3
-        };
-        //console.log('Adding new waypoint:', newWaypoint);
+        await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3, waypointId);
+        await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 3, waypointId);
+        setWaypoints(prevWaypoints => [...prevWaypoints, {
+            id: waypointId,
+            latitude: userLocation.latitude,
+            longitude: userLocation.longitude,
+            name: "Good Waypoint",
+            rating: 3
+        }]);
         showMessage({
-          message: "Good Waypoint Added!",
-          hideOnPress: true,
-          type: "success",
-          duration: 3000 
+            message: "Good Waypoint Added!",
+            type: "success",
+            duration: 3000
         });
-        return [...prevWaypoints, newWaypoint];
-      });
     } catch (err) {
-      showMessage({
-        message: "Could not add new waypoint",
-        description: err.message,
-        hideOnPress: true,
-        type: "error",
-        duration: 3000 
-      });
+        showMessage({
+            message: "Could not add new waypoint",
+            description: err.message,
+            type: "error",
+            duration: 3000
+        });
     }
-  };
-  
+};
 
-  const badMarkerPress = async () => {
-    //console.log('badMarkerPress called with currentGPXPath:', currentGPXPath);
+const badMarkerPress = async () => {
+    const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
     try {
-      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1);
-      await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 1);
-      setWaypoints(prevWaypoints => {
-        const newWaypoint = {
-          id: Date.now().toString(), // Generate a unique ID using the current timestamp
-          latitude: userLocation.latitude,
-          longitude: userLocation.longitude,
-          name: "Bad Waypoint",
-          rating: 1
-        };
-        console.log('Adding new waypoint:', newWaypoint);
-        return [...prevWaypoints, newWaypoint];
-      });
-
-      showMessage({
-        message: "Bad Waypoint Added!",
-        hideOnPress: true,
-        type: "success",
-        duration: 3000 
-      });
+        await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1, waypointId);
+        await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 1, waypointId);
+        setWaypoints(prevWaypoints => [...prevWaypoints, {
+            id: waypointId,
+            latitude: userLocation.latitude,
+            longitude: userLocation.longitude,
+            name: "Bad Waypoint",
+            rating: 1
+        }]);
+        showMessage({
+            message: "Bad Waypoint Added!",
+            type: "success",
+            duration: 3000
+        });
     } catch (err) {
-      showMessage({
-        message: "Could not add new waypoint",
-        description: err.message,
-        hideOnPress: true,
-        type: "error",
-        duration: 3000 
-      });
+        showMessage({
+            message: "Could not add new waypoint",
+            description: err.message,
+            type: "error",
+            duration: 3000
+        });
     }
-  };
+};
     
   //Importing the GPX File
   const importGPXFile = async () => {
@@ -561,6 +548,32 @@ const GPXWaypoints = ({route}) => {
     }
   };
 
+
+  const handleWaypointDelete = async (waypointId) => {
+    Alert.alert(
+      "Delete Waypoint",
+      "Are you sure you want to delete this waypoint?",
+      [
+        { text: "Cancel", style: "cancel" },
+        { 
+          text: "Yes", 
+          onPress: async () => {
+            setWaypoints(prevWaypoints => prevWaypoints.filter(wp => wp.id !== waypointId));
+            console.log("Waypoint ID to be deleted: " + waypointId);
+            try {
+              await deleteWaypointFromGPX(GPX_FILE_PATH, waypointId);
+              await deleteWaypointFromGPX(currentGPXPath, waypointId);
+              console.log("Waypoint deleted: " + waypointId);
+            } catch (error) {
+              console.error("Error deleting the waypoint: " + waypointId + ": " + error);
+            }
+          }
+        }
+      ],
+      { cancelable: true }
+    );
+  };
+
   useEffect(() => {
     let interval;
     if (isCycling) {
@@ -733,6 +746,7 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
                     coordinate={{ latitude: waypoint.latitude, longitude: waypoint.longitude }}
                     title={waypoint.name}
                     pinColor={pinColor}
+                    onPress={() => handleWaypointDelete(waypoint.id)}
                 />
             );
         })}
