@@ -29,6 +29,7 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
 };
 
 const GPXWaypoints = ({route}) => {
+  //Location and map state/refs
   const [waypoints, setWaypoints] = useState([]);
   const [imported, setImported] = useState(false);
   const [routes, setRoutes] = useState([]);
@@ -36,17 +37,19 @@ const GPXWaypoints = ({route}) => {
   const [userLocation, setUserLocation] = useState(null);
   const [mapRegion, setMapRegion] = useState(null);
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const [locationPerm, setLocationPerm] = useState(false);
+  //const [locationPerm, setLocationPerm] = useState(false);
   const mapRef = useRef(null);
   const userLocationRef = useRef(userLocation);
 
+  //Active route/nav state
   const [isCycling, setIsCycling] = useState(false);
   const [elapsedTime, setElapsedTime] =useState(0);
   const timerRef = useRef(null);
   const [currentGPXPath, setCurrentGPXPath] = useState('');
   const navigation = useNavigation();
 
-  
+  //Permission states
+  const [hasLocationPermission, setHasLocationPermission] = useState(null);
   useEffect(() => {
     if (route.params?.gpxFilePath) {
       const filePath = route.params.gpxFilePath;
@@ -59,15 +62,16 @@ const GPXWaypoints = ({route}) => {
   useEffect(() => {
     userLocationRef.current = userLocation; 
   }, [userLocation]);
-
-
-  //Update the user location oin real-time
+  
+  
   useEffect(() => {
     let locationSubscription;
 
     const startLocationTracking = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
+      const locationPermission = await Location.getForegroundPermissionsAsync();
+      setHasLocationPermission(locationPermission.status === "granted");
+
+      if (!hasLocationPermission) {
         console.error('Permission to access location was denied');
         setLocationPerm(false);
         return;
@@ -208,8 +212,6 @@ const GPXWaypoints = ({route}) => {
       duration: 3000 
     });
   };
-  
-
     
   //Importing the GPX File
   const importGPXFile = async () => {
@@ -349,7 +351,7 @@ const GPXWaypoints = ({route}) => {
     setWaypoints([]);
     
     //Check if the user has location permissions.
-    if(!locationPerm){
+    if(!hasLocationPermission){
       Alert.alert(
         "Location Permission Required",
         "You do not have the proper location permissions set. Please check your settings.",
