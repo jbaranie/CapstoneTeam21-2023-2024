@@ -7,6 +7,7 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX} from './GPXManager';
+import { deleteFile } from './GPXFileList';
 
 //Check how far the user is from a route start.
 //Uses Haversine Formula
@@ -141,26 +142,28 @@ const GPXWaypoints = ({route}) => {
   const stopRoute = async () => {
     try {
       setIsCycling(false);
-      stopTimer(); 
+      stopTimer();
   
       if (currentGPXPath) {
         console.log('Stopping route, current GPX path:', currentGPXPath);
         console.log('Routes to be saved:', routes);
         console.log('Waypoints to be saved:', waypoints);
   
-        // Save the route and waypoints to the current file
-
-        // for (const waypoint of waypoints) {
-        //   console.log('Saving waypoint:', waypoint);
-        //   //await addWaypointToGPX(currentGPXPath, waypoint.latitude, waypoint.longitude, waypoint.rating);
-        // }
-        
-        // Log the content of the GPX file
-        const fileContent = await FileSystem.readAsStringAsync(currentGPXPath);
-        console.log('GPX File Content:', fileContent);
-        
-        // Refresh the GPX file list to include the new file
-        navigation.navigate('GPX Files', { refreshFileList: true });
+        if (routes.length === 0 && waypoints.length === 0) {
+          // No waypoints or routes to add, delete the file
+          deleteFile(currentGPXPath);
+          console.log('No waypoints or routes. File deleted.');
+        } else {
+          // Save the route and waypoints to the current file
+          // (Uncomment and implement the logic for saving waypoints and routes)
+  
+          // Log the content of the GPX file
+          const fileContent = await FileSystem.readAsStringAsync(currentGPXPath);
+          console.log('GPX File Content:', fileContent);
+  
+          // Refresh the GPX file list to include the new file
+          navigation.navigate('GPX Files', { refreshFileList: true });
+        }
         setCurrentGPXPath(''); // Reset the current GPX file path
       } else {
         console.error('No GPX file path found when trying to stop route');
@@ -169,6 +172,7 @@ const GPXWaypoints = ({route}) => {
       console.error('Error in stopRoute:', error);
     }
   };
+  
   
  
   const goodMarkerPress = async () => {
@@ -555,9 +559,11 @@ return (
               >
                 <Text style={styles.buttonText}>Start Route</Text>
               </TouchableOpacity>
+              {/*
               <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
                 <Text style={styles.buttonText}>Import GPX File</Text>
               </TouchableOpacity>
+              */}
             </View>
           )
         )}
