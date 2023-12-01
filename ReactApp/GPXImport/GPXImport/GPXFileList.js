@@ -15,13 +15,13 @@ const GPXFileList = ({ navigation }) => {
     try {
       // Open the document picker for .gpx files
       const result = await DocumentPicker.getDocumentAsync({ type: '*/*' }); // Change the type to 'application/gpx+xml' to only allow GPX files
-      console.log('Document Picker Result:', result);
+      //console.log('Document Picker Result:', result);
   
       // Check if a file was selected and not canceled
       if (!result.canceled && result.assets && result.assets.length > 0) {
         // Extract the file URI from the first asset
         const fileUri = result.assets[0].uri;
-        console.log('GPX File URI:', fileUri);
+        //console.log('GPX File URI:', fileUri);
   
         // Copy the file from the temporary cache to the app's document directory
         const newFileUri = `${FileSystem.documentDirectory}${result.assets[0].name}`;
@@ -44,7 +44,7 @@ const GPXFileList = ({ navigation }) => {
 
   useEffect(() => {
     const fetchFiles = async () => {
-      console.log('Fetching files...');
+      //console.log('Fetching files...');
       let files;
       try {
         files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
@@ -54,9 +54,9 @@ const GPXFileList = ({ navigation }) => {
         console.error('Error reading GPX files:', error);
       }
       if (files) {
-        console.log('Files fetched:', files);
-      } 
-    };
+      //console.log('Files fetched:', files);
+    } 
+  };
     fetchFiles();
   }, []);
 
@@ -64,7 +64,7 @@ const GPXFileList = ({ navigation }) => {
     try {
       const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
       const filteredFiles = files.filter(file => file.endsWith('.gpx'));
-      console.log('Refreshing file list, files to set:', filteredFiles);
+      //console.log('Refreshing file list, files to set:', filteredFiles);
       setGpxFiles(filteredFiles);
     } catch (error) {
       console.error('Error reading GPX files:', error);
@@ -73,7 +73,7 @@ const GPXFileList = ({ navigation }) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      console.log('Focus event triggered');
+      //console.log('Focus event triggered');
       refreshFileList();
     });
   

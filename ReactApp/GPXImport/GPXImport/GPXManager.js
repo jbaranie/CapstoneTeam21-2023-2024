@@ -38,7 +38,7 @@ const createInitGPX = async () => {
 };
 
 const createNewGPXFile = async () => {
-  console.log('Creating new GPX file...');
+  //console.log('Creating new GPX file...');
   try {
     const newFileName = await getNewGPXFileName();
     const newFilePath = `${FileSystem.documentDirectory}${newFileName}`;
@@ -54,11 +54,11 @@ const createNewGPXFile = async () => {
 };
 
 const addWaypointToGPX = async (filePath, latitude, longitude, rating) => {
-  console.log(`Adding waypoint to GPX file: ${filePath}`);
+  //console.log(`Adding waypoint to GPX file: ${filePath}`);
   try {
-    console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
+    //console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
     let fileContent = await FileSystem.readAsStringAsync(filePath);
-
+    
     const waypoint = `<wpt lat="${latitude}" lon="${longitude}">
       <name>Waypoint</name>
       <rating>${rating}</rating>
@@ -67,7 +67,7 @@ const addWaypointToGPX = async (filePath, latitude, longitude, rating) => {
     fileContent = fileContent.replace("</gpx>", `${waypoint}\n</gpx>`);
 
     await FileSystem.writeAsStringAsync(filePath, fileContent);
-    console.log('Waypoint added to GPX file at:', filePath); // Log success
+    //console.log('Waypoint added to GPX file at:', filePath); // Log success
   } catch (error) {
     console.error(`Error adding waypoint to GPX file at ${filePath}:`, error);
     throw error; // Re-throw the error to handle it in the calling function
@@ -77,7 +77,7 @@ const addWaypointToGPX = async (filePath, latitude, longitude, rating) => {
 
 
 const addRouteToGPX = async (filePath) => {
-  console.log(`Creating new route in GPX file: ${filePath}`);
+  //console.log(`Creating new route in GPX file: ${filePath}`);
   //uuid is useid to create a unique ID
   const routeId = uuidv4();
   try {
@@ -95,7 +95,7 @@ const addRouteToGPX = async (filePath) => {
 
 
 const addRoutePointToGPX = async (filePath, routeId, routePoint) => {
-  console.log(`Adding point to route ID ${routeId} in GPX file: ${filePath}`);
+  //console.log(`Adding point to route ID ${routeId} in GPX file: ${filePath}`);
   try {
     let fileContent = await FileSystem.readAsStringAsync(filePath);
     
