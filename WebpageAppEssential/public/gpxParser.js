@@ -1,5 +1,6 @@
 // gpxParser.js
-
+// A basic gpx parser to get started in reading gpx files returning data that can go into google maps.
+//Coder: Jan Baraniecki
 function parseGPX(gpxData, callback) {
     var parser = new DOMParser();
     var xmlDoc = parser.parseFromString(gpxData, "text/xml");

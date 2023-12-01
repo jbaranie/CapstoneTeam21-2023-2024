@@ -1,4 +1,8 @@
 // server.js
+//This is Nodejs Custom Server. 
+//It handles gpx uploads using a predefined variable named port.
+//Jan Baraniecki
+
 
 const http = require('http');
 const fs = require('fs');
@@ -19,7 +23,7 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     // Generate a unique filename for the uploaded file
-    cb(null, Date.now() + '-' + file.originalname);
+    cb(null, file.originalname);
   },
 });
 

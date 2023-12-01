@@ -1,5 +1,6 @@
 // main.js
-
+// Loads the Google Map onto the webpage.
+//Coder: Jan Baraniecki
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 8,

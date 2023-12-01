@@ -1,10 +1,23 @@
-//gpxImport.js
-
+//importGPXTab.js
+//This file contains code for the area in index.html when the user hits "Import GPX"
+//It also cotains the code to import a gpx file.
+//Coder: Jan Baraniecki
 // Event Listener for Import GPX Button from the Main Menu
 const importLink = document.querySelector('li a[href="#import"]');
 importLink.addEventListener('click', function(e) {
     
     e.preventDefault(); // Prevent the default behavior of the link
+    // Get the current IP address from the browser's location
+    //GLOBAL VARIABLES
+    const port = 4000; // Port to connect to Nodejs
+    
+    //Variablees to construct WebUrl for Nodejs- To upload GPX Files
+    const currentLocation = window.location;
+    const ipAddress = currentLocation.hostname; // Extract the IP address
+    // Construct the dynamic URL for the server endpoint with port 4000
+    const serverURL = `http://${ipAddress}:${port}/upload`;
+    
+    
     //console.log("Import GPX File link clicked");
     // Update the content in the center area with the "Import GPX File" section content.
     const contentDiv = document.getElementById('background');
@@ -37,7 +50,7 @@ importLink.addEventListener('click', function(e) {
                 formData.append('gpxFile', file);
 
                 // Send the file to the server
-                fetch('http://52.15.57.219:4000/upload', {
+                fetch(serverURL, {
                     method: 'POST',
                     body: formData,
                 })

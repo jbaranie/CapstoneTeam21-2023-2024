@@ -1,4 +1,7 @@
  // stickyMenu.js
+ // Visual aethetics code for the top menu in index.html to always be visible up top.
+ //Coder: Jan Baraniecki
+ 
  //Purpose is to make the Main Menu stay in the top left position as the user scrolls up and down.
  function makeStickyMenu() 
  {

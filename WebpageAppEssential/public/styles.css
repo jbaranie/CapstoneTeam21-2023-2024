@@ -1,3 +1,6 @@
+ /*styles.css*/
+ /*Coder: Jan Baraniecki*/
+ 
  /* CSS styles */
         body {
             background-color: #3d7537; /* Dark green background */
@@ -51,7 +54,6 @@
             padding: 20px;
         }
 
-        /* Add more custom styles here */
 
         /* Modern button style */
         .button {
@@ -85,7 +87,7 @@
             width: 70%; /* Even narrower width */
             margin: 0 auto; /* Centered */
         }
-        
+/*Style for the Google Map Size*/
         #map {
           height: 800px;
           width: 100%;
