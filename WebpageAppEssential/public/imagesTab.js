@@ -80,7 +80,7 @@ imageLink.addEventListener('click', function(e) {
     // Event listener for the Process Image button
     // Remove old event listeners from importImageButton and attach new ones
     const oldImportImageButton = document.getElementById("importImageButton");
-    const newImportImageButton = oldImportImageButton.cloneNode(false);
+    const newImportImageButton = oldImportImageButton.cloneNode(true);
     oldImportImageButton.parentNode.replaceChild(newImportImageButton, oldImportImageButton);
         newImportImageButton.addEventListener("click", function() {
             // Clear error screen
