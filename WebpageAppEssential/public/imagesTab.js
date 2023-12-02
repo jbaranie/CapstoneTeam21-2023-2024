@@ -30,21 +30,13 @@ imageLink.addEventListener('click', function(e) {
         <button id="importImageButton" class="button">Process Image</button>
         <div id="uploadImageStatus"></div>
     `;
-
-
-    // Event listener for the Process Image button
-        const importImageButton = document.getElementById("importImageButton");
-        importImageButton.addEventListener("click", function() {
-            // Clear error screen
-            document.getElementById('uploadImageStatus').innerHTML = '';
-            // Trigger file input click to select an image file
-            document.getElementById('fileImageInput').click();
-    });
-});
-
-// Event listener for the file input change
-    const fileImageInput = document.getElementById('fileImageInput');
-    fileImageInput.addEventListener('change', function(event) {
+    
+    // Remove old event listeners from fileImageInput and attach new ones
+    const oldFileImageInput = document.getElementById('fileImageInput');
+    const newFileImageInput = oldFileImageInput.cloneNode(true);
+    oldFileImageInput.parentNode.replaceChild(newFileImageInput, oldFileImageInput);
+    
+    newfileImageInput.addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file) {
             // Create FormData and append the file
@@ -83,4 +75,17 @@ imageLink.addEventListener('click', function(e) {
             });
           
         }
-    });     
+    }); 
+
+    // Event listener for the Process Image button
+    // Remove old event listeners from importImageButton and attach new ones
+    const oldImportImageButton = document.getElementById("importImageButton");
+    const newImportImageButton = oldImportImageButton.cloneNode(false);
+    oldImportImageButton.parentNode.replaceChild(newImportImageButton, oldImportImageButton);
+        newImportImageButton.addEventListener("click", function() {
+            // Clear error screen
+            document.getElementById('uploadImageStatus').innerHTML = '';
+            // Trigger file input click to select an image file
+           newFileImageInput.click();
+    });
+});
