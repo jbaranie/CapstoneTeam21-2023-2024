@@ -3,10 +3,9 @@
 //It also cotains the code to import an jpeg file.
 //Coder: Jan Baraniecki
 
-// Event Listener for Import GPX Button from the Main Menu
+// Event Listener for Import Image Button from the Main Menu
 const importLink = document.querySelector('li a[href="#images"]');
 importLink.addEventListener('click', function(e) {
-    
     e.preventDefault(); // Prevent the default behavior of the link
     // Get the current IP address from the browser's location
     //GLOBAL VARIABLES
@@ -24,12 +23,12 @@ importLink.addEventListener('click', function(e) {
     const contentDiv = document.getElementById('background');
     
     //Generate HTML code that goes in the background container when "Import Gpx File" from MainMenu is Clicked.
-    contentDiv.innerHTML = `
+        contentDiv.innerHTML = `
         <h1>Import Image File</h1>
         <p>This is the Image section content.</p>
+        <input type="file" id="fileImageInput" accept="image/jpeg" style="display: none;">
         <button id="importImageButton" class="button">Process Image</button>
         <div id="uploadImageStatus"></div>
-
     `;
 
     // Event listener for the Process Image button in the background container.
