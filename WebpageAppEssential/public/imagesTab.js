@@ -70,7 +70,7 @@ imageLink.addEventListener('click', function(e) {
                 // Update UI with error message
                 document.getElementById('uploadImageStatus').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
             });
-            document.getElementById('fileImageInput').value = '';
+          
         }
     }, { once: true }); // Ensure the event listener is added only once
 
