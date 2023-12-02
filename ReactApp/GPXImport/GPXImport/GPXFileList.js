@@ -5,7 +5,6 @@ import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
 import * as DocumentPicker from 'expo-document-picker';
 
-
 // Deletes a single file
 export const deleteFile = async (fileName) => {
   try {
@@ -19,19 +18,22 @@ export const deleteFile = async (fileName) => {
 };
 
 const GPXFileList = ({ navigation }) => {
+  //File action state
   const [gpxFiles, setGpxFiles] = useState([]);
+  //Media library state
+  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
 
   const importGPXFile = async () => {
     try {
       // Open the document picker for .gpx files
       const result = await DocumentPicker.getDocumentAsync({ type: '*/*' }); // Change the type to 'application/gpx+xml' to only allow GPX files
-      console.log('Document Picker Result:', result);
+      //console.log('Document Picker Result:', result);
   
       // Check if a file was selected and not canceled
       if (!result.canceled && result.assets && result.assets.length > 0) {
         // Extract the file URI from the first asset
         const fileUri = result.assets[0].uri;
-        console.log('GPX File URI:', fileUri);
+        //console.log('GPX File URI:', fileUri);
   
         // Copy the file from the temporary cache to the app's document directory
         const newFileUri = `${FileSystem.documentDirectory}${result.assets[0].name}`;
@@ -51,12 +53,10 @@ const GPXFileList = ({ navigation }) => {
       console.error('Error importing GPX file:', error);
     }
   };
-  
-  
 
   useEffect(() => {
     const fetchFiles = async () => {
-      console.log('Fetching files...');
+      //console.log('Fetching files...');
       let files;
       try {
         files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
@@ -66,10 +66,9 @@ const GPXFileList = ({ navigation }) => {
         console.error('Error reading GPX files:', error);
       }
       if (files) {
-      console.log('Files fetched:', files);
+      //console.log('Files fetched:', files);
     } 
   };
-
     fetchFiles();
   }, []);
 
@@ -77,7 +76,7 @@ const GPXFileList = ({ navigation }) => {
     try {
       const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
       const filteredFiles = files.filter(file => file.endsWith('.gpx'));
-      console.log('Refreshing file list, files to set:', filteredFiles);
+      //console.log('Refreshing file list, files to set:', filteredFiles);
       setGpxFiles(filteredFiles);
     } catch (error) {
       console.error('Error reading GPX files:', error);
@@ -86,7 +85,7 @@ const GPXFileList = ({ navigation }) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      console.log('Focus event triggered');
+      //console.log('Focus event triggered');
       refreshFileList();
     });
   
@@ -162,11 +161,12 @@ const GPXFileList = ({ navigation }) => {
 
    // Function that handles file download
    const downloadFile = async (fileName) => {
+    // Request permissions to access the media library
+    const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
+    setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
     try {
-      // Request permissions to access the media library
-      const permissions = await MediaLibrary.requestPermissionsAsync();
-      if (permissions.status !== 'granted') {
-        alert('You need to grant storage permissions to download files.');
+      if (!hasMediaLibraryPermission) {
+        alert('You need to grant media library permissions to download files.');
         return;
       }
   
