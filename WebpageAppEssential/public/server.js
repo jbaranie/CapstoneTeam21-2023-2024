@@ -62,7 +62,8 @@ app.post('/uploadImage', uploadImage.single('jpegFile'), (req, res) => {
   }
 
   // Successfully received and saved the file
-  res.status(200).send('File uploaded successfully.');
+  //res.status(200).send('File uploaded successfully.');
+  //Send back image link//Can only send on response at a time.
   const imageUrl = `http://${req.hostname}:${port}/uploads/images/${req.file.filename}`;
   res.json({ imageUrl: imageUrl });
 });
