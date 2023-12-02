@@ -31,47 +31,44 @@ imageLink.addEventListener('click', function(e) {
         <div id="uploadImageStatus"></div>
     `;
 
-    // Event listener for the Process Image button in the background container.
+    // Event listener for the file input change
+    const fileImageInput = document.getElementById('fileImageInput');
+    fileImageInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            // Create FormData and append the file
+            const formData = new FormData();
+            formData.append('jpegFile', file);
+
+            // Send the file to the server
+            fetch(serverURL, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if(response.ok) {
+                    return response.text(); // Assuming the server sends a text response
+                } else {
+                    throw new Error('Upload failed');
+                }
+            })
+            .then(data => {
+                // Update UI with success message
+                document.getElementById('uploadImageStatus').innerHTML = `<p style="color: green;">Success: ${data}</p>`;
+            })
+            .catch(error => {
+                // Update UI with error message
+                document.getElementById('uploadImageStatus').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            });
+        }
+    }, { once: true }); // Ensure the event listener is added only once
+
+    // Event listener for the Process Image button
     const importImageButton = document.getElementById("importImageButton");
     importImageButton.addEventListener("click", function() {
-        // Clear error Screen
+        // Clear error screen
         document.getElementById('uploadImageStatus').innerHTML = '';
-        
-        // Trigger file input click to select Image file
-        const fileImageInput = document.getElementById('fileImageInput');
+        // Trigger file input click to select an image file
         fileImageInput.click();
-
-        // Add change event listener to the file input
-        fileImageInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                // Create FormData and append the file
-                const formData = new FormData();
-                formData.append('jpegFile', file);
-
-                // Send the file to the server
-                fetch(serverURL, {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => {
-                    if(response.ok) {
-                        return response.text(); // Assuming the server sends a text response
-                    } else {
-                        // If server response is not OK, throw an error
-                        console.log(response.text());
-                        throw new Error('Upload failed');
-                    }
-                })
-                .then(data => {
-                    // Update UI with success message
-                    document.getElementById('uploadStatus').innerHTML = `<p style="color: green;">Success: ${data}</p>`;
-                })
-                .catch(error => {
-                    // Update UI with error message
-                    document.getElementById('uploadStatus').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
-                });
-            }
-        }, { once: true }); // This ensures the event listener is added only once
     });
 });
