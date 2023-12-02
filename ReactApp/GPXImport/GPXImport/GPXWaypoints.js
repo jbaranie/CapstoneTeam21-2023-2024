@@ -550,6 +550,7 @@ const badMarkerPress = async () => {
 
 
   const handleWaypointDelete = async (waypointId) => {
+    if(!isCycling) return;
     Alert.alert(
       "Delete Waypoint",
       "Are you sure you want to delete this waypoint?",
