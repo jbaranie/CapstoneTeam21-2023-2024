@@ -31,7 +31,18 @@ imageLink.addEventListener('click', function(e) {
         <div id="uploadImageStatus"></div>
     `;
 
-    // Event listener for the file input change
+
+    // Event listener for the Process Image button
+        const importImageButton = document.getElementById("importImageButton");
+        importImageButton.addEventListener("click", function() {
+            // Clear error screen
+            document.getElementById('uploadImageStatus').innerHTML = '';
+            // Trigger file input click to select an image file
+            document.getElementById('fileImageInput').click();
+    });
+});
+
+// Event listener for the file input change
     const fileImageInput = document.getElementById('fileImageInput');
     fileImageInput.addEventListener('change', function(event) {
         const file = event.target.files[0];
@@ -72,14 +83,4 @@ imageLink.addEventListener('click', function(e) {
             });
           
         }
-    }, { once: true }); // Ensure the event listener is added only once
-
-    // Event listener for the Process Image button
-        const importImageButton = document.getElementById("importImageButton");
-        importImageButton.addEventListener("click", function() {
-            // Clear error screen
-            document.getElementById('uploadImageStatus').innerHTML = '';
-            // Trigger file input click to select an image file
-            fileImageInput.click();
-    });
-});
+    });     
