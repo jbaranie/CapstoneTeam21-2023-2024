@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<!--index.html-->
+<!--Is the Main Webagepage the user goes to. This is the starting file.-->
+<!--Coder: Jan Baraniecki -->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cycling Page</title>
+    
+    <!--Pulls Styles for Html Page-->
+    <link rel="stylesheet" href="styles.css">
+    
+
+</head>
+
+<body>
+    <!--Background Declarations-->
+    <input type="file" accept=".gpx" id="fileInput" style="display: none;">
+    
+    <!--Pre-Load JScripts-->
+    <script src="gpxParser.js"></script>
+    
+    
+    <!--Sets up the Main Menu Bar with Styles from styles.cc------------------------------------------------------------------------------->
+    <div id="menu">
+        <!--Main Title In Webpage-->
+        <h2>The Experimental Route App</h2>
+        <ul>
+            <li id="main-page-link"><a href="#main">Landing Page</a></li>
+            <li><a href="#modify">Modify GPX File</a></li>
+            <li><a href="#import">Import GPX File</a></li>
+            <li><a href="#export">Export GPX File</a></li>
+            <li><a href="#routes">View Routes</a></li>
+            <li><a href="#images">View Images</a></li>
+            <li><a href="#highlights">View Highlights</a></li>
+            <li><a href="#about">About Page</a></li>
+        </ul>
+    </div>
+
+    <!--Region Directly Below the Menu Bar------------------------------------------------------------------------------------------------->
+    <div id="content">
+        <!-- Landing Page Content -->
+        <section id="main">
+            <div id="background">
+                <h1>A New Experimental Route App</h1>
+                <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p>
+                
+                 <!-- Google Maps API is Loaded into HTML Landing Page-->
+                <div id="map" style="height: 500px;"></div> <!-- Set a height for the map container -->
+                <script async defer
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0&callback=initMap">
+                </script>    
+                <script src="GoogleMapAPI.js"></script>
+            
+            </div>
+        </section>
+
+    </div>
+    
+    <!-- Border To Let Tester Know Everything below is a Prototype testing zone.--------------------------------------------------------->
+    <div id="reactEntryBorder">
+      <h3 style="color: white;">Temporary Container to Test React Code </h3>
+    </div>
+    
+    <!-- Entry point for React to render React things, not used atm.  This must be included to avoid bugs. Ideally All coding below is using Reactjs with reactEntry div-->
+    <div id="reactEntry">
+    </div>
+
+    <!--Post-Load JScripts---------------------------------------------------------------------------------------------------------------->
+    <script src="stickyMenu.js"></script> <!--Makes Main Menu Stick to the top when the user scrolls-->
+    <script src="importGPXTab.js"></script>
+    <script src="exportGPXTab.js"></script>
+    
+    <script>
+ 
+
+   
+    // Landing Page Button Listener
+    const landingLink = document.querySelector('li a[href="#main"]');
+    landingLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        const contentDiv = document.getElementById('background');
+        contentDiv.innerHTML = `<h1>A New Experimental Route App</h1><p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p><div id="map" style="height: 500px;"></div>`;
+        function loadScript(src, callback) {
+            let script = document.createElement('script');
+            script.src = src;
+            script.onload = callback;
+            document.head.appendChild(script);
+        }
+        loadScript("gpxParser.js", function() { console.log("gpxParser.js loaded"); });
+        loadScript("GoogleMapAPI.js", function() { console.log("GoogleMapAPI.js loaded"); });
+        loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0&callback=initMap", function() { console.log("Google Maps API loaded"); });
+    });
+
+    // Reload Function
+    window.onload = function() {
+        function setAppTitleMargin() {
+            const appTitle = document.getElementById("menu").getElementsByTagName("h2")[0];
+            const mainPageLink = document.getElementById("main-page-link");
+            if (appTitle && mainPageLink) {
+                const mainPageLinkRect = mainPageLink.getBoundingClientRect();
+                appTitle.style.marginLeft = mainPageLinkRect.left + "px";
+            }
+        }
+        setAppTitleMargin();
+        window.onresize = setAppTitleMargin;
+    };
+</script>
+</body>
+</html>
