@@ -1,26 +1,29 @@
-// imagesTab.js
-// This file contains code for the area in index.html when the user hits "Images"
-// It also contains the code to import a JPEG file.
-// Coder: Jan Baraniecki
+//imagesTab.js
+//This file contains code for the area in index.html when the user hits "Images"
+//It also cotains the code to import an jpeg file.
+//Coder: Jan Baraniecki
 
 // Event Listener for Import Image Button from the Main Menu
 const imageLink = document.querySelector('li a[href="#images"]');
 imageLink.addEventListener('click', function(e) {
     e.preventDefault(); // Prevent the default behavior of the link
-
     // Get the current IP address from the browser's location
-    // GLOBAL VARIABLES
+    //GLOBAL VARIABLES
     const port = 4000; // Port to connect to Nodejs
-
-    // Variables to construct URL for Nodejs - To upload image Files
+    
+    //Variablees to construct WebUrl for Nodejs- To upload image Files
     const currentLocation = window.location;
     const ipAddress = currentLocation.hostname; // Extract the IP address
     // Construct the dynamic URL for the server endpoint with port 4000
     const serverURL = `http://${ipAddress}:${port}/uploadImage`;
-
-    // Update the content in the center area with the "Import Image File" section content.
+    
+    
+    //console.log("Import GPX File link clicked");
+    // Update the content in the center area with the "Import GPX File" section content.
     const contentDiv = document.getElementById('background');
-    contentDiv.innerHTML = `
+    
+    //Generate HTML code that goes in the background container when "Import Gpx File" from MainMenu is Clicked.
+        contentDiv.innerHTML = `
         <h1>Import Image File</h1>
         <p>This is the Image section content.</p>
         <input type="file" id="fileImageInput" accept="image/jpeg" style="display: none;">
@@ -28,18 +31,9 @@ imageLink.addEventListener('click', function(e) {
         <div id="uploadImageStatus"></div>
     `;
 
-    // Set up event listener for the Process Image button
-    document.getElementById("importImageButton").addEventListener("click", function() {
-        // Clear error screen
-        document.getElementById('uploadImageStatus').innerHTML = '';
-        // Trigger file input click to select an image file
-        document.getElementById('fileImageInput').click();
-    });
-});
-
-// Set up event listener for the file input change outside of the click handler
-document.addEventListener('change', function(event) {
-    if (event.target && event.target.id === 'fileImageInput') {
+    // Event listener for the file input change
+    const fileImageInput = document.getElementById('fileImageInput');
+    fileImageInput.addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file) {
             // Create FormData and append the file
@@ -47,7 +41,7 @@ document.addEventListener('change', function(event) {
             formData.append('jpegFile', file);
 
             // Send the file to the server
-            fetch(serverURL, {
+           fetch(serverURL, {
                 method: 'POST',
                 body: formData,
             })
@@ -77,5 +71,15 @@ document.addEventListener('change', function(event) {
             });
             document.getElementById('fileImageInput').value = '';
         }
-    }
+    }, { once: true }); // Ensure the event listener is added only once
+
+    // Event listener for the Process Image button
+    
+});
+const importImageButton = document.getElementById("importImageButton");
+    importImageButton.addEventListener("click", function() {
+        // Clear error screen
+        document.getElementById('uploadImageStatus').innerHTML = '';
+        // Trigger file input click to select an image file
+        fileImageInput.click();
 });
