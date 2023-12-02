@@ -55,6 +55,7 @@ imageLink.addEventListener('click', function(e) {
             .then(data => {
                 // Update UI with success message
                 const uploadStatusDiv = document.getElementById('uploadImageStatus');
+                uploadStatusDiv.innerHTML = '';
                 uploadStatusDiv.innerHTML = `<p style="color: green;">Success: File uploaded successfully.</p>`;
 
                 // Display the uploaded image
