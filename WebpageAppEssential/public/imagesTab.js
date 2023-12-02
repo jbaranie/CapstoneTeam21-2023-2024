@@ -36,7 +36,7 @@ imageLink.addEventListener('click', function(e) {
     const newFileImageInput = oldFileImageInput.cloneNode(true);
     oldFileImageInput.parentNode.replaceChild(newFileImageInput, oldFileImageInput);
     
-    newfileImageInput.addEventListener('change', function(event) {
+    newFileImageInput.addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file) {
             // Create FormData and append the file
