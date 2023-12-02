@@ -64,12 +64,13 @@ imageLink.addEventListener('click', function(e) {
                     img.alt = 'Uploaded Image';
                     uploadStatusDiv.appendChild(img);
                 }
+                document.getElementById('fileImageInput').value = '';
             })
             .catch(error => {
                 // Update UI with error message
                 document.getElementById('uploadImageStatus').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
             });
-            document.getElementById('fileImageInput').value = '';
+            
         }
     }, { once: true }); // Ensure the event listener is added only once
 
