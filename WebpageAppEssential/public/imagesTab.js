@@ -75,12 +75,11 @@ imageLink.addEventListener('click', function(e) {
     }, { once: true }); // Ensure the event listener is added only once
 
     // Event listener for the Process Image button
-    
-});
-const importImageButton = document.getElementById("importImageButton");
-    importImageButton.addEventListener("click", function() {
-        // Clear error screen
-        document.getElementById('uploadImageStatus').innerHTML = '';
-        // Trigger file input click to select an image file
-        fileImageInput.click();
+        const importImageButton = document.getElementById("importImageButton");
+        importImageButton.addEventListener("click", function() {
+            // Clear error screen
+            document.getElementById('uploadImageStatus').innerHTML = '';
+            // Trigger file input click to select an image file
+            fileImageInput.click();
+    });
 });
