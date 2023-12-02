@@ -41,20 +41,29 @@ imageLink.addEventListener('click', function(e) {
             formData.append('jpegFile', file);
 
             // Send the file to the server
-            fetch(serverURL, {
+           fetch(serverURL, {
                 method: 'POST',
                 body: formData,
             })
             .then(response => {
                 if(response.ok) {
-                    return response.text(); // Assuming the server sends a text response
+                    return response.json(); // Assuming the server sends back JSON data with the image URL
                 } else {
                     throw new Error('Upload failed');
                 }
             })
             .then(data => {
                 // Update UI with success message
-                document.getElementById('uploadImageStatus').innerHTML = `<p style="color: green;">Success: ${data}</p>`;
+                const uploadStatusDiv = document.getElementById('uploadImageStatus');
+                uploadStatusDiv.innerHTML = `<p style="color: green;">Success: File uploaded successfully.</p>`;
+
+                // Display the uploaded image
+                if (data.imageUrl) {
+                    const img = document.createElement('img');
+                    img.src = data.imageUrl; // URL from the server response
+                    img.alt = 'Uploaded Image';
+                    uploadStatusDiv.appendChild(img);
+                }
             })
             .catch(error => {
                 // Update UI with error message
