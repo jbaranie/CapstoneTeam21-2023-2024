@@ -16,7 +16,8 @@ app.use(cors());
 
 const port = 4000;
 
-//Server Sets up Storage Space and Recieve Files/////////////////////////////////////////////////////////////////
+//Storage Space
+//Server Sets up GPX Storage Space and Recieve Files/////////////////////////////////////////////////////////////////
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     // Specify the directory where uploaded files will be saved
@@ -28,11 +29,23 @@ const storage = multer.diskStorage({
   },
 });
 
+//Server Sets up GPX Storage Space and Recieve Files/////////////////////////////////////////////////////////////////
+const imageStorage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './uploads/images/'); // Specify the target directory
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
 
-// Create a Multer instance with the storage engine
+//Storage Instances
+// Create a Multer instance with the storage engine//////////////////////////////////////
 const upload = multer({ storage: storage });
+const uploadImage = multer({ storage: imageStorage });
 
-// Configure a route to handle file uploads
+//File Upload Requests
+// Configure a route to handle gpx file uploads
 app.post('/upload', upload.single('gpxFile'), (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
@@ -41,6 +54,18 @@ app.post('/upload', upload.single('gpxFile'), (req, res) => {
   // Successfully received and saved the file
   res.status(200).send('File uploaded successfully.');
 });
+
+// Configure a route to handle image file uploads
+app.post('/uploadImage', uploadImage.single('jpegFile'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
+
+  // Successfully received and saved the file
+  res.status(200).send('File uploaded successfully.');
+});
+
+
 
 // Start the Express server
 app.listen(port, () => {
