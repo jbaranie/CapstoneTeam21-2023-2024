@@ -4,8 +4,8 @@
 //Coder: Jan Baraniecki
 
 // Event Listener for Import Image Button from the Main Menu
-const importLink = document.querySelector('li a[href="#images"]');
-importLink.addEventListener('click', function(e) {
+const imageLink = document.querySelector('li a[href="#images"]');
+imageLink.addEventListener('click', function(e) {
     e.preventDefault(); // Prevent the default behavior of the link
     // Get the current IP address from the browser's location
     //GLOBAL VARIABLES
