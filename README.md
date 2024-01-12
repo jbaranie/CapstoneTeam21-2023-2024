@@ -7,6 +7,5 @@ Members:
 - John French
 - Larry Huang
 - Abel Mejia
-- Shadow Perea-Pilant
 
 Sponsor: Matt Parkin, Mornings with Matt Consulting
