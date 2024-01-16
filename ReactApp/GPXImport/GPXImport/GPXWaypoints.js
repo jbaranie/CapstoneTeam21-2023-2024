@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect} from 'react';
-import { View, Platform, Alert, TouchableOpacity, Text, ActivityIndicator} from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Platform, Alert, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
@@ -9,7 +9,7 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 
-import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX} from './GPXManager';
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX } from './GPXManager';
 import { deleteFile } from './GPXFileList';
 
 import { styles } from './styles';
@@ -22,9 +22,9 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(lat1 * Math.PI / 180) *
-      Math.cos(lat2 * Math.PI / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const d = R * c;
   return d;
@@ -43,6 +43,9 @@ const GPXWaypoints = ({route}) => {
   const mapRef = useRef(null);
   const userLocationRef = useRef(userLocation);
   const [hasAnimatedToUserLocation, setHasAnimatedToUserLocation] = useState(false);
+  const [latitudeDeltaDefault, setLatitudeDeltaDefault] = useState(0.0922);
+  const [longitudeDeltaDefault, setLongitudeDeltaDefault] = useState(0.0421);
+  const zoomScalar = 2;
 
   //Active route/nav state
   const [isCycling, setIsCycling] = useState(false);
@@ -95,8 +98,8 @@ const GPXWaypoints = ({route}) => {
           const userLoc = {
             latitude: newLocation.coords.latitude,
             longitude: newLocation.coords.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: latitudeDeltaDefault,
+            longitudeDelta: longitudeDeltaDefault,
           };
           setUserLocation(userLoc);
           setIsMapReady(true);
@@ -116,9 +119,9 @@ const GPXWaypoints = ({route}) => {
   //Animate to the user's location
   const onMapReady = () => {
     if (userLocation && mapRef.current && !hasAnimatedToUserLocation) {
-      mapRef.current.animateToRegion(userLocation, 1);
-      setHasAnimatedToUserLocation(true); 
+      setHasAnimatedToUserLocation(true);
       setIsMapReady(true);
+      centerOnUserLocation();
     }
   };
   
@@ -236,9 +239,9 @@ const GPXWaypoints = ({route}) => {
             duration: 3000
         });
     }
-};
+  };
 
-const badMarkerPress = async () => {
+  const badMarkerPress = async () => {
     const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
     try {
         await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1, waypointId);
@@ -263,7 +266,7 @@ const badMarkerPress = async () => {
             duration: 3000
         });
     }
-};
+  };
     
   //Importing the GPX File
   const importGPXFile = async () => {
@@ -640,18 +643,18 @@ const badMarkerPress = async () => {
         {isMenuOpen && (
           <View style={styles.subMenuContainer}>
             <View style={styles.subMenuContainer}>
-                <TouchableOpacity 
-                  style={styles.customButton} 
-                  onPress={startRoute} 
-                >
-                  <Text style={styles.buttonText}>Start Route</Text>
+              <TouchableOpacity 
+                style={styles.customButton} 
+                onPress={startRoute} 
+              >
+                <Text style={styles.buttonText}>Start Route</Text>
+              </TouchableOpacity>
+              {/*
+                <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
+                  <Text style={styles.buttonText}>Import GPX File</Text>
                 </TouchableOpacity>
-                {/*
-                  <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
-                    <Text style={styles.buttonText}>Import GPX File</Text>
-                  </TouchableOpacity>
-                */}
-              </View>
+              */}
+            </View>
           </View>
         )}
         <TouchableOpacity
@@ -702,24 +705,49 @@ const badMarkerPress = async () => {
   };
 
   //iOS additional map control functions & buttons (Android/Google maps contains these on the screen automatically; Apple maps does not have this feature)
+  const regionZoomCopy = (regionData, zoomAction = 0) => {
+    var newRegion = {
+      latitude: regionData.latitude,
+      longitude: regionData.longitude,
+      latitudeDelta: regionData.latitudeDelta,
+      longitudeDelta: regionData.longitudeDelta
+    };
+    if (zoomAction == 1) {//zoom in
+      newRegion.latitudeDelta = newRegion.latitudeDelta / zoomScalar;
+      newRegion.longitudeDelta = newRegion.longitudeDelta / zoomScalar;
+    }
+    if (zoomAction == 2) {//zoom out
+      newRegion.latitudeDelta = newRegion.latitudeDelta * zoomScalar;
+      newRegion.longitudeDelta = newRegion.longitudeDelta * zoomScalar;
+    }
+    return newRegion;
+  }
   const centerOnUserLocation = () => {
-    console.log("center attempted");
+    //console.log("center on user");
+    //console.log(userLocation);
+    //console.log(mapRef.current);
     mapRef.current.animateToRegion(userLocation, 1);
   }
   const iosZoomIn = () => {
-    console.log("zoom in");
+    //console.log("zoom in");
+    //console.log(mapRegion);
+    var newRegion = regionZoomCopy(mapRegion, 1);
+    mapRef.current.animateToRegion(newRegion, 1);
   }
   const iosZoomOut = () => {
-    console.log("zoom out");
+    //console.log("zoom out");
+    var newRegion = regionZoomCopy(mapRegion, 2);
+    mapRef.current.animateToRegion(newRegion, 1);
   }
-  const IOSMapControlComponent = () => {
+  const IOSMapControlComponent = ({isCycling}) => {
     return (
       <View style={[styles.actionContainer, {marginBottom: 5, alignSelf:'left'}]}>
+        {isCycling ? (<></>) : (
         <TouchableOpacity
           style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5 }]}
           onPress={centerOnUserLocation}>
           <Text style={styles.buttonText}>Find Self</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>)}
         <TouchableOpacity
           style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5 }]}
           onPress={iosZoomIn}>
@@ -729,7 +757,8 @@ const badMarkerPress = async () => {
           onPress={iosZoomOut}>
           <Text style={styles.buttonText}>Zoom Out</Text>
         </TouchableOpacity>
-      </View>);
+      </View>
+    );
   }
 
   //Actual Rendering Function
@@ -739,7 +768,7 @@ const badMarkerPress = async () => {
       {/*Map Component. Could not be seperated due to constant refreshing issue*/}
       {isMapReady ? (
       <MapView
-        ref = {mapRef} 
+        ref={mapRef} 
         style={styles.map}
         initialRegion={{
           latitude: waypoints[0]?.latitude || 37.78825,
@@ -747,21 +776,24 @@ const badMarkerPress = async () => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        showsUserLocation = {true}
+        region={mapRegion}
+        onRegionChangeComplete={setMapRegion}
+        showsUserLocation={true}
+        showsCompass={true}
         onMapReady={onMapReady}
       >
         {routes.length > 0 && (
           <Polyline
-          coordinates={[
-            ...routes.map(route => ({
-              latitude: parseFloat(route.latitude),
-              longitude: parseFloat(route.longitude),
-            })),
-            userLocation && isCycling ? { latitude: userLocation.latitude, longitude: userLocation.longitude } : null,
-          ].filter(Boolean)}
-          strokeColor="#000"
-          strokeWidth={3}
-        />
+            coordinates={[
+              ...routes.map(route => ({
+                latitude: parseFloat(route.latitude),
+                longitude: parseFloat(route.longitude),
+              })),
+              userLocation && isCycling ? { latitude: userLocation.latitude, longitude: userLocation.longitude } : null,
+            ].filter(Boolean)}
+            strokeColor="#000"
+            strokeWidth={3}
+          />
         )}
 
         {waypoints.map((waypoint) => {
@@ -779,7 +811,7 @@ const badMarkerPress = async () => {
                 />
             );
         })}
-            
+
         {routes.length > 0 && (
           <>
             <Marker
@@ -801,7 +833,7 @@ const badMarkerPress = async () => {
         <LoadingScreen />
       )}
       {/*End of Map Component.*/}
-      {(Platform.OS === 'ios') ? (<IOSMapControlComponent/>) : (<></>)}
+      {(Platform.OS === 'ios') ? (<IOSMapControlComponent isCycling={isCycling}/>) : (<></>)}
       <SubMenuComponent
         isCycling={isCycling}
         isMenuOpen={isMenuOpen}
