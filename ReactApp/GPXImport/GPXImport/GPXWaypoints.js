@@ -741,21 +741,21 @@ const GPXWaypoints = ({route}) => {
   }
   const IOSMapControlComponent = ({isCycling}) => {
     return (
-      <View style={[styles.actionContainer, {marginBottom: 5, alignSelf:'left'}]}>
+      <View style={[styles.actionContainer, {marginBottom: 5, alignItems:"left", position:"absolute"}]}>
         {isCycling ? (<></>) : (
         <TouchableOpacity
-          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5 }]}
+          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50  }]}
           onPress={centerOnUserLocation}>
-          <Text style={styles.buttonText}>Find Self</Text>
+          <Text style={styles.buttonText}>C</Text>
         </TouchableOpacity>)}
         <TouchableOpacity
-          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5 }]}
+          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50  }]}
           onPress={iosZoomIn}>
-          <Text style={styles.buttonText}>Zoom In</Text>
+          <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5 }]}
+        <TouchableOpacity style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50 }]}
           onPress={iosZoomOut}>
-          <Text style={styles.buttonText}>Zoom Out</Text>
+          <Text style={styles.buttonText}>-</Text>
         </TouchableOpacity>
       </View>
     );
