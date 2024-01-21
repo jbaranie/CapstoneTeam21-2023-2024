@@ -75,13 +75,22 @@ const GPXFileList = ({ navigation }) => {
   const refreshFileList = async () => {
     try {
       const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
-      const filteredFiles = files.filter(file => file.endsWith('.gpx'));
-      //console.log('Refreshing file list, files to set:', filteredFiles);
+      let filteredFiles = files.filter(file => file.endsWith('.gpx'));
+  
+      // Check if mainGPXFile.gpx exists and move it to the top
+      const mainFileIndex = filteredFiles.indexOf('mainGPXFile.gpx');
+      if (mainFileIndex > -1) {
+        // Remove the mainGPXFile.gpx from its current position
+        filteredFiles.splice(mainFileIndex, 1);
+        // Prepend mainGPXFile.gpx to the start of the list
+        filteredFiles = ['mainGPXFile.gpx', ...filteredFiles];
+      }
+  
       setGpxFiles(filteredFiles);
     } catch (error) {
       console.error('Error reading GPX files:', error);
     }
-  };
+  };  
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
