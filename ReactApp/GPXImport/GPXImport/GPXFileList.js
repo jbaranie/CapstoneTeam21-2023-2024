@@ -196,22 +196,41 @@ const GPXFileList = ({ navigation }) => {
     navigation.navigate('Home', { gpxFilePath: fileName });
   };
 
-  const renderItem = ({ item }) => (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
-      <TouchableOpacity
-        onPress={() => handleFilePress(item)}>
-        <Text>{item}</Text>
-      </TouchableOpacity>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Button title="Delete" onPress={() => confirmDeleteFile(item)} /> 
-        {/*}
+  // const renderItem = ({ item }) => (
+  //   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+  //     <TouchableOpacity
+  //       onPress={() => handleFilePress(item)}>
+  //       <Text>{item}</Text>
+  //     </TouchableOpacity>
+  //     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+  //       <Button title="Delete" onPress={() => confirmDeleteFile(item)} /> 
+  //       {/*}
+  //       <Button title="Log Content" onPress={() => logGPXContent(item)} />
+  //       */}
+  //       <Button title="Download" onPress={() => downloadFile(item)} />
+  //     </View>
+  //   </View>
+  // );
+  
+  const renderItem = ({ item, index }) => (
+    <View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+        <TouchableOpacity onPress={() => handleFilePress(item)}>
+          <Text>{item}</Text>
+        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Button title="Delete" onPress={() => confirmDeleteFile(item)} />
+          {/*}
         <Button title="Log Content" onPress={() => logGPXContent(item)} />
         */}
-        <Button title="Download" onPress={() => downloadFile(item)} />
+          <Button title="Download" onPress={() => downloadFile(item)} />
+        </View>
       </View>
+      {item === 'mainGPXFile.gpx' && (
+        <View style={{ borderBottomWidth: 1, borderBottomColor: '#ddd', marginVertical: 5 }} />
+      )}
     </View>
   );
-  
 
   return (
     <View>
