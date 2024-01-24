@@ -1,12 +1,27 @@
 import * as FileSystem from 'expo-file-system';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
-const GPX_FILE_PATH = `${FileSystem.documentDirectory}myGPXFile.gpx`;
+
+const GPX_FILE_PATH = `${FileSystem.documentDirectory}mainGPXFile.gpx`;
 const FILE_COUNTER_KEY = 'FILE_COUNTER_KEY';
 
 const getNewGPXFileName = async () => {
-  const fileCounter = await incrementFileCounter();
-  return `File${fileCounter}.gpx`; // Return a unique file name
+
+  const currDate = new Date();
+
+  const fileNameDateTime = currDate.getFullYear() + "-" +
+                           String(currDate.getMonth() + 1).padStart(2, '0') + "-" +
+                           String(currDate.getDate()).padStart(2, '0') + "_" +
+                           String(currDate.getHours()).padStart(2, '0') + "-" +
+                           String(currDate.getMinutes()).padStart(2, '0') + "-" +
+                           String(currDate.getSeconds()).padStart(2, '0');
+
+  //const fileCounter = await incrementFileCounter();
+  //return `File${fileCounter}.gpx`; // Return a unique file name
+
+  return `${fileNameDateTime}.gpx`
 };
 
 const incrementFileCounter = async () => {
@@ -35,7 +50,7 @@ const createInitGPX = async () => {
 };
 
 const createNewGPXFile = async () => {
-  console.log('Creating new GPX file...');
+  //console.log('Creating new GPX file...');
   try {
     const newFileName = await getNewGPXFileName();
     const newFilePath = `${FileSystem.documentDirectory}${newFileName}`;
@@ -50,50 +65,80 @@ const createNewGPXFile = async () => {
 
 };
 
-const addWaypointToGPX = async (filePath, latitude, longitude, rating) => {
-  console.log(`Adding waypoint to GPX file: ${filePath}`);
+const deleteWaypointFromGPX = async (filePath, id) => {
   try {
-    console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
     let fileContent = await FileSystem.readAsStringAsync(filePath);
 
+    const waypointRegex = new RegExp(`<wpt lat="[^"]+" lon="[^"]+">\\s*<name>[^<]+</name>\\s*<desc>${id}</desc>\\s*<rating>[^<]+</rating>\\s*</wpt>`, 'g');
+    fileContent = fileContent.replace(waypointRegex, '');
+
+    await FileSystem.writeAsStringAsync(filePath, fileContent);
+    console.log(`Waypoint with ID ${id} deleted from GPX file at: ${filePath}`);
+  } catch (error) {
+    console.error(`Error deleting waypoint from GPX file at ${filePath}:`, error);
+  }
+};
+
+const addWaypointToGPX = async (filePath, latitude, longitude, rating, id) => {
+  //console.log(`Adding waypoint to GPX file: ${filePath}`);
+  console.log('WaypointID: ' + id);
+  try {
+    //console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
+    let fileContent = await FileSystem.readAsStringAsync(filePath);
+    
     const waypoint = `<wpt lat="${latitude}" lon="${longitude}">
       <name>Waypoint</name>
+      <desc>${id}</desc>
       <rating>${rating}</rating>
     </wpt>`;
 
     fileContent = fileContent.replace("</gpx>", `${waypoint}\n</gpx>`);
 
     await FileSystem.writeAsStringAsync(filePath, fileContent);
-    console.log('Waypoint added to GPX file at:', filePath); // Log success
+    //console.log('Waypoint added to GPX file at:', filePath); // Log success
   } catch (error) {
     console.error(`Error adding waypoint to GPX file at ${filePath}:`, error);
     throw error; // Re-throw the error to handle it in the calling function
   }
-  console.log('Waypoint added:', { latitude, longitude, rating });
+  console.log('Waypoint added:', { latitude, longitude, rating, id });
 };
 
 
-const addRouteToGPX = async (filePath, routePoints) => {
-  console.log(`Adding route to GPX file: ${filePath}`);
+const addRouteToGPX = async (filePath) => {
+  //console.log(`Creating new route in GPX file: ${filePath}`);
+  //uuid is useid to create a unique ID
+  const routeId = uuidv4();
   try {
-    console.log('addRouteToGPX - filePath:', filePath); // Log the filePath
     let fileContent = await FileSystem.readAsStringAsync(filePath);
-    let routeElement = '<rte>\n';
-
-    routePoints.forEach(point => {
-      routeElement += `<rtept lat="${point.latitude}" lon="${point.longitude}">\n`;
-      routeElement += `<name>${point.name}</name>\n</rtept>\n`;
-    });
-
-    routeElement += '</rte>\n';
-    fileContent = fileContent.replace("</gpx>", `${routeElement}</gpx>`);
+    let routeElement = `<rte id="${routeId}">\n</rte>\n`; 
+    fileContent = fileContent.replace("</gpx>", `${routeElement}</gpx>`); 
 
     await FileSystem.writeAsStringAsync(filePath, fileContent); 
+    console.log(`New route created with ID: ${routeId}`);
   } catch (error) {
-    console.error('An error occurred while adding route to GPX file:', error);
+    console.error('An error occurred while creating new route in GPX file:', error);
   }
-  console.log('Route added:', routePoints);
+  return routeId; 
 };
 
-export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX, createInitGPX};
+
+const addRoutePointToGPX = async (filePath, routeId, routePoint) => {
+  //console.log(`Adding point to route ID ${routeId} in GPX file: ${filePath}`);
+  try {
+    let fileContent = await FileSystem.readAsStringAsync(filePath);
+    
+    const routePointElement = `<rtept lat="${routePoint.latitude}" lon="${routePoint.longitude}">\n<name>${routePoint.name}</name>\n</rtept>\n`;
+
+    const routeRegex = new RegExp(`(<rte id="${routeId}">)([\\s\\S]*?)(<\/rte>)`, 'm');
+    fileContent = fileContent.replace(routeRegex, `$1$2${routePointElement}$3`);
+
+    await FileSystem.writeAsStringAsync(filePath, fileContent);
+    console.log('Point added to route:', routePoint);
+  } catch (error) {
+    console.error(`An error occurred while adding point to route ID ${routeId}:`, error);
+  }
+};
+
+
+export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX};
 
