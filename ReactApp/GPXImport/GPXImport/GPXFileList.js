@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, View, Text, TouchableOpacity, FlatList, PermissionsAndroid } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, Platform, FlatList, PermissionsAndroid } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
@@ -97,15 +97,15 @@ const GPXFileList = ({ navigation }) => {
   //   This is currently disabled as the user does not need this. Might be useful again in 
   //   the future so I am just commenting it out. 
   //  */
-  // const logGPXContent = async (fileName) => {
-  //   try {
-  //     const fileUri = `${FileSystem.documentDirectory}${fileName}`;
-  //     const content = await FileSystem.readAsStringAsync(fileUri);
-  //     console.log(content); 
-  //   } catch (error) {
-  //     console.error('Error reading GPX file:', error);
-  //   }
-  // };
+  const logGPXContent = async (fileName) => {
+    try {
+      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
+      const content = await FileSystem.readAsStringAsync(fileUri);
+      console.log(content); 
+    } catch (error) {
+      console.error('Error reading GPX file:', error);
+    }
+  };
 
   // Asks user to confirm deletion of a single file
   const confirmDeleteFile = (fileName) => {
@@ -126,8 +126,6 @@ const GPXFileList = ({ navigation }) => {
       { cancelable: false }
     );
   };
-  
-  
 
   // Asks user to confirm deletion of all files
   const deleteAllFiles = async () => {
@@ -160,7 +158,7 @@ const GPXFileList = ({ navigation }) => {
   
 
    // Function that handles file download
-   const downloadFile = async (fileName) => {
+   const downloadFile = async (fileName) => {//TODO fix usage of media library for file system on ios
     // Request permissions to access the media library
     const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
     setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
@@ -203,34 +201,39 @@ const GPXFileList = ({ navigation }) => {
   };
 
   const requestFileSystemPermissions = async () => {
-    try {
-      const grantedRead = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: "File System Permission",
-          message: "App needs access to your file system",
-          buttonNeutral: "Ask Me Later",
-          buttonNegative: "Cancel",
-          buttonPositive: "OK"
+    if (Platform.OS === 'android') {
+      try {
+        const grantedRead = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          {
+            title: "File System Permission",
+            message: "App needs access to your file system",
+            buttonNeutral: "Ask Me Later",
+            buttonNegative: "Cancel",
+            buttonPositive: "OK"
+          }
+        );
+        const grantedWrite = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: "File System Permission",
+            message: "App needs access to your file system",
+            buttonNeutral: "Ask Me Later",
+            buttonNegative: "Cancel",
+            buttonPositive: "OK"
+          }
+        );
+        if (grantedRead === PermissionsAndroid.RESULTS.GRANTED && grantedWrite === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log("File system permissions granted");
+        } else {
+          console.log("File system permission denied");
         }
-      );
-      const grantedWrite = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: "File System Permission",
-          message: "App needs access to your file system",
-          buttonNeutral: "Ask Me Later",
-          buttonNegative: "Cancel",
-          buttonPositive: "OK"
-        }
-      );
-      if (grantedRead === PermissionsAndroid.RESULTS.GRANTED && grantedWrite === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("File system permissions granted");
-      } else {
-        console.log("File system permission denied");
+      } catch (err) {
+        console.warn(err);
       }
-    } catch (err) {
-      console.warn(err);
+    }
+    if (Platform.OS === 'ios') {
+      //TODO ios permissions for file control
     }
   };
   useEffect(() => {
@@ -256,7 +259,6 @@ const GPXFileList = ({ navigation }) => {
       </View>
     </View>
   );
-  
 
   return (
     <View>
