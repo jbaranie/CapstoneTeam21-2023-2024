@@ -635,6 +635,26 @@ const TimerComponent = ({ isCycling, elapsedTime }) => {
   );
 };
 
+//Clear Route Button Component
+const ClearRouteButton = ({ onPress }) => {
+  return (
+    <TouchableOpacity
+      style={{
+        position: 'absolute',
+        left: 10,
+        bottom: 10,
+        backgroundColor: '#007aff',
+        padding: 10,
+        borderRadius: 5,
+        zIndex: 1
+      }}
+      onPress={onPress}
+    >
+      <Text style={{ color: 'white' }}>Clear Route</Text>
+    </TouchableOpacity>
+  );
+};
+
 //Main Menu Expanding Button Component
 const SubMenuComponent = ({ isCycling, isMenuOpen, startRoute, importGPXFile, setMenuOpen }) => {
   if (isCycling || !isMapReady) return null;
@@ -773,6 +793,7 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
         <LoadingScreen />
       )}
       {/*End of Map Component.*/}
+      {imported && !isCycling && <ClearRouteButton/>}
       <SubMenuComponent
         isCycling={isCycling}
         isMenuOpen={isMenuOpen}
