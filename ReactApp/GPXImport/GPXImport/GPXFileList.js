@@ -26,14 +26,14 @@ const GPXFileList = ({ navigation }) => {
   const importGPXFile = async () => {
     try {
       // Open the document picker for .gpx files
-      const result = await DocumentPicker.getDocumentAsync({ type: '*/*' }); // Change the type to 'application/gpx+xml' to only allow GPX files
+      const result = await DocumentPicker.getDocumentAsync({ type: 'application/gpx+xml', copyToCacheDirectory: true }); // Change the type to 'application/gpx+xml' to only allow GPX files
       //console.log('Document Picker Result:', result);
   
       // Check if a file was selected and not canceled
       if (!result.canceled && result.assets && result.assets.length > 0) {
         // Extract the file URI from the first asset
         const fileUri = result.assets[0].uri;
-        //console.log('GPX File URI:', fileUri);
+        console.log('GPX File URI: ', fileUri);
   
         // Copy the file from the temporary cache to the app's document directory
         const newFileUri = `${FileSystem.documentDirectory}${result.assets[0].name}`;
@@ -50,7 +50,7 @@ const GPXFileList = ({ navigation }) => {
       }
     } catch (error) {
       // If there was an error during the process, log it
-      console.error('Error importing GPX file:', error);
+      console.error('Error importing GPX file: ', error);
     }
   };
 
@@ -63,12 +63,12 @@ const GPXFileList = ({ navigation }) => {
         const filteredFiles = files.filter(file => file.endsWith('.gpx'));
         setGpxFiles(filteredFiles);
       } catch (error) {
-        console.error('Error reading GPX files:', error);
+        console.error('Error reading GPX files: ', error);
       }
       if (files) {
-      //console.log('Files fetched:', files);
-    } 
-  };
+        console.log('Files fetched:', files);
+      }
+    };
     fetchFiles();
   }, []);
 
@@ -76,27 +76,27 @@ const GPXFileList = ({ navigation }) => {
     try {
       const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
       const filteredFiles = files.filter(file => file.endsWith('.gpx'));
-      //console.log('Refreshing file list, files to set:', filteredFiles);
+      console.log('Refreshing file list, files to set: ', filteredFiles);
       setGpxFiles(filteredFiles);
     } catch (error) {
-      console.error('Error reading GPX files:', error);
+      console.error('Error reading GPX files: ', error);
     }
   };
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      //console.log('Focus event triggered');
+      console.log('Focus event triggered');
       refreshFileList();
     });
   
     return unsubscribe;
   }, [navigation]);
 
-  //  /* 
-  //   Log the content of a GPX file to the console when the 'Log Content' button is pressed. 
-  //   This is currently disabled as the user does not need this. Might be useful again in 
-  //   the future so I am just commenting it out. 
-  //  */
+  /*
+    Log the content of a GPX file to the console when the 'Log Content' button is pressed. 
+    This is currently disabled as the user does not need this. Might be useful again in 
+    the future so I am just commenting it out. 
+  */
   const logGPXContent = async (fileName) => {
     try {
       const fileUri = `${FileSystem.documentDirectory}${fileName}`;
@@ -155,11 +155,15 @@ const GPXFileList = ({ navigation }) => {
       console.error('Error deleting all GPX files:', error);
     }
   };
-  
 
    // Function that handles file download
    const downloadFile = async (fileName) => {//TODO fix usage of media library for file system on ios
-    // Request permissions to access the media library
+    //TODO procedure in fix
+      //get file system permissions (ios, android)
+      //select save spot (this may vary by OS)
+      //try catch the save action
+
+    // Request permissions to access the media library TODO fix duplicate media library permission if it is needed
     const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
     setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
     try {
@@ -168,14 +172,18 @@ const GPXFileList = ({ navigation }) => {
       if (status !== 'granted') {
         alert('You need to grant storage permissions to download files.');
         return;
+      } else {
+        console.log("File permissions active.");
       }
-  
+
       // Define the path for the file in the local app storage
       const localUri = `${FileSystem.documentDirectory}${fileName}`;
+      console.log(localUri);//TODO delete
   
       // Define the destination path in the system's storage
       const systemUri = `${FileSystem.cacheDirectory}${fileName}`;
-  
+      console.log(systemUri);//TODO delete
+
       // Copy the file from the local app storage to the system storage
       await FileSystem.copyAsync({
         from: localUri,
@@ -183,6 +191,7 @@ const GPXFileList = ({ navigation }) => {
       });
   
       // Create an asset for the file in the media library
+      //NOTE: this doesn't work on iOS because iOS filters strongly for image datatypes
       const asset = await MediaLibrary.createAssetAsync(systemUri);
   
       // Get or create the album
@@ -234,6 +243,7 @@ const GPXFileList = ({ navigation }) => {
     }
     if (Platform.OS === 'ios') {
       //TODO ios permissions for file control
+      console.log("Request permissions for iOS at this point.");
     }
   };
   useEffect(() => {
@@ -251,8 +261,8 @@ const GPXFileList = ({ navigation }) => {
         <Text>{item}</Text>
       </TouchableOpacity>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Button title="Delete" onPress={() => confirmDeleteFile(item)} /> 
-        {/*}
+        <Button title="Delete" onPress={() => confirmDeleteFile(item)} />
+        {/*
         <Button title="Log Content" onPress={() => logGPXContent(item)} />
         */}
         <Button title="Download" onPress={() => downloadFile(item)} />
