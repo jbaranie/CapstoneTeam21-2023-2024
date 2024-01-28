@@ -380,7 +380,8 @@ const badMarkerPress = async () => {
   
       setWaypoints(newWaypoints);
       setRoutes(newRoutes);
-  
+      setImported(true);
+
       if (newWaypoints.length > 0) {
         mapRef.current.fitToCoordinates(newWaypoints.map(wp => ({
           latitude: wp.latitude,
@@ -495,7 +496,7 @@ const badMarkerPress = async () => {
     });
   };
   
-
+  
   useEffect(() => {
     return () => {
       setWaypoints([]);
@@ -601,6 +602,28 @@ const badMarkerPress = async () => {
     };
   }, [isCycling, currentGPXPath, routes, currentRoute]);
   
+ //Clear imported route onPress function with confirmation
+const clearRoute = () => {
+  Alert.alert(
+    "Clear Route",
+    "Are you sure you want to clear the route?",
+    [
+      {
+        text: "Cancel",
+        style: "cancel"
+      },
+      { text: "Yes", onPress: () => handleClearRoute() }
+    ],
+    { cancelable: false }
+  );
+};
+
+// Actual function to clear the route
+const handleClearRoute = () => {
+  setWaypoints([]); 
+  setRoutes([]); 
+  setImported(false); 
+};
 
 //Seperated Rendering Components --------------------------------
 
@@ -800,7 +823,7 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
         <LoadingScreen />
       )}
       {/*End of Map Component.*/}
-      {imported && !isCycling && <ClearRouteButton/>}
+      {imported && !isCycling && <ClearRouteButton onPress={clearRoute} />}
       <SubMenuComponent
         isCycling={isCycling}
         isMenuOpen={isMenuOpen}
