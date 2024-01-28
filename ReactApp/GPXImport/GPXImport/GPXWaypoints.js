@@ -55,6 +55,7 @@ const GPXWaypoints = ({route}) => {
   const [hasLocationPermission, setHasLocationPermission] = useState(null);
   const [isMapReady, setIsMapReady] = useState(false);
 
+  //Update states from GPXFileList
   useEffect(() => {
     if (route.params?.gpxFilePath) {
       const filePath = route.params.gpxFilePath;
@@ -62,6 +63,12 @@ const GPXWaypoints = ({route}) => {
       navigation.setParams({ gpxFilePath: null }); // Reset the parameter
     }
   }, [route.params?.gpxFilePath]);
+
+  useEffect(() => {
+    if (route.params?.imported) {
+        setImported(true);
+    }
+}, [route.params?.imported]);
 
   //Update the userLocRef
   useEffect(() => {
