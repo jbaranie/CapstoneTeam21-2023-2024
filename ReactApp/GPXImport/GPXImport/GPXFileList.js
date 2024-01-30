@@ -4,6 +4,7 @@ import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
 import * as DocumentPicker from 'expo-document-picker';
+import * as Sharing from 'expo-sharing';
 
 // Deletes a single file
 export const deleteFile = async (fileName) => {
@@ -163,49 +164,73 @@ const GPXFileList = ({ navigation }) => {
       //select save spot (this may vary by OS)
       //try catch the save action
 
-    // Request permissions to access the media library TODO fix duplicate media library permission if it is needed
+    // Request permissions to access the media library TODO fix/remove duplicate media library permission
     const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
     setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
-    try {
-      // Request permissions to access the media library
-      const { status } = await MediaLibrary.requestPermissionsAsync();
-      if (status !== 'granted') {
-        alert('You need to grant storage permissions to download files.');
-        return;
-      } else {
-        console.log("File permissions active.");
-      }
 
-      // Define the path for the file in the local app storage
+    if (Platform.OS === 'android') {//existing content; TODO fix for Android issues
+      try {
+        // Request permissions to access the media library
+        const { status } = await MediaLibrary.requestPermissionsAsync();
+        if (status !== 'granted') {
+          alert('You need to grant storage permissions to download files.');
+          return;
+        } else {
+          console.log("File permissions active.");
+        }
+
+        // Define the path for the file in the local app storage
+        const localUri = `${FileSystem.documentDirectory}${fileName}`;
+        console.log(localUri);//TODO delete
+    
+        // Define the destination path in the system's storage
+        const systemUri = `${FileSystem.cacheDirectory}${fileName}`;
+        console.log(systemUri);//TODO delete
+
+        // Copy the file from the local app storage to the system storage
+        await FileSystem.copyAsync({
+          from: localUri,
+          to: systemUri,
+        });
+    
+        // Create an asset for the file in the media library
+        //NOTE: this doesn't work on iOS because iOS filters strongly for image datatypes
+        const asset = await MediaLibrary.createAssetAsync(systemUri);
+    
+        // Get or create the album
+        let album = await MediaLibrary.getAlbumAsync('GPX Files');
+        if (!album) {
+          album = await MediaLibrary.createAlbumAsync('GPX Files', asset, false);
+        } else {
+          await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+        }
+    
+        console.log(`File saved to ${systemUri} in the 'GPX Files' album`);
+        return systemUri;
+      } catch (error) {
+        console.error('Error saving file to system storage: ', error.message);
+      }
+    }
+
+    if (Platform.OS === 'ios') {
+      console.log("iOS download attempt beginning...");//TODO comment out logs
+
+      //TODO check for Sharing availability
+      
       const localUri = `${FileSystem.documentDirectory}${fileName}`;
-      console.log(localUri);//TODO delete
-  
-      // Define the destination path in the system's storage
       const systemUri = `${FileSystem.cacheDirectory}${fileName}`;
-      console.log(systemUri);//TODO delete
-
-      // Copy the file from the local app storage to the system storage
-      await FileSystem.copyAsync({
-        from: localUri,
-        to: systemUri,
-      });
-  
-      // Create an asset for the file in the media library
-      //NOTE: this doesn't work on iOS because iOS filters strongly for image datatypes
-      const asset = await MediaLibrary.createAssetAsync(systemUri);
-  
-      // Get or create the album
-      let album = await MediaLibrary.getAlbumAsync('GPX Files');
-      if (!album) {
-        album = await MediaLibrary.createAlbumAsync('GPX Files', asset, false);
-      } else {
-        await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+      try {
+        // Copy the file from the local app storage to the system storage
+        const cacheResult = await FileSystem.copyAsync({
+          from: localUri,
+          to: systemUri,
+        }); //TODO check status
+        console.log("Cache result");
+        console.log(cacheResult);
+        const downloadResult = await Sharing.shareAsync(systemUri, {UTI: 'public.item'});
+      } catch (error) {
+        console.error('Error saving file to system storage: ', error.message);
       }
-  
-      console.log(`File saved to ${systemUri} in the 'GPX Files' album`);
-      return systemUri;
-    } catch (error) {
-      console.error('Error saving file to system storage:', error.message);
     }
   };
 
