@@ -133,7 +133,8 @@ const addRoutePointToGPX = async (filePath, routeId, routePoint) => {
     fileContent = fileContent.replace(routeRegex, `$1$2${routePointElement}$3`);
 
     await FileSystem.writeAsStringAsync(filePath, fileContent);
-    console.log('Point added to route:', routePoint);
+    console.log('Point added to route:', routePoint, ' + File: ', filePath, ' + filePath');
+    console.log(await FileSystem.readAsStringAsync(filePath));
   } catch (error) {
     console.error(`An error occurred while adding point to route ID ${routeId}:`, error);
   }
