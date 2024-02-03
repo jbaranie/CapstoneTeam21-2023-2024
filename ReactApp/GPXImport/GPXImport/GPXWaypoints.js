@@ -443,8 +443,44 @@ const badMarkerPress = async () => {
         { cancelable: true }
       );
     } else {
-      // If there is an imported route, start the route immediately
-      initiateRoute();
+      const startPoint = importedRoutes[0];
+
+      // Ensure startPoint and userLocation are available
+      if (importedRoutes.length > 0 && userLocation) {
+        const { latitude: userLat, longitude: userLon } = userLocation;
+
+        const distance = getDistanceFromLatLonInMiles(userLat, userLon, startPoint.latitude, startPoint.longitude);
+        console.log('Distance', distance);
+
+        if (distance > 3) {
+          Alert.alert("Too Far", "You are too far from the start of the route.");
+          return; 
+        }
+      } else {
+        showMessage({
+          message: "No Valid Routes",
+          description: "There are no valid routes in the imported route.",
+          hideOnPress: true,
+          type: "error",
+          duration: 5000
+        });
+      }
+      // Start route confirmation dialog
+      Alert.alert(
+        'Start Route',
+        'Would you like to begin Cycling?',
+        [
+          {
+            text: 'START',
+            onPress: () => initiateRoute(),
+          },
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+        ],
+        { cancelable: true }
+      );
     }
 };
 
