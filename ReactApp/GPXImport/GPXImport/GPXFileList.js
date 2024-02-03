@@ -168,6 +168,10 @@ const GPXFileList = ({ navigation }) => {
     const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
     setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
 
+    //filepaths
+    const localUri = `${FileSystem.documentDirectory}${fileName}`;
+    const systemUri = `${FileSystem.cacheDirectory}${fileName}`;
+
     if (Platform.OS === 'android') {//existing content; TODO fix for Android issues
       try {
         // Request permissions to access the media library
@@ -179,14 +183,6 @@ const GPXFileList = ({ navigation }) => {
           console.log("File permissions active.");
         }
 
-        // Define the path for the file in the local app storage
-        const localUri = `${FileSystem.documentDirectory}${fileName}`;
-        console.log(localUri);//TODO delete
-    
-        // Define the destination path in the system's storage
-        const systemUri = `${FileSystem.cacheDirectory}${fileName}`;
-        console.log(systemUri);//TODO delete
-
         // Copy the file from the local app storage to the system storage
         await FileSystem.copyAsync({
           from: localUri,
@@ -194,7 +190,7 @@ const GPXFileList = ({ navigation }) => {
         });
     
         // Create an asset for the file in the media library
-        //NOTE: this doesn't work on iOS because iOS filters strongly for image datatypes
+        //NOTE: this doesn't work on iOS because on iOS MediaLibrary has strict datatypes filters
         const asset = await MediaLibrary.createAssetAsync(systemUri);
     
         // Get or create the album
@@ -208,33 +204,33 @@ const GPXFileList = ({ navigation }) => {
         console.log(`File saved to ${systemUri} in the 'GPX Files' album`);
         return systemUri;
       } catch (error) {
-        console.error('Error saving file to system storage: ', error.message);
+        console.error('Error saving file to system storage on Android: ', error.message);
       }
     }
 
     if (Platform.OS === 'ios') {
-      console.log("iOS download attempt beginning...");//TODO comment out logs
-
-      //TODO check for Sharing availability
-      
-      const localUri = `${FileSystem.documentDirectory}${fileName}`;
-      const systemUri = `${FileSystem.cacheDirectory}${fileName}`;
+      //console.log("iOS download attempt beginning...");
       try {
+        const { shareStatus } = await Sharing.isAvailableAsync();
+        if (shareStatus !== true) {
+          alert('Sharing is not available; check your file and sharing permissions.');
+          return;
+        } else {
+          console.log("Sharing possible, Sharing API available.");
+        }
         // Copy the file from the local app storage to the system storage
-        const cacheResult = await FileSystem.copyAsync({
+        await FileSystem.copyAsync({
           from: localUri,
           to: systemUri,
-        }); //TODO check status
-        console.log("Cache result");
-        console.log(cacheResult);
+        });
         const downloadResult = await Sharing.shareAsync(systemUri, {UTI: 'public.item'});
       } catch (error) {
-        console.error('Error saving file to system storage: ', error.message);
+        console.error('Error saving file to system storage on iOS: ', error.message);
       }
     }
   };
 
-  const requestFileSystemPermissions = async () => {
+  const requestFileSystemPermissions = async () => {//specific to the android version
     if (Platform.OS === 'android') {
       try {
         const grantedRead = await PermissionsAndroid.request(
@@ -267,8 +263,8 @@ const GPXFileList = ({ navigation }) => {
       }
     }
     if (Platform.OS === 'ios') {
-      //TODO ios permissions for file control
-      console.log("Request permissions for iOS at this point.");
+      //NOTE: add any ios permissions for file control in this block
+      console.log("No specific permissions for iOS at this point.");
     }
   };
   useEffect(() => {
@@ -280,7 +276,7 @@ const GPXFileList = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+    <View style={{ flexDirection: 'col', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
       <TouchableOpacity
         onPress={() => handleFilePress(item)}>
         <Text>{item}</Text>
@@ -290,22 +286,22 @@ const GPXFileList = ({ navigation }) => {
         {/*
         <Button title="Log Content" onPress={() => logGPXContent(item)} />
         */}
-        <Button title="Download" onPress={() => downloadFile(item)} />
+        <Button title={(Platform.OS === 'ios' ? "Share" : "Download")} onPress={() => downloadFile(item)} />
       </View>
     </View>
   );
 
   return (
-    <View>
+    <View style={{ padding: 10}}>
       <FlatList
         data={gpxFiles}
         renderItem={renderItem}
         keyExtractor={item => item}
       />
-       <Button title="Import GPX File" onPress={importGPXFile} />
-       {gpxFiles.length >= 2 && (
-      <Button title="Delete All" onPress={deleteAllFiles} />
-       )}
+      <Button title="Import GPX File" onPress={importGPXFile} />
+      {gpxFiles.length >= 2 && (
+        <Button title="Delete All" onPress={deleteAllFiles} />
+      )}
     </View>
   );
 };
