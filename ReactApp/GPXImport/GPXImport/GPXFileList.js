@@ -158,13 +158,8 @@ const GPXFileList = ({ navigation }) => {
   };
 
    // Function that handles file download
-   const downloadFile = async (fileName) => {//TODO fix usage of media library for file system on ios
-    //TODO procedure in fix
-      //get file system permissions (ios, android)
-      //select save spot (this may vary by OS)
-      //try catch the save action
-
-    // Request permissions to access the media library TODO fix/remove duplicate media library permission
+   const downloadFile = async (fileName) => {
+    // Request permissions to access the media library
     const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
     setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
 
@@ -172,11 +167,10 @@ const GPXFileList = ({ navigation }) => {
     const localUri = `${FileSystem.documentDirectory}${fileName}`;
     const systemUri = `${FileSystem.cacheDirectory}${fileName}`;
 
-    if (Platform.OS === 'android') {//existing content; TODO fix for Android issues
+    if (Platform.OS === 'android') {//existing content; TODO fix Android issues
       try {
-        // Request permissions to access the media library
-        const { status } = await MediaLibrary.requestPermissionsAsync();
-        if (status !== 'granted') {
+        // Check permissions to access the media library
+        if (!hasMediaLibraryPermission) {
           alert('You need to grant storage permissions to download files.');
           return;
         } else {
@@ -211,13 +205,15 @@ const GPXFileList = ({ navigation }) => {
     if (Platform.OS === 'ios') {
       //console.log("iOS download attempt beginning...");
       try {
+        /*
         const { shareStatus } = await Sharing.isAvailableAsync();
-        if (shareStatus !== true) {
+        if (shareStatus !== 'granted') {
           alert('Sharing is not available; check your file and sharing permissions.');
           return;
         } else {
           console.log("Sharing possible, Sharing API available.");
         }
+        *///TODO fix share status check, it currently prevents it from working instead of correctly checking status
         // Copy the file from the local app storage to the system storage
         await FileSystem.copyAsync({
           from: localUri,
