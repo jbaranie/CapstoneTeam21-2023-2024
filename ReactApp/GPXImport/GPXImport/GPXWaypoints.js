@@ -10,9 +10,10 @@ import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 
 import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX } from './GPXManager';
-import { deleteFile } from './GPXFileList';
-
+import { deleteFile, photoWaypointsFile } from './GPXFileList';
+import { pickImage } from './ImageImport';
 import { styles } from './styles';
+
 //Check how far the user is from a route start.
 //Uses Haversine Formula
 const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
@@ -52,6 +53,7 @@ const GPXWaypoints = ({route}) => {
   const [elapsedTime, setElapsedTime] =useState(0);
   const timerRef = useRef(null);
   const [currentGPXPath, setCurrentGPXPath] = useState('');
+  const [photoGPXdata, setPhotoGPXdata] = useState('');
   const navigation = useNavigation();
 
   //Permission states
@@ -70,7 +72,6 @@ const GPXWaypoints = ({route}) => {
   useEffect(() => {
     userLocationRef.current = userLocation; 
   }, [userLocation]);
-  
   
   useEffect(() => {
     let locationSubscription;
@@ -396,7 +397,31 @@ const GPXWaypoints = ({route}) => {
     }
   };
   
-  
+  //Startup of photos waypoint file from storage; create file if it does not exist yet
+  useEffect(() => {
+    const photosFilename = `${FileSystem.documentDirectory}${photoWaypointsFile}`;
+    //TODO
+    //check file system on constant filename for existing photos waypoint GPX file
+      //if it does not exist, create new GPX contents in local storage
+    //load the photo GPX file's contents using setPhotoGPXdata
+  }, []);
+
+  //Function called when photos waypoints are modified
+  const addPhotoWaypoint = () => {
+    //add copy of photo to app local storage
+  }
+
+  //Function called when photos waypoints are deleted
+  const deletePhotoWaypoint = () => {
+    //TODO figure out how waypoint input selection
+    //remove from photos waypoint GPX file
+    //remove copy of photo used from app local storage
+  }
+
+  const sharePhotoWaypoint = () => {
+    //TOOD figure out waypoint input selection
+    //do FileShare API on photo in app local storage
+  }
 
   const startRoute = async () => {
     const gpxExists = await doesGPXFileExist();
@@ -648,6 +673,12 @@ const GPXWaypoints = ({route}) => {
                 onPress={startRoute} 
               >
                 <Text style={styles.buttonText}>Start Route</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.customButton}
+                onPress={pickImage}
+              >
+                <Text style={styles.buttonText}>Import Image</Text>
               </TouchableOpacity>
               {/*
                 <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>

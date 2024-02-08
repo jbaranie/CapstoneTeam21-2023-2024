@@ -5,6 +5,10 @@ import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
 import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
+import { pickImage } from './ImageImport';
+
+//Filename constants
+export const photoWaypointsFile = "importedPhotos.gpx";
 
 // Deletes a single file
 export const deleteFile = async (fileName) => {
@@ -221,7 +225,7 @@ const GPXFileList = ({ navigation }) => {
         });
         const downloadResult = await Sharing.shareAsync(systemUri, {UTI: 'public.item'});
       } catch (error) {
-        console.error('Error saving file to system storage on iOS: ', error.message);
+        console.error('Error sharing file on iOS: ', error.message);
       }
     }
   };
@@ -274,7 +278,8 @@ const GPXFileList = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <View style={{ flexDirection: 'col', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
       <TouchableOpacity
-        onPress={() => handleFilePress(item)}>
+        onPress={() => handleFilePress(item)}
+      >
         <Text>{item}</Text>
       </TouchableOpacity>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -295,6 +300,7 @@ const GPXFileList = ({ navigation }) => {
         keyExtractor={item => item}
       />
       <Button title="Import GPX File" onPress={importGPXFile} />
+      <Button title="Import Image" onPress={pickImage} />
       {gpxFiles.length >= 2 && (
         <Button title="Delete All" onPress={deleteAllFiles} />
       )}
