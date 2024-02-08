@@ -79,12 +79,12 @@ const GPXWaypoints = ({route}) => {
         status = response.status;
       }
       setHasLocationPermission(status === 'granted');
-
+    
       if (status !== 'granted') {
         console.error('Permission to access location was denied');
         return;
       }
-
+    
       locationSubscription = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.BestForNavigation,
@@ -92,14 +92,20 @@ const GPXWaypoints = ({route}) => {
           distanceInterval: 1,
         },
         (newLocation) => {
+          const zoomLevel = 0.007; 
           const userLoc = {
             latitude: newLocation.coords.latitude,
             longitude: newLocation.coords.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: zoomLevel, 
+            longitudeDelta: zoomLevel, 
           };
           setUserLocation(userLoc);
           setIsMapReady(true);
+    
+          // Animate to the user's location with more zoom when starting the route
+          if (isCycling && mapRef.current) {
+            mapRef.current.animateToRegion(userLoc, 1000); 
+          }
         }
       );
     };
@@ -425,6 +431,17 @@ const badMarkerPress = async () => {
             text: 'OK',
             onPress: async () => { // Make sure this function is async
               setIsCycling(true);
+
+              if (userLocation && mapRef.current) {
+                //Animate to user location with new zoom values
+                const zoomedInRegion = {
+                  ...userLocation,
+                  latitudeDelta: 0.001,
+                  longitudeDelta: 0.001, 
+                };
+                mapRef.current.animateToRegion(zoomedInRegion, 1000); 
+              }
+
               startTimer();
               if (!currentGPXPath) { 
                 const newFilePath = await createNewGPXFile();
