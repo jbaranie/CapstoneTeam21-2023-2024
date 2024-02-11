@@ -9,6 +9,7 @@ import { pickImage } from './ImageImport';
 
 //Filename constants
 export const photoWaypointsFile = "importedPhotos.gpx";
+export const photoLocalStore = "ImportedPhotos/";
 
 // Deletes a single file
 export const deleteFile = async (fileName) => {
@@ -21,6 +22,31 @@ export const deleteFile = async (fileName) => {
     console.error('Error deleting GPX file:', error);
   }
 };
+
+export const iosShare = async (uri, utiType) => {
+  try {
+    /*
+    const { shareStatus } = await Sharing.isAvailableAsync();
+    if (shareStatus !== 'granted') {
+      alert('Sharing is not available; check your file and sharing permissions.');
+      return;
+    } else {
+      console.log("Sharing possible, Sharing API available.");
+    }
+    *///TODO fix share status check, it currently prevents it from working instead of correctly checking status
+    // Copy the file from the local app storage to the system storage
+    /*
+    await FileSystem.copyAsync({
+      from: localUri,
+      to: systemUri,
+    });
+    */
+    const downloadResult = await Sharing.shareAsync(uri, {UTI: utiType});
+    console.log(downloadResult);
+  } catch (error) {
+    console.error('Error sharing file on iOS: ', error.message);
+  }
+}
 
 const GPXFileList = ({ navigation }) => {
   //File action state
@@ -208,25 +234,7 @@ const GPXFileList = ({ navigation }) => {
 
     if (Platform.OS === 'ios') {
       //console.log("iOS download attempt beginning...");
-      try {
-        /*
-        const { shareStatus } = await Sharing.isAvailableAsync();
-        if (shareStatus !== 'granted') {
-          alert('Sharing is not available; check your file and sharing permissions.');
-          return;
-        } else {
-          console.log("Sharing possible, Sharing API available.");
-        }
-        *///TODO fix share status check, it currently prevents it from working instead of correctly checking status
-        // Copy the file from the local app storage to the system storage
-        await FileSystem.copyAsync({
-          from: localUri,
-          to: systemUri,
-        });
-        const downloadResult = await Sharing.shareAsync(systemUri, {UTI: 'public.item'});
-      } catch (error) {
-        console.error('Error sharing file on iOS: ', error.message);
-      }
+      await iosShare(localUri, 'public.item');
     }
   };
 

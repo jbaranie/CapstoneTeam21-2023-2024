@@ -10,7 +10,7 @@ import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 
 import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX } from './GPXManager';
-import { deleteFile, photoWaypointsFile } from './GPXFileList';
+import { deleteFile, photoWaypointsFile, photoLocalStore, iosShare } from './GPXFileList';
 import { pickImage } from './ImageImport';
 import { styles } from './styles';
 
@@ -397,18 +397,47 @@ const GPXWaypoints = ({route}) => {
     }
   };
   
-  //Startup of photos waypoint file from storage; create file if it does not exist yet
-  useEffect(() => {
-    const photosFilename = `${FileSystem.documentDirectory}${photoWaypointsFile}`;
+  //PHOTO WAYPOINTS FILE
+  const photosFilename = `${FileSystem.documentDirectory}${photoWaypointsFile}`;
+  const photosDirectory = `${FileSystem.documentDirectory}${photoLocalStore}`;
+  
+  //Startup of photos waypoint file from storage; create if it does not exist yet
+  const photoWaypointsSetup = async () => {
     //TODO
     //check file system on constant filename for existing photos waypoint GPX file
       //if it does not exist, create new GPX contents in local storage
     //load the photo GPX file's contents using setPhotoGPXdata
+  }
+
+  useEffect(() => {
+    photoWaypointsSetup();
   }, []);
 
   //Function called when photos waypoints are modified
-  const addPhotoWaypoint = () => {
-    //add copy of photo to app local storage
+  const addPhotoWaypoint = async () => {
+    let selectedImage = await pickImage();
+    if (selectedImage != null) {
+      //TODO preview image to confirm selection
+      let photoCt = (await FileSystem.readDirectoryAsync(photosDirectory)).length;
+      //TODO determine original image type and store as string
+      let photoName = "imageImport" + photoCt;// + ImageType;
+      //TODO add copy of photo to app local storage
+      //await FileSystem.copyAsync({
+      //  from: selectedImage.uri,
+      //  to: `${photosDirectory}${photoName}`,
+      //});
+
+      //TODO add waypoint to photosFilename
+
+      //center map on location extracted from image
+      var newRegion = {
+        latitude: selectedImage.exif.latitude,
+        longitude: selectedImage.exif.longitude,
+        latitudeDelta: selectedImage.exif.latitudeDelta,
+        longitudeDelta: selectedImage.exif.longitudeDelta
+      };
+      mapRef.current.animateToRegion(newRegion, 1);
+    }
   }
 
   //Function called when photos waypoints are deleted
@@ -418,7 +447,7 @@ const GPXWaypoints = ({route}) => {
     //remove copy of photo used from app local storage
   }
 
-  const sharePhotoWaypoint = () => {
+  const shareWaypointPhoto = () => {
     //TOOD figure out waypoint input selection
     //do FileShare API on photo in app local storage
   }
@@ -513,7 +542,6 @@ const GPXWaypoints = ({route}) => {
       duration: 3000 
     });
   };
-  
 
   useEffect(() => {
     return () => {
@@ -558,8 +586,6 @@ const GPXWaypoints = ({route}) => {
           //await addRoutePointToGPX(currentGPXPath, routeId, point);
           //console.log('Route Point added to: ' + GPX_FILE_PATH + 'Point info: ' + JSON.stringify(point));
         }
-        
-
       } catch (error) {
         console.error('Error adding route point to GPX:', error);
 
@@ -573,7 +599,6 @@ const GPXWaypoints = ({route}) => {
       }
     }
   };
-
 
   const handleWaypointDelete = async (waypointId) => {
     if(!isCycling) return;
@@ -676,7 +701,7 @@ const GPXWaypoints = ({route}) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.customButton}
-                onPress={pickImage}
+                onPress={addPhotoWaypoint}
               >
                 <Text style={styles.buttonText}>Import Image</Text>
               </TouchableOpacity>
