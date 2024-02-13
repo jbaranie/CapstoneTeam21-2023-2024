@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX} from './GPXManager';
 import { deleteFile } from './GPXFileList';
+import WaypointModal from './WaypointModal';
 
 import { styles } from './styles';
 //Check how far the user is from a route start.
@@ -43,6 +44,10 @@ const GPXWaypoints = ({route}) => {
   const mapRef = useRef(null);
   const userLocationRef = useRef(userLocation);
   const [hasAnimatedToUserLocation, setHasAnimatedToUserLocation] = useState(false);
+
+  //Waypoint Modal States
+  const [modalVisible, setModalVisible] = useState(false);
+  const [waypointRating, setWaypointRating] = useState(null);
 
   //Imorted GPX data
   const [importedWaypoints, setImportedWaypoints] = useState([]);
@@ -222,59 +227,37 @@ const GPXWaypoints = ({route}) => {
   
   
  
-  const goodMarkerPress = async () => {
-    const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
-    try {
-        await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3, waypointId);
-        await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 3, waypointId);
-        setWaypoints(prevWaypoints => [...prevWaypoints, {
-            id: waypointId,
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
-            name: "Good Waypoint",
-            rating: 3
-        }]);
-        showMessage({
-            message: "Good Waypoint Added!",
-            type: "success",
-            duration: 3000
-        });
-    } catch (err) {
-        showMessage({
-            message: "Could not add new waypoint",
-            description: err.message,
-            type: "error",
-            duration: 3000
-        });
-    }
-};
+  // Update goodMarkerPress to show modal and set rating to 3
+  const goodMarkerPress = () => {
+    setWaypointRating(3);
+    setModalVisible(true);
+  };
 
-const badMarkerPress = async () => {
-    const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
+  // Update badMarkerPress similarly, but set rating to 1
+  const badMarkerPress = () => {
+    setWaypointRating(1);
+    setModalVisible(true);
+  };
+
+  // Function to handle modal confirm
+  const handleAddWaypoint = async (title, description) => {
+    const waypointId = Date.now().toString();
     try {
-        await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1, waypointId);
-        await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 1, waypointId);
-        setWaypoints(prevWaypoints => [...prevWaypoints, {
-            id: waypointId,
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
-            name: "Bad Waypoint",
-            rating: 1
-        }]);
-        showMessage({
-            message: "Bad Waypoint Added!",
-            type: "success",
-            duration: 3000
-        });
+      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, waypointRating, waypointId, title, description);
+      // Make sure to update your addWaypointToGPX function to handle title and description
+      setWaypoints(prevWaypoints => [...prevWaypoints, {
+        id: waypointId,
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+        name: title,
+        description: description,
+        rating: waypointRating
+      }]);
+      setModalVisible(false); // Close the modal
     } catch (err) {
-        showMessage({
-            message: "Could not add new waypoint",
-            description: err.message,
-            type: "error",
-            duration: 3000
-        });
+      console.log(err); // Handle the error appropriately
     }
-};
+  };
     
   //Importing the GPX File
   const importGPXFile = async () => {
@@ -775,6 +758,11 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
   return (
     <View style={styles.container}>
       <TimerComponent isCycling={isCycling} elapsedTime={elapsedTime} />
+      <WaypointModal
+        isVisible={modalVisible}
+        onConfirm={handleAddWaypoint}
+        onCancel={() => setModalVisible(false)}
+      />
       {/*Map Component. Could not be seperated due to constant refreshing issue*/}
       {isMapReady ? (
       <MapView
