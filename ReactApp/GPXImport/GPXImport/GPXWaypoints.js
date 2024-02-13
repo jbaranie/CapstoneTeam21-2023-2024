@@ -230,21 +230,21 @@ const GPXWaypoints = ({route}) => {
   // Update goodMarkerPress to show modal and set rating to 3
   const goodMarkerPress = () => {
     setWaypointRating(3);
-    setModalVisible(true);
+    setModalVisible(true); //Show Waypoint Modal
   };
 
   // Update badMarkerPress similarly, but set rating to 1
   const badMarkerPress = () => {
     setWaypointRating(1);
-    setModalVisible(true);
+    setModalVisible(true); //Show Waypoint Modal
   };
 
   // Function to handle modal confirm
   const handleAddWaypoint = async (title, description) => {
     const waypointId = Date.now().toString();
     try {
+      //title, description added. ID now in custom GPX tag. 
       await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, waypointRating, waypointId, title, description);
-      // Make sure to update your addWaypointToGPX function to handle title and description
       setWaypoints(prevWaypoints => [...prevWaypoints, {
         id: waypointId,
         latitude: userLocation.latitude,
@@ -255,7 +255,7 @@ const GPXWaypoints = ({route}) => {
       }]);
       setModalVisible(false); // Close the modal
     } catch (err) {
-      console.log(err); // Handle the error appropriately
+      console.log(err); // Handle the error 
     }
   };
     

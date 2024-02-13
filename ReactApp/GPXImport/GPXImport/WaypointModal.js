@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    width: '80%', // Make the modal larger
+    width: '80%',
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,

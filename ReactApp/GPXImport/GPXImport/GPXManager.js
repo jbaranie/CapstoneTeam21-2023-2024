@@ -85,7 +85,7 @@ const addWaypointToGPX = async (filePath, latitude, longitude, rating, id, title
   try {
     //console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
     let fileContent = await FileSystem.readAsStringAsync(filePath);
-    
+    //Default values for title, description. 
     const waypoint = `<wpt lat="${latitude}" lon="${longitude}">
       <name>${title}</name>
       <desc>${description}</desc>
