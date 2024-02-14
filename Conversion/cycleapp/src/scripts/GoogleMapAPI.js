@@ -11,7 +11,7 @@ function initMap() {
     var apiKey = 'AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0';
 
     // Load the GPX file and parse it
-    loadGPXFileIntoGoogleMap(map, './public/sample.gpx', apiKey);
+    loadGPXFileIntoGoogleMap(map, 'sample.gpx', apiKey);
 }
 
 function loadGPXFileIntoGoogleMap(map, filename, apiKey) {

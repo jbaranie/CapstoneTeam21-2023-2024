@@ -7,14 +7,7 @@
     
 
 
-    <!--Region Directly Below the Menu Bar------------------------------------------------------------------------------------------------->
-    <div id="content">
-        <!-- Landing Page Content -->
-        <section id="main">
-            <div id="background">
-                <h1>A New Experimental Route App</h1>
-                <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p>
-                
+
                  <!-- Google Maps API is Loaded into HTML Landing Page-->
                 <div id="map" style="height: 500px;"></div> <!-- Set a height for the map container -->
                 <script async defer
@@ -22,22 +15,11 @@
                 </script>    
                 <script src="./src/GoogleMapAPI.js"></script>
             
-            </div>
-        </section>
+  
+    
 
-    </div>
-    
-    <!-- Border To Let Tester Know Everything below is a Prototype testing zone.--------------------------------------------------------->
-    <div id="reactEntryBorder">
-      <h3 style="color: white;">Temporary Container to Test React Code </h3>
-    </div>
-    
-    <!-- Entry point for React to render React things, not used atm.  This must be included to avoid bugs. Ideally All coding below is using Reactjs with reactEntry div-->
-    <div id="reactEntry">
-    </div>
 
     <!--Post-Load JScripts---------------------------------------------------------------------------------------------------------------->
-    <script src="./src/stickyMenu.js"></script> <!--Makes Main Menu Stick to the top when the user scrolls-->
     <script src="./src/importGPXTab.js"></script>
     <script src="./src/exportGPXTab.js"></script>
     
@@ -57,24 +39,12 @@
             script.onload = callback;
             document.head.appendChild(script);
         }
-        loadScript("gpxParser.js", function() { console.log("gpxParser.js loaded"); });
-        loadScript("GoogleMapAPI.js", function() { console.log("GoogleMapAPI.js loaded"); });
-        loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0&callback=initMap", function() { console.log("Google Maps API loaded"); });
+     //   loadScript("gpxParser.js", function() { console.log("gpxParser.js loaded"); });
+     //   loadScript("GoogleMapAPI.js", function() { console.log("GoogleMapAPI.js loaded"); });
+       // loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBgL-iJwE2T1Jm8oUDpVArKUIpGuvPUSI0&callback=initMap", function() { console.log("Google Maps API loaded"); });
     });
 
-    // Reload Function
-    window.onload = function() {
-        function setAppTitleMargin() {
-            const appTitle = document.getElementById("menu").getElementsByTagName("h2")[0];
-            const mainPageLink = document.getElementById("main-page-link");
-            if (appTitle && mainPageLink) {
-                const mainPageLinkRect = mainPageLink.getBoundingClientRect();
-                appTitle.style.marginLeft = mainPageLinkRect.left + "px";
-            }
-        }
-        setAppTitleMargin();
-        window.onresize = setAppTitleMargin;
-    };
+    
 </script>
 </body>
 </html>
