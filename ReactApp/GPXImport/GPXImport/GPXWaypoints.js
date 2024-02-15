@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect} from 'react';
-import { View, StyleSheet, Alert, TouchableOpacity, Text, ActivityIndicator} from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity, Text, ActivityIndicator, Image} from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
@@ -9,10 +9,15 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 
+//Local Files Import
 import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX} from './GPXManager';
 import { deleteFile } from './GPXFileList';
-
 import { styles } from './styles';
+
+//Icons Import
+import zoomInIcon from './assets/icons/zoomIn.png';
+import zoomOutIcon from './assets/icons/zoomOut.png';
+
 //Check how far the user is from a route start.
 //Uses Haversine Formula
 const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
@@ -800,35 +805,38 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
       {/*End of Map Component.*/}
       {/*In-Route Zoom Toggle */}
       {isCycling && (
-        <TouchableOpacity
-          style={{
-            position: 'absolute',
-            right: 12, //Top Right below built in center button
-            top: 60,
-            width: 40,
-            height: 40,
-            justifyContent: 'center', 
-            alignItems: 'center', 
-            backgroundColor: '#007aff',
-            borderRadius: 30,
-            padding: 0,
-            zIndex: 2, //Make it above map
-          }}
-          onPress={() => {
-            setIsZoomedIn(!isZoomedIn); // Toggle the zoom state
-            const newZoom = isZoomedIn ? zoomLevels.zoomedOut : zoomLevels.zoomedIn; // Determine the new zoom level based on the updated flag
-            // Update map region to reflect new zoom level
-            const newRegion = {
-              latitude: userLocation.latitude,
-              longitude: userLocation.longitude,
-              ...newZoom,
-            };
-            mapRef.current.animateToRegion(newRegion, 1000);
-          }}
-        >
-          <Text style={{ color: 'white', fontSize: 24 }}>{isZoomedIn ? '-' : '+'}</Text>
-        </TouchableOpacity>
-    )}
+  <TouchableOpacity
+    style={{
+      position: 'absolute',
+      right: 12, 
+      top: 60,
+      width: 40,
+      height: 40,
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      backgroundColor: '#007aff',
+      borderRadius: 30,
+      padding: 0,
+      zIndex: 2, // Make it above map
+    }}
+    onPress={() => {
+      setIsZoomedIn(!isZoomedIn); // Toggle the zoom state
+      const newZoom = isZoomedIn ? zoomLevels.zoomedOut : zoomLevels.zoomedIn; 
+      // Update map region 
+      const newRegion = {
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+        ...newZoom,
+      };
+      mapRef.current.animateToRegion(newRegion, 1000);
+    }}
+  >
+    <Image 
+      source={isZoomedIn ? zoomOutIcon : zoomInIcon} 
+      style={{ width: 24, height: 24 }} 
+    />
+  </TouchableOpacity>
+)}
       <SubMenuComponent
         isCycling={isCycling}
         isMenuOpen={isMenuOpen}
