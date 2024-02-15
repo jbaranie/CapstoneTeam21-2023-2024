@@ -403,10 +403,25 @@ const GPXWaypoints = ({route}) => {
   
   //Startup of photos waypoint file from storage; create if it does not exist yet
   const photoWaypointsSetup = async () => {
-    //TODO
-    //check file system on constant filename for existing photos waypoint GPX file
-      //if it does not exist, create new GPX contents in local storage
+    //console.log("Setting up photos file places.");
+    const fileInfo = await FileSystem.getInfoAsync(photosFilename);
+    const storageInfo = await FileSystem.getInfoAsync(photosDirectory);
+    //console.log(fileInfo);
+    //console.log(storageInfo);
+
+    if (!fileInfo.exists) {
+      console.log("GPX waypoints file missing; recreating.");
+      await clearPhotoWaypoints();
+    } else if (!storageInfo.exists) {
+      console.log("Image storage folder missing; recreating.");
+      //create folder for images
+      await FileSystem.makeDirectoryAsync(photosDirectory, { intermediates : true });
+    }
     //load the photo GPX file's contents using setPhotoGPXdata
+    const photosData = await FileSystem.readAsStringAsync(photosFilename);
+    //console.log(photosData);
+    setPhotoGPXdata(photosData);
+    //console.log("Photos data successfully retrieved or created.");
   }
 
   useEffect(() => {
@@ -417,26 +432,34 @@ const GPXWaypoints = ({route}) => {
   const addPhotoWaypoint = async () => {
     let selectedImage = await pickImage();
     if (selectedImage != null) {
-      //TODO preview image to confirm selection
-      let photoCt = (await FileSystem.readDirectoryAsync(photosDirectory)).length;
-      //TODO determine original image type and store as string
-      let photoName = "imageImport" + photoCt;// + ImageType;
-      //TODO add copy of photo to app local storage
-      //await FileSystem.copyAsync({
-      //  from: selectedImage.uri,
-      //  to: `${photosDirectory}${photoName}`,
-      //});
-
-      //TODO add waypoint to photosFilename
+      let photoList = await FileSystem.readDirectoryAsync(photosDirectory);
+      console.log(photoList);
+      //determine original image type and store as string
+      let imageNameSplit = selectedImage.uri.split(".");
+      let imageType = imageNameSplit[imageNameSplit.length - 1];
+      let photoNum = photoList.length;
+      let photoName = "importedImage" + photoNum + "." + imageType;
+      console.log(photoName);
+      
+      //create copy of photo to app local storage
+      const localCopyResult = await FileSystem.copyAsync({
+        from: selectedImage.uri,
+        to: `${photosDirectory}${photoName}`,
+      });
+      
+      let inLat = selectedImage.exif.GPSLatitude * (selectedImage.exif.GPSLatitudeRef=="N" ? 1 : -1);
+      let inLon = selectedImage.exif.GPSLongitude * (selectedImage.exif.GPSLongitudeRef=="E" ? 1 : -1);
+      await addWaypointToGPX(photosFilename, inLat, inLon, 2, Date.now().toString());//TODO fix ratings;
 
       //center map on location extracted from image
       var newRegion = {
-        latitude: selectedImage.exif.latitude,
-        longitude: selectedImage.exif.longitude,
-        latitudeDelta: selectedImage.exif.latitudeDelta,
-        longitudeDelta: selectedImage.exif.longitudeDelta
+        latitude: inLat,
+        longitude: inLon
       };
+      //console.log(newRegion);
       mapRef.current.animateToRegion(newRegion, 1);
+    } else {
+      console.log("Error importing the image.");
     }
   }
 
@@ -445,6 +468,15 @@ const GPXWaypoints = ({route}) => {
     //TODO figure out how waypoint input selection
     //remove from photos waypoint GPX file
     //remove copy of photo used from app local storage
+  }
+
+  const clearPhotoWaypoints = async () => {
+    const initialContent =
+`<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="CyclingMarker">
+</gpx>`;
+    //create new GPX contents in local storage and save it
+    await FileSystem.writeAsStringAsync(photosFilename, initialContent);
   }
 
   const shareWaypointPhoto = () => {
