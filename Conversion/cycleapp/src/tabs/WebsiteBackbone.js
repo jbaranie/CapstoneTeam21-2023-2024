@@ -37,9 +37,9 @@ const WebsiteBackbone = () => {
             </div>
            
            <div id="content">
-                {currentTab === 'import' && <ImportGPXTab />}
-                {currentTab === 'export' && <ExportGPXTab />}
-                {currentTab === 'images' && <ImagesTab />}
+                 {currentTab === 'import' && <ImportGPXTab />}
+                 {currentTab === 'export' && <ExportGPXTab />}
+                 {currentTab === 'images' && <ImagesTab />}
                 {/* Add conditional rendering for other tabs */}
                
             </div>
