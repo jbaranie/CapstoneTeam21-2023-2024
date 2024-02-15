@@ -55,6 +55,14 @@ const GPXWaypoints = ({route}) => {
   const [hasLocationPermission, setHasLocationPermission] = useState(null);
   const [isMapReady, setIsMapReady] = useState(false);
 
+  //Zoom States
+  const zoomLevels = {
+    zoomedOut: { latitudeDelta: 0.0922, longitudeDelta: 0.0421 }, // Zoom Out
+    zoomedIn: { latitudeDelta: 0.005, longitudeDelta: 0.005 }, // Zoom In
+  };
+  const [currentZoom, setCurrentZoom] = useState(zoomLevels.zoomedOut); 
+  const [isZoomedIn, setIsZoomedIn] = useState(false);
+
   useEffect(() => {
     if (route.params?.gpxFilePath) {
       const filePath = route.params.gpxFilePath;
@@ -790,6 +798,37 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
         <LoadingScreen />
       )}
       {/*End of Map Component.*/}
+      {/*In-Route Zoom Toggle */}
+      {isCycling && (
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            right: 12, //Top Right below built in center button
+            top: 60,
+            width: 40,
+            height: 40,
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            backgroundColor: '#007aff',
+            borderRadius: 30,
+            padding: 0,
+            zIndex: 2, //Make it above map
+          }}
+          onPress={() => {
+            setIsZoomedIn(!isZoomedIn); // Toggle the zoom state
+            const newZoom = isZoomedIn ? zoomLevels.zoomedOut : zoomLevels.zoomedIn; // Determine the new zoom level based on the updated flag
+            // Update map region to reflect new zoom level
+            const newRegion = {
+              latitude: userLocation.latitude,
+              longitude: userLocation.longitude,
+              ...newZoom,
+            };
+            mapRef.current.animateToRegion(newRegion, 1000);
+          }}
+        >
+          <Text style={{ color: 'white', fontSize: 24 }}>{isZoomedIn ? '-' : '+'}</Text>
+        </TouchableOpacity>
+    )}
       <SubMenuComponent
         isCycling={isCycling}
         isMenuOpen={isMenuOpen}
