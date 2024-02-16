@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './WebsiteBackbone.css';
+import './WebsiteFoundation.css';
 
 import ImportGPXTab from './importGPXTab.js'; 
 import ExportGPXTab from './exportGPXTab.js'; 
@@ -8,7 +8,7 @@ import ImagesTab from './imagesTab.js';
 
 // Import other tab components as needed
 
-const WebsiteBackbone = () => {
+const WebsiteFoundation = () => {
       // State to keep track of the current tab
     const [currentTab, setCurrentTab] = useState('main');
 
@@ -58,4 +58,4 @@ const WebsiteBackbone = () => {
     );
 };
 
-export default WebsiteBackbone;
+export default WebsiteFoundation;

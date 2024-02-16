@@ -1,7 +1,7 @@
 import './App.css';
 import './scripts/gpxParser.js';
 
-import WebsiteBackbone from './tabs/WebsiteBackbone.js';
+import WebsiteFoundation from './tabs/WebsiteFoundation.js';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <input type="file" accept=".gpx" id="fileInput" style={{ display: 'none' }} />
       
        {/* Loads Website Template - Main Menu Bar and Region Underneath */}
-       <WebsiteBackbone />
+       <WebsiteFoundation />
       
       
 
