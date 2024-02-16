@@ -53,7 +53,7 @@ const GPXWaypoints = ({route}) => {
   const [elapsedTime, setElapsedTime] =useState(0);
   const timerRef = useRef(null);
   const [currentGPXPath, setCurrentGPXPath] = useState('');
-  const [photoGPXdata, setPhotoGPXdata] = useState('');
+  const [photoGPXdata, setPhotoGPXdata] = useState([]);//deprecated, but may be useful so it's still here
   const navigation = useNavigation();
 
   //Permission states
@@ -412,15 +412,22 @@ const GPXWaypoints = ({route}) => {
     if (!fileInfo.exists) {
       console.log("GPX waypoints file missing; recreating.");
       await clearPhotoWaypoints();
-    } else if (!storageInfo.exists) {
+      //await deleteAllImportedPhotos();//useful DEBUG action of clearing photos folder on deleting photos file
+    }
+    if (!storageInfo.exists) {
       console.log("Image storage folder missing; recreating.");
       //create folder for images
       await FileSystem.makeDirectoryAsync(photosDirectory, { intermediates : true });
     }
+
+    //below is deprecated due to not storing image import GPX data anymore, but may still be useful for future functions
     //load the photo GPX file's contents using setPhotoGPXdata
-    const photosData = await FileSystem.readAsStringAsync(photosFilename);
-    //console.log(photosData);
-    setPhotoGPXdata(photosData);
+    let photosData = await FileSystem.readAsStringAsync(photosFilename);
+    var dataLines = photosData.split("\n").filter((word)=>{
+      let expectedWpt = word.trim();
+      return expectedWpt.startsWith("<wpt") && !expectedWpt.includes("undefined");
+    });
+    setPhotoGPXdata(dataLines);
     //console.log("Photos data successfully retrieved or created.");
   }
 
@@ -442,14 +449,16 @@ const GPXWaypoints = ({route}) => {
       console.log(photoName);
       
       //create copy of photo to app local storage
-      const localCopyResult = await FileSystem.copyAsync({
+      await FileSystem.copyAsync({
         from: selectedImage.uri,
         to: `${photosDirectory}${photoName}`,
       });
+      let descContent = `${photosDirectory}${photoName}`;
+      //TODO add dialog for a user-submitted name and info-line for the waypoint
       
       let inLat = selectedImage.exif.GPSLatitude * (selectedImage.exif.GPSLatitudeRef=="N" ? 1 : -1);
       let inLon = selectedImage.exif.GPSLongitude * (selectedImage.exif.GPSLongitudeRef=="E" ? 1 : -1);
-      await addWaypointToGPX(photosFilename, inLat, inLon, 2, Date.now().toString());//TODO fix ratings;
+      await addWaypointToGPX(photosFilename, inLat, inLon, 2, Date.now().toString(), descContent);//TODO fix ratings;
 
       //center map on location extracted from image
       var newRegion = {
@@ -458,13 +467,16 @@ const GPXWaypoints = ({route}) => {
       };
       //console.log(newRegion);
       mapRef.current.animateToRegion(newRegion, 1);
+
+      //reset internal collection of waypoints
+      photoWaypointsSetup();
     } else {
       console.log("Error importing the image.");
     }
   }
 
   //Function called when photos waypoints are deleted
-  const deletePhotoWaypoint = () => {
+  const deletePhotoWaypoint = async () => {
     //TODO figure out how waypoint input selection
     //remove from photos waypoint GPX file
     //remove copy of photo used from app local storage
@@ -479,7 +491,21 @@ const GPXWaypoints = ({route}) => {
     await FileSystem.writeAsStringAsync(photosFilename, initialContent);
   }
 
-  const shareWaypointPhoto = () => {
+  const deleteAllImportedPhotos = async () => {
+    const storageInfo = await FileSystem.getInfoAsync(photosDirectory);
+    if (storageInfo.exists) {
+      const photoFiles = await FileSystem.readDirectoryAsync(photosDirectory);
+      console.log(photoFiles);
+      console.log("clearing photo storage");
+      for (photoItem in photoFiles) {
+        FileSystem.deleteAsync(`${photosDirectory}${photoFiles[photoItem]}`);
+      }
+    }
+    const expectedEmpty = await FileSystem.readDirectoryAsync(photosDirectory);
+    console.log(expectedEmpty);
+  }
+
+  const shareWaypointPhoto = async () => {
     //TOOD figure out waypoint input selection
     //do FileShare API on photo in app local storage
   }

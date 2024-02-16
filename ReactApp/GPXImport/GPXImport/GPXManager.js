@@ -79,18 +79,23 @@ const deleteWaypointFromGPX = async (filePath, id) => {
   }
 };
 
-const addWaypointToGPX = async (filePath, latitude, longitude, rating, id) => {
+const addWaypointToGPX = async (filePath, latitude, longitude, rating, id, descExtend = "", waypointName = "", waypointElements = []) => {
   //console.log(`Adding waypoint to GPX file: ${filePath}`);
   console.log('WaypointID: ' + id);
   try {
     //console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
     let fileContent = await FileSystem.readAsStringAsync(filePath);
+    let descContent = ((descExtend != "") ? (id + " - " + descExtend) : id);
+    let wpName = ((waypointName != "") ? waypointName : "Waypoint");
+
+    //TODO use the waypointElements array to customize this further after evaluating against GPX schema
     
-    const waypoint = `<wpt lat="${latitude}" lon="${longitude}">
-      <name>Waypoint</name>
-      <desc>${id}</desc>
-      <rating>${rating}</rating>
-    </wpt>`;
+    const waypoint =
+`  <wpt lat="${latitude}" lon="${longitude}">
+    <name>${wpName}</name>
+    <desc>${descContent}</desc>
+    <rating>${rating}</rating>
+  </wpt>`;
 
     fileContent = fileContent.replace("</gpx>", `${waypoint}\n</gpx>`);
 
@@ -138,7 +143,6 @@ const addRoutePointToGPX = async (filePath, routeId, routePoint) => {
     console.error(`An error occurred while adding point to route ID ${routeId}:`, error);
   }
 };
-
 
 export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX};
 
