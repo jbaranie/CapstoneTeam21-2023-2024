@@ -144,5 +144,20 @@ const addRoutePointToGPX = async (filePath, routeId, routePoint) => {
   }
 };
 
-export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX};
+const deleteAllImportedPhotos = async () => {
+  const photosDirectory = `${FileSystem.documentDirectory}${photoLocalStore}`;
+  const storageInfo = await FileSystem.getInfoAsync(photosDirectory);
+  if (storageInfo.exists) {
+    const photoFiles = await FileSystem.readDirectoryAsync(photosDirectory);
+    console.log(photoFiles);
+    console.log("clearing photo storage");
+    for (photoItem in photoFiles) {
+      FileSystem.deleteAsync(`${photosDirectory}${photoFiles[photoItem]}`);
+    }
+  }
+  const expectedEmpty = await FileSystem.readDirectoryAsync(photosDirectory);
+  console.log(expectedEmpty);
+}
+
+export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos };
 

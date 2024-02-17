@@ -9,7 +9,7 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 
-import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX } from './GPXManager';
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos } from './GPXManager';
 import { deleteFile, photoWaypointsFile, photoLocalStore, iosShare } from './GPXFileList';
 import { pickImage } from './ImageImport';
 import { styles } from './styles';
@@ -489,20 +489,6 @@ const GPXWaypoints = ({route}) => {
 </gpx>`;
     //create new GPX contents in local storage and save it
     await FileSystem.writeAsStringAsync(photosFilename, initialContent);
-  }
-
-  const deleteAllImportedPhotos = async () => {
-    const storageInfo = await FileSystem.getInfoAsync(photosDirectory);
-    if (storageInfo.exists) {
-      const photoFiles = await FileSystem.readDirectoryAsync(photosDirectory);
-      console.log(photoFiles);
-      console.log("clearing photo storage");
-      for (photoItem in photoFiles) {
-        FileSystem.deleteAsync(`${photosDirectory}${photoFiles[photoItem]}`);
-      }
-    }
-    const expectedEmpty = await FileSystem.readDirectoryAsync(photosDirectory);
-    console.log(expectedEmpty);
   }
 
   const shareWaypointPhoto = async () => {
