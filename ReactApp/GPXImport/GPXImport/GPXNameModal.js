@@ -1,12 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
+// Function to generate default file name
+const getDefaultFileName = () => {
+  const currDate = new Date();
+  const fileNameDateTime = `${currDate.getFullYear()}-${
+    String(currDate.getMonth() + 1).padStart(2, '0')}-${
+    String(currDate.getDate()).padStart(2, '0')}_${
+    String(currDate.getHours()).padStart(2, '0')}-${
+    String(currDate.getMinutes()).padStart(2, '0')}-${
+    String(currDate.getSeconds()).padStart(2, '0')}`;
+  return `${fileNameDateTime}`;
+};
+
 const GPXNameModal = ({ isVisible, onConfirm, onCancel }) => {
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState(getDefaultFileName());
+
+  useEffect(() => {
+    // Update the fileName state every time the modal becomes visible
+    if (isVisible) {
+      setFileName(getDefaultFileName());
+    }
+  }, [isVisible]);
 
   const handleConfirm = () => {
     onConfirm(fileName.trim() || "Unnamed Route");
-    setFileName(''); // Reset the input field
+    setFileName(getDefaultFileName()); // Reset the input field with new default name
   };
 
   return (
@@ -23,6 +42,7 @@ const GPXNameModal = ({ isVisible, onConfirm, onCancel }) => {
             style={styles.input}
             value={fileName}
             onChangeText={setFileName}
+            selectTextOnFocus={true} // Highlight text when input is focused
           />
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={handleConfirm} style={styles.button}>
