@@ -12,6 +12,8 @@ import { useNavigation } from '@react-navigation/native';
 import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX} from './GPXManager';
 import { deleteFile } from './GPXFileList';
 import WaypointModal from './WaypointModal';
+import GPXNameModal from './GPXNameModal';
+
 
 import { styles } from './styles';
 //Check how far the user is from a route start.
@@ -63,6 +65,10 @@ const GPXWaypoints = ({route}) => {
   //Permission states
   const [hasLocationPermission, setHasLocationPermission] = useState(null);
   const [isMapReady, setIsMapReady] = useState(false);
+  
+  //GPX name Modal states
+  const [gpxNameModalVisible, setGpxNameModalVisible] = useState(false);
+
 
   //Update states from GPXFileList
   useEffect(() => {
