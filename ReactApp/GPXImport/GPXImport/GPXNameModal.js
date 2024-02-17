@@ -13,7 +13,7 @@ const getDefaultFileName = () => {
   return `${fileNameDateTime}`;
 };
 
-const GPXNameModal = ({ isVisible, onConfirm, onCancel }) => {
+const GPXNameModal = ({ isVisible, onConfirm }) => {
   const [fileName, setFileName] = useState(getDefaultFileName());
 
   useEffect(() => {
@@ -33,10 +33,10 @@ const GPXNameModal = ({ isVisible, onConfirm, onCancel }) => {
       animationType="slide"
       transparent={true}
       visible={isVisible}
-      onRequestClose={onCancel}>
+      onRequestClose={() => {}}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Name Your GPX File</Text>
+          <Text style={styles.modalText}>Name Your Route:</Text>
           <TextInput
             placeholder="Enter file name"
             style={styles.input}
@@ -45,11 +45,8 @@ const GPXNameModal = ({ isVisible, onConfirm, onCancel }) => {
             selectTextOnFocus={true} // Highlight text when input is focused
           />
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={handleConfirm} style={styles.button}>
+            <TouchableOpacity onPress={handleConfirm} style={[styles.button, { width: '50%' }]}>
               <Text style={styles.buttonText}>OK</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onCancel} style={[styles.button, styles.cancelButton]}>
-              <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -59,60 +56,63 @@ const GPXNameModal = ({ isVisible, onConfirm, onCancel }) => {
 };
 
 const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
-  },
-  modalView: {
-    margin: 20,
-    width: '80%',
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
-  },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-    width: '100%',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  button: {
-    backgroundColor: "#2196F3",
-    padding: 10,
-    borderRadius: 20,
-    margin: 10,
-    width: '40%',
-    alignItems: 'center',
-  },
-  cancelButton: {
-    backgroundColor: "#f44336",
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-    fontWeight: 'bold',
-  }
-});
+    modalView: {
+      margin: 20,
+      width: '80%',
+      backgroundColor: "white",
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "flex-start", // Align items to the start (left) instead of center
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+    },
+    input: {
+      height: 40,
+      marginVertical: 8, // Adjust vertical margin for equal spacing
+      borderWidth: 1,
+      padding: 10,
+      width: '100%',
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center', // Center the button in the container
+      width: '100%',
+      marginTop: 8, // Adjust margin top for equal spacing
+    },
+    button: {
+      backgroundColor: "#2196F3",
+      padding: 10,
+      borderRadius: 20,
+      alignSelf: 'center', // Ensure the button is centered
+      width: '100%', // Button takes full width of its container
+    },
+    cancelButton: {
+      backgroundColor: "#f44336",
+    },
+    buttonText: {
+      color: 'white',
+      fontWeight: 'bold',
+      textAlign: 'center', // Ensure text is centered within the button
+    },
+    modalText: {
+      marginBottom: 8, // Adjust bottom margin for equal spacing
+      textAlign: "left", // Align text to the left
+      fontWeight: 'bold',
+      width: '100%', // Ensure text container takes full width for proper alignment
+    },
+  });
+  
 
 export default GPXNameModal;
