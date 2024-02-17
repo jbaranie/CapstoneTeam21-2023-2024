@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
       backgroundColor: "white",
       borderRadius: 20,
       padding: 35,
-      alignItems: "flex-start", // Align items to the start (left) instead of center
+      alignItems: "flex-start", 
       shadowColor: "#000",
       shadowOffset: {
         width: 0,
@@ -80,23 +80,23 @@ const styles = StyleSheet.create({
     },
     input: {
       height: 40,
-      marginVertical: 8, // Adjust vertical margin for equal spacing
+      marginVertical: 8, 
       borderWidth: 1,
       padding: 10,
       width: '100%',
     },
     buttonContainer: {
       flexDirection: 'row',
-      justifyContent: 'center', // Center the button in the container
+      justifyContent: 'center', 
       width: '100%',
-      marginTop: 8, // Adjust margin top for equal spacing
+      marginTop: 8, 
     },
     button: {
       backgroundColor: "#2196F3",
       padding: 10,
       borderRadius: 20,
-      alignSelf: 'center', // Ensure the button is centered
-      width: '100%', // Button takes full width of its container
+      alignSelf: 'center', 
+      width: '100%', 
     },
     cancelButton: {
       backgroundColor: "#f44336",
@@ -104,13 +104,13 @@ const styles = StyleSheet.create({
     buttonText: {
       color: 'white',
       fontWeight: 'bold',
-      textAlign: 'center', // Ensure text is centered within the button
+      textAlign: 'center',
     },
     modalText: {
-      marginBottom: 8, // Adjust bottom margin for equal spacing
-      textAlign: "left", // Align text to the left
+      marginBottom: 8,
+      textAlign: "left", 
       fontWeight: 'bold',
-      width: '100%', // Ensure text container takes full width for proper alignment
+      width: '100%', 
     },
   });
   
