@@ -34,6 +34,32 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
 };
 
 const GPXWaypoints = ({route}) => {
+
+  const handleGPXNameConfirm = async (fileName) => {
+    // Rename the GPX file here using FileSystem from 'expo-file-system'
+    const newPath = `${FileSystem.documentDirectory}${fileName}.gpx`;
+    try {
+      await FileSystem.moveAsync({
+        from: currentGPXPath,
+        to: newPath,
+      });
+      console.log(`GPX file renamed to: ${newPath}`);
+      setCurrentGPXPath(''); // Reset the current GPX file path
+      // Navigate away or refresh the list as needed
+      navigation.navigate('GPX Files', { refreshFileList: true });
+    } catch (error) {
+      console.error('Error renaming GPX file:', error);
+      showMessage({
+        message: "Error renaming GPX file",
+        description: "Please try again.",
+        hideOnPress: true,
+        type: "error",
+        duration: 3000 
+      });
+    }
+    setGpxNameModalVisible(false); // Close the modal
+  };  
+
   //Location and map state/refs
   const [waypoints, setWaypoints] = useState([]);
   const [imported, setImported] = useState(false);
@@ -205,17 +231,19 @@ const GPXWaypoints = ({route}) => {
           // Log the content of the GPX file
           // const fileContent = await FileSystem.readAsStringAsync(currentGPXPath);
           // console.log('GPX File Content:', fileContent);
-          
-          showMessage({
-            message: "Route has ended.",
-            hideOnPress: true,
-            type: "info",
-            duration: 2000
-          });
+
+          setGpxNameModalVisible(true);
+
+          // showMessage({
+          //   message: "Route has ended.",
+          //   hideOnPress: true,
+          //   type: "info",
+          //   duration: 2000
+          // });
           // Refresh the GPX file list to include the new file
-          navigation.navigate('GPX Files', { refreshFileList: true });
+          // navigation.navigate('GPX Files', { refreshFileList: true });
         }
-        setCurrentGPXPath(''); // Reset the current GPX file path
+        //setCurrentGPXPath(''); // Reset the current GPX file path
       } else {
         console.error('No GPX file path found when trying to stop route');
 
@@ -876,6 +904,12 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
         badMarkerPress={badMarkerPress}
         stopRoute={stopRoute}
       />
+      <GPXNameModal
+        isVisible={gpxNameModalVisible}
+        onConfirm={handleGPXNameConfirm}
+        onCancel={() => setGpxNameModalVisible(false)}
+      />
+
       <FlashMessage position="top" />
     </View>
   );
