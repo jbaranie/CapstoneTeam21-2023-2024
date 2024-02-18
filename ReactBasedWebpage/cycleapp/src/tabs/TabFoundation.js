@@ -4,7 +4,7 @@ import './TabFoundation.css';
 import ImportGPXTab from './ImportGPXTab.js'; 
 import ExportGPXTab from './ExportGPXTab.js'; 
 import ImagesTab from './ImagesTab.js'; 
-
+import ReactGoogleMapAPI from '../Scripts/ReactGoogleMapAPI';
 
 // Import other tab components as needed
 
@@ -43,6 +43,19 @@ const WebsiteFoundation = () => {
                 {/* Add conditional rendering for other tabs */}
                
             </div>
+           
+            <div id="content">
+                <section id="main">
+                    <div id="background">
+                        <h1>A New Experimental Route App</h1>
+                        <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p> 
+                         <ReactGoogleMapAPI />
+                    </div>
+                </section>
+            </div> 
+       
+            
+            
             
             {/*TO DO- Move Code to a new tab.js file for the landing page. 
             <div id="content">
