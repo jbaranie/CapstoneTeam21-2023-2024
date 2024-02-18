@@ -240,18 +240,19 @@ const GPXWaypoints = ({route}) => {
   };
 
   // Function to handle modal confirm
-  const handleAddWaypoint = async (title, description) => {
+  const handleAddWaypoint = async (title, description, image) => {
     const waypointId = Date.now().toString();
     try {
       //title, description added. ID now in custom GPX tag. 
-      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, waypointRating, waypointId, title, description);
+      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, waypointRating, waypointId, title, description, image);
       setWaypoints(prevWaypoints => [...prevWaypoints, {
         id: waypointId,
         latitude: userLocation.latitude,
         longitude: userLocation.longitude,
         name: title,
         description: description,
-        rating: waypointRating
+        rating: waypointRating,
+        image: image
       }]);
       setModalVisible(false); // Close the modal
     } catch (err) {
