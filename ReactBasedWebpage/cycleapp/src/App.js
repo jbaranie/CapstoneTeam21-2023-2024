@@ -1,7 +1,7 @@
 import './App.css';
-import './scripts/gpxParser.js';
+import './Scripts/gpxParser.js';
 
-import WebsiteFoundation from './tabs/WebsiteFoundation.js';
+import TabFoundation from './Tabs/TabFoundation.js';
 
 function App() {
   return (
@@ -11,10 +11,8 @@ function App() {
         <input type="file" accept=".gpx" id="fileInput" style={{ display: 'none' }} />
       
        {/* Loads Website Template - Main Menu Bar and Region Underneath */}
-       <WebsiteFoundation />
+       <TabFoundation />
       
-      
-
     </div>
   );
 }

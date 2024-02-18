@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import './WebsiteFoundation.css';
+import './TabFoundation.css';
 
-import ImportGPXTab from './importGPXTab.js'; 
-import ExportGPXTab from './exportGPXTab.js'; 
-import ImagesTab from './imagesTab.js'; 
+import ImportGPXTab from './ImportGPXTab.js'; 
+import ExportGPXTab from './ExportGPXTab.js'; 
+import ImagesTab from './ImagesTab.js'; 
 
 
 // Import other tab components as needed
