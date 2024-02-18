@@ -80,5 +80,12 @@ export const styles = StyleSheet.create({
       marginTop: 20,
       fontSize: 16,
       color: 'gray'
+    },
+    inputText: {
+      padding: 10,
+      fontSize : 20,
+      width: 300,
+      alignSelf: 'center',
+      backgroundColor: 'white'
     }
   });
