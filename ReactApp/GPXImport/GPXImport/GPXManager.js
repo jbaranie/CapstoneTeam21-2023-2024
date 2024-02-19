@@ -79,17 +79,18 @@ const deleteWaypointFromGPX = async (filePath, id) => {
   }
 };
 
-const addWaypointToGPX = async (filePath, latitude, longitude, rating, id) => {
+const addWaypointToGPX = async (filePath, latitude, longitude, rating, id, title = "Waypoint", description = "No Description") => {
   //console.log(`Adding waypoint to GPX file: ${filePath}`);
   console.log('WaypointID: ' + id);
   try {
     //console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
     let fileContent = await FileSystem.readAsStringAsync(filePath);
-    
+    //Default values for title, description. 
     const waypoint = `<wpt lat="${latitude}" lon="${longitude}">
-      <name>Waypoint</name>
-      <desc>${id}</desc>
+      <name>${title}</name>
+      <desc>${description}</desc>
       <rating>${rating}</rating>
+      <id>${id}</id>
     </wpt>`;
 
     fileContent = fileContent.replace("</gpx>", `${waypoint}\n</gpx>`);
