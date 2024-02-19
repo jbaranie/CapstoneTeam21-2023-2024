@@ -238,6 +238,7 @@ const GPXWaypoints = ({route}) => {
         showMessage({
             message: "Good Waypoint Added!",
             type: "success",
+            backgroundColor: "#2196f3",
             duration: 3000
         });
     } catch (err) {
@@ -265,6 +266,7 @@ const GPXWaypoints = ({route}) => {
         showMessage({
             message: "Bad Waypoint Added!",
             type: "success",
+            backgroundColor: "#2196f3",
             duration: 3000
         });
     } catch (err) {
