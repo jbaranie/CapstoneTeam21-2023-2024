@@ -41,7 +41,8 @@ const GPXFileList = ({ navigation }) => {
           from: fileUri,
           to: newFileUri,
         });
-  
+
+        
         // Refresh the file list to show the new file
         refreshFileList();
       } else {
@@ -182,6 +183,16 @@ const GPXFileList = ({ navigation }) => {
       alert('Error saving file!');
     }
   };  
+
+  const logGPXContent = async (fileName) => {
+    try {
+      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
+      const content = await FileSystem.readAsStringAsync(fileUri);
+      console.log(content); 
+    } catch (error) {
+      console.error('Error reading GPX file:', error);
+    }
+  };
 
   const handleFilePress = (fileName) => {
     navigation.navigate('Home', { gpxFilePath: fileName , imported: true});
