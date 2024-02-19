@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect} from 'react';
-import { View, StyleSheet, Alert, TouchableOpacity, Text, ActivityIndicator} from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Platform, Alert, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
@@ -9,7 +9,7 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 
-import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX} from './GPXManager';
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX } from './GPXManager';
 import { deleteFile } from './GPXFileList';
 
 import { styles } from './styles';
@@ -22,9 +22,9 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(lat1 * Math.PI / 180) *
-      Math.cos(lat2 * Math.PI / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const d = R * c;
   return d;
@@ -43,6 +43,9 @@ const GPXWaypoints = ({route}) => {
   const mapRef = useRef(null);
   const userLocationRef = useRef(userLocation);
   const [hasAnimatedToUserLocation, setHasAnimatedToUserLocation] = useState(false);
+  const [latitudeDeltaDefault, setLatitudeDeltaDefault] = useState(0.0922);
+  const [longitudeDeltaDefault, setLongitudeDeltaDefault] = useState(0.0421);
+  const zoomScalar = 2;
 
   //Active route/nav state
   const [isCycling, setIsCycling] = useState(false);
@@ -95,8 +98,8 @@ const GPXWaypoints = ({route}) => {
           const userLoc = {
             latitude: newLocation.coords.latitude,
             longitude: newLocation.coords.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: latitudeDeltaDefault,
+            longitudeDelta: longitudeDeltaDefault,
           };
           setUserLocation(userLoc);
           setIsMapReady(true);
@@ -116,9 +119,9 @@ const GPXWaypoints = ({route}) => {
   //Animate to the user's location
   const onMapReady = () => {
     if (userLocation && mapRef.current && !hasAnimatedToUserLocation) {
-      mapRef.current.animateToRegion(userLocation, 1);
-      setHasAnimatedToUserLocation(true); 
+      setHasAnimatedToUserLocation(true);
       setIsMapReady(true);
+      centerOnUserLocation();
     }
   };
   
@@ -210,8 +213,6 @@ const GPXWaypoints = ({route}) => {
       console.error('Error in stopRoute:', error);
     }
   };
-  
-  
  
   const goodMarkerPress = async () => {
     const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
@@ -238,9 +239,9 @@ const GPXWaypoints = ({route}) => {
             duration: 3000
         });
     }
-};
+  };
 
-const badMarkerPress = async () => {
+  const badMarkerPress = async () => {
     const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
     try {
         await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1, waypointId);
@@ -265,7 +266,7 @@ const badMarkerPress = async () => {
             duration: 3000
         });
     }
-};
+  };
     
   //Importing the GPX File
   const importGPXFile = async () => {
@@ -593,56 +594,55 @@ const badMarkerPress = async () => {
       }
     };
   }, [isCycling, currentGPXPath, routes, currentRoute]);
-  
 
-//Seperated Rendering Components --------------------------------
+  //Seperated Rendering Components --------------------------------
 
-//Loading Screen Component
-const LoadingScreen = () => (
-  <View style={styles.loadingContainer}>
-    <ActivityIndicator size="large" color="#0000ff" />
-    <Text style={styles.loadingText}>Gathering user location data . . .</Text>
-  </View>
-);
-
-//Route Timer Component 
-const TimerComponent = ({ isCycling, elapsedTime }) => {
-  if (!isCycling) return null;
-
-  const hours = Math.floor(elapsedTime / 3600);
-  const minutes = Math.floor((elapsedTime % 3600) / 60);
-  const seconds = elapsedTime % 60;
-
-  const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  return (
-    <View style={{
-      position: 'absolute',
-      top: 50,
-      alignSelf: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      padding: 10,
-      borderRadius: 10,
-      zIndex: 1,
-      maxWidth: 150
-    }}>
-      <Text style={{
-        fontSize: 36,
-        color: 'white'
-      }}>
-        {formattedTime}
-      </Text>
+  //Loading Screen Component
+  const LoadingScreen = () => (
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator size="large" color="#0000ff" />
+      <Text style={styles.loadingText}>Gathering user location data . . .</Text>
     </View>
   );
-};
 
-//Main Menu Expanding Button Component
-const SubMenuComponent = ({ isCycling, isMenuOpen, startRoute, importGPXFile, setMenuOpen }) => {
-  if (isCycling || !isMapReady) return null;
-  return (
-    <View style={styles.buttonContainer}>
-      {isMenuOpen && (
-        <View style={styles.subMenuContainer}>
+  //Route Timer Component 
+  const TimerComponent = ({ isCycling, elapsedTime }) => {
+    if (!isCycling) return null;
+
+    const hours = Math.floor(elapsedTime / 3600);
+    const minutes = Math.floor((elapsedTime % 3600) / 60);
+    const seconds = elapsedTime % 60;
+
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    return (
+      <View style={{
+        position: 'absolute',
+        top: 50,
+        alignSelf: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: 10,
+        borderRadius: 10,
+        zIndex: 1,
+        maxWidth: 150
+      }}>
+        <Text style={{
+          fontSize: 36,
+          color: 'white'
+        }}>
+          {formattedTime}
+        </Text>
+      </View>
+    );
+  };
+
+  //Main Menu Expanding Button Component
+  const SubMenuComponent = ({ isCycling, isMenuOpen, startRoute, importGPXFile, setMenuOpen }) => {
+    if (isCycling || !isMapReady) return null;
+    return (
+      <View style={styles.buttonContainer}>
+        {isMenuOpen && (
           <View style={styles.subMenuContainer}>
+            <View style={styles.subMenuContainer}>
               <TouchableOpacity 
                 style={styles.customButton} 
                 onPress={startRoute} 
@@ -655,63 +655,120 @@ const SubMenuComponent = ({ isCycling, isMenuOpen, startRoute, importGPXFile, se
                 </TouchableOpacity>
               */}
             </View>
-        </View>
-      )}
-      <TouchableOpacity
-        style={styles.menuButton}
-        onPress={() => setMenuOpen(!isMenuOpen)}
-      >
-        <Text style={[
-          styles.menuButtonText, 
-          { lineHeight: isMenuOpen ? 40 : 50 } 
-        ]}>
-          {isMenuOpen ? 'x' : '+'}
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-//Active Route View and Buttons
-const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, stopRoute }) => {
-  if (!isCycling) return null;
-
-  return (
-    <View style={styles.actionContainer}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+          </View>
+        )}
         <TouchableOpacity
-          style={[styles.customLargeButton, { backgroundColor: 'green', flex: 1, marginRight: 5 }]}
-          onPress={goodMarkerPress}
+          style={styles.menuButton}
+          onPress={() => setMenuOpen(!isMenuOpen)}
         >
-          <Text style={styles.buttonText}>Good</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.customLargeButton, { backgroundColor: 'red', flex: 1, marginLeft: 5 }]}
-          onPress={badMarkerPress}
-        >
-          <Text style={styles.buttonText}>Bad</Text>
+          <Text style={[
+            styles.menuButtonText, 
+            { lineHeight: isMenuOpen ? 40 : 50 } 
+          ]}>
+            {isMenuOpen ? 'x' : '+'}
+          </Text>
         </TouchableOpacity>
       </View>
+    );
+  };
 
-      <TouchableOpacity 
-        style={[styles.customButton, { marginTop: 10, width: '100%'}]} 
-        onPress={confirmStopRoute} 
-      >
-        <Text style={styles.buttonText}>Stop Route</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
+  //Active Route View and Buttons
+  const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, stopRoute }) => {
+    if (!isCycling) return null;
 
-//Actual Rendering Function
+    return (
+      <View style={styles.actionContainer}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+          <TouchableOpacity
+            style={[styles.customLargeButton, { backgroundColor: 'green', flex: 1, marginRight: 5 }]}
+            onPress={goodMarkerPress}
+          >
+            <Text style={styles.buttonText}>Good</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.customLargeButton, { backgroundColor: 'red', flex: 1, marginLeft: 5 }]}
+            onPress={badMarkerPress}
+          >
+            <Text style={styles.buttonText}>Bad</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity 
+          style={[styles.customButton, { marginTop: 10, width: '100%'}]} 
+          onPress={confirmStopRoute} 
+        >
+          <Text style={styles.buttonText}>Stop Route</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  //iOS additional map control functions & buttons (Android/Google maps contains these on the screen automatically; Apple maps does not have this feature)
+  const regionZoomCopy = (regionData, zoomAction = 0) => {
+    var newRegion = {
+      latitude: regionData.latitude,
+      longitude: regionData.longitude,
+      latitudeDelta: regionData.latitudeDelta,
+      longitudeDelta: regionData.longitudeDelta
+    };
+    if (zoomAction == 1) {//zoom in
+      newRegion.latitudeDelta = newRegion.latitudeDelta / zoomScalar;
+      newRegion.longitudeDelta = newRegion.longitudeDelta / zoomScalar;
+    }
+    if (zoomAction == 2) {//zoom out
+      newRegion.latitudeDelta = newRegion.latitudeDelta * zoomScalar;
+      newRegion.longitudeDelta = newRegion.longitudeDelta * zoomScalar;
+    }
+    return newRegion;
+  }
+  const centerOnUserLocation = () => {
+    //console.log("center on user");
+    //console.log(userLocation);
+    //console.log(mapRef.current);
+    mapRef.current.animateToRegion(userLocation, 1);
+  }
+  const iosZoomIn = () => {
+    //console.log("zoom in");
+    //console.log(mapRegion);
+    var newRegion = regionZoomCopy(mapRegion, 1);
+    mapRef.current.animateToRegion(newRegion, 1);
+  }
+  const iosZoomOut = () => {
+    //console.log("zoom out");
+    var newRegion = regionZoomCopy(mapRegion, 2);
+    mapRef.current.animateToRegion(newRegion, 1);
+  }
+  const IOSMapControlComponent = ({isCycling}) => {
+    return (
+      <View style={[styles.actionContainer, {marginBottom: 5, alignItems:"left", position:"absolute"}]}>
+        {isCycling ? (<></>) : (
+        <TouchableOpacity
+          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50  }]}
+          onPress={centerOnUserLocation}>
+          <Text style={styles.buttonText}>C</Text>
+        </TouchableOpacity>)}
+        <TouchableOpacity
+          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50  }]}
+          onPress={iosZoomIn}>
+          <Text style={styles.buttonText}>+</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50 }]}
+          onPress={iosZoomOut}>
+          <Text style={styles.buttonText}>-</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  //Actual Rendering Function
   return (
     <View style={styles.container}>
       <TimerComponent isCycling={isCycling} elapsedTime={elapsedTime} />
       {/*Map Component. Could not be seperated due to constant refreshing issue*/}
       {isMapReady ? (
       <MapView
-        ref = {mapRef} 
+        ref={mapRef} 
         style={styles.map}
         initialRegion={{
           latitude: waypoints[0]?.latitude || 37.78825,
@@ -719,21 +776,24 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        showsUserLocation = {true}
+        region={mapRegion}
+        onRegionChangeComplete={setMapRegion}
+        showsUserLocation={true}
+        showsCompass={true}
         onMapReady={onMapReady}
       >
         {routes.length > 0 && (
           <Polyline
-          coordinates={[
-            ...routes.map(route => ({
-              latitude: parseFloat(route.latitude),
-              longitude: parseFloat(route.longitude),
-            })),
-            userLocation && isCycling ? { latitude: userLocation.latitude, longitude: userLocation.longitude } : null,
-          ].filter(Boolean)}
-          strokeColor="#000"
-          strokeWidth={3}
-        />
+            coordinates={[
+              ...routes.map(route => ({
+                latitude: parseFloat(route.latitude),
+                longitude: parseFloat(route.longitude),
+              })),
+              userLocation && isCycling ? { latitude: userLocation.latitude, longitude: userLocation.longitude } : null,
+            ].filter(Boolean)}
+            strokeColor="#000"
+            strokeWidth={3}
+          />
         )}
 
         {waypoints.map((waypoint) => {
@@ -751,7 +811,7 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
                 />
             );
         })}
-            
+
         {routes.length > 0 && (
           <>
             <Marker
@@ -773,6 +833,7 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
         <LoadingScreen />
       )}
       {/*End of Map Component.*/}
+      {(Platform.OS === 'ios') ? (<IOSMapControlComponent isCycling={isCycling}/>) : (<></>)}
       <SubMenuComponent
         isCycling={isCycling}
         isMenuOpen={isMenuOpen}
