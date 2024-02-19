@@ -261,8 +261,6 @@ const GPXWaypoints = ({route}) => {
       console.error('Error in stopRoute:', error);
     }
   };
-  
-  /*
   // Update goodMarkerPress to show modal and set rating to 3
   const goodMarkerPress = () => {
     setWaypointRating(3);
@@ -273,7 +271,7 @@ const GPXWaypoints = ({route}) => {
   const badMarkerPress = () => {
     setWaypointRating(1);
     setModalVisible(true); //Show Waypoint Modal
-  };*/
+  };
 
   // Function to handle modal confirm
   const handleAddWaypoint = async (title, description) => {
@@ -295,56 +293,56 @@ const GPXWaypoints = ({route}) => {
     }
   };
  
-  const goodMarkerPress = async () => {
-    const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
-    try {
-        await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3, waypointId);
-        await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 3, waypointId);
-        setWaypoints(prevWaypoints => [...prevWaypoints, {
-            id: waypointId,
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
-            name: "Good Waypoint",
-            rating: 3
-        }]);
-        showMessage({
-            message: "Good Waypoint Added!",
-            type: "success",
-            backgroundColor: "#2196f3",
-            duration: 3000
-        });
-    } catch (err) {
-        showMessage({
-            message: "Could not add new waypoint",
-            description: err.message,
-            type: "error",
-            duration: 3000
-        });
-    }
-  };
+  // const goodMarkerPress = async () => {
+  //   const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
+  //   try {
+  //       await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3, waypointId);
+  //       await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 3, waypointId);
+  //       setWaypoints(prevWaypoints => [...prevWaypoints, {
+  //           id: waypointId,
+  //           latitude: userLocation.latitude,
+  //           longitude: userLocation.longitude,
+  //           name: "Good Waypoint",
+  //           rating: 3
+  //       }]);
+  //       showMessage({
+  //           message: "Good Waypoint Added!",
+  //           type: "success",
+  //           backgroundColor: "#2196f3",
+  //           duration: 3000
+  //       });
+  //   } catch (err) {
+  //       showMessage({
+  //           message: "Could not add new waypoint",
+  //           description: err.message,
+  //           type: "error",
+  //           duration: 3000
+  //       });
+  //   }
+  // };
 
-  const badMarkerPress = async () => {
-    const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
-    try {
-        await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1, waypointId);
-        await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 1, waypointId);
-        setWaypoints(prevWaypoints => [...prevWaypoints, {
-            id: waypointId,
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
-            name: "Bad Waypoint",
-            rating: 1
-        }]);
-        showMessage({
-            message: "Bad Waypoint Added!",
-            type: "success",
-            backgroundColor: "#2196f3",
-            duration: 3000
-        });
-    } catch (err) {
-      console.log(err); // Handle the error 
-    }
-  };
+  // const badMarkerPress = async () => {
+  //   const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
+  //   try {
+  //       await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1, waypointId);
+  //       await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 1, waypointId);
+  //       setWaypoints(prevWaypoints => [...prevWaypoints, {
+  //           id: waypointId,
+  //           latitude: userLocation.latitude,
+  //           longitude: userLocation.longitude,
+  //           name: "Bad Waypoint",
+  //           rating: 1
+  //       }]);
+  //       showMessage({
+  //           message: "Bad Waypoint Added!",
+  //           type: "success",
+  //           backgroundColor: "#2196f3",
+  //           duration: 3000
+  //       });
+  //   } catch (err) {
+  //     console.log(err); // Handle the error 
+  //   }
+  // };
     
   //Importing the GPX File
   const importGPXFile = async () => {
