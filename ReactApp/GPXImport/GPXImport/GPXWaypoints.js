@@ -58,6 +58,7 @@ const GPXWaypoints = ({route}) => {
   const [hasLocationPermission, setHasLocationPermission] = useState(null);
   const [isMapReady, setIsMapReady] = useState(false);
 
+  //Update states from GPXFileList
   useEffect(() => {
     if (route.params?.gpxFilePath) {
       const filePath = route.params.gpxFilePath;
@@ -65,6 +66,12 @@ const GPXWaypoints = ({route}) => {
       navigation.setParams({ gpxFilePath: null }); // Reset the parameter
     }
   }, [route.params?.gpxFilePath]);
+
+  useEffect(() => {
+    if (route.params?.imported) {
+        setImported(true);
+    }
+}, [route.params?.imported]);
 
   //Update the userLocRef
   useEffect(() => {
@@ -374,7 +381,8 @@ const GPXWaypoints = ({route}) => {
   
       setWaypoints(newWaypoints);
       setRoutes(newRoutes);
-  
+      setImported(true);
+
       if (newWaypoints.length > 0) {
         mapRef.current.fitToCoordinates(newWaypoints.map(wp => ({
           latitude: wp.latitude,
@@ -489,7 +497,7 @@ const GPXWaypoints = ({route}) => {
     });
   };
   
-
+  
   useEffect(() => {
     return () => {
       setWaypoints([]);
@@ -594,6 +602,29 @@ const GPXWaypoints = ({route}) => {
       }
     };
   }, [isCycling, currentGPXPath, routes, currentRoute]);
+  
+ //Clear imported route onPress function with confirmation
+const clearRoute = () => {
+  Alert.alert(
+    "Clear Route",
+    "Are you sure you want to clear the route?",
+    [
+      {
+        text: "Cancel",
+        style: "cancel"
+      },
+      { text: "Yes", onPress: () => handleClearRoute() }
+    ],
+    { cancelable: false }
+  );
+};
+
+// Actual function to clear the route
+const handleClearRoute = () => {
+  setWaypoints([]); 
+  setRoutes([]); 
+  setImported(false); 
+};
 
   //Seperated Rendering Components --------------------------------
 
@@ -604,6 +635,26 @@ const GPXWaypoints = ({route}) => {
       <Text style={styles.loadingText}>Gathering user location data . . .</Text>
     </View>
   );
+
+  //Clear Route Button Component
+  const ClearRouteButton = ({ onPress }) => {
+    return (
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          left: 10,
+          bottom: 10,
+          backgroundColor: '#007aff',
+          padding: 10,
+          borderRadius: 5,
+          zIndex: 1
+        }}
+        onPress={onPress}
+      >
+        <Text style={{ color: 'white' }}>Clear Route</Text>
+      </TouchableOpacity>
+    );
+  };
 
   //Route Timer Component 
   const TimerComponent = ({ isCycling, elapsedTime }) => {
@@ -833,6 +884,7 @@ const GPXWaypoints = ({route}) => {
         <LoadingScreen />
       )}
       {/*End of Map Component.*/}
+      {imported && !isCycling && <ClearRouteButton onPress={clearRoute} />}
       {(Platform.OS === 'ios') ? (<IOSMapControlComponent isCycling={isCycling}/>) : (<></>)}
       <SubMenuComponent
         isCycling={isCycling}

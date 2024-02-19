@@ -184,7 +184,7 @@ const GPXFileList = ({ navigation }) => {
   };  
 
   const handleFilePress = (fileName) => {
-    navigation.navigate('Home', { gpxFilePath: fileName });
+    navigation.navigate('Home', { gpxFilePath: fileName , imported: true});
   };
 
   const renderItem = ({ item }) => (
