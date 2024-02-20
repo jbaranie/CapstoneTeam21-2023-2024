@@ -72,7 +72,8 @@ const GPXFileList = ({ navigation }) => {
           from: fileUri,
           to: newFileUri,
         });
-  
+
+        
         // Refresh the file list to show the new file
         refreshFileList();
       } else {
@@ -108,11 +109,19 @@ const GPXFileList = ({ navigation }) => {
       const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
       const filteredFiles = files.filter(file => file.endsWith('.gpx'));
       console.log('Refreshing file list, files to set: ', filteredFiles);
-      setGpxFiles(filteredFiles);
+  
+      // Sort the files to ensure mainGPXFile.gpx is always at the top
+      const sortedFiles = filteredFiles.sort((a, b) => {
+        if (a === 'mainGPXFile.gpx') return -1;
+        if (b === 'mainGPXFile.gpx') return 1;
+        return a.localeCompare(b); // Sort other files alphabetically
+      });  
+      setGpxFiles(sortedFiles);
     } catch (error) {
       console.error('Error reading GPX files: ', error);
     }
   };
+    
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -278,25 +287,54 @@ const GPXFileList = ({ navigation }) => {
   useEffect(() => {
     requestFileSystemPermissions();
   }, []);
-  
-  const handleFilePress = (fileName) => {
-    navigation.navigate('Home', { gpxFilePath: fileName });
+
+  const logGPXContent = async (fileName) => {
+    try {
+      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
+      const content = await FileSystem.readAsStringAsync(fileUri);
+      console.log(content); 
+    } catch (error) {
+      console.error('Error reading GPX file:', error);
+    }
   };
 
-  const renderItem = ({ item }) => (
-    <View style={{ flexDirection: 'col', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
-      <TouchableOpacity
-        onPress={() => handleFilePress(item)}
-      >
-        <Text>{item}</Text>
-      </TouchableOpacity>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Button title="Delete" onPress={() => confirmDeleteFile(item)} />
-        {/*
+  const handleFilePress = (fileName) => {
+    navigation.navigate('Home', { gpxFilePath: fileName , imported: true});
+  };
+
+  // const renderItem = ({ item }) => (
+  //   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+  //     <TouchableOpacity
+  //       onPress={() => handleFilePress(item)}>
+  //       <Text>{item}</Text>
+  //     </TouchableOpacity>
+  //     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+  //       <Button title="Delete" onPress={() => confirmDeleteFile(item)} /> 
+  //       {/*}
+  //       <Button title="Log Content" onPress={() => logGPXContent(item)} />
+  //       */}
+  //       <Button title="Download" onPress={() => downloadFile(item)} />
+  //     </View>
+  //   </View>
+  // );
+  
+  const renderItem = ({ item, index }) => (
+    <View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+        <TouchableOpacity onPress={() => handleFilePress(item)}>
+          <Text>{item}</Text>
+        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Button title="Delete" onPress={() => confirmDeleteFile(item)} />
+          {/*}
         <Button title="Log Content" onPress={() => logGPXContent(item)} />
         */}
-        <Button title={(Platform.OS === 'ios' ? "Share" : "Download")} onPress={() => downloadFile(item)} />
+          <Button title={(Platform.OS === 'ios' ? "Share" : "Download")} onPress={() => downloadFile(item)} />
+        </View>
       </View>
+      {item === 'mainGPXFile.gpx' && (
+        <View style={{ borderBottomWidth: 1, borderBottomColor: '#ddd', marginVertical: 5 }} />
+      )}
     </View>
   );
 
