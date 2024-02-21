@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
+import { photoLocalStore } from './GPXFileList';
 
 const GPX_FILE_PATH = `${FileSystem.documentDirectory}mainGPXFile.gpx`;
 const FILE_COUNTER_KEY = 'FILE_COUNTER_KEY';
@@ -79,6 +80,7 @@ const deleteWaypointFromGPX = async (filePath, id) => {
   }
 };
 
+//TODO add list of useful rating values and descriptions
 const addWaypointToGPX = async (filePath, latitude, longitude, rating, id, title = "Waypoint", description = "No Description") => {
   //console.log(`Adding waypoint to GPX file: ${filePath}`);
   console.log('WaypointID: ' + id);
@@ -134,7 +136,7 @@ const addRoutePointToGPX = async (filePath, routeId, routePoint) => {
 
     await FileSystem.writeAsStringAsync(filePath, fileContent);
     console.log('Point added to route:', routePoint, ' + File: ', filePath, ' + filePath');
-    console.log(await FileSystem.readAsStringAsync(filePath));
+    //console.log(await FileSystem.readAsStringAsync(filePath));
   } catch (error) {
     console.error(`An error occurred while adding point to route ID ${routeId}:`, error);
   }
@@ -156,4 +158,3 @@ const deleteAllImportedPhotos = async () => {
 }
 
 export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos };
-

@@ -30,11 +30,21 @@ export const pickImage = async () => {
     if (imageData.exif == null || imageData.exif == undefined) {
       Alert.alert(
         'Photo Error - EXIF',
-        'The selected photo is not of the corret type, or does not contain the required location data.',
+        'The selected photo is not of the correct type, or does not contain the required location data.',
         [
           { text: 'OK' }
         ],
         { cancelable: false }
+      );
+      return null;
+    }
+
+    if (imageData.exif.GPSLatitude == undefined || imageData.exif.GPSLongitude == undefined) {
+      console.log("Image does not contain coords.");
+      Alert.alert(
+        "Image is not valid",
+        "This image does not have valid coordinate data.",
+        [{ text: "OK :(" }]
       );
       return null;
     }

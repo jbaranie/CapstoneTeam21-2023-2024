@@ -479,21 +479,21 @@ const GPXWaypoints = ({route}) => {
   
   //Startup of photos waypoint file from storage; create if it does not exist yet
   const photoWaypointsSetup = async () => {
-    //console.log("Setting up photos file places.");
     const fileInfo = await FileSystem.getInfoAsync(photosFilename);
-    const storageInfo = await FileSystem.getInfoAsync(photosDirectory);
     //console.log(fileInfo);
+    const storageInfo = await FileSystem.getInfoAsync(photosDirectory);
     //console.log(storageInfo);
 
-    if (!fileInfo.exists) {
-      console.log("GPX waypoints file missing; recreating.");
-      await clearPhotoWaypoints();
-      await deleteAllImportedPhotos();//useful DEBUG action of clearing photos folder on deleting photos file
-    }
     if (!storageInfo.exists) {
       console.log("Image storage folder missing; recreating.");
       //create folder for images
       await FileSystem.makeDirectoryAsync(photosDirectory, { intermediates : true });
+    }
+    if (!fileInfo.exists) {
+      console.log("GPX waypoints file missing; recreating.");
+      await clearPhotoWaypoints();
+      await deleteAllImportedPhotos();//useful DEBUG action of clearing photos folder on deleting the associated waypoints
+      //TODO ^ should not be present if images are associated with waypoints in routes; this is yet to be implemented
     }
 
     //below is deprecated due to not storing image import GPX data anymore, but may still be useful for future functions
@@ -515,32 +515,32 @@ const GPXWaypoints = ({route}) => {
   const addPhotoWaypointImport = async () => {
     let selectedImage = await pickImage();
     if (selectedImage != null) {
+      //check photos directory and create an appropriate name for the locally stored copy
       let photoList = await FileSystem.readDirectoryAsync(photosDirectory);
-      console.log(photoList);
-      //determine original image type and store as string
+      //console.log(photoList);
       let imageNameSplit = selectedImage.uri.split(".");
-      let imageType = imageNameSplit[imageNameSplit.length - 1];
       let photoNum = photoList.length;
-      let photoName = "importedImage" + photoNum + "." + imageType;
+      let photoName = "importedImage" + photoNum + "." + imageNameSplit[imageNameSplit.length - 1];
       console.log(photoName);
       
-      //create copy of photo to app local storage
+      //copy photo to app local storage
       await FileSystem.copyAsync({
         from: selectedImage.uri,
         to: `${photosDirectory}${photoName}`,
       });
       
-      let inLat = selectedImage.exif.GPSLatitude * (selectedImage.exif.GPSLatitudeRef=="N" ? 1 : -1);
-      let inLon = selectedImage.exif.GPSLongitude * (selectedImage.exif.GPSLongitudeRef=="E" ? 1 : -1);
-      await addWaypointToGPX(photosFilename, inLat, inLon, 2, Date.now().toString(), photoName);//TODO fix based upon merge in GPXManager.js
+      //save coordinate data to imported images GPX file
+      let inLat = selectedImage.exif.GPSLatitude *
+        (selectedImage.exif.GPSLatitudeRef=="S" ? -1 : 1);
+      let inLon = selectedImage.exif.GPSLongitude *
+        (selectedImage.exif.GPSLongitudeRef=="W" ? -1 : 1);
+      await addWaypointToGPX(photosFilename, inLat, inLon, 2, Date.now().toString(), photoName);
 
       //center map on location extracted from image
-      var newRegion = {
+      mapRef.current.animateToRegion({
         latitude: inLat,
         longitude: inLon
-      };
-      //console.log(newRegion);
-      mapRef.current.animateToRegion(newRegion, 1);
+      }, 1);
 
       //reset internal collection of waypoints
       photoWaypointsSetup();
