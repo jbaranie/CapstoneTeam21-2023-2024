@@ -86,15 +86,15 @@ const addWaypointToGPX = async (filePath, latitude, longitude, rating, id, title
     //console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
     let fileContent = await FileSystem.readAsStringAsync(filePath);
     //Default values for title, description. 
-    const waypoint = `<wpt lat="${latitude}" lon="${longitude}">
-      <name>${title}</name>
-      <desc>${description}</desc>
-      <rating>${rating}</rating>
-      <id>${id}</id>
-    </wpt>`;
+    const waypoint =
+`  <wpt lat="${latitude}" lon="${longitude}">
+    <name>${title}</name>
+    <desc>${description}</desc>
+    <rating>${rating}</rating>
+    <id>${id}</id>
+  </wpt>`;
 
     fileContent = fileContent.replace("</gpx>", `${waypoint}\n</gpx>`);
-
     await FileSystem.writeAsStringAsync(filePath, fileContent);
     //console.log('Waypoint added to GPX file at:', filePath); // Log success
   } catch (error) {
@@ -103,7 +103,6 @@ const addWaypointToGPX = async (filePath, latitude, longitude, rating, id, title
   }
   console.log('Waypoint added:', { latitude, longitude, rating, id });
 };
-
 
 const addRouteToGPX = async (filePath) => {
   //console.log(`Creating new route in GPX file: ${filePath}`);
@@ -141,6 +140,20 @@ const addRoutePointToGPX = async (filePath, routeId, routePoint) => {
   }
 };
 
+const deleteAllImportedPhotos = async () => {
+  const photosDirectory = `${FileSystem.documentDirectory}${photoLocalStore}`;
+  const storageInfo = await FileSystem.getInfoAsync(photosDirectory);
+  if (storageInfo.exists) {
+    const photoFiles = await FileSystem.readDirectoryAsync(photosDirectory);
+    console.log(photoFiles);
+    console.log("clearing photo storage");
+    for (photoItem in photoFiles) {
+      FileSystem.deleteAsync(`${photosDirectory}${photoFiles[photoItem]}`);
+    }
+  }
+  const expectedEmpty = await FileSystem.readDirectoryAsync(photosDirectory);
+  console.log(expectedEmpty);
+}
 
-export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX};
+export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos };
 

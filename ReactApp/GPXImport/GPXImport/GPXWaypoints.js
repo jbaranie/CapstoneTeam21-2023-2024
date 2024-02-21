@@ -9,13 +9,13 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 
-import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX } from './GPXManager';
-import { deleteFile } from './GPXFileList';
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos } from './GPXManager';
+import { deleteFile, photoWaypointsFile, photoLocalStore, iosShare } from './GPXFileList';
+import { pickImage } from './ImageImport';
 import WaypointModal from './WaypointModal';
 import GPXNameModal from './GPXNameModal';
-
-
 import { styles } from './styles';
+
 //Check how far the user is from a route start.
 //Uses Haversine Formula
 const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
@@ -89,6 +89,7 @@ const GPXWaypoints = ({route}) => {
   const [elapsedTime, setElapsedTime] =useState(0);
   const timerRef = useRef(null);
   const [currentGPXPath, setCurrentGPXPath] = useState('');
+  const [photoGPXdata, setPhotoGPXdata] = useState([]);//deprecated, but may be useful so it's still here
   const navigation = useNavigation();
 
   //Permission states
@@ -118,7 +119,6 @@ const GPXWaypoints = ({route}) => {
   useEffect(() => {
     userLocationRef.current = userLocation; 
   }, [userLocation]);
-  
   
   useEffect(() => {
     let locationSubscription;
@@ -473,7 +473,102 @@ const GPXWaypoints = ({route}) => {
     }
   };
   
+  //PHOTO WAYPOINTS FILE
+  const photosFilename = `${FileSystem.documentDirectory}${photoWaypointsFile}`;
+  const photosDirectory = `${FileSystem.documentDirectory}${photoLocalStore}`;
   
+  //Startup of photos waypoint file from storage; create if it does not exist yet
+  const photoWaypointsSetup = async () => {
+    //console.log("Setting up photos file places.");
+    const fileInfo = await FileSystem.getInfoAsync(photosFilename);
+    const storageInfo = await FileSystem.getInfoAsync(photosDirectory);
+    //console.log(fileInfo);
+    //console.log(storageInfo);
+
+    if (!fileInfo.exists) {
+      console.log("GPX waypoints file missing; recreating.");
+      await clearPhotoWaypoints();
+      await deleteAllImportedPhotos();//useful DEBUG action of clearing photos folder on deleting photos file
+    }
+    if (!storageInfo.exists) {
+      console.log("Image storage folder missing; recreating.");
+      //create folder for images
+      await FileSystem.makeDirectoryAsync(photosDirectory, { intermediates : true });
+    }
+
+    //below is deprecated due to not storing image import GPX data anymore, but may still be useful for future functions
+    //load the photo GPX file's contents using setPhotoGPXdata
+    let photosData = await FileSystem.readAsStringAsync(photosFilename);
+    var dataLines = photosData.split("\n").filter((word)=>{
+      let expectedWpt = word.trim();
+      return expectedWpt.startsWith("<wpt") && !expectedWpt.includes("undefined");
+    });
+    setPhotoGPXdata(dataLines);
+    //console.log("Photos data successfully retrieved or created.");
+  }
+
+  useEffect(() => {
+    photoWaypointsSetup();
+  }, []);
+
+  //Function called when photos waypoints are modified
+  const addPhotoWaypointImport = async () => {
+    let selectedImage = await pickImage();
+    if (selectedImage != null) {
+      let photoList = await FileSystem.readDirectoryAsync(photosDirectory);
+      console.log(photoList);
+      //determine original image type and store as string
+      let imageNameSplit = selectedImage.uri.split(".");
+      let imageType = imageNameSplit[imageNameSplit.length - 1];
+      let photoNum = photoList.length;
+      let photoName = "importedImage" + photoNum + "." + imageType;
+      console.log(photoName);
+      
+      //create copy of photo to app local storage
+      await FileSystem.copyAsync({
+        from: selectedImage.uri,
+        to: `${photosDirectory}${photoName}`,
+      });
+      
+      let inLat = selectedImage.exif.GPSLatitude * (selectedImage.exif.GPSLatitudeRef=="N" ? 1 : -1);
+      let inLon = selectedImage.exif.GPSLongitude * (selectedImage.exif.GPSLongitudeRef=="E" ? 1 : -1);
+      await addWaypointToGPX(photosFilename, inLat, inLon, 2, Date.now().toString(), photoName);//TODO fix based upon merge in GPXManager.js
+
+      //center map on location extracted from image
+      var newRegion = {
+        latitude: inLat,
+        longitude: inLon
+      };
+      //console.log(newRegion);
+      mapRef.current.animateToRegion(newRegion, 1);
+
+      //reset internal collection of waypoints
+      photoWaypointsSetup();
+    } else {
+      console.log("Error importing the image.");
+    }
+  }
+
+  //Function called when photos waypoints are deleted
+  const deletePhotoWaypoint = async () => {
+    //TODO figure out how waypoint input selection
+    //remove from photos waypoint GPX file
+    //remove copy of photo used from app local storage
+  }
+
+  const clearPhotoWaypoints = async () => {
+    const initialContent =
+`<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="CyclingMarker">
+</gpx>`;
+    //create new GPX contents in local storage and save it
+    await FileSystem.writeAsStringAsync(photosFilename, initialContent);
+  }
+
+  const shareWaypointPhoto = async () => {
+    //TOOD figure out waypoint input selection
+    //do FileShare API on photo in app local storage
+  }
 
   const startRoute = async () => {
     const gpxExists = await doesGPXFileExist();
@@ -636,7 +731,6 @@ const initiateRoute = async () => {
     }
   };
 
-
   const handleWaypointDelete = async (waypointId) => {
     if(!isCycling) return;
     Alert.alert(
@@ -783,6 +877,12 @@ const handleClearRoute = () => {
                 onPress={startRoute} 
               >
                 <Text style={styles.buttonText}>Start Route</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.customButton}
+                onPress={addPhotoWaypointImport}
+              >
+                <Text style={styles.buttonText}>Import Image</Text>
               </TouchableOpacity>
               {/*
                 <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>

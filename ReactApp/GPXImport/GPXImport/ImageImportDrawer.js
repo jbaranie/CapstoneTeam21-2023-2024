@@ -16,7 +16,7 @@ const ImageImportDrawer = () => {
     <GestureDetector gesture={threeTap}>
     <View style={styles.container}>
       <Button
-        title="Import Image"
+        title="Import Image in this window is deprecated, and will be removed in a future update"
         onPress={pickImage}
       />
     </View>
