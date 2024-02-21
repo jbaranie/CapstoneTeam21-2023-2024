@@ -488,7 +488,7 @@ const GPXWaypoints = ({route}) => {
     if (!fileInfo.exists) {
       console.log("GPX waypoints file missing; recreating.");
       await clearPhotoWaypoints();
-      //await deleteAllImportedPhotos();//useful DEBUG action of clearing photos folder on deleting photos file
+      await deleteAllImportedPhotos();//useful DEBUG action of clearing photos folder on deleting photos file
     }
     if (!storageInfo.exists) {
       console.log("Image storage folder missing; recreating.");
@@ -512,7 +512,7 @@ const GPXWaypoints = ({route}) => {
   }, []);
 
   //Function called when photos waypoints are modified
-  const addPhotoWaypoint = async () => {
+  const addPhotoWaypointImport = async () => {
     let selectedImage = await pickImage();
     if (selectedImage != null) {
       let photoList = await FileSystem.readDirectoryAsync(photosDirectory);
@@ -529,12 +529,10 @@ const GPXWaypoints = ({route}) => {
         from: selectedImage.uri,
         to: `${photosDirectory}${photoName}`,
       });
-      let descContent = `${photosDirectory}${photoName}`;
-      //TODO add dialog for a user-submitted name and info-line for the waypoint
       
       let inLat = selectedImage.exif.GPSLatitude * (selectedImage.exif.GPSLatitudeRef=="N" ? 1 : -1);
       let inLon = selectedImage.exif.GPSLongitude * (selectedImage.exif.GPSLongitudeRef=="E" ? 1 : -1);
-      await addWaypointToGPX(photosFilename, inLat, inLon, 2, Date.now().toString(), descContent);//TODO fix based upon merge in GPXManager.js
+      await addWaypointToGPX(photosFilename, inLat, inLon, 2, Date.now().toString(), photoName);//TODO fix based upon merge in GPXManager.js
 
       //center map on location extracted from image
       var newRegion = {
@@ -717,7 +715,7 @@ const initiateRoute = async () => {
         // Add route point to both GPX files
         await addRoutePointToGPX(GPX_FILE_PATH, routeIds.global, point);
         await addRoutePointToGPX(currentGPXPath, routeIds.instance, point);
-        setRoutes(prevRoutes => [...prevRoutes, point]);]
+        setRoutes(prevRoutes => [...prevRoutes, point]);
         //console.log('Route Point added to both GPX files. Point info: ' + JSON.stringify(point));
       } catch (error) {
         console.error('Error adding route point to GPX:', error);
@@ -882,7 +880,7 @@ const handleClearRoute = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.customButton}
-                onPress={addPhotoWaypoint}
+                onPress={addPhotoWaypointImport}
               >
                 <Text style={styles.buttonText}>Import Image</Text>
               </TouchableOpacity>
