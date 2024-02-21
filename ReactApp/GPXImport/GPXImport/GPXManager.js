@@ -79,21 +79,22 @@ const deleteWaypointFromGPX = async (filePath, id) => {
   }
 };
 
-const addWaypointToGPX = async (filePath, latitude, longitude, rating, id) => {
+const addWaypointToGPX = async (filePath, latitude, longitude, rating, id, title = "Waypoint", description = "No Description") => {
   //console.log(`Adding waypoint to GPX file: ${filePath}`);
   console.log('WaypointID: ' + id);
   try {
     //console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
     let fileContent = await FileSystem.readAsStringAsync(filePath);
-    
-    const waypoint = `<wpt lat="${latitude}" lon="${longitude}">
-      <name>Waypoint</name>
-      <desc>${id}</desc>
-      <rating>${rating}</rating>
-    </wpt>`;
+    //Default values for title, description. 
+    const waypoint =
+`  <wpt lat="${latitude}" lon="${longitude}">
+    <name>${title}</name>
+    <desc>${description}</desc>
+    <rating>${rating}</rating>
+    <id>${id}</id>
+  </wpt>`;
 
     fileContent = fileContent.replace("</gpx>", `${waypoint}\n</gpx>`);
-
     await FileSystem.writeAsStringAsync(filePath, fileContent);
     //console.log('Waypoint added to GPX file at:', filePath); // Log success
   } catch (error) {
@@ -102,7 +103,6 @@ const addWaypointToGPX = async (filePath, latitude, longitude, rating, id) => {
   }
   console.log('Waypoint added:', { latitude, longitude, rating, id });
 };
-
 
 const addRouteToGPX = async (filePath) => {
   //console.log(`Creating new route in GPX file: ${filePath}`);
@@ -133,12 +133,27 @@ const addRoutePointToGPX = async (filePath, routeId, routePoint) => {
     fileContent = fileContent.replace(routeRegex, `$1$2${routePointElement}$3`);
 
     await FileSystem.writeAsStringAsync(filePath, fileContent);
-    console.log('Point added to route:', routePoint);
+    console.log('Point added to route:', routePoint, ' + File: ', filePath, ' + filePath');
+    console.log(await FileSystem.readAsStringAsync(filePath));
   } catch (error) {
     console.error(`An error occurred while adding point to route ID ${routeId}:`, error);
   }
 };
 
+const deleteAllImportedPhotos = async () => {
+  const photosDirectory = `${FileSystem.documentDirectory}${photoLocalStore}`;
+  const storageInfo = await FileSystem.getInfoAsync(photosDirectory);
+  if (storageInfo.exists) {
+    const photoFiles = await FileSystem.readDirectoryAsync(photosDirectory);
+    console.log(photoFiles);
+    console.log("clearing photo storage");
+    for (photoItem in photoFiles) {
+      FileSystem.deleteAsync(`${photosDirectory}${photoFiles[photoItem]}`);
+    }
+  }
+  const expectedEmpty = await FileSystem.readDirectoryAsync(photosDirectory);
+  console.log(expectedEmpty);
+}
 
-export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX};
+export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos };
 

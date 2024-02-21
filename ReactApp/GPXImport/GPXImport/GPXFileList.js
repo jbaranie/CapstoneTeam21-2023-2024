@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, Platform, FlatList, PermissionsAndroid } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
 import * as DocumentPicker from 'expo-document-picker';
+import * as Sharing from 'expo-sharing';
+import { pickImage } from './ImageImport';
+
+//Filename constants
+export const photoWaypointsFile = "importedPhotos.gpx";
+export const photoLocalStore = "ImportedPhotos/";
 
 // Deletes a single file
 export const deleteFile = async (fileName) => {
@@ -17,6 +23,31 @@ export const deleteFile = async (fileName) => {
   }
 };
 
+export const iosShare = async (uri, utiType) => {
+  try {
+    /*
+    const { shareStatus } = await Sharing.isAvailableAsync();
+    if (shareStatus !== 'granted') {
+      alert('Sharing is not available; check your file and sharing permissions.');
+      return;
+    } else {
+      console.log("Sharing possible, Sharing API available.");
+    }
+    *///TODO fix share status check, it currently prevents it from working instead of correctly checking status
+    // Copy the file from the local app storage to the system storage
+    /*
+    await FileSystem.copyAsync({
+      from: localUri,
+      to: systemUri,
+    });
+    */
+    const downloadResult = await Sharing.shareAsync(uri, {UTI: utiType});
+    console.log(downloadResult);
+  } catch (error) {
+    console.error('Error sharing file on iOS: ', error.message);
+  }
+}
+
 const GPXFileList = ({ navigation }) => {
   //File action state
   const [gpxFiles, setGpxFiles] = useState([]);
@@ -26,14 +57,14 @@ const GPXFileList = ({ navigation }) => {
   const importGPXFile = async () => {
     try {
       // Open the document picker for .gpx files
-      const result = await DocumentPicker.getDocumentAsync({ type: '*/*' }); // Change the type to 'application/gpx+xml' to only allow GPX files
+      const result = await DocumentPicker.getDocumentAsync({ type: 'application/gpx+xml', copyToCacheDirectory: true }); // Change the type to 'application/gpx+xml' to only allow GPX files
       //console.log('Document Picker Result:', result);
   
       // Check if a file was selected and not canceled
       if (!result.canceled && result.assets && result.assets.length > 0) {
         // Extract the file URI from the first asset
         const fileUri = result.assets[0].uri;
-        //console.log('GPX File URI:', fileUri);
+        console.log('GPX File URI: ', fileUri);
   
         // Copy the file from the temporary cache to the app's document directory
         const newFileUri = `${FileSystem.documentDirectory}${result.assets[0].name}`;
@@ -41,7 +72,8 @@ const GPXFileList = ({ navigation }) => {
           from: fileUri,
           to: newFileUri,
         });
-  
+
+        
         // Refresh the file list to show the new file
         refreshFileList();
       } else {
@@ -50,7 +82,7 @@ const GPXFileList = ({ navigation }) => {
       }
     } catch (error) {
       // If there was an error during the process, log it
-      console.error('Error importing GPX file:', error);
+      console.error('Error importing GPX file: ', error);
     }
   };
 
@@ -63,12 +95,12 @@ const GPXFileList = ({ navigation }) => {
         const filteredFiles = files.filter(file => file.endsWith('.gpx'));
         setGpxFiles(filteredFiles);
       } catch (error) {
-        console.error('Error reading GPX files:', error);
+        console.error('Error reading GPX files: ', error);
       }
       if (files) {
-      //console.log('Files fetched:', files);
-    } 
-  };
+        console.log('Files fetched:', files);
+      }
+    };
     fetchFiles();
   }, []);
 
@@ -76,36 +108,44 @@ const GPXFileList = ({ navigation }) => {
     try {
       const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
       const filteredFiles = files.filter(file => file.endsWith('.gpx'));
-      //console.log('Refreshing file list, files to set:', filteredFiles);
-      setGpxFiles(filteredFiles);
+      console.log('Refreshing file list, files to set: ', filteredFiles);
+  
+      // Sort the files to ensure mainGPXFile.gpx is always at the top
+      const sortedFiles = filteredFiles.sort((a, b) => {
+        if (a === 'mainGPXFile.gpx') return -1;
+        if (b === 'mainGPXFile.gpx') return 1;
+        return a.localeCompare(b); // Sort other files alphabetically
+      });  
+      setGpxFiles(sortedFiles);
     } catch (error) {
-      console.error('Error reading GPX files:', error);
+      console.error('Error reading GPX files: ', error);
     }
   };
+    
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      //console.log('Focus event triggered');
+      console.log('Focus event triggered');
       refreshFileList();
     });
   
     return unsubscribe;
   }, [navigation]);
 
-  //  /* 
-  //   Log the content of a GPX file to the console when the 'Log Content' button is pressed. 
-  //   This is currently disabled as the user does not need this. Might be useful again in 
-  //   the future so I am just commenting it out. 
-  //  */
-  // const logGPXContent = async (fileName) => {
-  //   try {
-  //     const fileUri = `${FileSystem.documentDirectory}${fileName}`;
-  //     const content = await FileSystem.readAsStringAsync(fileUri);
-  //     console.log(content); 
-  //   } catch (error) {
-  //     console.error('Error reading GPX file:', error);
-  //   }
-  // };
+  /*
+    Log the content of a GPX file to the console when the 'Log Content' button is pressed. 
+    This is currently disabled as the user does not need this. Might be useful again in 
+    the future so I am just commenting it out. 
+  */
+  const logGPXContent = async (fileName) => {
+    try {
+      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
+      const content = await FileSystem.readAsStringAsync(fileUri);
+      console.log(content); 
+    } catch (error) {
+      console.error('Error reading GPX file:', error);
+    }
+  };
 
   // Asks user to confirm deletion of a single file
   const confirmDeleteFile = (fileName) => {
@@ -126,8 +166,6 @@ const GPXFileList = ({ navigation }) => {
       { cancelable: false }
     );
   };
-  
-  
 
   // Asks user to confirm deletion of all files
   const deleteAllFiles = async () => {
@@ -157,64 +195,151 @@ const GPXFileList = ({ navigation }) => {
       console.error('Error deleting all GPX files:', error);
     }
   };
-  
 
    // Function that handles file download
    const downloadFile = async (fileName) => {
     // Request permissions to access the media library
     const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
     setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
-    try {
-      if (!hasMediaLibraryPermission) {
-        alert('You need to grant media library permissions to download files.');
-        return;
-      }
-  
-      // Get the URI for the file in the app's file system
-      const uri = `${FileSystem.documentDirectory}${fileName}`;
-  
-      // Create an asset for the file in the media library
-      await MediaLibrary.createAssetAsync(uri);
-  
-      alert('File saved!');
-    } catch (error) {
-      console.error('Error saving GPX file:', error);
-      alert('Error saving file!');
-    }
-  };  
 
-  const handleFilePress = (fileName) => {
-    navigation.navigate('Home', { gpxFilePath: fileName });
+    //filepaths
+    const localUri = `${FileSystem.documentDirectory}${fileName}`;
+    const systemUri = `${FileSystem.cacheDirectory}${fileName}`;
+
+    if (Platform.OS === 'android') {//existing content; TODO fix Android issues
+      try {
+        // Check permissions to access the media library
+        if (!hasMediaLibraryPermission) {
+          alert('You need to grant storage permissions to download files.');
+          return;
+        } else {
+          console.log("File permissions active.");
+        }
+
+        // Copy the file from the local app storage to the system storage
+        await FileSystem.copyAsync({
+          from: localUri,
+          to: systemUri,
+        });
+    
+        // Create an asset for the file in the media library
+        //NOTE: this doesn't work on iOS because on iOS MediaLibrary has strict datatypes filters
+        const asset = await MediaLibrary.createAssetAsync(systemUri);
+    
+        // Get or create the album
+        let album = await MediaLibrary.getAlbumAsync('GPX Files');
+        if (!album) {
+          album = await MediaLibrary.createAlbumAsync('GPX Files', asset, false);
+        } else {
+          await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+        }
+    
+        console.log(`File saved to ${systemUri} in the 'GPX Files' album`);
+        return systemUri;
+      } catch (error) {
+        console.error('Error saving file to system storage on Android: ', error.message);
+      }
+    }
+
+    if (Platform.OS === 'ios') {
+      //console.log("iOS download attempt beginning...");
+      await iosShare(localUri, 'public.item');
+    }
   };
 
-  const renderItem = ({ item }) => (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
-      <TouchableOpacity
-        onPress={() => handleFilePress(item)}>
-        <Text>{item}</Text>
-      </TouchableOpacity>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Button title="Delete" onPress={() => confirmDeleteFile(item)} /> 
-        {/*}
+  const requestFileSystemPermissions = async () => {//specific to the android version
+    if (Platform.OS === 'android') {
+      try {
+        const grantedRead = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          {
+            title: "File System Permission",
+            message: "App needs access to your file system",
+            buttonNeutral: "Ask Me Later",
+            buttonNegative: "Cancel",
+            buttonPositive: "OK"
+          }
+        );
+        const grantedWrite = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: "File System Permission",
+            message: "App needs access to your file system",
+            buttonNeutral: "Ask Me Later",
+            buttonNegative: "Cancel",
+            buttonPositive: "OK"
+          }
+        );
+        if (grantedRead === PermissionsAndroid.RESULTS.GRANTED && grantedWrite === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log("File system permissions granted");
+        } else {
+          console.log("File system permission denied");
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+    if (Platform.OS === 'ios') {
+      //NOTE: add any ios permissions for file control in this block
+      console.log("No specific permissions for iOS at this point.");
+    }
+  };
+  useEffect(() => {
+    requestFileSystemPermissions();
+  }, []);
+
+  const handleFilePress = (fileName) => {
+    navigation.navigate('Home', { gpxFilePath: fileName , imported: true});
+  };
+
+  // const renderItem = ({ item }) => (
+  //   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+  //     <TouchableOpacity
+  //       onPress={() => handleFilePress(item)}>
+  //       <Text>{item}</Text>
+  //     </TouchableOpacity>
+  //     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+  //       <Button title="Delete" onPress={() => confirmDeleteFile(item)} /> 
+  //       {/*}
+  //       <Button title="Log Content" onPress={() => logGPXContent(item)} />
+  //       */}
+  //       <Button title="Download" onPress={() => downloadFile(item)} />
+  //     </View>
+  //   </View>
+  // );
+  
+  const renderItem = ({ item, index }) => (
+    <View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+        <TouchableOpacity onPress={() => handleFilePress(item)}>
+          <Text>{item}</Text>
+        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Button title="Delete" onPress={() => confirmDeleteFile(item)} />
+          {/*}
         <Button title="Log Content" onPress={() => logGPXContent(item)} />
         */}
-        <Button title="Download" onPress={() => downloadFile(item)} />
+          <Button title={(Platform.OS === 'ios' ? "Share" : "Download")} onPress={() => downloadFile(item)} />
+        </View>
       </View>
+      {item === 'mainGPXFile.gpx' && (
+        <View style={{ borderBottomWidth: 1, borderBottomColor: '#ddd', marginVertical: 5 }} />
+      )}
     </View>
   );
-  
 
   return (
-    <View>
+    <View style={{ padding: 10}}>
       <FlatList
         data={gpxFiles}
         renderItem={renderItem}
         keyExtractor={item => item}
       />
-       <Button title="Import GPX File" onPress={importGPXFile} />
-       {gpxFiles.length >= 2 && (
-      <Button title="Delete All" onPress={deleteAllFiles} />
-       )}
+      <Button title="Import GPX File" onPress={importGPXFile} />
+      <Button title="Import Image" onPress={pickImage} />
+      {gpxFiles.length >= 2 && (
+        <Button title="Delete All" onPress={deleteAllFiles} />
+      )}
     </View>
   );
 };

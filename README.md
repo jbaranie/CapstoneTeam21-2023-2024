@@ -7,7 +7,7 @@ Members:
 - John French
 - Larry Huang
 - Abel Mejia
-- Shadow Perea-Pilant
+
 
 Sponsor: Dr. Alexandra Mehlhase
 

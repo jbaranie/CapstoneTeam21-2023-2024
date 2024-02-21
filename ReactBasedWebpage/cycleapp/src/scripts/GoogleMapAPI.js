@@ -1,6 +1,7 @@
 // GoogleMapAPI.js
 // Loads the Google Map onto the webpage.
 //Coder: Jan Baraniecki
+//This code is deprecated
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 8,

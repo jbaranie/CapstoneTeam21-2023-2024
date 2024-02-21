@@ -5,6 +5,8 @@ import GPXWaypoints from './GPXWaypoints';
 import ImageImportDrawer from './ImageImportDrawer';
 import CaptureImageDrawer from './CaptureImageDrawer';
 import GPXFileList from './GPXFileList';
+import { UserInfoPanel } from './SettingsAndInfo';
+
 import 'expo-dev-client';//comment out in preview builds
 
 const Drawer = createDrawerNavigator();
@@ -17,6 +19,7 @@ export default function App() {
         <Drawer.Screen name="Import Image" component={ImageImportDrawer} />
         <Drawer.Screen name="Camera Waypoint" component={CaptureImageDrawer}/>
         <Drawer.Screen name="GPX Files" component={GPXFileList} />
+        <Drawer.Screen name="User Info" component={UserInfoPanel} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
