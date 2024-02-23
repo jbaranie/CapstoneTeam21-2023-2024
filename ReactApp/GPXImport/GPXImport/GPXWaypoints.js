@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect} from 'react';
-import { View, StyleSheet, Alert, TouchableOpacity, Text, ActivityIndicator} from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Platform, Alert, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
@@ -9,10 +9,13 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 
-import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX} from './GPXManager';
-import { deleteFile } from './GPXFileList';
-
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos } from './GPXManager';
+import { deleteFile, photoWaypointsFile, photoLocalStore, iosShare } from './GPXFileList';
+import { pickImage } from './ImageImport';
+import WaypointModal from './WaypointModal';
+import GPXNameModal from './GPXNameModal';
 import { styles } from './styles';
+
 //Check how far the user is from a route start.
 //Uses Haversine Formula
 const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
@@ -22,15 +25,41 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(lat1 * Math.PI / 180) *
-      Math.cos(lat2 * Math.PI / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const d = R * c;
   return d;
 };
 
 const GPXWaypoints = ({route}) => {
+
+  const handleGPXNameConfirm = async (fileName) => {
+    // Rename the GPX file here using FileSystem from 'expo-file-system'
+    const newPath = `${FileSystem.documentDirectory}${fileName}.gpx`;
+    try {
+      await FileSystem.moveAsync({
+        from: currentGPXPath,
+        to: newPath,
+      });
+      console.log(`GPX file renamed to: ${newPath}`);
+      setCurrentGPXPath(''); // Reset the current GPX file path
+      // Navigate away or refresh the list as needed
+      navigation.navigate('GPX Files', { refreshFileList: true });
+    } catch (error) {
+      console.error('Error renaming GPX file:', error);
+      showMessage({
+        message: "Error renaming GPX file",
+        description: "Please try again.",
+        hideOnPress: true,
+        type: "error",
+        duration: 3000 
+      });
+    }
+    setGpxNameModalVisible(false); // Close the modal
+  };  
+
   //Location and map state/refs
   const [waypoints, setWaypoints] = useState([]);
   const [imported, setImported] = useState(false);
@@ -43,6 +72,13 @@ const GPXWaypoints = ({route}) => {
   const mapRef = useRef(null);
   const userLocationRef = useRef(userLocation);
   const [hasAnimatedToUserLocation, setHasAnimatedToUserLocation] = useState(false);
+  const [latitudeDeltaDefault, setLatitudeDeltaDefault] = useState(0.0922);
+  const [longitudeDeltaDefault, setLongitudeDeltaDefault] = useState(0.0421);
+  const zoomScalar = 2;
+
+  //Waypoint Modal States
+  const [modalVisible, setModalVisible] = useState(false);
+  const [waypointRating, setWaypointRating] = useState(null);
 
   //Imorted GPX data
   const [importedWaypoints, setImportedWaypoints] = useState([]);
@@ -53,11 +89,16 @@ const GPXWaypoints = ({route}) => {
   const [elapsedTime, setElapsedTime] =useState(0);
   const timerRef = useRef(null);
   const [currentGPXPath, setCurrentGPXPath] = useState('');
+  const [photoGPXdata, setPhotoGPXdata] = useState([]);//deprecated, but may be useful so it's still here
   const navigation = useNavigation();
 
   //Permission states
   const [hasLocationPermission, setHasLocationPermission] = useState(null);
   const [isMapReady, setIsMapReady] = useState(false);
+  
+  //GPX name Modal states
+  const [gpxNameModalVisible, setGpxNameModalVisible] = useState(false);
+
 
   //Update states from GPXFileList
   useEffect(() => {
@@ -78,7 +119,6 @@ const GPXWaypoints = ({route}) => {
   useEffect(() => {
     userLocationRef.current = userLocation; 
   }, [userLocation]);
-  
   
   useEffect(() => {
     let locationSubscription;
@@ -106,8 +146,8 @@ const GPXWaypoints = ({route}) => {
           const userLoc = {
             latitude: newLocation.coords.latitude,
             longitude: newLocation.coords.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: latitudeDeltaDefault,
+            longitudeDelta: longitudeDeltaDefault,
           };
           setUserLocation(userLoc);
           setIsMapReady(true);
@@ -127,9 +167,9 @@ const GPXWaypoints = ({route}) => {
   //Animate to the user's location
   const onMapReady = () => {
     if (userLocation && mapRef.current && !hasAnimatedToUserLocation) {
-      mapRef.current.animateToRegion(userLocation, 1);
-      setHasAnimatedToUserLocation(true); 
+      setHasAnimatedToUserLocation(true);
       setIsMapReady(true);
+      centerOnUserLocation();
     }
   };
   
@@ -194,17 +234,19 @@ const GPXWaypoints = ({route}) => {
           // Log the content of the GPX file
           // const fileContent = await FileSystem.readAsStringAsync(currentGPXPath);
           // console.log('GPX File Content:', fileContent);
-          
-          showMessage({
-            message: "Route has ended.",
-            hideOnPress: true,
-            type: "info",
-            duration: 2000
-          });
+
+          setGpxNameModalVisible(true);
+
+          // showMessage({
+          //   message: "Route has ended.",
+          //   hideOnPress: true,
+          //   type: "info",
+          //   duration: 2000
+          // });
           // Refresh the GPX file list to include the new file
-          navigation.navigate('GPX Files', { refreshFileList: true });
+          // navigation.navigate('GPX Files', { refreshFileList: true });
         }
-        setCurrentGPXPath(''); // Reset the current GPX file path
+        //setCurrentGPXPath(''); // Reset the current GPX file path
       } else {
         console.error('No GPX file path found when trying to stop route');
 
@@ -219,7 +261,7 @@ const GPXWaypoints = ({route}) => {
       console.error('Error in stopRoute:', error);
     }
   };
-  
+
   //Effect to create the initial GPX file if it doesn't exist, and display its waypoints on the home screen upon loading.
   useEffect(() => {
     const loadWaypointsFromGPX = async () => {
@@ -237,61 +279,88 @@ const GPXWaypoints = ({route}) => {
     }
   }, [isMapReady]);
 
-  
- 
-  const goodMarkerPress = async () => {
-    const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
-    try {
-        await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3, waypointId);
-        await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 3, waypointId);
-        setWaypoints(prevWaypoints => [...prevWaypoints, {
-            id: waypointId,
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
-            name: "Good Waypoint",
-            rating: 3
-        }]);
-        showMessage({
-            message: "Good Waypoint Added!",
-            type: "success",
-            duration: 3000
-        });
-    } catch (err) {
-        showMessage({
-            message: "Could not add new waypoint",
-            description: err.message,
-            type: "error",
-            duration: 3000
-        });
-    }
-};
+  // Update goodMarkerPress to show modal and set rating to 3
+  const goodMarkerPress = () => {
+    setWaypointRating(3);
+    setModalVisible(true); //Show Waypoint Modal
+  };
 
-const badMarkerPress = async () => {
-    const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
+  // Update badMarkerPress similarly, but set rating to 1
+  const badMarkerPress = () => {
+    setWaypointRating(1);
+    setModalVisible(true); //Show Waypoint Modal
+  };
+
+  // Function to handle modal confirm
+  const handleAddWaypoint = async (title, description) => {
+    const waypointId = Date.now().toString();
     try {
-        await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1, waypointId);
-        await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 1, waypointId);
-        setWaypoints(prevWaypoints => [...prevWaypoints, {
-            id: waypointId,
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
-            name: "Bad Waypoint",
-            rating: 1
-        }]);
-        showMessage({
-            message: "Bad Waypoint Added!",
-            type: "success",
-            duration: 3000
-        });
+      //title, description added. ID now in custom GPX tag. 
+      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, waypointRating, waypointId, title, description);
+      setWaypoints(prevWaypoints => [...prevWaypoints, {
+        id: waypointId,
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+        name: title,
+        description: description,
+        rating: waypointRating
+      }]);
+      setModalVisible(false); // Close the modal
     } catch (err) {
-        showMessage({
-            message: "Could not add new waypoint",
-            description: err.message,
-            type: "error",
-            duration: 3000
-        });
+      console.log(err); // Handle the error 
     }
-};
+  };
+ 
+  // const goodMarkerPress = async () => {
+  //   const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
+  //   try {
+  //       await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 3, waypointId);
+  //       await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 3, waypointId);
+  //       setWaypoints(prevWaypoints => [...prevWaypoints, {
+  //           id: waypointId,
+  //           latitude: userLocation.latitude,
+  //           longitude: userLocation.longitude,
+  //           name: "Good Waypoint",
+  //           rating: 3
+  //       }]);
+  //       showMessage({
+  //           message: "Good Waypoint Added!",
+  //           type: "success",
+  //           backgroundColor: "#2196f3",
+  //           duration: 3000
+  //       });
+  //   } catch (err) {
+  //       showMessage({
+  //           message: "Could not add new waypoint",
+  //           description: err.message,
+  //           type: "error",
+  //           duration: 3000
+  //       });
+  //   }
+  // };
+
+  // const badMarkerPress = async () => {
+  //   const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
+  //   try {
+  //       await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, 1, waypointId);
+  //       await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, 1, waypointId);
+  //       setWaypoints(prevWaypoints => [...prevWaypoints, {
+  //           id: waypointId,
+  //           latitude: userLocation.latitude,
+  //           longitude: userLocation.longitude,
+  //           name: "Bad Waypoint",
+  //           rating: 1
+  //       }]);
+  //       showMessage({
+  //           message: "Bad Waypoint Added!",
+  //           type: "success",
+  //           backgroundColor: "#2196f3",
+  //           duration: 3000
+  //       });
+  //   } catch (err) {
+  //     console.log(err); // Handle the error 
+  //   }
+  // };
     
   //Importing the GPX File
   const importGPXFile = async () => {
@@ -422,7 +491,102 @@ const badMarkerPress = async () => {
     }
   };
   
+  //PHOTO WAYPOINTS FILE
+  const photosFilename = `${FileSystem.documentDirectory}${photoWaypointsFile}`;
+  const photosDirectory = `${FileSystem.documentDirectory}${photoLocalStore}`;
   
+  //Startup of photos waypoint file from storage; create if it does not exist yet
+  const photoWaypointsSetup = async () => {
+    //console.log("Setting up photos file places.");
+    const fileInfo = await FileSystem.getInfoAsync(photosFilename);
+    const storageInfo = await FileSystem.getInfoAsync(photosDirectory);
+    //console.log(fileInfo);
+    //console.log(storageInfo);
+
+    if (!fileInfo.exists) {
+      console.log("GPX waypoints file missing; recreating.");
+      await clearPhotoWaypoints();
+      await deleteAllImportedPhotos();//useful DEBUG action of clearing photos folder on deleting photos file
+    }
+    if (!storageInfo.exists) {
+      console.log("Image storage folder missing; recreating.");
+      //create folder for images
+      await FileSystem.makeDirectoryAsync(photosDirectory, { intermediates : true });
+    }
+
+    //below is deprecated due to not storing image import GPX data anymore, but may still be useful for future functions
+    //load the photo GPX file's contents using setPhotoGPXdata
+    let photosData = await FileSystem.readAsStringAsync(photosFilename);
+    var dataLines = photosData.split("\n").filter((word)=>{
+      let expectedWpt = word.trim();
+      return expectedWpt.startsWith("<wpt") && !expectedWpt.includes("undefined");
+    });
+    setPhotoGPXdata(dataLines);
+    //console.log("Photos data successfully retrieved or created.");
+  }
+
+  useEffect(() => {
+    photoWaypointsSetup();
+  }, []);
+
+  //Function called when photos waypoints are modified
+  const addPhotoWaypointImport = async () => {
+    let selectedImage = await pickImage();
+    if (selectedImage != null) {
+      let photoList = await FileSystem.readDirectoryAsync(photosDirectory);
+      console.log(photoList);
+      //determine original image type and store as string
+      let imageNameSplit = selectedImage.uri.split(".");
+      let imageType = imageNameSplit[imageNameSplit.length - 1];
+      let photoNum = photoList.length;
+      let photoName = "importedImage" + photoNum + "." + imageType;
+      console.log(photoName);
+      
+      //create copy of photo to app local storage
+      await FileSystem.copyAsync({
+        from: selectedImage.uri,
+        to: `${photosDirectory}${photoName}`,
+      });
+      
+      let inLat = selectedImage.exif.GPSLatitude * (selectedImage.exif.GPSLatitudeRef=="N" ? 1 : -1);
+      let inLon = selectedImage.exif.GPSLongitude * (selectedImage.exif.GPSLongitudeRef=="E" ? 1 : -1);
+      await addWaypointToGPX(photosFilename, inLat, inLon, 2, Date.now().toString(), photoName);//TODO fix based upon merge in GPXManager.js
+
+      //center map on location extracted from image
+      var newRegion = {
+        latitude: inLat,
+        longitude: inLon
+      };
+      //console.log(newRegion);
+      mapRef.current.animateToRegion(newRegion, 1);
+
+      //reset internal collection of waypoints
+      photoWaypointsSetup();
+    } else {
+      console.log("Error importing the image.");
+    }
+  }
+
+  //Function called when photos waypoints are deleted
+  const deletePhotoWaypoint = async () => {
+    //TODO figure out how waypoint input selection
+    //remove from photos waypoint GPX file
+    //remove copy of photo used from app local storage
+  }
+
+  const clearPhotoWaypoints = async () => {
+    const initialContent =
+`<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="CyclingMarker">
+</gpx>`;
+    //create new GPX contents in local storage and save it
+    await FileSystem.writeAsStringAsync(photosFilename, initialContent);
+  }
+
+  const shareWaypointPhoto = async () => {
+    //TOOD figure out waypoint input selection
+    //do FileShare API on photo in app local storage
+  }
 
   const startRoute = async () => {
     //const gpxExists = await doesGPXFileExist();
@@ -585,7 +749,6 @@ const initiateRoute = async () => {
     }
   };
 
-
   const handleWaypointDelete = async (waypointId) => {
     if(!isCycling) return;
     Alert.alert(
@@ -659,79 +822,85 @@ const handleClearRoute = () => {
   setImported(false); 
 };
 
-//Seperated Rendering Components --------------------------------
+  //Seperated Rendering Components --------------------------------
 
-//Loading Screen Component
-const LoadingScreen = () => (
-  <View style={styles.loadingContainer}>
-    <ActivityIndicator size="large" color="#0000ff" />
-    <Text style={styles.loadingText}>Gathering user location data . . .</Text>
-  </View>
-);
-
-//Route Timer Component 
-const TimerComponent = ({ isCycling, elapsedTime }) => {
-  if (!isCycling) return null;
-
-  const hours = Math.floor(elapsedTime / 3600);
-  const minutes = Math.floor((elapsedTime % 3600) / 60);
-  const seconds = elapsedTime % 60;
-
-  const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  return (
-    <View style={{
-      position: 'absolute',
-      top: 50,
-      alignSelf: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      padding: 10,
-      borderRadius: 10,
-      zIndex: 1,
-      maxWidth: 150
-    }}>
-      <Text style={{
-        fontSize: 36,
-        color: 'white'
-      }}>
-        {formattedTime}
-      </Text>
+  //Loading Screen Component
+  const LoadingScreen = () => (
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator size="large" color="#0000ff" />
+      <Text style={styles.loadingText}>Gathering user location data . . .</Text>
     </View>
   );
-};
 
-//Clear Route Button Component
-const ClearRouteButton = ({ onPress }) => {
-  return (
-    <TouchableOpacity
-      style={{
+  //Clear Route Button Component
+  const ClearRouteButton = ({ onPress }) => {
+    return (
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          left: 10,
+          bottom: 10,
+          backgroundColor: '#007aff',
+          padding: 10,
+          borderRadius: 5,
+          zIndex: 1
+        }}
+        onPress={onPress}
+      >
+        <Text style={{ color: 'white' }}>Clear Route</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  //Route Timer Component 
+  const TimerComponent = ({ isCycling, elapsedTime }) => {
+    if (!isCycling) return null;
+
+    const hours = Math.floor(elapsedTime / 3600);
+    const minutes = Math.floor((elapsedTime % 3600) / 60);
+    const seconds = elapsedTime % 60;
+
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    return (
+      <View style={{
         position: 'absolute',
-        left: 10,
-        bottom: 10,
-        backgroundColor: '#007aff',
+        top: 50,
+        alignSelf: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
         padding: 10,
-        borderRadius: 5,
-        zIndex: 1
-      }}
-      onPress={onPress}
-    >
-      <Text style={{ color: 'white' }}>Clear Route</Text>
-    </TouchableOpacity>
-  );
-};
+        borderRadius: 10,
+        zIndex: 1,
+        maxWidth: 150
+      }}>
+        <Text style={{
+          fontSize: 36,
+          color: 'white'
+        }}>
+          {formattedTime}
+        </Text>
+      </View>
+    );
+  };
 
-//Main Menu Expanding Button Component
-const SubMenuComponent = ({ isCycling, isMenuOpen, startRoute, importGPXFile, setMenuOpen }) => {
-  if (isCycling || !isMapReady) return null;
-  return (
-    <View style={styles.buttonContainer}>
-      {isMenuOpen && (
-        <View style={styles.subMenuContainer}>
+  //Main Menu Expanding Button Component
+  const SubMenuComponent = ({ isCycling, isMenuOpen, startRoute, importGPXFile, setMenuOpen }) => {
+    if (isCycling || !isMapReady) return null;
+    return (
+      <View style={styles.buttonContainer}>
+        {isMenuOpen && (
           <View style={styles.subMenuContainer}>
+            <View style={styles.subMenuContainer}>
               <TouchableOpacity 
                 style={styles.customButton} 
                 onPress={startRoute} 
               >
                 <Text style={styles.buttonText}>Start Route</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.customButton}
+                onPress={addPhotoWaypointImport}
+              >
+                <Text style={styles.buttonText}>Import Image</Text>
               </TouchableOpacity>
               {/*
                 <TouchableOpacity style={styles.customButton} onPress={importGPXFile}>
@@ -739,63 +908,125 @@ const SubMenuComponent = ({ isCycling, isMenuOpen, startRoute, importGPXFile, se
                 </TouchableOpacity>
               */}
             </View>
-        </View>
-      )}
-      <TouchableOpacity
-        style={styles.menuButton}
-        onPress={() => setMenuOpen(!isMenuOpen)}
-      >
-        <Text style={[
-          styles.menuButtonText, 
-          { lineHeight: isMenuOpen ? 40 : 50 } 
-        ]}>
-          {isMenuOpen ? 'x' : '+'}
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-//Active Route View and Buttons
-const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, stopRoute }) => {
-  if (!isCycling) return null;
-
-  return (
-    <View style={styles.actionContainer}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+          </View>
+        )}
         <TouchableOpacity
-          style={[styles.customLargeButton, { backgroundColor: 'green', flex: 1, marginRight: 5 }]}
-          onPress={goodMarkerPress}
+          style={styles.menuButton}
+          onPress={() => setMenuOpen(!isMenuOpen)}
         >
-          <Text style={styles.buttonText}>Good</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.customLargeButton, { backgroundColor: 'red', flex: 1, marginLeft: 5 }]}
-          onPress={badMarkerPress}
-        >
-          <Text style={styles.buttonText}>Bad</Text>
+          <Text style={[
+            styles.menuButtonText, 
+            { lineHeight: isMenuOpen ? 40 : 50 } 
+          ]}>
+            {isMenuOpen ? 'x' : '+'}
+          </Text>
         </TouchableOpacity>
       </View>
+    );
+  };
 
-      <TouchableOpacity 
-        style={[styles.customButton, { marginTop: 10, width: '100%'}]} 
-        onPress={confirmStopRoute} 
-      >
-        <Text style={styles.buttonText}>Stop Route</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
+  //Active Route View and Buttons
+  const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, stopRoute }) => {
+    if (!isCycling) return null;
 
-//Actual Rendering Function
+    return (
+      <View style={styles.actionContainer}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+          <TouchableOpacity
+            style={[styles.customLargeButton, { backgroundColor: 'green', flex: 1, marginRight: 5 }]}
+            onPress={goodMarkerPress}
+          >
+            <Text style={styles.buttonText}>Good</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.customLargeButton, { backgroundColor: 'red', flex: 1, marginLeft: 5 }]}
+            onPress={badMarkerPress}
+          >
+            <Text style={styles.buttonText}>Bad</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity 
+          style={[styles.customButton, { marginTop: 10, width: '100%'}]} 
+          onPress={confirmStopRoute} 
+        >
+          <Text style={styles.buttonText}>Stop Route</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  //iOS additional map control functions & buttons (Android/Google maps contains these on the screen automatically; Apple maps does not have this feature)
+  const regionZoomCopy = (regionData, zoomAction = 0) => {
+    var newRegion = {
+      latitude: regionData.latitude,
+      longitude: regionData.longitude,
+      latitudeDelta: regionData.latitudeDelta,
+      longitudeDelta: regionData.longitudeDelta
+    };
+    if (zoomAction == 1) {//zoom in
+      newRegion.latitudeDelta = newRegion.latitudeDelta / zoomScalar;
+      newRegion.longitudeDelta = newRegion.longitudeDelta / zoomScalar;
+    }
+    if (zoomAction == 2) {//zoom out
+      newRegion.latitudeDelta = newRegion.latitudeDelta * zoomScalar;
+      newRegion.longitudeDelta = newRegion.longitudeDelta * zoomScalar;
+    }
+    return newRegion;
+  }
+  const centerOnUserLocation = () => {
+    //console.log("center on user");
+    //console.log(userLocation);
+    //console.log(mapRef.current);
+    mapRef.current.animateToRegion(userLocation, 1);
+  }
+  const iosZoomIn = () => {
+    //console.log("zoom in");
+    //console.log(mapRegion);
+    var newRegion = regionZoomCopy(mapRegion, 1);
+    mapRef.current.animateToRegion(newRegion, 1);
+  }
+  const iosZoomOut = () => {
+    //console.log("zoom out");
+    var newRegion = regionZoomCopy(mapRegion, 2);
+    mapRef.current.animateToRegion(newRegion, 1);
+  }
+  const IOSMapControlComponent = ({isCycling}) => {
+    return (
+      <View style={[styles.actionContainer, {marginBottom: 5, alignItems:"left", position:"absolute"}]}>
+        {isCycling ? (<></>) : (
+        <TouchableOpacity
+          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50  }]}
+          onPress={centerOnUserLocation}>
+          <Text style={styles.buttonText}>C</Text>
+        </TouchableOpacity>)}
+        <TouchableOpacity
+          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50  }]}
+          onPress={iosZoomIn}>
+          <Text style={styles.buttonText}>+</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50 }]}
+          onPress={iosZoomOut}>
+          <Text style={styles.buttonText}>-</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  //Actual Rendering Function
   return (
     <View style={styles.container}>
       <TimerComponent isCycling={isCycling} elapsedTime={elapsedTime} />
+      <WaypointModal
+        isVisible={modalVisible}
+        onConfirm={handleAddWaypoint}
+        onCancel={() => setModalVisible(false)}
+      />
       {/*Map Component. Could not be seperated due to constant refreshing issue*/}
       {isMapReady ? (
       <MapView
-        ref = {mapRef} 
+        ref={mapRef} 
         style={styles.map}
         initialRegion={{
           latitude: waypoints[0]?.latitude || 37.78825,
@@ -803,7 +1034,10 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        showsUserLocation = {true}
+        region={mapRegion}
+        onRegionChangeComplete={setMapRegion}
+        showsUserLocation={true}
+        showsCompass={true}
         onMapReady={onMapReady}
       >
          {importedRoutes.length > 0 && (
@@ -820,16 +1054,16 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
 
         {routes.length > 0 && (
           <Polyline
-          coordinates={[
-            ...routes.map(route => ({
-              latitude: parseFloat(route.latitude),
-              longitude: parseFloat(route.longitude),
-            })),
-            userLocation && isCycling ? { latitude: userLocation.latitude, longitude: userLocation.longitude } : null,
-          ].filter(Boolean)}
-          strokeColor="#000"
-          strokeWidth={5}
-        />
+            coordinates={[
+              ...routes.map(route => ({
+                latitude: parseFloat(route.latitude),
+                longitude: parseFloat(route.longitude),
+              })),
+              userLocation && isCycling ? { latitude: userLocation.latitude, longitude: userLocation.longitude } : null,
+            ].filter(Boolean)}
+            strokeColor="#000"
+            strokeWidth={5}
+          />
         )}
 
         {waypoints.map((waypoint) => {
@@ -886,6 +1120,7 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
       )}
       {/*End of Map Component.*/}
       {imported && !isCycling && <ClearRouteButton onPress={clearRoute} />}
+      {(Platform.OS === 'ios') ? (<IOSMapControlComponent isCycling={isCycling}/>) : (<></>)}
       <SubMenuComponent
         isCycling={isCycling}
         isMenuOpen={isMenuOpen}
@@ -899,6 +1134,12 @@ const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, sto
         badMarkerPress={badMarkerPress}
         stopRoute={stopRoute}
       />
+      <GPXNameModal
+        isVisible={gpxNameModalVisible}
+        onConfirm={handleGPXNameConfirm}
+        onCancel={() => setGpxNameModalVisible(false)}
+      />
+
       <FlashMessage position="top" />
     </View>
   );
