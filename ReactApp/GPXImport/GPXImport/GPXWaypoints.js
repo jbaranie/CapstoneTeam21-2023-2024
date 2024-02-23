@@ -261,6 +261,24 @@ const GPXWaypoints = ({route}) => {
       console.error('Error in stopRoute:', error);
     }
   };
+
+  //Effect to create the initial GPX file if it doesn't exist, and display its waypoints on the home screen upon loading.
+  useEffect(() => {
+    const loadWaypointsFromGPX = async () => {
+      const gpxExists = await doesGPXFileExist();
+      if (!gpxExists) {
+        await createInitGPX();
+      } else {
+        await importGPXFileFromPath(GPX_FILE_PATH);
+        setImportedRoutes([]);
+      }
+    };
+  
+    if (isMapReady) {
+      loadWaypointsFromGPX();
+    }
+  }, [isMapReady]);
+
   // Update goodMarkerPress to show modal and set rating to 3
   const goodMarkerPress = () => {
     setWaypointRating(3);
@@ -571,10 +589,10 @@ const GPXWaypoints = ({route}) => {
   }
 
   const startRoute = async () => {
-    const gpxExists = await doesGPXFileExist();
-    if (!gpxExists) {
-      await createInitGPX();
-    }
+    //const gpxExists = await doesGPXFileExist();
+    //if (!gpxExists) {
+    //  await createInitGPX();
+    //}
     setWaypoints([]);
     
     // Check if the user has location permissions
@@ -780,7 +798,7 @@ const initiateRoute = async () => {
  //Clear imported route onPress function with confirmation
 const clearRoute = () => {
   Alert.alert(
-    "Clear Route",
+    "Clear Map",
     "Are you sure you want to clear the route?",
     [
       {
