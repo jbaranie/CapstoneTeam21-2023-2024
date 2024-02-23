@@ -23,7 +23,7 @@ export const deleteFile = async (fileName) => {
   }
 };
 
-export const iosShare = async (uri, utiType) => {
+const iosShare = async (uri, utiType) => {
   try {
     /*
     const { shareStatus } = await Sharing.isAvailableAsync();

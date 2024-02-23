@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, ScrollView } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 
-const GPXViewer = ({ route }) => {
+const GPXViewer = ({ navigation, route }) => {
   const { fileName } = route.params; // Assuming you're passing the file name as a route param
   const [gpxContent, setGpxContent] = useState('');
 

@@ -10,7 +10,7 @@ import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 
 import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos } from './GPXManager';
-import { deleteFile, photoWaypointsFile, photoLocalStore, iosShare } from './GPXFileList';
+import { deleteFile, photoWaypointsFile, photoLocalStore } from './GPXFileList';
 import { pickImage } from './ImageImport';
 import WaypointModal from './WaypointModal';
 import GPXNameModal from './GPXNameModal';
@@ -33,33 +33,7 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
   return d;
 };
 
-const GPXWaypoints = ({route}) => {
-
-  const handleGPXNameConfirm = async (fileName) => {
-    // Rename the GPX file here using FileSystem from 'expo-file-system'
-    const newPath = `${FileSystem.documentDirectory}${fileName}.gpx`;
-    try {
-      await FileSystem.moveAsync({
-        from: currentGPXPath,
-        to: newPath,
-      });
-      console.log(`GPX file renamed to: ${newPath}`);
-      setCurrentGPXPath(''); // Reset the current GPX file path
-      // Navigate away or refresh the list as needed
-      navigation.navigate('GPX Files', { refreshFileList: true });
-    } catch (error) {
-      console.error('Error renaming GPX file:', error);
-      showMessage({
-        message: "Error renaming GPX file",
-        description: "Please try again.",
-        hideOnPress: true,
-        type: "error",
-        duration: 3000 
-      });
-    }
-    setGpxNameModalVisible(false); // Close the modal
-  };  
-
+const GPXWaypoints = ({ navigation, route }) => {
   //Location and map state/refs
   const [waypoints, setWaypoints] = useState([]);
   const [imported, setImported] = useState(false);
@@ -84,13 +58,14 @@ const GPXWaypoints = ({route}) => {
   const [importedWaypoints, setImportedWaypoints] = useState([]);
   const [importedRoutes, setImportedRoutes] = useState([]);
 
-  //Active route/nav state
+  //Active route state
   const [isCycling, setIsCycling] = useState(false);
   const [elapsedTime, setElapsedTime] =useState(0);
   const timerRef = useRef(null);
   const [currentGPXPath, setCurrentGPXPath] = useState('');
   const [photoGPXdata, setPhotoGPXdata] = useState([]);//deprecated, but may be useful so it's still here
-  const navigation = useNavigation();
+  
+  //const navigation = useNavigation();
 
   //Permission states
   const [hasLocationPermission, setHasLocationPermission] = useState(null);
@@ -99,6 +74,31 @@ const GPXWaypoints = ({route}) => {
   //GPX name Modal states
   const [gpxNameModalVisible, setGpxNameModalVisible] = useState(false);
 
+  //Modal activity at the end of route-recording.
+  const handleGPXNameConfirm = async (fileName) => {
+    // Rename the GPX file here using FileSystem from 'expo-file-system'
+    const newPath = `${FileSystem.documentDirectory}${fileName}.gpx`;
+    try {
+      await FileSystem.moveAsync({
+        from: currentGPXPath,
+        to: newPath,
+      });
+      console.log(`GPX file renamed to: ${newPath}`);
+      setCurrentGPXPath(''); // Reset the current GPX file path
+      // Navigate away or refresh the list as needed
+      navigation.navigate('GPX Files', { refreshFileList: true });
+    } catch (error) {
+      console.error('Error renaming GPX file:', error);
+      showMessage({
+        message: "Error renaming GPX file",
+        description: "Please try again.",
+        hideOnPress: true,
+        type: "error",
+        duration: 3000 
+      });
+    }
+    setGpxNameModalVisible(false); // Close the modal
+  };
 
   //Update states from GPXFileList
   useEffect(() => {

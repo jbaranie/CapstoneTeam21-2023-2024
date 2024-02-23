@@ -4,7 +4,7 @@ import { Camera, CameraType } from 'expo-camera';
 import * as Location from 'expo-location';
 import * as MediaLibrary from 'expo-media-library';
 
-const CaptureImageDrawer = () => {
+const CaptureImageDrawer = ({ navigation }) => {
   //Camera state
   const [type, setType] = useState(CameraType.back);
   //Data state
