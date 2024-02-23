@@ -27,12 +27,12 @@ const WebsiteFoundation = () => {
                 <h2>The Experimental Route App</h2>
                 <ul>
                     <li onClick={() => changeTab('cycleapp')}><a href="#CycleApp">CycleApp</a></li>
-                    <li onClick={() => changeTab('modify')}><a href="#modify">Modify GPX File</a></li>
+                    {/*<li onClick={() => changeTab('modify')}><a href="#modify">Modify GPX File</a></li>*/}
+                    <li onClick={() => changeTab('routes')}><a href="#routes">Routes Manager</a></li>
                     <li onClick={() => changeTab('import')}><a href="#import">Import GPX File</a></li>
                     <li onClick={() => changeTab('export')}><a href="#export">Export GPX File</a></li>
-                    <li onClick={() => changeTab('routes')}><a href="#routes">View Routes</a></li>
-                    <li onClick={() => changeTab('images')}><a href="#images">View Images</a></li>
-                    <li onClick={() => changeTab('highlights')}><a href="#highlights">View Highlights</a></li>
+                    <li onClick={() => changeTab('highlights')}><a href="#highlights">Highlights</a></li>
+                    <li onClick={() => changeTab('images')}><a href="#images">Image Gallery</a></li>
                     <li onClick={() => changeTab('about')}><a href="#about">About Page</a></li>
                 </ul>
             </div>
