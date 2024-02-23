@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Platform, Alert, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import React, { useState, useRef, useEffect} from 'react';
+import { View, Platform, StyleSheet, Alert, TouchableOpacity, Text, ActivityIndicator, Image} from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
@@ -16,6 +16,9 @@ import WaypointModal from './WaypointModal';
 import GPXNameModal from './GPXNameModal';
 import { styles } from './styles';
 
+//Icons Import
+import zoomInIcon from './assets/icons/zoomIn.png';
+import zoomOutIcon from './assets/icons/zoomOut.png';
 //Check how far the user is from a route start.
 //Uses Haversine Formula
 const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
@@ -99,8 +102,14 @@ const GPXWaypoints = ({route}) => {
   //GPX name Modal states
   const [gpxNameModalVisible, setGpxNameModalVisible] = useState(false);
 
+  //Zoom States
+  const zoomLevels = {
+    zoomedOut: { latitudeDelta: 0.0922, longitudeDelta: 0.0421 }, // Zoom Out
+    zoomedIn: { latitudeDelta: 0.005, longitudeDelta: 0.005 }, // Zoom In
+  };
+  const [currentZoom, setCurrentZoom] = useState(zoomLevels.zoomedOut); 
+  const [isZoomedIn, setIsZoomedIn] = useState(false);
 
-  //Update states from GPXFileList
   useEffect(() => {
     if (route.params?.gpxFilePath) {
       const filePath = route.params.gpxFilePath;
@@ -130,12 +139,12 @@ const GPXWaypoints = ({route}) => {
         status = response.status;
       }
       setHasLocationPermission(status === 'granted');
-
+    
       if (status !== 'granted') {
         console.error('Permission to access location was denied');
         return;
       }
-
+    
       locationSubscription = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.BestForNavigation,
@@ -143,14 +152,20 @@ const GPXWaypoints = ({route}) => {
           distanceInterval: 1,
         },
         (newLocation) => {
+          const zoomLevel = 0.007; 
           const userLoc = {
             latitude: newLocation.coords.latitude,
             longitude: newLocation.coords.longitude,
-            latitudeDelta: latitudeDeltaDefault,
-            longitudeDelta: longitudeDeltaDefault,
+            latitudeDelta: zoomLevel, 
+            longitudeDelta: zoomLevel, 
           };
           setUserLocation(userLoc);
           setIsMapReady(true);
+    
+          // Animate to the user's location with more zoom when starting the route
+          if (isCycling && mapRef.current) {
+            mapRef.current.animateToRegion(userLoc, 1000); 
+          }
         }
       );
     };
@@ -614,7 +629,26 @@ const GPXWaypoints = ({route}) => {
         [
           {
             text: 'OK',
-            onPress: () => initiateRoute(),
+            onPress: async () => { // Make sure this function is async
+              setIsCycling(true);
+
+              if (userLocation && mapRef.current) {
+                //Animate to user location with new zoom values
+                const zoomedInRegion = {
+                  ...userLocation,
+                  latitudeDelta: 0.001,
+                  longitudeDelta: 0.001, 
+                };
+                mapRef.current.animateToRegion(zoomedInRegion, 1000); 
+              }
+
+              startTimer();
+              if (!currentGPXPath) { 
+                const newFilePath = await createNewGPXFile();
+                setCurrentGPXPath(newFilePath);
+                setCurrentRoute(await addRouteToGPX(GPX_FILE_PATH));
+              }
+            },
           },
           {
             text: 'Cancel',
@@ -1119,6 +1153,40 @@ const handleClearRoute = () => {
         <LoadingScreen />
       )}
       {/*End of Map Component.*/}
+      {/*In-Route Zoom Toggle */}
+      {isCycling && (
+  <TouchableOpacity
+    style={{
+      position: 'absolute',
+      right: 12, 
+      top: 60,
+      width: 40,
+      height: 40,
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      backgroundColor: '#007aff',
+      borderRadius: 30,
+      padding: 0,
+      zIndex: 2, // Make it above map
+    }}
+    onPress={() => {
+      setIsZoomedIn(!isZoomedIn); // Toggle the zoom state
+      const newZoom = isZoomedIn ? zoomLevels.zoomedOut : zoomLevels.zoomedIn; 
+      // Update map region 
+      const newRegion = {
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+        ...newZoom,
+      };
+      mapRef.current.animateToRegion(newRegion, 1000);
+    }}
+  >
+    <Image 
+      source={isZoomedIn ? zoomOutIcon : zoomInIcon} 
+      style={{ width: 24, height: 24 }} 
+    />
+  </TouchableOpacity>
+)}
       {imported && !isCycling && <ClearRouteButton onPress={clearRoute} />}
       {(Platform.OS === 'ios') ? (<IOSMapControlComponent isCycling={isCycling}/>) : (<></>)}
       <SubMenuComponent
