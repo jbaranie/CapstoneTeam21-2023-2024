@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import './TabFoundation.css';
+import './TabLoader.css';
 
 import ImportGPXTab from './ImportGPXTab.js'; 
 import ExportGPXTab from './ExportGPXTab.js'; 
 import ImagesTab from './ImagesTab.js'; 
+import CycleAppTab from './CycleAppTab.js'; 
 import ReactGoogleMapAPI from '../Scripts/ReactGoogleMapAPI';
 
 // Import other tab components as needed
 
 const WebsiteFoundation = () => {
       // State to keep track of the current tab
-    const [currentTab, setCurrentTab] = useState('main');
+    const [currentTab, setCurrentTab] = useState('cycleapp');
 
     // Function to change the current tab
     const changeTab = (tabName) => {
@@ -25,7 +26,7 @@ const WebsiteFoundation = () => {
                 {/* Main Title In Webpage */}
                 <h2>The Experimental Route App</h2>
                 <ul>
-                    <li onClick={() => changeTab('main')}><a href="#main">Landing Page</a></li>
+                    <li onClick={() => changeTab('cycleapp')}><a href="#CycleApp">CycleApp</a></li>
                     <li onClick={() => changeTab('modify')}><a href="#modify">Modify GPX File</a></li>
                     <li onClick={() => changeTab('import')}><a href="#import">Import GPX File</a></li>
                     <li onClick={() => changeTab('export')}><a href="#export">Export GPX File</a></li>
@@ -40,10 +41,11 @@ const WebsiteFoundation = () => {
                  {currentTab === 'import' && <ImportGPXTab />}
                  {currentTab === 'export' && <ExportGPXTab />}
                  {currentTab === 'images' && <ImagesTab />}
+                 {currentTab === 'cycleapp' && <CycleAppTab />}
                 {/* Add conditional rendering for other tabs */}
                
             </div>
-           
+           {/*
             <div id="content">
                 <section id="main">
                     <div id="background">
@@ -54,7 +56,7 @@ const WebsiteFoundation = () => {
                 </section>
             </div> 
        
-            
+            */}
             
             
             {/*TO DO- Move Code to a new tab.js file for the landing page. 

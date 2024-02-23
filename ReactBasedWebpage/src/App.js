@@ -1,7 +1,7 @@
 import './App.css';
 import './Scripts/gpxParser.js';
 
-import TabFoundation from './Tabs/TabFoundation.js';
+import TabLoader from './Tabs/TabLoader.js';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <input type="file" accept=".gpx" id="fileInput" style={{ display: 'none' }} />
       
        {/* Loads Website Template - Main Menu Bar and Region Underneath */}
-       <TabFoundation />
+       <TabLoader />
       
     </div>
   );
