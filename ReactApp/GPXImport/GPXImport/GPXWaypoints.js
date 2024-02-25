@@ -7,7 +7,8 @@ import FlashMessage from 'react-native-flash-message';
 import { showMessage } from 'react-native-flash-message';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
-import { useNavigation } from '@react-navigation/native';
+import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
+import { runOnJS } from 'react-native-reanimated';
 
 import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos } from './GPXManager';
 import { deleteFile, photoWaypointsFile, photoLocalStore } from './GPXFileList';
@@ -343,6 +344,31 @@ const GPXWaypoints = ({ navigation, route }) => {
   //     console.log(err); // Handle the error 
   //   }
   // };
+
+  //TODO determine how to add this to "Home"
+  //gesture navigation items
+  const navigateUp = () => {
+    navigation.navigate("User Info");
+  }
+  const navigateDown = () => {
+    navigation.navigate("Camera Waypoint");
+  }
+  const navUp = Gesture.Fling()
+    .direction(Directions.UP)
+    .numberOfPointers(2)
+    .onEnd(() => {
+      console.log("NavUp");
+      runOnJS(navigateUp)();//NOTE: this method is needed to wrap all navigation actions if called by Gesture handlers
+    });
+  const navDown = Gesture.Fling()
+    .direction(Directions.DOWN)
+    .numberOfPointers(2)
+    .onEnd(() => {
+      console.log("NavDown");
+      runOnJS(navigateDown)();
+    });
+  const twoFlingNav = Gesture.Exclusive(navUp, navDown);
+  //NOTE: currently, the mapview's gesture controls override any attempt to wrap the system with usable controls
     
   //Importing the GPX File
   const importGPXFile = async () => {
@@ -975,6 +1001,7 @@ const handleClearRoute = () => {
     mapRef.current.animateToRegion(newRegion, 1);
   }
   const IOSMapControlComponent = ({isCycling}) => {
+    //TODO fix overlap between this and other components in some page-state cases
     return (
       <View style={[styles.actionContainer, {marginBottom: 5, alignItems:"left", position:"absolute"}]}>
         {isCycling ? (<></>) : (
@@ -1021,6 +1048,7 @@ const handleClearRoute = () => {
         showsUserLocation={true}
         showsCompass={true}
         onMapReady={onMapReady}
+        pitchEnabled={false}
       >
          {importedRoutes.length > 0 && (
           <Polyline

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { styles } from './styles';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
 import { runOnJS } from 'react-native-reanimated';
+
+import { styles } from './styles';
 
 const userInfoDir = `${FileSystem.documentDirectory}userData/`;
 const userInfoLoc = `${userInfoDir}userInputData.json`;
@@ -14,7 +14,7 @@ const newUserInfo = async () => {
   await FileSystem.writeAsStringAsync(userInfoLoc, `{}`);
 }
 
-const UserInfoPanel = () => {
+const UserInfoPanel = ({ navigation }) => {
   //State refs
   const [loadedInfo, setLoaded] = useState(false);
   const [storagePerm, setStoragePerm] = useState(true);
@@ -22,13 +22,12 @@ const UserInfoPanel = () => {
   const [nameText, setNameText] = useState("");
   const [vehicleText, setVehicleText] = useState("");
 
-  const navigation = useNavigation();
-
   useEffect(() => {
-    //TODO set up storage file and make sure it exists; load data if it does
-    setLoaded(true); //comment out to view loading screen
+    loadUserInfo();
+    //setLoaded(true); //uncomment to view incomplete contents
   }, []);
 
+  /*
   useEffect(() => {
     let userData = {
       name: nameText,
@@ -36,9 +35,24 @@ const UserInfoPanel = () => {
     };
     setStoredInfo(userData);
   }, [nameText, vehicleText]);
+  */
+
+  const loadUserInfo = async () => {
+    //TODO implement before disabling loading screen in future versions
+  }
 
   const saveUserInfo = async () => {
-    //TODO
+    if (loadedInfo) {
+      console.log("not yet implemented.");
+      //TODO
+    } else {
+      console.log("Data is not yet loaded; operation cancelled.");
+      Alert.alert(
+        "Loading",
+        "Please wait until data is loaded before attempting operations.",
+        [{ text: "OK" }]
+      );
+    }
   }
 
   useEffect(() => {
@@ -46,30 +60,32 @@ const UserInfoPanel = () => {
     //saveUserInfo();
   }, [storedInfo]);
 
-  //navigation items
-  const navigateAction1 = () => {
+  //gesture navigation items
+  const navigateUp = () => {
     navigation.navigate("Home");
   }
-
-  const navigateAction2 = () => {
-    //currently unused
+  const navigateDown = () => {
+    navigation.navigate("GPX Files");
   }
-
-  //gesture items
-  const twoFling = Gesture.Fling()
+  const navUp = Gesture.Fling()
     .direction(Directions.UP)
     .numberOfPointers(2)
-    .onFinalize(() => {
+    .onEnd(() => {
       console.log("NavUp");
-      runOnJS(navigateAction1)();//NOTE: this method is needed to wrap all navigation actions if called by Gesture handlers
+      runOnJS(navigateUp)();//NOTE: this method is needed to wrap all navigation actions if called by Gesture handlers
     });
+  const navDown = Gesture.Fling()
+    .direction(Directions.DOWN)
+    .numberOfPointers(2)
+    .onEnd(() => {
+      console.log("NavDown");
+      runOnJS(navigateDown)();
+    });
+  const twoFlingNav = Gesture.Exclusive(navUp, navDown);
 
-  //component items
-
-  //<GestureDetector gesture={threeTap}></GestureDetector>
   //return component
   return (
-    <GestureDetector gesture={twoFling}>
+    <GestureDetector gesture={twoFlingNav}>
       <View style={styles.container}>
         {loadedInfo ?
         (storagePerm ?
@@ -79,7 +95,7 @@ const UserInfoPanel = () => {
         </View>) :
         (<Text style={styles.loadingText}>This app does not have file permissions; user info cannot be saved.</Text>)) :
         (<Text style={styles.loadingText}>Loading User Info...</Text>)}
-        <TouchableOpacity style={styles.customButton} onPress={navigateAction1}>
+        <TouchableOpacity style={styles.customButton} onPress={saveUserInfo}>
           <Text styles={styles.buttonContainer}>Save</Text>
         </TouchableOpacity>
       </View>

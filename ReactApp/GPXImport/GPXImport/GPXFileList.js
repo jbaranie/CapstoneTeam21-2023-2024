@@ -5,6 +5,9 @@ import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
 import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
+import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
+import { runOnJS } from 'react-native-reanimated';
+
 import { pickImage } from './ImageImport';
 
 //Filename constants
@@ -307,6 +310,29 @@ const GPXFileList = ({ navigation }) => {
   //     </View>
   //   </View>
   // );
+
+  //gesture navigation items
+  const navigateUp = () => {
+    navigation.navigate("User Info");
+  }
+  const navigateDown = () => {
+    navigation.navigate("Camera Waypoint");
+  }
+  const navUp = Gesture.Fling()
+    .direction(Directions.UP)
+    .numberOfPointers(2)
+    .onEnd(() => {
+      console.log("NavUp");
+      runOnJS(navigateUp)();//NOTE: this method is needed to wrap all navigation actions if called by Gesture handlers
+    });
+  const navDown = Gesture.Fling()
+    .direction(Directions.DOWN)
+    .numberOfPointers(2)
+    .onEnd(() => {
+      console.log("NavDown");
+      runOnJS(navigateDown)();
+    });
+  const twoFlingNav = Gesture.Exclusive(navUp, navDown);
   
   const renderItem = ({ item, index }) => (
     <View>
@@ -329,18 +355,20 @@ const GPXFileList = ({ navigation }) => {
   );
 
   return (
-    <View style={{ padding: 10}}>
-      <FlatList
-        data={gpxFiles}
-        renderItem={renderItem}
-        keyExtractor={item => item}
-      />
-      <Button title="Import GPX File" onPress={importGPXFile} />
-      <Button title="Import Image" onPress={pickImage} />
-      {gpxFiles.length >= 2 && (
-        <Button title="Delete All" onPress={deleteAllFiles} />
-      )}
-    </View>
+    <GestureDetector gesture={twoFlingNav}>
+      <View style={{ padding: 10}}>
+        <FlatList
+          data={gpxFiles}
+          renderItem={renderItem}
+          keyExtractor={item => item}
+        />
+        <Button title="Import GPX File" onPress={importGPXFile} />
+        <Button title="Import Image" onPress={pickImage} />
+        {gpxFiles.length >= 2 && (
+          <Button title="Delete All" onPress={deleteAllFiles} />
+        )}
+      </View>
+    </GestureDetector>
   );
 };
 
