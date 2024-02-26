@@ -1,5 +1,5 @@
 import './App.css';
-import './Scripts/gpxParser.js';
+
 
 import TabLoader from './Tabs/TabLoader.js';
 
@@ -8,7 +8,7 @@ function App() {
     
     <div className="App">    
         {/*Variable Declarations*/}
-        <input type="file" accept=".gpx" id="fileInput" style={{ display: 'none' }} />
+        {/* <input type="file" accept=".gpx" id="fileInput" style={{ display: 'none' }} />*/}
       
        {/* Loads Website Template - Main Menu Bar and Region Underneath */}
        <TabLoader />

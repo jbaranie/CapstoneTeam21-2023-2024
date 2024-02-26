@@ -4,14 +4,14 @@ import './TabLoader.css';
 import ImportGPXTab from './ImportGPXTab.js'; 
 import ExportGPXTab from './ExportGPXTab.js'; 
 import ImagesTab from './ImagesTab.js'; 
-import CycleAppTab from './CycleAppTab.js'; 
-import ReactGoogleMapAPI from '../Scripts/ReactGoogleMapAPI';
+import HomeTab from './HomeTab.js'; 
+
 
 // Import other tab components as needed
 
-const WebsiteFoundation = () => {
+const TabLoader = () => {
       // State to keep track of the current tab
-    const [currentTab, setCurrentTab] = useState('cycleapp');
+    const [currentTab, setCurrentTab] = useState('homeTab');
 
     // Function to change the current tab
     const changeTab = (tabName) => {
@@ -26,22 +26,22 @@ const WebsiteFoundation = () => {
                 {/* Main Title In Webpage */}
                 <h2>The Experimental Route App</h2>
                 <ul>
-                    <li onClick={() => changeTab('cycleapp')}><a href="#CycleApp">CycleApp</a></li>
+                    <li onClick={() => changeTab('homeTab')}><a href="#Home">Home</a></li>
                     {/*<li onClick={() => changeTab('modify')}><a href="#modify">Modify GPX File</a></li>*/}
-                    <li onClick={() => changeTab('routes')}><a href="#routes">Routes Manager</a></li>
-                    <li onClick={() => changeTab('import')}><a href="#import">Import GPX File</a></li>
-                    <li onClick={() => changeTab('export')}><a href="#export">Export GPX File</a></li>
-                    <li onClick={() => changeTab('highlights')}><a href="#highlights">Highlights</a></li>
-                    <li onClick={() => changeTab('images')}><a href="#images">Image Gallery</a></li>
-                    <li onClick={() => changeTab('about')}><a href="#about">About Page</a></li>
+                    <li onClick={() => changeTab('routesManagerTab')}><a href="#RoutesManager">Routes Manager</a></li>
+                    <li onClick={() => changeTab('importTab')}><a href="#ImportGPX">Import GPX File</a></li>
+                    <li onClick={() => changeTab('exportTab')}><a href="#ExportGPX">Export GPX File</a></li>
+                    <li onClick={() => changeTab('highlightsTab')}><a href="#Highlights">Highlights</a></li>
+                    <li onClick={() => changeTab('imagesTab')}><a href="#ImageGallery">Image Gallery</a></li>
+                    <li onClick={() => changeTab('aboutTab')}><a href="#About">About Page</a></li>
                 </ul>
             </div>
            
            <div id="content">
-                 {currentTab === 'import' && <ImportGPXTab />}
-                 {currentTab === 'export' && <ExportGPXTab />}
-                 {currentTab === 'images' && <ImagesTab />}
-                 {currentTab === 'cycleapp' && <CycleAppTab />}
+                 {currentTab === 'importTab' && <ImportGPXTab />}
+                 {currentTab === 'exportTab' && <ExportGPXTab />}
+                 {currentTab === 'imagesTab' && <ImagesTab />}
+                 {currentTab === 'homeTab' && <HomeTab />}
                 {/* Add conditional rendering for other tabs */}
                
             </div>
@@ -73,4 +73,4 @@ const WebsiteFoundation = () => {
     );
 };
 
-export default WebsiteFoundation;
+export default TabLoader;
