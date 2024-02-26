@@ -7,6 +7,7 @@ import FlashMessage from 'react-native-flash-message';
 import { showMessage } from 'react-native-flash-message';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
+import * as ScreenOrient from 'expo-screen-orientation';
 import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
 
@@ -66,8 +67,6 @@ const GPXWaypoints = ({ navigation, route }) => {
   const [currentGPXPath, setCurrentGPXPath] = useState('');
   const [photoGPXdata, setPhotoGPXdata] = useState([]);//deprecated, but may be useful so it's still here
   
-  //const navigation = useNavigation();
-
   //Permission states
   const [hasLocationPermission, setHasLocationPermission] = useState(null);
   const [isMapReady, setIsMapReady] = useState(false);
@@ -345,13 +344,12 @@ const GPXWaypoints = ({ navigation, route }) => {
   //   }
   // };
 
-  //TODO determine how to add this to "Home"
   //gesture navigation items
   const navigateUp = () => {
-    navigation.navigate("User Info");
+    navigation.navigate("Camera Waypoint");
   }
   const navigateDown = () => {
-    navigation.navigate("Camera Waypoint");
+    navigation.navigate("User Info");
   }
   const navUp = Gesture.Fling()
     .direction(Directions.UP)
@@ -498,6 +496,11 @@ const GPXWaypoints = ({ navigation, route }) => {
       });
     }
   };
+
+  //orientation lock
+  useEffect(() => {
+    ScreenOrient.lockAsync(ScreenOrient.OrientationLock.PORTRAIT_UP);
+  }, []);//TODO turn this off on some other views
   
   //PHOTO WAYPOINTS FILE
   const photosFilename = `${FileSystem.documentDirectory}${photoWaypointsFile}`;
@@ -671,38 +674,37 @@ const GPXWaypoints = ({ navigation, route }) => {
         { cancelable: true }
       );
     }
-};
+  };
 
-// Function to initiate the route
-const initiateRoute = async () => {
-  setIsCycling(true);
-  startTimer();
+  // Function to initiate the route
+  const initiateRoute = async () => {
+    setIsCycling(true);
+    startTimer();
 
-  //Clear any existing data
-  setRoutes([]);
-  setWaypoints([]);
+    //Clear any existing data
+    setRoutes([]);
+    setWaypoints([]);
 
-  if (!currentGPXPath) {
-    const newFilePath = await createNewGPXFile();
-    setCurrentGPXPath(newFilePath);
+    if (!currentGPXPath) {
+      const newFilePath = await createNewGPXFile();
+      setCurrentGPXPath(newFilePath);
 
-    // Create a route in the global GPX file and the instance-based GPX file
-    const routeIdGlobal = await addRouteToGPX(GPX_FILE_PATH);
-    const routeIdInstance = await addRouteToGPX(newFilePath);
-    setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
-  }
+      // Create a route in the global GPX file and the instance-based GPX file
+      const routeIdGlobal = await addRouteToGPX(GPX_FILE_PATH);
+      const routeIdInstance = await addRouteToGPX(newFilePath);
+      setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
+    }
 
-  //Prevent the phone from sleeping while active
-  activateKeepAwakeAsync();
+    //Prevent the phone from sleeping while active
+    activateKeepAwakeAsync();
 
-  showMessage({
-    message: "Route Started!",
-    hideOnPress: true,
-    type: "info",
-    duration: 3000 
-  });
-};
-  
+    showMessage({
+      message: "Route Started!",
+      hideOnPress: true,
+      type: "info",
+      duration: 3000 
+    });
+  };
   
   useEffect(() => {
     return () => {
@@ -846,8 +848,8 @@ const handleClearRoute = () => {
       <TouchableOpacity
         style={{
           position: 'absolute',
-          left: 10,
-          bottom: 10,
+          left: 15,
+          bottom: 35,
           backgroundColor: '#007aff',
           padding: 10,
           borderRadius: 5,
@@ -1001,21 +1003,21 @@ const handleClearRoute = () => {
     mapRef.current.animateToRegion(newRegion, 1);
   }
   const IOSMapControlComponent = ({isCycling}) => {
-    //TODO fix overlap between this and other components in some page-state cases
     return (
-      <View style={[styles.actionContainer, {marginBottom: 5, alignItems:"left", position:"absolute"}]}>
-        {isCycling ? (<></>) : (
+      <View style={styles.iosControlContainer}>
+        {isCycling ? (null) : (
         <TouchableOpacity
-          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50  }]}
+          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50 }]}
           onPress={centerOnUserLocation}>
           <Text style={styles.buttonText}>C</Text>
         </TouchableOpacity>)}
         <TouchableOpacity
-          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50  }]}
+          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50 }]}
           onPress={iosZoomIn}>
           <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50 }]}
+        <TouchableOpacity
+          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50 }]}
           onPress={iosZoomOut}>
           <Text style={styles.buttonText}>-</Text>
         </TouchableOpacity>
@@ -1025,7 +1027,7 @@ const handleClearRoute = () => {
 
   //Actual Rendering Function
   return (
-    <View style={styles.container}>
+    <GestureDetector gesture={twoFlingNav}><View style={styles.container}>
       <TimerComponent isCycling={isCycling} elapsedTime={elapsedTime} />
       <WaypointModal
         isVisible={modalVisible}
@@ -1050,7 +1052,7 @@ const handleClearRoute = () => {
         onMapReady={onMapReady}
         pitchEnabled={false}
       >
-         {importedRoutes.length > 0 && (
+        {importedRoutes.length > 0 && (
           <Polyline
             coordinates={importedRoutes.map(route => ({
               latitude: parseFloat(route.latitude),
@@ -1151,7 +1153,7 @@ const handleClearRoute = () => {
       />
 
       <FlashMessage position="top" />
-    </View>
+    </View></GestureDetector>
   );
 };
 export default GPXWaypoints;

@@ -331,8 +331,8 @@ const GPXFileList = ({ navigation }) => {
     .onEnd(() => {
       console.log("NavDown");
       runOnJS(navigateDown)();
-    });
-  const twoFlingNav = Gesture.Exclusive(navUp, navDown);
+    }).cancelsTouchesInView(true);
+    const twoFlingNav = Gesture.Exclusive(navUp, navDown);
   
   const renderItem = ({ item, index }) => (
     <View>
@@ -356,7 +356,7 @@ const GPXFileList = ({ navigation }) => {
 
   return (
     <GestureDetector gesture={twoFlingNav}>
-      <View style={{ padding: 10}}>
+      <View style={{ padding: 10 }}>
         <FlatList
           data={gpxFiles}
           renderItem={renderItem}

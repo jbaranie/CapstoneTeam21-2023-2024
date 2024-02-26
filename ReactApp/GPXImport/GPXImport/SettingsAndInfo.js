@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TextInput, TouchableOpacity, SafeAreaView, View } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
@@ -23,7 +23,7 @@ const UserInfoPanel = ({ navigation }) => {
   const [vehicleText, setVehicleText] = useState("");
 
   useEffect(() => {
-    loadUserInfo();
+        loadUserInfo();
     //setLoaded(true); //uncomment to view incomplete contents
   }, []);
 
@@ -86,7 +86,7 @@ const UserInfoPanel = ({ navigation }) => {
   //return component
   return (
     <GestureDetector gesture={twoFlingNav}>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         {loadedInfo ?
         (storagePerm ?
         (<View style={{flexDirection : 'column', padding: 10}}>
@@ -98,7 +98,7 @@ const UserInfoPanel = ({ navigation }) => {
         <TouchableOpacity style={styles.customButton} onPress={saveUserInfo}>
           <Text styles={styles.buttonContainer}>Save</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     </GestureDetector>
   );
 }
