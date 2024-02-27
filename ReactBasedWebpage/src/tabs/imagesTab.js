@@ -44,7 +44,7 @@ const ImagesTab = () => {
     };
 
     return (
-        <div>
+        <div id="background">
             <h1>Import Image File</h1>
             <p>This is the Image section content.</p>
             <input type="file" id="fileImageInput" accept="image/jpeg" style={{ display: 'none' }} onChange={handleImageUpload} />
