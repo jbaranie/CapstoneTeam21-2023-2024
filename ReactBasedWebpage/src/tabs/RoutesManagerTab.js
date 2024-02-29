@@ -1,4 +1,4 @@
-//RoutesManagerTab.js
+//toutesManagerTab.js
 //This file contains code for the area in index.html when the user hits "Images"
 //It also cotains the code to import an jpeg file.
 //Coder: Jan Baraniecki

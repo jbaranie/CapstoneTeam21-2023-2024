@@ -2,8 +2,11 @@
 //This file contains code for the area in index.html when the user hits "Images"
 //It also cotains the code to import an jpeg file.
 //Coder: Jan Baraniecki
+
+//TODO fix the comments above
+
 import React, { useState } from 'react';
-import ReactGoogleMapAPI from '../Scripts/ReactGoogleMapAPI';
+import ReactGoogleMapAPI from '../scripts/ReactGoogleMapAPI';
 
 const HomeTab = () => {
     return (
