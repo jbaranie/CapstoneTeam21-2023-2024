@@ -500,7 +500,7 @@ const GPXWaypoints = ({ navigation, route }) => {
   //orientation lock
   useEffect(() => {
     ScreenOrient.lockAsync(ScreenOrient.OrientationLock.PORTRAIT_UP);
-  }, []);//TODO turn this off on some other views
+  }, []);//TODO modify this setup to only lock on specific windows; this seems to activate it on the entire app
   
   //PHOTO WAYPOINTS FILE
   const photosFilename = `${FileSystem.documentDirectory}${photoWaypointsFile}`;
