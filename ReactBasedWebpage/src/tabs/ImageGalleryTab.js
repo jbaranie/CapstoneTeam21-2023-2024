@@ -4,7 +4,7 @@
 //Coder: Jan Baraniecki
 import React, { useState } from 'react';
 
-const ImagesTab = () => {
+const ImageGalleryTab = () => {
     const [uploadImageStatus, setUploadImageStatus] = useState('');
     const [uploadedImageUrl, setUploadedImageUrl] = useState('');
     const port = 4000;
@@ -57,4 +57,4 @@ const ImagesTab = () => {
     );
 };
 
-export default ImagesTab;
+export default ImageGalleryTab;

@@ -3,7 +3,7 @@ import './TabLoader.css';
 
 import ImportGPXTab from './ImportGPXTab.js'; 
 import ExportGPXTab from './ExportGPXTab.js'; 
-import ImagesTab from './ImagesTab.js'; 
+import ImageGalleryTab from './ImageGalleryTab.js'; 
 import HomeTab from './HomeTab.js'; 
 import RoutesManagerTab from './RoutesManagerTab.js';
 
@@ -41,7 +41,7 @@ const TabLoader = () => {
            <div id="content">
                  {currentTab === 'importTab' && <ImportGPXTab />}
                  {currentTab === 'exportTab' && <ExportGPXTab />}
-                 {currentTab === 'imagesTab' && <ImagesTab />}
+                 {currentTab === 'imagesTab' && <ImageGalleryTab />}
                  {currentTab === 'homeTab' && <HomeTab />}
                  {currentTab === 'routesManagerTab' && <RoutesManagerTab />}
                 {/* Add conditional rendering for other tabs */}
