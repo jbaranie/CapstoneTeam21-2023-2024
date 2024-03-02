@@ -5,12 +5,18 @@ import * as Location from 'expo-location';
 import * as MediaLibrary from 'expo-media-library';
 import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
+import * as FileSystem from 'expo-file-system';
+
+import { recordActiveFile } from './GPXWaypoints'; 
+
+const checkForRecordingActive = () => {}
 
 const CaptureImageDrawer = ({ navigation }) => {
   //Camera state
   const [type, setType] = useState(CameraType.back);
   //Data state
   const [photo, setPhoto] = useState();
+  const [isRecording, setIsRecord] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
   //Permissions state
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -52,6 +58,16 @@ const CaptureImageDrawer = ({ navigation }) => {
     };
   }, []);
 
+  //state for recording
+  const getRecordState = async () => {
+    let lockInfo = await FileSystem.getInfoAsync(`${FileSystem.documentDirectory}${recordActiveFile}`);
+    return lockInfo.exists;
+  }
+  useEffect(() => {
+    let rState = getRecordState();
+    setIsRecord(rState);
+  }, [photo]);
+
   //gesture navigation items
   const navigateUp = () => {
     navigation.navigate("GPX Files");
@@ -90,12 +106,24 @@ const CaptureImageDrawer = ({ navigation }) => {
       setPhoto(image);
     }
   }
+  const saveWaypoint = async () => {
+    if (!photo) return;
+    //TODO call actions on route recording lock (see addLock and clearLock in GPXWaypoints.js for info)
+    await savePhoto();
+    navigateDown();
+  }
   const savePhoto = async () => {
     if (!photo) return;
     MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
       setPhoto(undefined);
     });
   }
+
+  const saveButton = ({ onSave }) => (
+    <TouchableOpacity style={styles.button} onPress={savePhoto}>
+      <Text style={styles.text}>Save Image</Text>
+    </TouchableOpacity>
+  );
 
   //render returns
   if (hasCameraPermission === undefined ||
@@ -119,16 +147,14 @@ const CaptureImageDrawer = ({ navigation }) => {
       </View>
     )
   } else if (photo) {
-    const saveButton = (
-      <TouchableOpacity style={styles.button} onPress={savePhoto}>
-        <Text style={styles.text}>Save Image</Text>
-      </TouchableOpacity>
-    );
+    const saveA = saveButton(saveWaypoint);
+    const saveB = saveButton(savePhoto);
     return (
       <View style={styles.container}>
         <Image style={styles.preview} source={{ uri: photo.uri }} />
         <View style={styles.buttonContainer}>
-          {hasMediaLibraryPermission ? saveButton : null}
+          {saveA}
+          {saveB}
           <TouchableOpacity style={styles.button} onPress={() => setPhoto(undefined)}>
             <Text style={styles.text}>Discard Image</Text>
           </TouchableOpacity>

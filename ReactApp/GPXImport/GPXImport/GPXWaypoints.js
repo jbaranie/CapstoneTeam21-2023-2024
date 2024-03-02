@@ -38,6 +38,8 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
   return d;
 };
 
+export const recordActiveFile = "locks/lock-record.txt";
+
 const GPXWaypoints = ({ navigation, route }) => {
   //Location and map state/refs
   const [waypoints, setWaypoints] = useState([]);
@@ -110,6 +112,27 @@ const GPXWaypoints = ({ navigation, route }) => {
   };
   const [currentZoom, setCurrentZoom] = useState(zoomLevels.zoomedOut); 
   const [isZoomedIn, setIsZoomedIn] = useState(false);
+
+  //locks for recording route -> camera add to route
+  const lockFile = `${FileSystem.documentDirectory}${recordActiveFile}`;
+  const addLock = async () => {
+    FileSystem.writeAsStringAsync(lockFile, Date.now().toString());
+  }
+  const clearLock = async () => {
+    let lockInfo = await FileSystem.getInfoAsync(lockFile);
+    if (lockInfo.exists) {
+      let lockContents = await FileSystem.readAsStringAsync(lockFile);
+      let lockData = "Route recording lock: lockContents = " + lockContents
+      console.log(lockData);
+      FileSystem.deleteAsync(lockFile);
+    } else {
+      console.log("Did not have to delete lock for recording route (app was not last closed while recording route)");
+    }
+  }
+  //clear lock file on app and ending route, in case app crashed while recording route
+  useEffect(() => {
+    if (!isCycling) clearLock();
+  }, [isCycling]);
 
   useEffect(() => {
     if (route.params?.gpxFilePath) {
@@ -380,10 +403,11 @@ const GPXWaypoints = ({ navigation, route }) => {
 
   //gesture navigation items
   const navigateUp = () => {
-    navigation.navigate("Camera Waypoint");
+    if (isCycling) navigation.navigate("Camera Waypoint");//TODO add parameters for waypoint integration
+    else navigation.navigate("Camera Waypoint");
   }
   const navigateDown = () => {
-    navigation.navigate("User Info");
+    if (!isCycling) navigation.navigate("User Info");
   }
   const navUp = Gesture.Fling()
     .direction(Directions.UP)
@@ -733,6 +757,7 @@ const GPXWaypoints = ({ navigation, route }) => {
   const initiateRoute = async () => {
     setIsCycling(true);
     startTimer();
+    addLock();
 
     //Clear any existing data
     setRoutes([]);
@@ -989,11 +1014,18 @@ const handleClearRoute = () => {
   };
 
   //Active Route View and Buttons
-  const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, stopRoute }) => {
+  const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, stopRouteFunc, camNav }) => {
     if (!isCycling) return null;
 
     return (
       <View style={styles.actionContainer}>
+        <TouchableOpacity 
+          style={[styles.customButton, { alignSelf: 'right', marginTop: 10, width: '35%'}]} 
+          onPress={camNav} 
+        >
+          <Text style={styles.buttonText}>Camera</Text>
+        </TouchableOpacity>
+
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
           <TouchableOpacity
             style={[styles.customLargeButton, { backgroundColor: 'green', flex: 1, marginRight: 5 }]}
@@ -1012,7 +1044,7 @@ const handleClearRoute = () => {
 
         <TouchableOpacity 
           style={[styles.customButton, { marginTop: 10, width: '100%'}]} 
-          onPress={confirmStopRoute} 
+          onPress={stopRouteFunc} 
         >
           <Text style={styles.buttonText}>Stop Route</Text>
         </TouchableOpacity>
@@ -1231,7 +1263,8 @@ const handleClearRoute = () => {
         isCycling={isCycling}
         goodMarkerPress={goodMarkerPress}
         badMarkerPress={badMarkerPress}
-        stopRoute={stopRoute}
+        stopRouteFunc={confirmStopRoute}
+        camNav={navigateUp}
       />
       <GPXNameModal
         isVisible={gpxNameModalVisible}
