@@ -363,7 +363,7 @@ const GPXFileList = ({ navigation }) => {
           keyExtractor={item => item}
         />
         <Button title="Import GPX File" onPress={importGPXFile} />
-        <Button title="Import Image" onPress={pickImage} />
+        {/*<Button title="Import Image" onPress={pickImage} />*/}
         {gpxFiles.length >= 2 && (
           <Button title="Delete All" onPress={deleteAllFiles} />
         )}

@@ -38,6 +38,7 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
   return d;
 };
 
+const recordActiveDir = "locks";
 export const recordActiveFile = "locks/lock-record.txt";
 
 const GPXWaypoints = ({ navigation, route }) => {
@@ -114,15 +115,18 @@ const GPXWaypoints = ({ navigation, route }) => {
   const [isZoomedIn, setIsZoomedIn] = useState(false);
 
   //locks for recording route -> camera add to route
+  const lockDir = `${FileSystem.documentDirectory}${recordActiveDir}`;
   const lockFile = `${FileSystem.documentDirectory}${recordActiveFile}`;
   const addLock = async () => {
-    FileSystem.writeAsStringAsync(lockFile, Date.now().toString());
+    let lockData = currentGPXPath + " " + Date.now().toString(); //TODO add gpx target file
+    await FileSystem.makeDirectoryAsync(lockDir);
+    FileSystem.writeAsStringAsync(lockFile, lockData);
   }
   const clearLock = async () => {
     let lockInfo = await FileSystem.getInfoAsync(lockFile);
     if (lockInfo.exists) {
       let lockContents = await FileSystem.readAsStringAsync(lockFile);
-      let lockData = "Route recording lock: lockContents = " + lockContents
+      let lockData = "Route recording lock: lockContents\n" + lockContents;
       console.log(lockData);
       FileSystem.deleteAsync(lockFile);
     } else {
@@ -147,6 +151,13 @@ const GPXWaypoints = ({ navigation, route }) => {
         setImported(true);
     }
   }, [route.params?.imported]);
+
+  //handle images passed from CaptureImageDrawer.js
+  useEffect(() => {
+    if (route.params?.waypointPhoto) {
+      extractWaypointFromNewPhoto(route.params.waypointPhoto);
+    }
+  }, [route.params?.waypointPhoto]);
 
   //Update the userLocRef
   useEffect(() => {
@@ -349,6 +360,30 @@ const GPXWaypoints = ({ navigation, route }) => {
       console.log(err); // Handle the error 
     }
   };
+
+  const extractWaypointFromNewPhoto = async (photo) => {
+    const waypointId = Date.now().toString();
+    try {
+      let inLat = selectedImage.exif.GPSLatitude *
+        (selectedImage.exif.GPSLatitudeRef=="S" ? -1 : 1);
+      let inLon = selectedImage.exif.GPSLongitude *
+        (selectedImage.exif.GPSLongitudeRef=="W" ? -1 : 1);
+      console.log(inLat);
+      console.log(inLon);
+      // await addWaypointToGPX(currentGPXPath, inLat, inLon, 2, waypointId);
+      // setWaypoints(prevWaypoints => [...prevWaypoints, {
+      //   id: waypointId,
+      //   latitude: inLat,
+      //   longitude: inLon,
+      //   name: "Image Waypoint",
+      //   description: "Image Waypoint",
+      //   rating: 2
+      // }]);
+      navigation.setParams({ waypointPhoto: null, waypointDesc: null }); // Reset the parameter
+    } catch {
+      console.log(err);
+    }
+  };
  
   // const goodMarkerPress = async () => {
   //   const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
@@ -403,8 +438,7 @@ const GPXWaypoints = ({ navigation, route }) => {
 
   //gesture navigation items
   const navigateUp = () => {
-    if (isCycling) navigation.navigate("Camera Waypoint");//TODO add parameters for waypoint integration
-    else navigation.navigate("Camera Waypoint");
+    navigation.navigate("Camera Waypoint");
   }
   const navigateDown = () => {
     if (!isCycling) navigation.navigate("User Info");
@@ -615,7 +649,7 @@ const GPXWaypoints = ({ navigation, route }) => {
         from: selectedImage.uri,
         to: `${photosDirectory}${photoName}`,
       });
-      
+
       //save coordinate data to imported images GPX file
       let inLat = selectedImage.exif.GPSLatitude *
         (selectedImage.exif.GPSLatitudeRef=="S" ? -1 : 1);

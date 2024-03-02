@@ -123,7 +123,6 @@ const addRouteToGPX = async (filePath) => {
   return routeId; 
 };
 
-
 const addRoutePointToGPX = async (filePath, routeId, routePoint) => {
   //console.log(`Adding point to route ID ${routeId} in GPX file: ${filePath}`);
   try {

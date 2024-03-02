@@ -9,8 +9,6 @@ import * as FileSystem from 'expo-file-system';
 
 import { recordActiveFile } from './GPXWaypoints'; 
 
-const checkForRecordingActive = () => {}
-
 const CaptureImageDrawer = ({ navigation }) => {
   //Camera state
   const [type, setType] = useState(CameraType.back);
@@ -72,8 +70,9 @@ const CaptureImageDrawer = ({ navigation }) => {
   const navigateUp = () => {
     navigation.navigate("GPX Files");
   }
-  const navigateDown = () => {
-    navigation.navigate("Home");
+  const navigateDown = (passPhoto = undefined) => {
+    if (passPhoto !== undefined) navigation.navigate("Home", passPhoto);
+    else navigation.navigate("Home");
   }
   const navUp = Gesture.Fling()
     .direction(Directions.UP)
@@ -108,9 +107,9 @@ const CaptureImageDrawer = ({ navigation }) => {
   }
   const saveWaypoint = async () => {
     if (!photo) return;
-    //TODO call actions on route recording lock (see addLock and clearLock in GPXWaypoints.js for info)
+    let bundle = {waypointPhoto: photo.exif, waypointDesc: photo.uri};
     await savePhoto();
-    navigateDown();
+    runOnJS(navigateDown(bundle));
   }
   const savePhoto = async () => {
     if (!photo) return;
@@ -119,11 +118,13 @@ const CaptureImageDrawer = ({ navigation }) => {
     });
   }
 
-  const saveButton = ({ onSave }) => (
-    <TouchableOpacity style={styles.button} onPress={savePhoto}>
-      <Text style={styles.text}>Save Image</Text>
-    </TouchableOpacity>
-  );
+  const saveButton = (onSave, saveTarget) => {
+    return (
+      <TouchableOpacity style={styles.button} onPress={savePhoto}>
+        <Text style={styles.text}>Save {saveTarget}</Text>
+      </TouchableOpacity>
+    );
+  };
 
   //render returns
   if (hasCameraPermission === undefined ||
@@ -147,13 +148,13 @@ const CaptureImageDrawer = ({ navigation }) => {
       </View>
     )
   } else if (photo) {
-    const saveA = saveButton(saveWaypoint);
-    const saveB = saveButton(savePhoto);
+    const saveA = saveButton(saveWaypoint, "Waypoint");
+    const saveB = saveButton(savePhoto, "Photo");
     return (
       <View style={styles.container}>
         <Image style={styles.preview} source={{ uri: photo.uri }} />
         <View style={styles.buttonContainer}>
-          {saveA}
+          {isRecording ? saveA : <></>}
           {saveB}
           <TouchableOpacity style={styles.button} onPress={() => setPhoto(undefined)}>
             <Text style={styles.text}>Discard Image</Text>
