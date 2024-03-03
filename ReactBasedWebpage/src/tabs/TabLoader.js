@@ -6,7 +6,8 @@ import ExportGPXTab from './ExportGPXTab.js';
 import ImageGalleryTab from './ImageGalleryTab.js'; 
 import HomeTab from './HomeTab.js'; 
 import RoutesManagerTab from './RoutesManagerTab.js';
-
+import AboutTab from './AboutTab.js';
+import HighLightsTab from './HighLightsTab.js';
 
 // Import other tab components as needed
 
@@ -44,33 +45,11 @@ const TabLoader = () => {
                  {currentTab === 'imagesTab' && <ImageGalleryTab />}
                  {currentTab === 'homeTab' && <HomeTab />}
                  {currentTab === 'routesManagerTab' && <RoutesManagerTab />}
+                 {currentTab === 'aboutTab' && <AboutTab />}
+                 {currentTab === 'highlightsTab' && <HighLightsTab />}
                 {/* Add conditional rendering for other tabs */}
                
             </div>
-           {/*
-            <div id="content">
-                <section id="main">
-                    <div id="background">
-                        <h1>A New Experimental Route App</h1>
-                        <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p> 
-                         <ReactGoogleMapAPI />
-                    </div>
-                </section>
-            </div> 
-       
-            */}
-            
-            
-            {/*TO DO- Move Code to a new tab.js file for the landing page. 
-            <div id="content">
-                <section id="main">
-                    <div id="background">
-                        <h1>A New Experimental Route App</h1>
-                        <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p> 
-                    </div>
-                </section>
-            </div> 
-            */}
         </>    
     );
 };
