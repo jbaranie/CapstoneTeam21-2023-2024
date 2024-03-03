@@ -3,6 +3,8 @@
 //It also cotains the code to import an jpeg file.
 //Coder: Jan Baraniecki
 import React, { useState } from 'react';
+import CarouselGallery from '../GUIComponents/CarouselGallery.js';
+
 
 const ImageGalleryTab = () => {
     const [uploadImageStatus, setUploadImageStatus] = useState('');
@@ -53,6 +55,7 @@ const ImageGalleryTab = () => {
                 {uploadImageStatus && <p style={{ color: uploadImageStatus.startsWith('Error') ? 'red' : 'green' }}>{uploadImageStatus}</p>}
                 {uploadedImageUrl && <img src={uploadedImageUrl} alt="Uploaded" />}
             </div>
+            <CarouselGallery/>
         </div>
     );
 };
