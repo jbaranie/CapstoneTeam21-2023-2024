@@ -3,9 +3,9 @@
 //It also cotains the code to import an jpeg file.
 //Coder: Jan Baraniecki
 import React, { useState } from 'react';
-import ReactGoogleMapAPI from '../Scripts/ReactGoogleMapAPI';
+import ReactGoogleMapAPI from '../scripts/ReactGoogleMapAPI';
 
-const CycleAppTab = () => {
+const HomeTab = () => {
     return (
         <div>
             <section id="main">
@@ -20,4 +20,4 @@ const CycleAppTab = () => {
     );
 };
 
-export default CycleAppTab;
+export default HomeTab;
