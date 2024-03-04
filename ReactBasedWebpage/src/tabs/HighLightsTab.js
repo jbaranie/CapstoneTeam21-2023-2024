@@ -1,4 +1,4 @@
-//AboutTab.js
+//HighLightsTab.js
 //Coder: Jan Baraniecki
 import React, { useState } from 'react';
 
