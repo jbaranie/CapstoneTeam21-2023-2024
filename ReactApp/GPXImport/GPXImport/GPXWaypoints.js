@@ -252,16 +252,16 @@ const GPXWaypoints = ({route}) => {
 
           setGpxNameModalVisible(true);
 
-          // showMessage({
-          //   message: "Route has ended.",
-          //   hideOnPress: true,
-          //   type: "info",
-          //   duration: 2000
-          // });
-          // Refresh the GPX file list to include the new file
-          // navigation.navigate('GPX Files', { refreshFileList: true });
+          showMessage({
+            message: "Route has ended.",
+            hideOnPress: true,
+            type: "info",
+            duration: 2000
+          });
+          //Refresh the GPX file list to include the new file
+          navigation.navigate('GPX Files', { refreshFileList: true });
         }
-        //setCurrentGPXPath(''); // Reset the current GPX file path
+        setCurrentGPXPath(''); // Reset the current GPX file path
       } else {
         console.error('No GPX file path found when trying to stop route');
 
@@ -278,21 +278,22 @@ const GPXWaypoints = ({route}) => {
   };
 
   //Effect to create the initial GPX file if it doesn't exist, and display its waypoints on the home screen upon loading.
-  useEffect(() => {
-    const loadWaypointsFromGPX = async () => {
-      const gpxExists = await doesGPXFileExist();
-      if (!gpxExists) {
-        await createInitGPX();
-      } else {
-        await importGPXFileFromPath(GPX_FILE_PATH);
-        setImportedRoutes([]);
-      }
-    };
+  // useEffect(() => {
+  //   const loadWaypointsFromGPX = async () => {
+  //     const gpxExists = await doesGPXFileExist();
+  //     if (!gpxExists) {
+  //       await createInitGPX();
+  //     } 
+  //     // else {
+  //     //   await importGPXFileFromPath(GPX_FILE_PATH);
+  //     //   setImportedRoutes([]);
+  //     // }
+  //   };
   
-    if (isMapReady) {
-      loadWaypointsFromGPX();
-    }
-  }, [isMapReady]);
+  //   if (isMapReady) {
+  //     loadWaypointsFromGPX();
+  //   }
+  // }, [isMapReady]);
 
   // Update goodMarkerPress to show modal and set rating to 3
   const goodMarkerPress = () => {
@@ -309,6 +310,7 @@ const GPXWaypoints = ({route}) => {
   // Function to handle modal confirm
   const handleAddWaypoint = async (title, description) => {
     const waypointId = Date.now().toString();
+    const rating = waypointRating; 
     try {
       //title, description added. ID now in custom GPX tag. 
       await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, waypointRating, waypointId, title, description);
@@ -318,11 +320,24 @@ const GPXWaypoints = ({route}) => {
         longitude: userLocation.longitude,
         name: title,
         description: description,
-        rating: waypointRating
+        rating: rating
       }]);
-      setModalVisible(false); // Close the modal
+      showMessage({
+        message: `${rating === 3 ? "Good" : "Bad"} Waypoint Added!`,
+        type: "success",
+        backgroundColor: "#2196f3", // Consider changing color based on rating
+        duration: 3000
+      });
     } catch (err) {
-      console.log(err); // Handle the error 
+      console.log(err); // Handle the error
+      showMessage({
+        message: "Could not add new waypoint",
+        description: err.message,
+        type: "error",
+        duration: 3000
+      });
+    } finally {
+      setModalVisible(false); // Close the modal regardless of success or failure
     }
   };
  
@@ -604,10 +619,10 @@ const GPXWaypoints = ({route}) => {
   }
 
   const startRoute = async () => {
-    //const gpxExists = await doesGPXFileExist();
-    //if (!gpxExists) {
-    //  await createInitGPX();
-    //}
+    const gpxExists = await doesGPXFileExist();
+    if (!gpxExists) {
+     await createInitGPX();
+    }
     setWaypoints([]);
     
     // Check if the user has location permissions
