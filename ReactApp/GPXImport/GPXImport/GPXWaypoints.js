@@ -47,9 +47,6 @@ const GPXWaypoints = ({route}) => {
         to: newPath,
       });
       console.log(`GPX file renamed to: ${newPath}`);
-      setCurrentGPXPath(''); // Reset the current GPX file path
-      // Navigate away or refresh the list as needed
-      navigation.navigate('GPX Files', { refreshFileList: true });
     } catch (error) {
       console.error('Error renaming GPX file:', error);
       showMessage({
@@ -59,8 +56,13 @@ const GPXWaypoints = ({route}) => {
         type: "error",
         duration: 3000 
       });
+    } finally {
+      // Navigate and reset state after handling rename
+      setCurrentGPXPath(''); 
+      setGpxNameModalVisible(false); // Close the modal
+      // Navigate away or refresh the list as needed
+      navigation.navigate('GPX Files', { refreshFileList: true });
     }
-    setGpxNameModalVisible(false); // Close the modal
   };  
 
   //Location and map state/refs
@@ -242,7 +244,6 @@ const GPXWaypoints = ({route}) => {
             type: "info",
             duration: 3000 
           });
-          setGpxNameModalVisible(true);
         } else {
           // Save the route and waypoints to the current file
           // (Uncomment and implement the logic for saving waypoints and routes)
@@ -251,21 +252,16 @@ const GPXWaypoints = ({route}) => {
           // const fileContent = await FileSystem.readAsStringAsync(currentGPXPath);
           // console.log('GPX File Content:', fileContent);
 
-          
-
           showMessage({
             message: "Route has ended.",
             hideOnPress: true,
             type: "info",
             duration: 2000
           });
-          //Refresh the GPX file list to include the new file
-          navigation.navigate('GPX Files', { refreshFileList: true });
         }
-        setCurrentGPXPath(''); // Reset the current GPX file path
+        setGpxNameModalVisible(true);
       } else {
         console.error('No GPX file path found when trying to stop route');
-
         showMessage({
           message: "Could not save created route to GPX File",
           hideOnPress: true,
@@ -313,6 +309,7 @@ const GPXWaypoints = ({route}) => {
     const waypointId = Date.now().toString();
     try {
       await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, rating, waypointId, title, description);
+      await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, rating, waypointId, title, description);
       setWaypoints(prevWaypoints => [...prevWaypoints, {
         id: waypointId,
         latitude: userLocation.latitude,
@@ -324,7 +321,7 @@ const GPXWaypoints = ({route}) => {
       showMessage({
         message: `${rating === 3 ? "Good" : "Bad"} Waypoint Added!`,
         type: "success",
-        backgroundColor: "#2196f3", // Consider changing color based on rating
+        backgroundColor: "#2196f3", 
         duration: 3000
       });
     } catch (err) {
