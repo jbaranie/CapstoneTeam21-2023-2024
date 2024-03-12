@@ -234,7 +234,7 @@ const GPXWaypoints = ({route}) => {
           // No waypoints or routes to add, delete the file
           deleteFile(currentGPXPath);
           //console.log('No waypoints or routes. File deleted.');
-
+          
           showMessage({
             message: "Route Not Saved",
             description: "Route wasn't long enough to be saved. Try adding waypoints!",
@@ -242,6 +242,7 @@ const GPXWaypoints = ({route}) => {
             type: "info",
             duration: 3000 
           });
+          setGpxNameModalVisible(true);
         } else {
           // Save the route and waypoints to the current file
           // (Uncomment and implement the logic for saving waypoints and routes)
@@ -250,7 +251,7 @@ const GPXWaypoints = ({route}) => {
           // const fileContent = await FileSystem.readAsStringAsync(currentGPXPath);
           // console.log('GPX File Content:', fileContent);
 
-          setGpxNameModalVisible(true);
+          
 
           showMessage({
             message: "Route has ended.",
@@ -295,7 +296,7 @@ const GPXWaypoints = ({route}) => {
   //   }
   // }, [isMapReady]);
 
-  // Update goodMarkerPress to show modal and set rating to 3
+  //Update goodMarkerPress to show modal and set rating to 3
   const goodMarkerPress = () => {
     setWaypointRating(3);
     setModalVisible(true); //Show Waypoint Modal
@@ -308,12 +309,10 @@ const GPXWaypoints = ({route}) => {
   };
 
   // Function to handle modal confirm
-  const handleAddWaypoint = async (title, description) => {
+  const handleAddWaypoint = async (title, description, rating) => {
     const waypointId = Date.now().toString();
-    const rating = waypointRating; 
     try {
-      //title, description added. ID now in custom GPX tag. 
-      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, waypointRating, waypointId, title, description);
+      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, rating, waypointId, title, description);
       setWaypoints(prevWaypoints => [...prevWaypoints, {
         id: waypointId,
         latitude: userLocation.latitude,
@@ -329,7 +328,7 @@ const GPXWaypoints = ({route}) => {
         duration: 3000
       });
     } catch (err) {
-      console.log(err); // Handle the error
+      console.error(err);
       showMessage({
         message: "Could not add new waypoint",
         description: err.message,
@@ -337,9 +336,10 @@ const GPXWaypoints = ({route}) => {
         duration: 3000
       });
     } finally {
-      setModalVisible(false); // Close the modal regardless of success or failure
+      setModalVisible(false);
     }
   };
+  
  
   // const goodMarkerPress = async () => {
   //   const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
@@ -1069,7 +1069,7 @@ const handleClearRoute = () => {
       <TimerComponent isCycling={isCycling} elapsedTime={elapsedTime} />
       <WaypointModal
         isVisible={modalVisible}
-        onConfirm={handleAddWaypoint}
+        onConfirm={(title, description) => handleAddWaypoint(title, description, waypointRating)}
         onCancel={() => setModalVisible(false)}
       />
       {/*Map Component. Could not be seperated due to constant refreshing issue*/}
