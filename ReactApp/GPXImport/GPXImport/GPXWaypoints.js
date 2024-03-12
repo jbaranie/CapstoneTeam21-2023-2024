@@ -475,15 +475,17 @@ const GPXWaypoints = ({route}) => {
       const fileContent = await FileSystem.readAsStringAsync(fullPath);
   
       // Extracting waypoints
-      const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)".*?<name>([^<]+)<\/name>(?:.*?<rating>(\d)<\/rating>)?/gs;
+      const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)".*?>\s*(?:<name>([^<]*)<\/name>)?\s*(?:<desc>([^<]*)<\/desc>)?\s*(?:<rating>(\d)<\/rating>)?\s*(?:<id>(\d+)<\/id>)?\s*<\/wpt>/gs;
       const matches = Array.from(fileContent.matchAll(waypointRegex));
       const newWaypoints = matches.map((match, index) => ({
-        id: index.toString(),
+        id: match[6] || index.toString(),
         latitude: parseFloat(match[1]),
         longitude: parseFloat(match[2]),
-        name: match[3] || 'Unnamed Waypoint',
-        rating: match[4] ? parseInt(match[4]) : 2
+        name: match[3] || '',
+        desc: match[4] || '',
+        rating: match[5] ? parseInt(match[5]) : undefined,
       }));
+    
   
       // Extracting routes
       const routeRegex = /<rtept[^>]*lat="([-.\d]+)"[^>]*lon="([-.\d]+)"[^>]*>/g;
@@ -492,6 +494,9 @@ const GPXWaypoints = ({route}) => {
         latitude: parseFloat(match[1]),
         longitude: parseFloat(match[2]),
       }));
+
+      console.log("Extracted Waypoints: ", newWaypoints);
+      console.log("Extracted Routes: ", newRoutes);
   
       setImportedWaypoints(newWaypoints);
       setImportedRoutes(newRoutes);
@@ -507,7 +512,7 @@ const GPXWaypoints = ({route}) => {
         });
       }
     } catch (error) {
-      //console.error('Error importing GPX file:', error);
+      console.error('Error importing GPX file:', error);
       showMessage({
         message: "Error importing GPX file",
         description: "Check the file you are trying to import, and try again.",
@@ -1086,6 +1091,10 @@ const handleClearRoute = () => {
         showsCompass={true}
         onMapReady={onMapReady}
       >
+          {console.log('Rendering Routes:', routes)}
+          {console.log('Rendering Imported Routes:', importedRoutes)}
+          {console.log('Rendering Waypoints:', waypoints)}
+          {console.log('Rendering Imported Waypoints:', importedWaypoints)}
          {importedRoutes.length > 0 && (
           <Polyline
             coordinates={importedRoutes.map(route => ({

@@ -317,7 +317,7 @@ const GPXFileList = ({ navigation }) => {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Button title="Delete" onPress={() => confirmDeleteFile(item)} />
           
-        <Button title="Log Content" onPress={() => logGPXContent(item)} />
+        <Button title="Log Content" onPress={() => logGPXContent(item)} /> 
         
           <Button title={(Platform.OS === 'ios' ? "Share" : "Download")} onPress={() => downloadFile(item)} />
         </View>
