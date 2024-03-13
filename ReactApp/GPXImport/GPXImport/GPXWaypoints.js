@@ -313,15 +313,17 @@ const GPXWaypoints = ({ navigation, route }) => {
   };
 
   //Effect to create the initial GPX file if it doesn't exist, and display its waypoints on the home screen upon loading.
+  //NOTE: question - why are we including the main gpx's waypoints all at the start? I've forgotten why - Larry
   useEffect(() => {
     const loadWaypointsFromGPX = async () => {
       const gpxExists = await doesGPXFileExist();
       if (!gpxExists) {
         await createInitGPX();
-      } else {
+      }
+      /*else {
         await importGPXFileFromPath(GPX_FILE_PATH);
         setImportedRoutes([]);
-      }
+      }*/
     };
   
     if (isMapReady) {
@@ -706,6 +708,12 @@ const GPXWaypoints = ({ navigation, route }) => {
         [{ text: "OK :(" }]
       );
       return;
+    }
+
+    //check for mainGPX
+    const gpxExists = await doesGPXFileExist();
+    if (!gpxExists) {
+      await createInitGPX();
     }
 
     // Check if there is an imported route

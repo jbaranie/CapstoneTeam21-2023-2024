@@ -59,11 +59,14 @@ const CaptureImageDrawer = ({ navigation }) => {
   //state for recording
   const getRecordState = async () => {
     let lockInfo = await FileSystem.getInfoAsync(`${FileSystem.documentDirectory}${recordActiveFile}`);
-    return lockInfo.exists;
+    console.log(lockInfo);
+    return (lockInfo.exists);
   }
   useEffect(() => {
     let rState = getRecordState();
     setIsRecord(rState);
+    if (isRecording === true) console.log("Recording in progress; waypoint button should show.");
+    else console.log("Not recording; you should not see waypoint button.");
   }, [photo]);
 
   //gesture navigation items
@@ -120,7 +123,7 @@ const CaptureImageDrawer = ({ navigation }) => {
 
   const saveButton = (onSave, saveTarget) => {
     return (
-      <TouchableOpacity style={styles.button} onPress={savePhoto}>
+      <TouchableOpacity style={styles.button} onPress={onSave}>
         <Text style={styles.text}>Save {saveTarget}</Text>
       </TouchableOpacity>
     );
@@ -148,13 +151,13 @@ const CaptureImageDrawer = ({ navigation }) => {
       </View>
     )
   } else if (photo) {
-    const saveA = saveButton(saveWaypoint, "Waypoint");
+    const saveA = ((isRecording === true) ? saveButton(saveWaypoint, "Waypoint") : null);
     const saveB = saveButton(savePhoto, "Photo");
     return (
       <View style={styles.container}>
         <Image style={styles.preview} source={{ uri: photo.uri }} />
         <View style={styles.buttonContainer}>
-          {isRecording ? saveA : <></>}
+          {saveA}
           {saveB}
           <TouchableOpacity style={styles.button} onPress={() => setPhoto(undefined)}>
             <Text style={styles.text}>Discard Image</Text>
