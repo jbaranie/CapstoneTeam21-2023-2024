@@ -495,8 +495,12 @@ const GPXWaypoints = ({route}) => {
         longitude: parseFloat(match[2]),
       }));
 
-      console.log("Extracted Waypoints: ", newWaypoints);
-      console.log("Extracted Routes: ", newRoutes);
+      /* To check if newWaypoints and newRoutes are extracted correctly and 
+        state setters like setImportedWaypoints and setImportedRoutes 
+        are called with the correct data.
+      */
+        // console.log("Extracted Waypoints: ", newWaypoints);
+        // console.log("Extracted Routes: ", newRoutes);
   
       setImportedWaypoints(newWaypoints);
       setImportedRoutes(newRoutes);
@@ -621,49 +625,46 @@ const GPXWaypoints = ({route}) => {
   }
 
   const startRoute = async () => {
+    // Check if a main GPX file exists; if not, create a new one.
     const gpxExists = await doesGPXFileExist();
     if (!gpxExists) {
-     await createInitGPX();
+      await createInitGPX();
     }
     setWaypoints([]);
-    
-    // Check if the user has location permissions
+  
+    // Ensure the user has granted location permissions.
     if (!hasLocationPermission) {
       Alert.alert(
         "Location Permission Required",
         "You do not have the proper location permissions set. Please check your settings.",
-        [{ text: "OK :(" }]
+        [{ text: "OK" }]
       );
       return;
     }
-
-    // Check if there is an imported route
+  
+    // If no route has been imported, confirm with the user to start a new route.
     if (!imported) {
-      // If there is no imported route, ask for confirmation to start without a route
       Alert.alert(
         'Start Route',
-        'Do you want to start Cycling without a route?',
+        'Do you want to start cycling without a route?',
         [
           {
             text: 'OK',
-            onPress: async () => { // Make sure this function is async
-              setIsCycling(true);
-
-              if (userLocation && mapRef.current) {
-                //Animate to user location with new zoom values
-                const zoomedInRegion = {
-                  ...userLocation,
-                  latitudeDelta: 0.001,
-                  longitudeDelta: 0.001, 
-                };
-                mapRef.current.animateToRegion(zoomedInRegion, 1000); 
-              }
-
-              startTimer();
-              if (!currentGPXPath) { 
+            onPress: async () => {
+              setIsCycling(true); // Start cycling
+              startTimer();  
+              // Check if user location data is available
+              if (userLocation && userLocation.latitude && userLocation.longitude) {
+                // Create a new GPX file for this route session
                 const newFilePath = await createNewGPXFile();
                 setCurrentGPXPath(newFilePath);
-                setCurrentRoute(await addRouteToGPX(GPX_FILE_PATH));
+  
+                // Add a new route to the session-specific GPX file and main GPX file
+                const routeId = await addRouteToGPX(newFilePath, userLocation);
+                setCurrentRoute(routeId);
+                await addRouteToGPX(GPX_FILE_PATH, userLocation, routeId);
+              } else {
+                console.log('User location data is not available.');
               }
             },
           },
@@ -674,47 +675,8 @@ const GPXWaypoints = ({route}) => {
         ],
         { cancelable: true }
       );
-    } else {
-      const startPoint = importedRoutes[0];
-
-      // Ensure startPoint and userLocation are available
-      if (importedRoutes.length > 0 && userLocation) {
-        const { latitude: userLat, longitude: userLon } = userLocation;
-
-        const distance = getDistanceFromLatLonInMiles(userLat, userLon, startPoint.latitude, startPoint.longitude);
-        console.log('Distance', distance);
-
-        if (distance > 3) {
-          Alert.alert("Too Far", "You are too far from the start of the route.");
-          return; 
-        }
-      } else {
-        showMessage({
-          message: "No Valid Routes",
-          description: "There are no valid routes in the imported route.",
-          hideOnPress: true,
-          type: "error",
-          duration: 5000
-        });
-      }
-      // Start route confirmation dialog
-      Alert.alert(
-        'Start Route',
-        'Would you like to begin Cycling?',
-        [
-          {
-            text: 'START',
-            onPress: () => initiateRoute(),
-          },
-          {
-            text: 'Cancel',
-            style: 'cancel',
-          },
-        ],
-        { cancelable: true }
-      );
     }
-};
+  };  
 
 // Function to initiate the route
 const initiateRoute = async () => {
@@ -731,8 +693,11 @@ const initiateRoute = async () => {
 
     // Create a route in the global GPX file and the instance-based GPX file
     const routeIdGlobal = await addRouteToGPX(GPX_FILE_PATH);
+    console.log(`Global Route ID: ${routeIdGlobal}`); 
     const routeIdInstance = await addRouteToGPX(newFilePath);
+    console.log(`Instance Route ID: ${routeIdInstance}`);
     setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
+    
   }
 
   //Prevent the phone from sleeping while active
@@ -783,9 +748,10 @@ const initiateRoute = async () => {
       try {
         // Add route point to both GPX files
         await addRoutePointToGPX(GPX_FILE_PATH, routeIds.global, point);
-        await addRoutePointToGPX(currentGPXPath, routeIds.instance, point);
+        console.log(`Adding point to route with ID: ${routeIds}`);
+        await addRoutePointToGPX(currentGPXPath, routeIds, point);
         setRoutes(prevRoutes => [...prevRoutes, point]);
-        //console.log('Route Point added to both GPX files. Point info: ' + JSON.stringify(point));
+        console.log('Route Point added to both GPX files. Point info: ' + JSON.stringify(point));
       } catch (error) {
         console.error('Error adding route point to GPX:', error);
         
@@ -828,14 +794,14 @@ const initiateRoute = async () => {
 
   useEffect(() => {
     let interval;
-    if (isCycling) {
+    if (isCycling && currentRoute) {
       interval = setInterval(() => {
-        const routeIds = currentRoute;
-        if (routeIds) {
-          addRoutePoint(routeIds);
-        } else {
-          console.log('UNEXPECTED: No route found to add point to!');
-        }
+        const point = {
+          latitude: userLocationRef.current.latitude,
+          longitude: userLocationRef.current.longitude,
+          name: new Date().toLocaleTimeString(),
+        };
+        addRoutePoint(currentRoute, point);
       }, 3000);
     }
     return () => {
@@ -843,7 +809,7 @@ const initiateRoute = async () => {
         clearInterval(interval);
       }
     };
-  }, [isCycling, currentGPXPath, routes, currentRoute]);
+  }, [isCycling, currentRoute, userLocationRef]);
   
   
  //Clear imported route onPress function with confirmation
@@ -1091,10 +1057,16 @@ const handleClearRoute = () => {
         showsCompass={true}
         onMapReady={onMapReady}
       >
+          {/* 
+          Outputs the current values of routes, importedRoutes, waypoints, and importedWaypoints 
+          right before they are passed to render the map elements
+
           {console.log('Rendering Routes:', routes)}
           {console.log('Rendering Imported Routes:', importedRoutes)}
           {console.log('Rendering Waypoints:', waypoints)}
           {console.log('Rendering Imported Waypoints:', importedWaypoints)}
+           */}
+
          {importedRoutes.length > 0 && (
           <Polyline
             coordinates={importedRoutes.map(route => ({
