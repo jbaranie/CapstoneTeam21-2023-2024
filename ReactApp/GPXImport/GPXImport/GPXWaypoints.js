@@ -653,19 +653,20 @@ const GPXWaypoints = ({route}) => {
             onPress: async () => {
               setIsCycling(true); // Start cycling
               startTimer();  
-              // Check if user location data is available
-              if (userLocation && userLocation.latitude && userLocation.longitude) {
-                // Create a new GPX file for this route session
-                const newFilePath = await createNewGPXFile();
-                setCurrentGPXPath(newFilePath);
+              await initiateRoute();
+              // //Check if user location data is available
+              // if (userLocation && userLocation.latitude && userLocation.longitude) {
+              //   // Create a new GPX file for this route session
+              //   const newFilePath = await createNewGPXFile();
+              //   setCurrentGPXPath(newFilePath);
   
-                // Add a new route to the session-specific GPX file and main GPX file
-                const routeId = await addRouteToGPX(newFilePath, userLocation);
-                setCurrentRoute(routeId);
-                await addRouteToGPX(GPX_FILE_PATH, userLocation, routeId);
-              } else {
-                console.log('User location data is not available.');
-              }
+              //   // Add a new route to the session-specific GPX file and main GPX file
+              //   const routeId = await addRouteToGPX(newFilePath, userLocation);
+              //   setCurrentRoute(routeId);
+              //   await addRouteToGPX(GPX_FILE_PATH, userLocation, routeId);
+              // } else {
+              //   console.log('User location data is not available.');
+              // }
             },
           },
           {
@@ -694,6 +695,9 @@ const initiateRoute = async () => {
     // Create a route in the global GPX file and the instance-based GPX file
     const routeIdGlobal = await addRouteToGPX(GPX_FILE_PATH);
     console.log(`Global Route ID: ${routeIdGlobal}`); 
+    if (!routeIdGlobal) {
+      console.error('Failed to create route in the main GPX file');
+    }
     const routeIdInstance = await addRouteToGPX(newFilePath);
     console.log(`Instance Route ID: ${routeIdInstance}`);
     setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
@@ -719,7 +723,7 @@ const initiateRoute = async () => {
     };
   }, []);
 
-  const addRoutePoint = async (routeIds) => {
+  const addRoutePoint = async () => {
     const currentLocation = userLocationRef.current;
     if (currentLocation) {
       const point = {
@@ -746,10 +750,17 @@ const initiateRoute = async () => {
       }
     
       try {
-        // Add route point to both GPX files
-        await addRoutePointToGPX(GPX_FILE_PATH, routeIds.global, point);
-        console.log(`Adding point to route with ID: ${routeIds}`);
-        await addRoutePointToGPX(currentGPXPath, routeIds, point);
+        // Check if currentRoute is an object with global and instance properties
+        if (typeof currentRoute === 'object' && currentRoute.global && currentRoute.instance) {
+          // Add route point to both GPX files
+          await addRoutePointToGPX(GPX_FILE_PATH, currentRoute.global, point);
+          console.log(`Adding point to route with ID: ${currentRoute.global}`);
+          await addRoutePointToGPX(currentGPXPath, currentRoute.instance, point);
+        } else {
+          // Add route point to the instance-based GPX file only
+          await addRoutePointToGPX(currentGPXPath, currentRoute, point);
+        }
+  
         setRoutes(prevRoutes => [...prevRoutes, point]);
         console.log('Route Point added to both GPX files. Point info: ' + JSON.stringify(point));
       } catch (error) {

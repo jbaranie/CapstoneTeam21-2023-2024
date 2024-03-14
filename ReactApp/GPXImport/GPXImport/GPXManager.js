@@ -104,7 +104,7 @@ const addWaypointToGPX = async (filePath, latitude, longitude, rating, id, title
   console.log('Waypoint added:', { latitude, longitude, rating, id });
 };
 
-const addRouteToGPX = async (filePath, userLocation, routeId = uuidv4()) => {
+const addRouteToGPX = async (filePath, userLocation = { latitude: 0, longitude: 0 }, routeId = uuidv4()) => {
   try {
     // Read the existing content from the GPX file.
     let fileContent = await FileSystem.readAsStringAsync(filePath);
@@ -124,6 +124,7 @@ const addRouteToGPX = async (filePath, userLocation, routeId = uuidv4()) => {
   } catch (error) {
     // Log any errors that occur during the process.
     console.error('An error occurred while creating a new route in the GPX file:', error);
+    return null;
   }
 
   // Return the unique ID of the newly created route.
