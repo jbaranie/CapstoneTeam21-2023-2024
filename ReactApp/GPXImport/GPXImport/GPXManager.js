@@ -104,7 +104,11 @@ const addWaypointToGPX = async (filePath, latitude, longitude, rating, id, title
   console.log('Waypoint added:', { latitude, longitude, rating, id });
 };
 
-const addRouteToGPX = async (filePath, userLocation = { latitude: 0, longitude: 0 }, routeId = uuidv4()) => {
+const addRouteToGPX = async (filePath, userLocation, routeId = uuidv4()) => {
+  if (!userLocation || userLocation.latitude === 0 || userLocation.longitude === 0) {
+    console.error('Invalid user location provided to addRouteToGPX');
+    return null;  // Consider handling this case more gracefully depending on your app's flow.
+  }
   try {
     // Read the existing content from the GPX file.
     let fileContent = await FileSystem.readAsStringAsync(filePath);

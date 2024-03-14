@@ -692,17 +692,21 @@ const initiateRoute = async () => {
     const newFilePath = await createNewGPXFile();
     setCurrentGPXPath(newFilePath);
 
+    if (userLocation && userLocation.latitude && userLocation.longitude) {
     // Create a route in the global GPX file and the instance-based GPX file
-    const routeIdGlobal = await addRouteToGPX(GPX_FILE_PATH);
+    const routeIdGlobal = await addRouteToGPX(GPX_FILE_PATH, userLocation);
     console.log(`Global Route ID: ${routeIdGlobal}`); 
     if (!routeIdGlobal) {
       console.error('Failed to create route in the main GPX file');
     }
-    const routeIdInstance = await addRouteToGPX(newFilePath);
+    const routeIdInstance = await addRouteToGPX(newFilePath, userLocation);
     console.log(`Instance Route ID: ${routeIdInstance}`);
     setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
     
+  } else {
+    console.log('User location is not available.');
   }
+}
 
   //Prevent the phone from sleeping while active
   activateKeepAwakeAsync();
