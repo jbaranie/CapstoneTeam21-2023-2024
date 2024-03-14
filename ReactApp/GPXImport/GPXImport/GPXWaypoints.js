@@ -79,6 +79,7 @@ const GPXWaypoints = ({route}) => {
   const [longitudeDeltaDefault, setLongitudeDeltaDefault] = useState(0.0421);
   const zoomScalar = 2;
 
+  const maxDeltas = useRef({ latitudeDelta: 0.0004, longitudeDelta: 0.0004 }); //Max Zoom Values
   //Waypoint Modal States
   const [modalVisible, setModalVisible] = useState(false);
   const [waypointRating, setWaypointRating] = useState(null);
@@ -856,6 +857,7 @@ const handleClearRoute = () => {
   setImported(false); 
 };
 
+
   //Seperated Rendering Components --------------------------------
 
   //Loading Screen Component
@@ -1069,7 +1071,15 @@ const handleClearRoute = () => {
           longitudeDelta: 0.0421,
         }}
         region={mapRegion}
-        onRegionChangeComplete={setMapRegion}
+        onRegionChangeComplete={region => {
+          const latitudeDelta = Math.max(region.latitudeDelta, maxDeltas.current.latitudeDelta);
+          const longitudeDelta = Math.max(region.longitudeDelta, maxDeltas.current.longitudeDelta);
+          setMapRegion({
+            ...region,
+            latitudeDelta,
+            longitudeDelta,
+          });
+        }}
         showsUserLocation={true}
         showsCompass={true}
         onMapReady={onMapReady}
