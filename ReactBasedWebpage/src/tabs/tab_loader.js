@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import './TabLoader.css';
+import './tab_loader.css';
 
-import ImportGPXTab from './ImportGPXTab.js'; 
-import ExportGPXTab from './ExportGPXTab.js'; 
-import ImageGalleryTab from './ImageGalleryTab.js'; 
-import HomeTab from './HomeTab.js'; 
-import RoutesManagerTab from './RoutesManagerTab.js';
-import AboutTab from './AboutTab.js';
-import HighLightsTab from './HighLightsTab.js';
+import ImportGPXTab from './import_gpx_tab.js'; 
+import ExportGPXTab from './export_gpx_tab.js'; 
+import ImageGalleryTab from './image_gallery_tab.js'; 
+import HomeTab from './home_tab.js'; 
+import RoutesManagerTab from './routes_manager_tab.js';
+import AboutTab from './about_tab.js';
+import HighLightsTab from './high_lights_tab.js';
 
 // Import other tab components as needed
 

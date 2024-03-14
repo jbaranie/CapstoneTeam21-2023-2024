@@ -3,7 +3,7 @@
 //It also cotains the code to import an jpeg file.
 //Coder: Jan Baraniecki
 import React, { useState } from 'react';
-import ReactGoogleMapAPI from '../scripts/ReactGoogleMapAPI';
+import ReactGoogleMapAPI from '../scripts/react_google_map_api';
 
 const HomeTab = () => {
     return (

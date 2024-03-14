@@ -1,7 +1,7 @@
 import './App.css';
 
 
-import TabLoader from './tabs/TabLoader.js';
+import TabLoader from './tabs/tab_loader.js';
 
 function App() {
   return (

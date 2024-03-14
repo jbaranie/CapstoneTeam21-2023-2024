@@ -3,7 +3,7 @@
 //It also cotains the code to import an jpeg file.
 //Coder: Jan Baraniecki
 import React, { useState } from 'react';
-import CarouselGallery from '../guicomponents/CarouselGallery.js';
+import CarouselGallery from '../gui_components/carousel_gallery.js';
 
 
 const ImageGalleryTab = () => {
