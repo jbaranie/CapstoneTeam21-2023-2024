@@ -744,11 +744,10 @@ const initiateRoute = async () => {
         + '\n\nCurrent Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude 
         + '\n--------------\n');
         */
-        //console.log('Last Point info: ' + '\nname: ' + lastPoint.name + '\nlat: ' + lastPoint.latitude + 'lon: ' + lastPoint.longitude);
-        //console.log('Current Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude);
-        //console.log('\n--------------\n');
+        // console.log('Last Point info: ' + '\nname: ' + lastPoint.name + '\nlat: ' + lastPoint.latitude + 'lon: ' + lastPoint.longitude);
+        // console.log('Current Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude);
+        // console.log('\n--------------\n');
       }
-      console
       if (lastPoint && lastPoint.latitude === point.latitude && lastPoint.longitude === point.longitude) {
         console.log('New route point is the same as the last one. Skipping addition.');
         return; 
