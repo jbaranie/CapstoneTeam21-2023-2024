@@ -687,6 +687,9 @@ const initiateRoute = async () => {
   setRoutes([]);
   setWaypoints([]);
 
+  // Reset the lastPointRef
+  lastPointRef.current = null;
+
   if (!currentGPXPath) {
     const newFilePath = await createNewGPXFile();
     setCurrentGPXPath(newFilePath);
@@ -728,58 +731,41 @@ const initiateRoute = async () => {
     };
   }, []);
 
-  const addRoutePoint = async () => {
-    const currentLocation = userLocationRef.current;
-    if (currentLocation) {
-      const point = {
-        latitude: currentLocation.latitude,
-        longitude: currentLocation.longitude,
-        name: new Date().toLocaleTimeString(),
-      };  
 
-      const lastPoint = routes[routes.length - 1];
-      if(lastPoint){
-        /*console.log('POINT INFO \n--------------\n' 
-        + 'Last Point info: ' + '\nname: ' + lastPoint.name + '\nlat: ' + lastPoint.latitude + 'lon: ' + lastPoint.longitude 
-        + '\n\nCurrent Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude 
-        + '\n--------------\n');
-        */
-        // console.log('Last Point info: ' + '\nname: ' + lastPoint.name + '\nlat: ' + lastPoint.latitude + 'lon: ' + lastPoint.longitude);
-        // console.log('Current Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude);
-        // console.log('\n--------------\n');
-      }
-      if (lastPoint && lastPoint.latitude === point.latitude && lastPoint.longitude === point.longitude) {
-        console.log('New route point is the same as the last one. Skipping addition.');
-        return; 
-      }
-    
-      try {
-        // Check if currentRoute is an object with global and instance properties
-        if (typeof currentRoute === 'object' && currentRoute.global && currentRoute.instance) {
-          // Add route point to both GPX files
-          await addRoutePointToGPX(GPX_FILE_PATH, currentRoute.global, point);
-          console.log(`Adding point to route with ID: ${currentRoute.global}`);
-          await addRoutePointToGPX(currentGPXPath, currentRoute.instance, point);
-        } else {
-          // Add route point to the instance-based GPX file only
-          await addRoutePointToGPX(currentGPXPath, currentRoute, point);
-        }
-  
-        setRoutes(prevRoutes => [...prevRoutes, point]);
-        console.log('Route Point added to both GPX files. Point info: ' + JSON.stringify(point));
-      } catch (error) {
-        console.error('Error adding route point to GPX:', error);
-        
-        showMessage({
-          message: "Error adding route point to GPX File",
-          description: "There could be an issue with the GPX file.",
-          hideOnPress: true,
-          type: "error",
-          duration: 30000 
-        });
-      }
+
+const lastPointRef = useRef();
+const addRoutePoint = async () => {
+  const currentLocation = userLocationRef.current;
+  if (currentLocation) {
+    const point = {
+      latitude: currentLocation.latitude,
+      longitude: currentLocation.longitude,
+      name: new Date().toLocaleTimeString(),
+    };
+
+    const lastPoint = lastPointRef.current;
+    if (lastPoint && lastPoint.latitude === point.latitude && lastPoint.longitude === point.longitude) {
+      console.log('New route point is the same as the last one. Skipping addition.');
+      return;
     }
-  };
+
+    lastPointRef.current = point; // Update the ref with the new point
+
+    try {
+      if (typeof currentRoute === 'object' && currentRoute.global && currentRoute.instance) {
+        await addRoutePointToGPX(GPX_FILE_PATH, currentRoute.global, point);
+        await addRoutePointToGPX(currentGPXPath, currentRoute.instance, point);
+        setRoutes(prevRoutes => [...prevRoutes, point]); // Update routes state
+      } else {
+        await addRoutePointToGPX(currentGPXPath, currentRoute, point);
+      }
+      console.log('Route Point added to both GPX files. Point info: ' + JSON.stringify(point));
+    } catch (error) {
+      console.error('Error adding route point to GPX:', error);
+    }
+  }
+};
+  
 
   const handleWaypointDelete = async (waypointId) => {
     if(!isCycling) return;
