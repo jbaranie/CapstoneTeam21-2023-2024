@@ -107,7 +107,7 @@ const addWaypointToGPX = async (filePath, latitude, longitude, rating, id, title
 const addRouteToGPX = async (filePath, userLocation, routeId = uuidv4()) => {
   if (!userLocation || userLocation.latitude === 0 || userLocation.longitude === 0) {
     console.error('Invalid user location provided to addRouteToGPX');
-    return null;  // Consider handling this case more gracefully depending on your app's flow.
+    return null;  
   }
   try {
     // Read the existing content from the GPX file.
@@ -115,7 +115,6 @@ const addRouteToGPX = async (filePath, userLocation, routeId = uuidv4()) => {
 
     // Create a new route element with the provided location and a generated route ID.
     let routeElement = `<rte id="${routeId}">\n<rtept lat="${userLocation.latitude}" lon="${userLocation.longitude}">\n<name>Start Point</name>\n</rtept>\n</rte>\n`;
-    console.log(`Route created with ID: ${routeId}`);
 
     // Insert the new route element into the file content, right before the closing tag of the GPX file.
     fileContent = fileContent.replace("</gpx>", `${routeElement}</gpx>`);
