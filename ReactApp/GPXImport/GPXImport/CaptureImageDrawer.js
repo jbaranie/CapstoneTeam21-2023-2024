@@ -59,14 +59,12 @@ const CaptureImageDrawer = ({ navigation }) => {
   //state for recording
   const getRecordState = async () => {
     let lockInfo = await FileSystem.getInfoAsync(`${FileSystem.documentDirectory}${recordActiveFile}`);
-    console.log(lockInfo);
-    return (lockInfo.exists);
+    //console.log(lockInfo);
+    return (lockInfo.exists === true);
   }
   useEffect(() => {
     let rState = getRecordState();
     setIsRecord(rState);
-    if (isRecording === true) console.log("Recording in progress; waypoint button should show.");
-    else console.log("Not recording; you should not see waypoint button.");
   }, [photo]);
 
   //gesture navigation items
@@ -104,7 +102,6 @@ const CaptureImageDrawer = ({ navigation }) => {
         additionalExif:{LocationInfo : userLocation}
       });
       //console.log(image);
-      console.log(image.exif.LocationInfo);
       setPhoto(image);
     }
   }
@@ -112,6 +109,7 @@ const CaptureImageDrawer = ({ navigation }) => {
     if (!photo) return;
     let bundle = {waypointPhoto: photo.exif, waypointDesc: photo.uri};
     await savePhoto();
+    //console.log(bundle);
     runOnJS(navigateDown(bundle));
   }
   const savePhoto = async () => {

@@ -114,30 +114,6 @@ const GPXWaypoints = ({ navigation, route }) => {
   const [currentZoom, setCurrentZoom] = useState(zoomLevels.zoomedOut); 
   const [isZoomedIn, setIsZoomedIn] = useState(false);
 
-  //locks for recording route -> camera add to route
-  const lockDir = `${FileSystem.documentDirectory}${recordActiveDir}`;
-  const lockFile = `${FileSystem.documentDirectory}${recordActiveFile}`;
-  const addLock = async () => {
-    let lockData = currentGPXPath + " " + Date.now().toString(); //TODO add gpx target file
-    await FileSystem.makeDirectoryAsync(lockDir);
-    FileSystem.writeAsStringAsync(lockFile, lockData);
-  }
-  const clearLock = async () => {
-    let lockInfo = await FileSystem.getInfoAsync(lockFile);
-    if (lockInfo.exists) {
-      let lockContents = await FileSystem.readAsStringAsync(lockFile);
-      let lockData = "Route recording lock: lockContents\n" + lockContents;
-      console.log(lockData);
-      FileSystem.deleteAsync(lockFile);
-    } else {
-      console.log("Did not have to delete lock for recording route (app was not last closed while recording route)");
-    }
-  }
-  //clear lock file on app and ending route, in case app crashed while recording route
-  useEffect(() => {
-    if (!isCycling) clearLock();
-  }, [isCycling]);
-
   useEffect(() => {
     if (route.params?.gpxFilePath) {
       const filePath = route.params.gpxFilePath;
@@ -151,13 +127,6 @@ const GPXWaypoints = ({ navigation, route }) => {
         setImported(true);
     }
   }, [route.params?.imported]);
-
-  //handle images passed from CaptureImageDrawer.js
-  useEffect(() => {
-    if (route.params?.waypointPhoto) {
-      extractWaypointFromNewPhoto(route.params.waypointPhoto);
-    }
-  }, [route.params?.waypointPhoto]);
 
   //Update the userLocRef
   useEffect(() => {
@@ -362,30 +331,59 @@ const GPXWaypoints = ({ navigation, route }) => {
       console.log(err); // Handle the error 
     }
   };
+  
+  //locks for recording route -> camera add to route
+  const lockDir = `${FileSystem.documentDirectory}${recordActiveDir}`;
+  const lockFile = `${FileSystem.documentDirectory}${recordActiveFile}`;
+  const addLock = async () => {
+    let lockData = currentGPXPath + " " + Date.now().toString(); //TODO add gpx target file
+    let lockDirCheck = await FileSystem.getInfoAsync(lockDir);
+    if (!lockDirCheck.exists) await FileSystem.makeDirectoryAsync(lockDir);
+    FileSystem.writeAsStringAsync(lockFile, lockData);
+  }
+  const clearLock = async () => {
+    let lockInfo = await FileSystem.getInfoAsync(lockFile);
+    if (lockInfo.exists) {
+      let lockContents = await FileSystem.readAsStringAsync(lockFile);
+      let lockData = "Route recording lock: lockContents\n" + lockContents;
+      console.log(lockData);
+      FileSystem.deleteAsync(lockFile);
+    } else {
+      console.log("Did not have to delete lock for recording route (app was not last closed while recording route)");
+    }
+  }
+  //clear lock file on app and ending route, in case app crashed while recording route
+  useEffect(() => {
+    if (isCycling) addLock();
+    else clearLock();
+  }, [isCycling]);
 
+  //function handling image data passed from camera
   const extractWaypointFromNewPhoto = async (photo) => {
     const waypointId = Date.now().toString();
-    try {
-      let inLat = selectedImage.exif.GPSLatitude *
-        (selectedImage.exif.GPSLatitudeRef=="S" ? -1 : 1);
-      let inLon = selectedImage.exif.GPSLongitude *
-        (selectedImage.exif.GPSLongitudeRef=="W" ? -1 : 1);
-      console.log(inLat);
-      console.log(inLon);
-      // await addWaypointToGPX(currentGPXPath, inLat, inLon, 2, waypointId);
-      // setWaypoints(prevWaypoints => [...prevWaypoints, {
-      //   id: waypointId,
-      //   latitude: inLat,
-      //   longitude: inLon,
-      //   name: "Image Waypoint",
-      //   description: "Image Waypoint",
-      //   rating: 2
-      // }]);
-      navigation.setParams({ waypointPhoto: null, waypointDesc: null }); // Reset the parameter
-    } catch {
-      console.log(err);
-    }
+    let inLat = photo.LocationInfo.latitude;
+    let inLon = photo.LocationInfo.longitude;
+    console.log(inLat);
+    console.log(inLon);
+    // await addWaypointToGPX(currentGPXPath, inLat, inLon, 2, waypointId);
+    // setWaypoints(prevWaypoints => [...prevWaypoints, {
+    //   id: waypointId,
+    //   latitude: inLat,
+    //   longitude: inLon,
+    //   name: "Image Waypoint",
+    //   description: "Image Waypoint",
+    //   rating: 2
+    // }]);
+    navigation.setParams({ waypointPhoto: null, waypointDesc: null }); // Reset the parameter
   };
+
+  //handle images passed from CaptureImageDrawer.js
+  useEffect(() => {
+    if (route.params?.waypointPhoto) {
+      console.log(route.params.waypointPhoto)
+      extractWaypointFromNewPhoto(route.params.waypointPhoto);
+    }
+  }, [route.params?.waypointPhoto]);
  
   // const goodMarkerPress = async () => {
   //   const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
@@ -644,7 +642,7 @@ const GPXWaypoints = ({ navigation, route }) => {
       let imageNameSplit = selectedImage.uri.split(".");
       let photoNum = photoList.length;
       let photoName = "importedImage" + photoNum + "." + imageNameSplit[imageNameSplit.length - 1];
-      console.log(photoName);
+      //console.log(photoName);
       
       //copy photo to app local storage
       await FileSystem.copyAsync({
@@ -698,7 +696,7 @@ const GPXWaypoints = ({ navigation, route }) => {
     //if (!gpxExists) {
     //  await createInitGPX();
     //}
-    setWaypoints([]);
+    setWaypoints([]);//CHECK - is clearing the view of waypoints intentional for following an existing route
     
     // Check if the user has location permissions
     if (!hasLocationPermission) {
@@ -799,7 +797,6 @@ const GPXWaypoints = ({ navigation, route }) => {
   const initiateRoute = async () => {
     setIsCycling(true);
     startTimer();
-    addLock();
 
     //Clear any existing data
     setRoutes([]);
@@ -855,7 +852,7 @@ const GPXWaypoints = ({ navigation, route }) => {
       }
       console
       if (lastPoint && lastPoint.latitude === point.latitude && lastPoint.longitude === point.longitude) {
-        console.log('New route point is the same as the last one. Skipping addition.');
+        //console.log('New route point is the same as the last one. Skipping addition.');
         return; 
       }
     
