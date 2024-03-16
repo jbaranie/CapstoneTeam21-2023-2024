@@ -80,29 +80,40 @@ const deleteWaypointFromGPX = async (filePath, id) => {
 };
 
 const addWaypointToGPX = async (filePath, latitude, longitude, rating, id, title = "Waypoint", description = "No Description") => {
-  //console.log(`Adding waypoint to GPX file: ${filePath}`);
   console.log('WaypointID: ' + id);
   try {
-    //console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
     let fileContent = await FileSystem.readAsStringAsync(filePath);
-    //Default values for title, description. 
     const waypoint =
-`  <wpt lat="${latitude}" lon="${longitude}">
-    <name>${title}</name>
-    <desc>${description}</desc>
-    <rating>${rating}</rating>
-    <id>${id}</id>
-  </wpt>`;
+`<wpt lat="${latitude}" lon="${longitude}">
+  <name>${title}</name>
+  <desc>${description}</desc>
+  <rating>${rating}</rating>
+  <id>${id}</id>
+</wpt>\n`;
 
-    fileContent = fileContent.replace("</gpx>", `${waypoint}\n</gpx>`);
+    const gpxStartIndex = fileContent.indexOf('<gpx');
+    if (gpxStartIndex === -1) {
+      console.error('GPX opening tag not found.');
+      return;
+    }
+
+    const gpxTagCloseIndex = fileContent.indexOf('>', gpxStartIndex) + 1;
+    if (gpxTagCloseIndex === 0) {
+      console.error('GPX opening tag is malformed.');
+      return;
+    }
+
+    fileContent = fileContent.slice(0, gpxTagCloseIndex) + '\n' + waypoint + fileContent.slice(gpxTagCloseIndex);
+
     await FileSystem.writeAsStringAsync(filePath, fileContent);
-    //console.log('Waypoint added to GPX file at:', filePath); // Log success
+    console.log('Waypoint added to GPX file at:', filePath);
   } catch (error) {
     console.error(`Error adding waypoint to GPX file at ${filePath}:`, error);
-    throw error; // Re-throw the error to handle it in the calling function
+    throw error;
   }
   console.log('Waypoint added:', { latitude, longitude, rating, id });
 };
+
 
 const addRouteToGPX = async (filePath) => {
   //console.log(`Creating new route in GPX file: ${filePath}`);
