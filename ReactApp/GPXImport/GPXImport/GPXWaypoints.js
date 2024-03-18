@@ -61,6 +61,9 @@ const GPXWaypoints = ({ navigation, route }) => {
   //Waypoint Modal States
   const [modalVisible, setModalVisible] = useState(false);
   const [waypointRating, setWaypointRating] = useState(null);
+  const [waypointLat, setWaypointLat] = useState(0);
+  const [waypointLon, setWaypointLon] = useState(0);
+  const [waypointLink, setWaypointLink] = useState("");//TODO use to update modal description automatically when taking photo
 
   //Imorted GPX data
   const [importedWaypoints, setImportedWaypoints] = useState([]);
@@ -68,7 +71,7 @@ const GPXWaypoints = ({ navigation, route }) => {
 
   //Active route state
   const [isCycling, setIsCycling] = useState(false);
-  const [elapsedTime, setElapsedTime] =useState(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
   const timerRef = useRef(null);
   const [currentGPXPath, setCurrentGPXPath] = useState('');
   const [photoGPXdata, setPhotoGPXdata] = useState([]);//deprecated, but may be useful so it's still here
@@ -302,26 +305,35 @@ const GPXWaypoints = ({ navigation, route }) => {
 
   // Update goodMarkerPress to show modal and set rating to 3
   const goodMarkerPress = () => {
+    setWaypointLocationUser();
     setWaypointRating(3);
     setModalVisible(true); //Show Waypoint Modal
   };
-
   // Update badMarkerPress similarly, but set rating to 1
   const badMarkerPress = () => {
+    setWaypointLocationUser();
     setWaypointRating(1);
     setModalVisible(true); //Show Waypoint Modal
   };
+  //helper method setting the waypoint modal's coordinates to the user location
+  const setWaypointLocationUser = () => {
+    setWaypointLat(userLocation.latitude);
+    setWaypointLon(userLocation.longitude);
+  }
 
   // Function to handle modal confirm
   const handleAddWaypoint = async (title, description) => {
     const waypointId = Date.now().toString();
     try {
-      //title, description added. ID now in custom GPX tag. 
-      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, waypointRating, waypointId, title, description);
+      //title, description added. ID now in custom GPX tag.
+      //previous coordinate items:
+        // userLocation.latitude
+        // userLocation.longitude
+      await addWaypointToGPX(currentGPXPath, waypointLat, waypointLon, waypointRating, waypointId, title, description);
       setWaypoints(prevWaypoints => [...prevWaypoints, {
         id: waypointId,
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude,
+        latitude: waypointLat,
+        longitude: waypointLon,
         name: title,
         description: description,
         rating: waypointRating
@@ -365,6 +377,12 @@ const GPXWaypoints = ({ navigation, route }) => {
     let inLon = photo.LocationInfo.longitude;
     console.log(inLat);
     console.log(inLon);
+
+    setWaypointLat(inLat);
+    setWaypointLon(inLon);
+    setWaypointRating(2);
+    setModalVisible(true);
+    
     // await addWaypointToGPX(currentGPXPath, inLat, inLon, 2, waypointId);
     // setWaypoints(prevWaypoints => [...prevWaypoints, {
     //   id: waypointId,

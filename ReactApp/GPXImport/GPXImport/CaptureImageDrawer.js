@@ -60,11 +60,11 @@ const CaptureImageDrawer = ({ navigation }) => {
   const getRecordState = async () => {
     let lockInfo = await FileSystem.getInfoAsync(`${FileSystem.documentDirectory}${recordActiveFile}`);
     //console.log(lockInfo);
-    return (lockInfo.exists === true);
+    setIsRecord(lockInfo.exists);
+    console.log(lockInfo.exists);
   }
   useEffect(() => {
-    let rState = getRecordState();
-    setIsRecord(rState);
+    getRecordState();
   }, [photo]);
 
   //gesture navigation items
