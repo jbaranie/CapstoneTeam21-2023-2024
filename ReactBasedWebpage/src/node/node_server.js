@@ -1,4 +1,4 @@
-// server.js
+// node_server.js
 //This is Nodejs Custom Server. 
 //It handles gpx uploads using a predefined variable named port.
 //Jan Baraniecki
@@ -16,24 +16,24 @@ app.use(cors());
 
 const port = 4000;
 
-//Server Sets up Storage Space and Recieve Files/////////////////////////////////////////////////////////////////
+//Server Sets up Storage "Engine" and Recieve Files/////////////////////////////////////////////////////////////////
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     // Specify the directory where uploaded files will be saved
-    cb(null, './uploads/');
+    cb(null, './user_uploads/');
   },
   filename: function (req, file, cb) {
     // Generate a unique filename for the uploaded file
     cb(null, file.originalname);
   },
 });
-
-
 // Create a Multer instance with the storage engine
 const upload = multer({ storage: storage });
 
-// Configure a route to handle file uploads
-app.post('/upload', upload.single('gpxFile'), (req, res) => {
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Handle gpx file uploads
+//Also Sends a post which tell the clients success or failure
+app.post('/user_uploads', upload.single('gpxFile'), (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
@@ -42,6 +42,7 @@ app.post('/upload', upload.single('gpxFile'), (req, res) => {
   res.status(200).send('File uploaded successfully.');
 });
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start the Express server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
@@ -52,7 +53,7 @@ app.listen(port, () => {
 //Server Sends GPX Files to the Client/////////////////////////////////////////////////////////////////////////////////////
 // Endpoint to list all files in 'uploads' directory
 app.get('/files', (req, res) => {
-  fs.readdir('./uploads', (err, files) => {
+  fs.readdir('./user_uploads', (err, files) => {
     if (err) {
       res.status(500).send('Error reading files.');
     } else {
@@ -62,4 +63,5 @@ app.get('/files', (req, res) => {
 });
 
 // Serve static files from 'uploads' directory
-app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+app.use('/user_uploads', express.static(path.join(__dirname, '..', 'uploads')));
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
