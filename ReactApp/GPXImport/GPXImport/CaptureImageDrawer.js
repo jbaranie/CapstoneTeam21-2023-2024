@@ -59,9 +59,8 @@ const CaptureImageDrawer = ({ navigation }) => {
   //state for recording
   const getRecordState = async () => {
     let lockInfo = await FileSystem.getInfoAsync(`${FileSystem.documentDirectory}${recordActiveFile}`);
-    //console.log(lockInfo);
     setIsRecord(lockInfo.exists);
-    console.log(lockInfo.exists);
+    //console.log(lockInfo.exists);
   }
   useEffect(() => {
     getRecordState();
@@ -101,17 +100,20 @@ const CaptureImageDrawer = ({ navigation }) => {
         exif:true,
         additionalExif:{LocationInfo : userLocation}
       });
-      //console.log(image);
+      console.log(image);
       setPhoto(image);
     }
   }
   const saveWaypoint = async () => {
     if (!photo) return;
     let bundle = {waypointPhoto: photo.exif, waypointDesc: photo.uri};
-    await savePhoto();
+    //await savePhoto();
+    setPhoto(undefined);
     //console.log(bundle);
     runOnJS(navigateDown(bundle));
   }
+
+  //Note: this function has been removed due to an issue where the photo does not keep location info when saved
   const savePhoto = async () => {
     if (!photo) return;
     MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
@@ -150,13 +152,13 @@ const CaptureImageDrawer = ({ navigation }) => {
     )
   } else if (photo) {
     const saveA = ((isRecording === true) ? saveButton(saveWaypoint, "Waypoint") : null);
-    const saveB = saveButton(savePhoto, "Photo");
+    //const saveB = saveButton(savePhoto, "Photo");
     return (
       <View style={styles.container}>
         <Image style={styles.preview} source={{ uri: photo.uri }} />
         <View style={styles.buttonContainer}>
           {saveA}
-          {saveB}
+          {/*saveB*/}
           <TouchableOpacity style={styles.button} onPress={() => setPhoto(undefined)}>
             <Text style={styles.text}>Discard Image</Text>
           </TouchableOpacity>

@@ -375,8 +375,8 @@ const GPXWaypoints = ({ navigation, route }) => {
     const waypointId = Date.now().toString();
     let inLat = photo.LocationInfo.latitude;
     let inLon = photo.LocationInfo.longitude;
-    console.log(inLat);
-    console.log(inLon);
+    //console.log(inLat);
+    //console.log(inLon);
 
     setWaypointLat(inLat);
     setWaypointLon(inLon);
@@ -398,7 +398,7 @@ const GPXWaypoints = ({ navigation, route }) => {
   //handle images passed from CaptureImageDrawer.js
   useEffect(() => {
     if (route.params?.waypointPhoto) {
-      console.log(route.params.waypointPhoto)
+      //console.log(route.params.waypointPhoto)
       extractWaypointFromNewPhoto(route.params.waypointPhoto);
     }
   }, [route.params?.waypointPhoto]);
