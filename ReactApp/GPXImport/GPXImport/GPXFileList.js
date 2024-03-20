@@ -67,8 +67,7 @@ const GPXFileList = ({ navigation }) => {
         console.log('GPX File URI: ', fileUri);
   
         // Copy the file from the temporary cache to the app's document directory
-        const newFileUri = await createNewGPXFile(true);
-        // const newFileUri = `${FileSystem.documentDirectory}${result.assets[0].name}`;
+        const newFileUri = `${FileSystem.documentDirectory}${result.assets[0].name}`;
         await FileSystem.copyAsync({
           from: fileUri,
           to: newFileUri,
