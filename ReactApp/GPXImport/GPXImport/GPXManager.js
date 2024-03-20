@@ -4,8 +4,12 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
 
-const GPX_FILE_PATH = `${FileSystem.documentDirectory}mainGPXFile.gpx`;
+const GPX_FILE_PATH = `${FileSystem.documentDirectory}createdGPX/mainGPXFile.gpx`;
 const FILE_COUNTER_KEY = 'FILE_COUNTER_KEY';
+
+const CREATED_GPX_DIRECTORY = `${FileSystem.documentDirectory}createdGPX/`;
+const IMPORTED_GPX_DIRECTORY = `${FileSystem.documentDirectory}importedGPX/`;
+
 
 const getNewGPXFileName = async () => {
 
@@ -49,20 +53,22 @@ const createInitGPX = async () => {
   await FileSystem.writeAsStringAsync(GPX_FILE_PATH, initialContent);
 };
 
-const createNewGPXFile = async () => {
-  //console.log('Creating new GPX file...');
+const createNewGPXFile = async (isImported = false) => {
   try {
+    const directory = isImported ? IMPORTED_GPX_DIRECTORY : CREATED_GPX_DIRECTORY;
+    // Ensure directory exists
+    await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
+
     const newFileName = await getNewGPXFileName();
-    const newFilePath = `${FileSystem.documentDirectory}${newFileName}`;
+    const newFilePath = `${directory}${newFileName}`;
 
     await FileSystem.writeAsStringAsync(newFilePath, INITIAL_GPX_CONTENT);
-    console.log('GPX file created at:', newFilePath); // Log the new file path
-    return newFilePath; // Return the new file path for further use
+    console.log('GPX file created at:', newFilePath);
+    return newFilePath;
   } catch (error) {
     console.error('Error creating new GPX file:', error);
-    throw error; // Re-throw the error to handle it in the calling function
+    throw error;
   }
-
 };
 
 const deleteWaypointFromGPX = async (filePath, id) => {
