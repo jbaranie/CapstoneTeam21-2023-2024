@@ -307,15 +307,17 @@ const GPXWaypoints = ({route}) => {
   // Function to handle modal confirm
   const handleAddWaypoint = async (title, description, rating) => {
     const waypointId = Date.now().toString();
+    const waypointTitle = title.trim() !== '' ? title : 'Unnamed Waypoint'; // Default to 'Unnamed Waypoint' if title is left empty
+    const waypointDescription = description.trim() !== '' ? description : 'No Description'; // Default to 'No Description' if description is left empty
     try {
-      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, rating, waypointId, title, description);
-      await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, rating, waypointId, title, description);
+      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, rating, waypointId,  waypointTitle, waypointDescription);
+      await addWaypointToGPX(GPX_FILE_PATH, userLocation.latitude, userLocation.longitude, rating, waypointId, waypointTitle, waypointDescription);
       setWaypoints(prevWaypoints => [...prevWaypoints, {
         id: waypointId,
         latitude: userLocation.latitude,
         longitude: userLocation.longitude,
-        name: title,
-        description: description,
+        name: waypointTitle,
+        description: waypointDescription,
         rating: rating
       }]);
       showMessage({
