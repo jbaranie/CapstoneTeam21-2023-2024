@@ -126,6 +126,19 @@ const GPXWaypoints = ({route}) => {
     }
 }, [route.params?.imported]);
 
+  // keeps the user centered on the map during route
+  useEffect(() => {
+    if (userLocation && mapRef.current && isCycling) {
+      const region = {
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+        latitudeDelta: 0.005, 
+        longitudeDelta: 0.005,
+      };
+      mapRef.current.animateToRegion(region, 1000); 
+    }
+  }, [userLocation, isCycling]); // Will re-run when userLocation or isCycling changes
+
   //Update the userLocRef
   useEffect(() => {
     userLocationRef.current = userLocation; 
@@ -654,20 +667,7 @@ const GPXWaypoints = ({route}) => {
             text: 'OK',
             onPress: async () => {
               setIsCycling(true); // Start cycling  
-              await initiateRoute();
-              // //Check if user location data is available
-              // if (userLocation && userLocation.latitude && userLocation.longitude) {
-              //   // Create a new GPX file for this route session
-              //   const newFilePath = await createNewGPXFile();
-              //   setCurrentGPXPath(newFilePath);
-  
-              //   // Add a new route to the session-specific GPX file and main GPX file
-              //   const routeId = await addRouteToGPX(newFilePath, userLocation);
-              //   setCurrentRoute(routeId);
-              //   await addRouteToGPX(GPX_FILE_PATH, userLocation, routeId);
-              // } else {
-              //   console.log('User location data is not available.');
-              // }
+              await initiateRoute();           
             },
           },
           {
@@ -677,6 +677,45 @@ const GPXWaypoints = ({route}) => {
         ],
         { cancelable: true }
       );
+    } else {
+      // If a route has been imported, use the existing logic to check the distance to the start point of the route
+      // and proceed with the confirmation to start the route
+      const startPoint = importedRoutes[0];
+  
+      // Ensure startPoint and userLocation are available
+      if (startPoint && userLocation) {
+        const { latitude: userLat, longitude: userLon } = userLocation;
+        const distance = getDistanceFromLatLonInMiles(userLat, userLon, startPoint.latitude, startPoint.longitude);
+  
+        if (distance > 3) {
+          Alert.alert("Too Far", "You are too far from the start of the route.");
+          return;
+        }
+  
+        Alert.alert(
+          'Start Route',
+          'Would you like to begin Cycling?',
+          [
+            {
+              text: 'START',
+              onPress: () => initiateRoute(),
+            },
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+          ],
+          { cancelable: true }
+        );
+      } else {
+        showMessage({
+          message: "No Valid Routes",
+          description: "There are no valid routes in the imported route.",
+          hideOnPress: true,
+          type: "error",
+          duration: 5000
+        });
+      }
     }
   };  
 
