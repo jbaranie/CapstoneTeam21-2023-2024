@@ -9,7 +9,7 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useNavigation } from '@react-navigation/native';
 
-import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos } from './GPXManager';
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos, createdGPXDirectory } from './GPXManager';
 import { deleteFile, photoWaypointsFile, photoLocalStore, iosShare } from './GPXFileList';
 import { pickImage } from './ImageImport';
 import WaypointModal from './WaypointModal';
@@ -40,7 +40,7 @@ const GPXWaypoints = ({route}) => {
 
   const handleGPXNameConfirm = async (fileName) => {
     // Rename the GPX file here using FileSystem from 'expo-file-system'
-    const newPath = `${FileSystem.documentDirectory}${fileName}.gpx`;
+    const newPath = `${createdGPXDirectory}${fileName}.gpx`;
     try {
       await FileSystem.moveAsync({
         from: currentGPXPath,

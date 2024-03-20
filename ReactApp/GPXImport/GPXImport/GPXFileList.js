@@ -11,6 +11,9 @@ import { pickImage } from './ImageImport';
 export const photoWaypointsFile = "importedPhotos.gpx";
 export const photoLocalStore = "ImportedPhotos/";
 
+export const importedGPXDirectory = `${FileSystem.documentDirectory}imported/`;
+export const createdGPXDirectory = `${FileSystem.documentDirectory}created/`;
+
 // Deletes a single file
 export const deleteFile = async (fileName) => {
   try {
@@ -53,6 +56,35 @@ const GPXFileList = ({ navigation }) => {
   const [gpxFiles, setGpxFiles] = useState([]);
   //Media library state
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
+  const [activeDirectory, setActiveDirectory] = useState('created'); // 'created' or 'imported'
+
+  const ensureDirectoryExists = async (directory) => {
+    const dir = `${FileSystem.documentDirectory}${directory}/`;
+    const dirInfo = await FileSystem.getInfoAsync(dir);
+    if (!dirInfo.exists) {
+      console.log(`Directory does not exist, creating: ${dir}`);
+      await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
+    }
+  };
+
+  const loadFilesFromDirectory = async (directory) => {
+    try {
+      await ensureDirectoryExists(directory);
+      const dir = `${FileSystem.documentDirectory}${directory}/`;
+      const files = await FileSystem.readDirectoryAsync(dir);
+      const filteredFiles = files.filter(file => file.endsWith('.gpx'));
+      console.log('Files fetched from', directory, ':', filteredFiles);
+      setGpxFiles(filteredFiles);
+    } catch (error) {
+      console.error(`Error reading GPX files from ${directory}: `, error);
+    }
+  };
+
+  useEffect(() => {
+    console.log('Loading Directory Files...');
+    loadFilesFromDirectory(activeDirectory);
+  }, [activeDirectory]);
+
 
   const importGPXFile = async () => {
     try {
@@ -67,12 +99,23 @@ const GPXFileList = ({ navigation }) => {
         console.log('GPX File URI: ', fileUri);
   
         // Copy the file from the temporary cache to the app's document directory
-        const newFileUri = `${FileSystem.documentDirectory}${result.assets[0].name}`;
-        await FileSystem.copyAsync({
-          from: fileUri,
-          to: newFileUri,
-        });
+        try {
+          const dirInfo = await FileSystem.getInfoAsync(importedGPXDirectory);
+          if (!dirInfo.exists) {
+            console.log('Creating directory:', importedGPXDirectory);
+            await FileSystem.makeDirectoryAsync(importedGPXDirectory, { intermediates: true });
+          }
 
+          const newFileUri = `${importedGPXDirectory}${result.assets[0].name}`;
+          await FileSystem.copyAsync({
+            from: fileUri,
+            to: newFileUri,
+          });
+
+        } catch (e) {
+          console.error('Error creating new GPX file:', error);
+      throw error;
+        }
         
         // Refresh the file list to show the new file
         refreshFileList();
@@ -91,7 +134,7 @@ const GPXFileList = ({ navigation }) => {
       //console.log('Fetching files...');
       let files;
       try {
-        files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+        files = await FileSystem.readDirectoryAsync(`${FileSystem.documentDirectory}${activeDirectory}/`);
         const filteredFiles = files.filter(file => file.endsWith('.gpx'));
         setGpxFiles(filteredFiles);
       } catch (error) {
@@ -106,7 +149,7 @@ const GPXFileList = ({ navigation }) => {
 
   const refreshFileList = async () => {
     try {
-      const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+      const files = await FileSystem.readDirectoryAsync(`${FileSystem.documentDirectory}${activeDirectory}/`);
       const filteredFiles = files.filter(file => file.endsWith('.gpx'));
       console.log('Refreshing file list, files to set: ', filteredFiles);
   
@@ -289,7 +332,7 @@ const GPXFileList = ({ navigation }) => {
   }, []);
 
   const handleFilePress = (fileName) => {
-    navigation.navigate('Home', { gpxFilePath: fileName , imported: true});
+    navigation.navigate('Home', { gpxFilePath: `${activeDirectory}/${fileName}` , imported: true});
   };
 
   // const renderItem = ({ item }) => (
@@ -308,31 +351,33 @@ const GPXFileList = ({ navigation }) => {
   //   </View>
   // );
   
-  const renderItem = ({ item, index }) => (
-    <View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
-        <TouchableOpacity onPress={() => handleFilePress(item)}>
-          <Text>{item}</Text>
-        </TouchableOpacity>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Button title="Delete" onPress={() => confirmDeleteFile(item)} />
-          {/*}
-        <Button title="Log Content" onPress={() => logGPXContent(item)} />
-        */}
-          <Button title={(Platform.OS === 'ios' ? "Share" : "Download")} onPress={() => downloadFile(item)} />
-        </View>
-      </View>
-      {item === 'mainGPXFile.gpx' && (
-        <View style={{ borderBottomWidth: 1, borderBottomColor: '#ddd', marginVertical: 5 }} />
-      )}
-    </View>
-  );
-
   return (
-    <View style={{ padding: 10}}>
+    <View style={{ padding: 10 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+        <Button
+          title="Created Files"
+          onPress={() => setActiveDirectory('created')}
+          color={activeDirectory === 'created' ? 'blue' : 'gray'} // Highlight active tab
+        />
+        <Button
+          title="Imported Files"
+          onPress={() => setActiveDirectory('imported')}
+          color={activeDirectory === 'imported' ? 'blue' : 'gray'} // Highlight active tab
+        />
+      </View>
       <FlatList
         data={gpxFiles}
-        renderItem={renderItem}
+        renderItem={({ item }) => (
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+            <TouchableOpacity onPress={() => handleFilePress(item)}>
+              <Text>{item}</Text>
+            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Button title="Delete" onPress={() => confirmDeleteFile(`${activeDirectory}/${item}`)} />
+              <Button title={(Platform.OS === 'ios' ? "Share" : "Download")} onPress={() => downloadFile(`${activeDirectory}/${item}`)} />
+            </View>
+          </View>
+        )}
         keyExtractor={item => item}
       />
       <Button title="Import GPX File" onPress={importGPXFile} />
