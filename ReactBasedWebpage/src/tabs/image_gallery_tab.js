@@ -1,5 +1,5 @@
 //imagesTab.js
-//This file contains code for the area in index.html when the user hits "Images"
+//This file contains code for the tab area that manages images.
 //It also cotains the code to import an jpeg file.
 //Coder: Jan Baraniecki
 import React, { useState } from 'react';
@@ -10,7 +10,7 @@ const ImageGalleryTab = () => {
     const [uploadImageStatus, setUploadImageStatus] = useState('');
     const [uploadedImageUrl, setUploadedImageUrl] = useState('');
     const port = 4000;
-    const serverURL = `http://${window.location.hostname}:${port}/uploadImage`;
+    const serverURL = `http://${window.location.hostname}:${port}/image_uploads`;
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
