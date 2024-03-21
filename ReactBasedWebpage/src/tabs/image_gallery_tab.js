@@ -13,33 +13,40 @@ const ImageGalleryTab = () => {
     const serverURL = `http://${window.location.hostname}:${port}/image_uploads`;
 
     const handleImageUpload = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const formData = new FormData();
-            formData.append('jpegFile', file);
+    const file = event.target.files[0];
+    if (file) {
+        const formData = new FormData();
+        formData.append('jpegFile', file);
 
-            fetch(serverURL, {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => {
-                if(response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Upload failed');
-                }
-            })
-            .then(data => {
+        fetch(serverURL, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            // First, get the response as text to check what was received
+            return response.text();
+        })
+        .then(text => {
+            console.log(text);  // Log the text to see what you received
+            // Now try to parse it as JSON
+            try {
+                const data = JSON.parse(text);
                 setUploadImageStatus('Success: File uploaded successfully.');
                 if (data.imageUrl) {
                     setUploadedImageUrl(data.imageUrl);
                 }
-            })
-            .catch(error => {
-                setUploadImageStatus(`Error: ${error.message}`);
-            });
-        }
-    };
+                else {
+                    throw new Error('No image URL returned from server');
+                }
+            } catch (error) {
+                throw new Error('Upload failed or returned non-JSON data');
+            }
+        })
+        .catch(error => {
+            setUploadImageStatus(`Error: ${error.message}`);
+        });
+    }
+};
 
     const handleProcessImageClick = () => {
         document.getElementById('fileImageInput').click();

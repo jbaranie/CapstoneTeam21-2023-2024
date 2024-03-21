@@ -12,15 +12,18 @@ const multer = require('multer');
 const express = require('express');
 const cors = require('cors');
 const app = express();
+app.use(express.static('public')); // Serve static files
 app.use(cors());
+
+
 
 const port = 4000;
 
-// Check if the os is Windows
+// Check if the os is Windows///////////////////////////////////////////////////////////////////////////////////
 const isWindows = process.platform === 'win32';
 // Set the base directory for file storage based on the os
 const baseDirectory = isWindows ? '.\\user_uploads\\' : './user_uploads/';
-
+app.use('/uploads', express.static(baseDirectory));
 
 //Server Sets up Storage "Engine" and Recieve Files/////////////////////////////////////////////////////////////////
 const storage = multer.diskStorage({
@@ -33,20 +36,36 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
-// Create a Multer instance with the storage engine
-const upload = multer({ storage: storage });
+// Multer setup for GPX files
+const uploadGPX = multer({ storage: storage }).single('gpxFile');
+// Multer setup for image files
+const uploadImage = multer({ storage: storage }).single('jpegFile');
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Client sends Server GPX File
+//Client sends Server GPX File -route
 //Also Sends a post which tell the clients success or failure
-app.post('/uploads', upload.single('gpxFile'), (req, res) => {
+app.post('/uploads', uploadGPX, (req, res) => {
   if (!req.file) {
-    return res.status(400).send('No file uploaded.');
+    return res.status(400).send('No GPX file uploaded.');
   }
 
   // Successfully received and saved the file
   res.status(200).send('File uploaded successfully.');
 });
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Client sends Server jpeg Files -route
+//Also Sends a post which tell the clients success or failure
+app.post('/image_uploads', uploadImage, (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No image file uploaded.');
+    }
+   const imageUrl = `${req.protocol}://${req.hostname}:${port}/uploads/${req.file.filename}`;
+   res.json({ message: 'File uploaded successfully.', imageUrl: imageUrl  });
+});
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start the Express server
