@@ -357,12 +357,12 @@ const GPXFileList = ({ navigation }) => {
         <Button
           title="Created Files"
           onPress={() => setActiveDirectory('created')}
-          color={activeDirectory === 'created' ? 'blue' : 'gray'} // Highlight active tab
+          color={activeDirectory === 'created' ? '#007aff' : 'gray'} // Highlight active tab
         />
         <Button
           title="Imported Files"
           onPress={() => setActiveDirectory('imported')}
-          color={activeDirectory === 'imported' ? 'blue' : 'gray'} // Highlight active tab
+          color={activeDirectory === 'imported' ? '#007aff' : 'gray'} // Highlight active tab
         />
       </View>
       <FlatList
