@@ -103,31 +103,32 @@ const GPXWaypoints = ({ navigation, route }) => {
   //GPX name Modal states
   const [gpxNameModalVisible, setGpxNameModalVisible] = useState(false);
 
-  //Modal activity at the end of route-recording.
-  const handleGPXNameConfirm = async (fileName) => {
-    // Rename the GPX file here using FileSystem from 'expo-file-system'
-    const newPath = `${FileSystem.documentDirectory}${fileName}.gpx`;
-    try {
-      await FileSystem.moveAsync({
-        from: currentGPXPath,
-        to: newPath,
-      });
-      console.log(`GPX file renamed to: ${newPath}`);
-      setCurrentGPXPath(''); // Reset the current GPX file path
-      // Navigate away or refresh the list as needed
-      navigation.navigate('GPX Files', { refreshFileList: true });
-    } catch (error) {
-      console.error('Error renaming GPX file:', error);
-      showMessage({
-        message: "Error renaming GPX file",
-        description: "Please try again.",
-        hideOnPress: true,
-        type: "error",
-        duration: 3000 
-      });
-    }
-    setGpxNameModalVisible(false); // Close the modal
-  };
+  // // DECLARED TWICE FOR SOME REASON. COMMENTING OUT FOR NOW JUST IN CASE IT BREAKS SOMETHING. 
+  // // Modal activity at the end of route-recording.
+  // const handleGPXNameConfirm = async (fileName) => {
+  //   // Rename the GPX file here using FileSystem from 'expo-file-system'
+  //   const newPath = `${FileSystem.documentDirectory}${fileName}.gpx`;
+  //   try {
+  //     await FileSystem.moveAsync({
+  //       from: currentGPXPath,
+  //       to: newPath,
+  //     });
+  //     console.log(`GPX file renamed to: ${newPath}`);
+  //     setCurrentGPXPath(''); // Reset the current GPX file path
+  //     // Navigate away or refresh the list as needed
+  //     navigation.navigate('GPX Files', { refreshFileList: true });
+  //   } catch (error) {
+  //     console.error('Error renaming GPX file:', error);
+  //     showMessage({
+  //       message: "Error renaming GPX file",
+  //       description: "Please try again.",
+  //       hideOnPress: true,
+  //       type: "error",
+  //       duration: 3000 
+  //     });
+  //   }
+  //   setGpxNameModalVisible(false); // Close the modal
+  // };
 
   //Zoom States
   const zoomLevels = {
