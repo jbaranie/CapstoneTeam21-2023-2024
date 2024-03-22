@@ -65,6 +65,11 @@ const GPXWaypoints = ({ navigation, route }) => {
       navigation.navigate('GPX Files', { refreshFileList: true });
     }
   };  
+
+  //Add a state variable to store the map rotation
+  const [mapRotation, setMapRotation] = useState(0);
+
+
   //Location and map state/refs
   const [waypoints, setWaypoints] = useState([]);
   const [imported, setImported] = useState(false);
@@ -1158,8 +1163,12 @@ const handleClearRoute = () => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        region={mapRegion}
-        onRegionChangeComplete={setMapRegion}
+        mapPitch={0}
+        mapRotation={mapRotation}
+        onRegionChangeComplete={(region) => {
+          setMapRegion(region);
+          setMapRotation(region.heading);
+        }}
         showsUserLocation={true}
         showsCompass={true}
         onMapReady={onMapReady}
