@@ -92,3 +92,18 @@ app.get('/files', (req, res) => {
 
 app.use('/download', express.static(baseDirectory));
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  user: 'your-username',
+  host: 'localhost',
+  database: 'your-database-name',
+  password: 'your-password',
+  port: 5432, // Default port for PostgreSQL
+});
+
+pool.query('SELECT NOW()', (err, res) => {
+  console.log(err, res);
+  pool.end();
+});
