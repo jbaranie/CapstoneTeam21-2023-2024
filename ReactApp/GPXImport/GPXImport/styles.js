@@ -87,5 +87,15 @@ export const styles = StyleSheet.create({
       width: 300,
       alignSelf: 'center',
       backgroundColor: 'white'
+    },
+    iosControlContainer: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      position: 'absolute',
+      left: 10,
+      bottom: 70,
+      right: 100,
+      marginBottom: 5,
+      alignItems:"left"
     }
   });

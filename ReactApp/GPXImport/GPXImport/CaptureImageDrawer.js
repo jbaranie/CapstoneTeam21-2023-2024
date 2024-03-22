@@ -3,8 +3,10 @@ import { Image, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as Location from 'expo-location';
 import * as MediaLibrary from 'expo-media-library';
+import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
+import { runOnJS } from 'react-native-reanimated';
 
-const CaptureImageDrawer = () => {
+const CaptureImageDrawer = ({ navigation }) => {
   //Camera state
   const [type, setType] = useState(CameraType.back);
   //Data state
@@ -49,6 +51,29 @@ const CaptureImageDrawer = () => {
       }
     };
   }, []);
+
+  //gesture navigation items
+  const navigateUp = () => {
+    navigation.navigate("GPX Files");
+  }
+  const navigateDown = () => {
+    navigation.navigate("Home");
+  }
+  const navUp = Gesture.Fling()
+    .direction(Directions.UP)
+    .numberOfPointers(2)
+    .onEnd(() => {
+      console.log("NavUp");
+      runOnJS(navigateUp)();//NOTE: this method is needed to wrap all navigation actions if called by Gesture handlers
+    });
+  const navDown = Gesture.Fling()
+    .direction(Directions.DOWN)
+    .numberOfPointers(2)
+    .onEnd(() => {
+      console.log("NavDown");
+      runOnJS(navigateDown)();
+    });
+  const twoFlingNav = Gesture.Exclusive(navUp, navDown);
 
   //constants for button actions
   const toggleCameraType = () => {
@@ -115,19 +140,21 @@ const CaptureImageDrawer = () => {
       <Text style={styles.topText}>Media Library Permission not granted; images not saved. Waypoints are still viable.</Text>
     );
     return (
-      <View style={styles.container}>
-        <Camera style={styles.camera} ref={(r) => {camera = r}} type={type}>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-              <Text style={styles.text}>Flip Camera</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={captureImage}>
-              <Text style={styles.text}>Capture</Text>
-            </TouchableOpacity>
-          </View>
-        </Camera>
-        {hasMediaLibraryPermission ? null : mediaWarning}
-      </View>
+      <GestureDetector gesture={twoFlingNav}>
+        <View style={styles.container}>
+          <Camera style={styles.camera} ref={(r) => {camera = r}} type={type}>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
+                <Text style={styles.text}>Flip Camera</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={captureImage}>
+                <Text style={styles.text}>Capture</Text>
+              </TouchableOpacity>
+            </View>
+          </Camera>
+          {hasMediaLibraryPermission ? null : mediaWarning}
+        </View>
+      </GestureDetector>
     );
   }
 }
