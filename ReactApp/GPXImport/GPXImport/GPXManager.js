@@ -141,6 +141,48 @@ const addRoutePointToGPX = async (filePath, routeId, routePoint) => {
   }
 };
 
+const addTrackToGPX = async (filePath) => {
+  const trackId = uuidv4();
+  try {
+    let fileContent = await FileSystem.readAsStringAsync(filePath);
+
+    let trackElement = `<trk id="${trackId}">\n<type>Cycling</type>\n</trk>\n`;
+
+    fileContent = fileContent.replace("</gpx>", `${trackElement}</gpx>`);
+    await FileSystem.writeAsStringAsync(filePath, fileContent);
+
+    console.log(`New track added with ID: ${trackId}\nTarget GPX: ${filePath}`);
+  } catch (error) {
+    console.error('An error occured while trying to add track to gpx file', error);
+  }
+  return trackId();
+}
+
+const extractTime = (dateTimeObj) => {
+  //TODO extract specific items from dateTimeObj and build the following line
+    //timepoint format: `YYYY-MM-DDT##:##:##`;
+  let timeStr = ``;
+  return `<time>${timeStr}</time>\n`;
+}
+
+//TODO modify this area for track segments; the current state follows route organization and there is an additional layer to consider.
+//Note: given that we are expecting continuous location data without issue, there isn't much to consider here. HOWEVER, each track would only have one segment in this organization. be careful.
+
+//track points should contain datetime data; if it does not, there will be no timestamp included with the track point
+const addTrackPointToGPX = async (filePath, trackId, trackPoint) => {
+  try {
+    let fileContent = await FileSystem.readAsStringAsync(filePath);
+    let timeElement = (trackPoint.dateTimeObj !== undefined) ? `` : extractTime(trackPoint.dateTimeObj);
+    const trackPointElement = `<trkpt lat="${trackPoint.latitude}" lon="${trackPoint.longitude}">\n${timeElement}</trkpt>\n`;
+    const trackRegex = new RegExp(`(<trk id="${routeId}">)([\\s\\S]*?)(<\/trk>)`, 'm');
+    fileContent = fileContent.replace(trackRegex, `$1$2${trackPointElement}$3`);
+    await FileSystem.writeAsStringAsync(filePath, fileContent);
+    console.log(`Added point to track: ${trackPointElement}`);
+  } catch (error) {
+    console.error(`An error occurred while adding point to track ID ${trackId}:`, error);
+  }
+}
+
 const deleteAllImportedPhotos = async () => {
   const photosDirectory = `${FileSystem.documentDirectory}${photoLocalStore}`;
   const storageInfo = await FileSystem.getInfoAsync(photosDirectory);
@@ -156,4 +198,4 @@ const deleteAllImportedPhotos = async () => {
   console.log(expectedEmpty);
 }
 
-export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos };
+export { GPX_FILE_PATH, createNewGPXFile, addWaypointToGPX, doesGPXFileExist, addRouteToGPX, addRoutePointToGPX, addTrackToGPX, addTrackPointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos };
