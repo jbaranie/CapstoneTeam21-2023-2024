@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, View, Text, TouchableOpacity, Platform, FlatList, PermissionsAndroid } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, Platform, FlatList, PermissionsAndroid, StyleSheet} from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
@@ -57,6 +57,7 @@ const GPXFileList = ({ navigation }) => {
   //Media library state
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
   const [activeDirectory, setActiveDirectory] = useState('created'); // 'created' or 'imported'
+  const [expandedItem, setExpandedItem] = useState(null);
 
   const ensureDirectoryExists = async (directory) => {
     const dir = `${FileSystem.documentDirectory}${directory}/`;
@@ -332,52 +333,49 @@ const GPXFileList = ({ navigation }) => {
   }, []);
 
   const handleFilePress = (fileName) => {
-    navigation.navigate('Home', { gpxFilePath: `${activeDirectory}/${fileName}` , imported: true});
+    setExpandedItem(expandedItem === fileName ? null : fileName); // Toggle the expanded item
   };
 
-  // const renderItem = ({ item }) => (
-  //   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
-  //     <TouchableOpacity
-  //       onPress={() => handleFilePress(item)}>
-  //       <Text>{item}</Text>
-  //     </TouchableOpacity>
-  //     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-  //       <Button title="Delete" onPress={() => confirmDeleteFile(item)} /> 
-  //       {/*}
-  //       <Button title="Log Content" onPress={() => logGPXContent(item)} />
-  //       */}
-  //       <Button title="Download" onPress={() => downloadFile(item)} />
-  //     </View>
-  //   </View>
-  // );
-  
+  const handleUseFile = (fileName) => {
+    navigation.navigate('Home', { gpxFilePath: `${activeDirectory}/${fileName}`, imported: true });
+  };
+
+  // Render item modified to include an expandable view for each file
+  const renderItem = ({ item }) => (
+    <View style={styles.itemContainer}>
+      <TouchableOpacity
+        style={styles.itemTitle}
+        onPress={() => handleFilePress(item)}>
+        <Text>{item}</Text>
+      </TouchableOpacity>
+      {expandedItem === item && (
+        <View style={styles.expandedArea}>
+          <Button title="Use" onPress={() => handleUseFile(item)} />
+          <Button title="Delete" onPress={() => confirmDeleteFile(`${activeDirectory}/${item}`)} />
+          <Button title={(Platform.OS === 'ios' ? "Share" : "Download")} onPress={() => downloadFile(`${activeDirectory}/${item}`)} />
+        </View>
+      )}
+    </View>
+  );
+  // The rest of your component (FlatList, other buttons) remains largely unchanged
+
   return (
     <View style={{ padding: 10 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
         <Button
           title="Created Files"
           onPress={() => setActiveDirectory('created')}
-          color={activeDirectory === 'created' ? '#007aff' : 'gray'} // Highlight active tab
+          color={activeDirectory === 'created' ? '#007aff' : 'gray'}
         />
         <Button
           title="Imported Files"
           onPress={() => setActiveDirectory('imported')}
-          color={activeDirectory === 'imported' ? '#007aff' : 'gray'} // Highlight active tab
+          color={activeDirectory === 'imported' ? '#007aff' : 'gray'}
         />
       </View>
       <FlatList
         data={gpxFiles}
-        renderItem={({ item }) => (
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
-            <TouchableOpacity onPress={() => handleFilePress(item)}>
-              <Text>{item}</Text>
-            </TouchableOpacity>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Button title="Delete" onPress={() => confirmDeleteFile(`${activeDirectory}/${item}`)} />
-              <Button title={(Platform.OS === 'ios' ? "Share" : "Download")} onPress={() => downloadFile(`${activeDirectory}/${item}`)} />
-            </View>
-          </View>
-        )}
+        renderItem={renderItem}
         keyExtractor={item => item}
       />
       <Button title="Import GPX File" onPress={importGPXFile} />
@@ -388,5 +386,24 @@ const GPXFileList = ({ navigation }) => {
     </View>
   );
 };
+
+
+const styles = StyleSheet.create({
+  itemContainer: {
+    marginBottom: 5,
+    padding: 10,
+    backgroundColor: '#fff', // Default background color
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  expandedItemContainer: {
+    backgroundColor: '#f0f0f0', // Darker background for expanded item
+  },
+  expandedArea: {
+    paddingLeft: 20,
+    paddingBottom: 10,
+  },
+});
+
 
 export default GPXFileList;
