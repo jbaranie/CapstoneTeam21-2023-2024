@@ -340,24 +340,32 @@ const GPXFileList = ({ navigation }) => {
     navigation.navigate('Home', { gpxFilePath: `${activeDirectory}/${fileName}`, imported: true });
   };
 
-  // Render item modified to include an expandable view for each file
   const renderItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      <TouchableOpacity
-        style={styles.itemTitle}
-        onPress={() => handleFilePress(item)}>
-        <Text>{item}</Text>
+    <View style={[
+      styles.itemContainer,
+      expandedItem === item ? styles.expandedItemContainer : null // Apply expanded styling conditionally
+    ]}>
+      <TouchableOpacity onPress={() => handleFilePress(item)}>
+        <Text style={expandedItem === item ? styles.expandedItemTitle : styles.itemTitle}>{item}</Text>
       </TouchableOpacity>
       {expandedItem === item && (
         <View style={styles.expandedArea}>
-          <Button title="Use" onPress={() => handleUseFile(item)} />
-          <Button title="Delete" onPress={() => confirmDeleteFile(`${activeDirectory}/${item}`)} />
-          <Button title={(Platform.OS === 'ios' ? "Share" : "Download")} onPress={() => downloadFile(`${activeDirectory}/${item}`)} />
+          <View style={styles.boxOutline}></View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={() => handleUseFile(item)}>
+              <Text style={styles.buttonText}>Use</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => console.log('Delete Pressed')}>
+              <Text style={[styles.buttonText, styles.deleteButtonText]}>Delete</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => console.log('Download Pressed')}>
+              <Text style={styles.buttonText}>Download</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </View>
   );
-  // The rest of your component (FlatList, other buttons) remains largely unchanged
 
   return (
     <View style={{ padding: 10 }}>
@@ -391,19 +399,44 @@ const GPXFileList = ({ navigation }) => {
 const styles = StyleSheet.create({
   itemContainer: {
     marginBottom: 5,
-    padding: 10,
-    backgroundColor: '#fff', // Default background color
     borderWidth: 1,
     borderColor: '#ddd',
   },
   expandedItemContainer: {
-    backgroundColor: '#f0f0f0', // Darker background for expanded item
+    backgroundColor: '#f0f0f0',
+  },
+  itemTitle: {
+    padding: 10,
+  },
+  expandedItemTitle: {
+    padding: 10,
+    fontSize: 18, 
   },
   expandedArea: {
-    paddingLeft: 20,
-    paddingBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    padding: 10,
+    paddingTop: 20, 
+  },
+  boxOutline: {
+    width: '50%', 
+    height: 100, 
+    borderWidth: 1,
+    borderColor: '#000',
+    marginRight: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  buttonText: {
+    marginHorizontal: 5,
+    color: '#007aff', 
+  },
+  deleteButtonText: {
+    color: 'red',
   },
 });
-
 
 export default GPXFileList;
