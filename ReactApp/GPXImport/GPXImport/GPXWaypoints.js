@@ -707,6 +707,8 @@ const GPXWaypoints = ({ navigation, route }) => {
   const shareWaypointPhoto = async () => {
     //TOOD figure out waypoint input selection
     //do FileShare API on photo in app local storage
+
+    //Note: see Task 225 for issues with saving waypoint photo data and examine carefully 
   }
 
   const startRoute = async () => {
@@ -758,7 +760,7 @@ const GPXWaypoints = ({ navigation, route }) => {
               if (!currentGPXPath) { 
                 const newFilePath = await createNewGPXFile();
                 setCurrentGPXPath(newFilePath);
-                setCurrentRoute(await addRouteToGPX(GPX_FILE_PATH));//TODO US228
+                setCurrentRoute(await addTrackToGPX(GPX_FILE_PATH));//TODO US228
               }
             },
           },
@@ -825,8 +827,8 @@ const GPXWaypoints = ({ navigation, route }) => {
       setCurrentGPXPath(newFilePath);
 
       // Create a route in the global GPX file and the instance-based GPX file
-      const routeIdGlobal = await addRouteToGPX(GPX_FILE_PATH);//TODO US228
-      const routeIdInstance = await addRouteToGPX(newFilePath);//TODO US228
+      const routeIdGlobal = await addTrackToGPX(GPX_FILE_PATH);//TODO US228
+      const routeIdInstance = await addTrackToGPX(newFilePath);//TODO US228
       setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
     }
 
@@ -855,6 +857,7 @@ const GPXWaypoints = ({ navigation, route }) => {
         latitude: currentLocation.latitude,
         longitude: currentLocation.longitude,
         name: new Date().toLocaleTimeString(),
+        dateTime: true
       };  
 
       const lastPoint = routes[routes.length - 1];
@@ -876,8 +879,10 @@ const GPXWaypoints = ({ navigation, route }) => {
     
       try {
         // Add route point to both GPX files
-        await addRoutePointToGPX(GPX_FILE_PATH, routeIds.global, point);//TODO US228
-        await addRoutePointToGPX(currentGPXPath, routeIds.instance, point);//TODO US228
+        let globalAdd = await addTrackPointToGPX(GPX_FILE_PATH, routeIds.global, point);//TODO US228
+        let instanceAdd = await addTrackPointToGPX(currentGPXPath, routeIds.instance, point);//TODO US228
+        console.log(`Global trackpoint add: ${globalAdd}`);
+        console.log(`Instance trackpoint add: ${instanceAdd}`);
         setRoutes(prevRoutes => [...prevRoutes, point]);
         //console.log('Route Point added to both GPX files. Point info: ' + JSON.stringify(point));
       } catch (error) {

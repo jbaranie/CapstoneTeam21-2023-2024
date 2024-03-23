@@ -44,8 +44,8 @@ const doesGPXFileExist = async () => {
 
 const createInitGPX = async () => {
   const initialContent = `<?xml version="1.0" encoding="UTF-8"?>
-  <gpx version="1.1" creator="YourApp">
-  </gpx>`;
+<gpx version="1.1" creator="YourApp">
+</gpx>`;
 
   await FileSystem.writeAsStringAsync(GPX_FILE_PATH, initialContent);
 };
@@ -157,7 +157,7 @@ const addTrackToGPX = async (filePath) => {
     console.error('An error occured while trying to add track to gpx file', error);
     return null;
   }
-  return trackId();
+  return trackId;
 }
 //Note: given that we are expecting continuous location data without issue, there isn't much to consider here in terms of track segments.
 //  Each track expects only one segment in this organization.
