@@ -93,17 +93,14 @@ app.get('/files', (req, res) => {
 app.use('/download', express.static(baseDirectory));
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const { Pool } = require('pg');
+const db = require('./database.js');
 
-const pool = new Pool({
-  user: 'your-username',
-  host: 'localhost',
-  database: 'your-database-name',
-  password: 'your-password',
-  port: 5432, // Default port for PostgreSQL
-});
-
-pool.query('SELECT NOW()', (err, res) => {
-  console.log(err, res);
-  pool.end();
+app.get('/items', async (req, res) => {
+  try {
+    const { rows } = await db.query('SELECT * FROM items');
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching items', err);
+    res.status(500).send('Server error');
+  }
 });
