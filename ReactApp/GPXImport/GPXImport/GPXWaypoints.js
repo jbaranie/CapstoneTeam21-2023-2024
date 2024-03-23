@@ -11,7 +11,7 @@ import * as ScreenOrient from 'expo-screen-orientation';
 import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
 
-import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos } from './GPXManager';
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, addTrackToGPX, addTrackPointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos } from './GPXManager';
 import { deleteFile, photoWaypointsFile, photoLocalStore } from './GPXFileList';
 import { pickImage } from './ImageImport';
 import WaypointModal from './WaypointModal';
@@ -758,7 +758,7 @@ const GPXWaypoints = ({ navigation, route }) => {
               if (!currentGPXPath) { 
                 const newFilePath = await createNewGPXFile();
                 setCurrentGPXPath(newFilePath);
-                setCurrentRoute(await addRouteToGPX(GPX_FILE_PATH));
+                setCurrentRoute(await addRouteToGPX(GPX_FILE_PATH));//TODO US228
               }
             },
           },
@@ -825,8 +825,8 @@ const GPXWaypoints = ({ navigation, route }) => {
       setCurrentGPXPath(newFilePath);
 
       // Create a route in the global GPX file and the instance-based GPX file
-      const routeIdGlobal = await addRouteToGPX(GPX_FILE_PATH);
-      const routeIdInstance = await addRouteToGPX(newFilePath);
+      const routeIdGlobal = await addRouteToGPX(GPX_FILE_PATH);//TODO US228
+      const routeIdInstance = await addRouteToGPX(newFilePath);//TODO US228
       setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
     }
 
@@ -876,8 +876,8 @@ const GPXWaypoints = ({ navigation, route }) => {
     
       try {
         // Add route point to both GPX files
-        await addRoutePointToGPX(GPX_FILE_PATH, routeIds.global, point);
-        await addRoutePointToGPX(currentGPXPath, routeIds.instance, point);
+        await addRoutePointToGPX(GPX_FILE_PATH, routeIds.global, point);//TODO US228
+        await addRoutePointToGPX(currentGPXPath, routeIds.instance, point);//TODO US228
         setRoutes(prevRoutes => [...prevRoutes, point]);
         //console.log('Route Point added to both GPX files. Point info: ' + JSON.stringify(point));
       } catch (error) {
