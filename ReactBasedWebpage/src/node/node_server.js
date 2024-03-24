@@ -92,15 +92,15 @@ app.get('/files', (req, res) => {
 
 app.use('/download', express.static(baseDirectory));
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Database Calls
+const db = require('./database_scripts/database_server.js');
 
-const db = require('./database.js');
-
-app.get('/items', async (req, res) => {
-  try {
-    const { rows } = await db.query('SELECT * FROM items');
-    res.json(rows);
-  } catch (err) {
-    console.error('Error fetching items', err);
-    res.status(500).send('Server error');
-  }
-});
+//app.get('/items', async (req, res) => {
+  //try {
+   // const { rows } = await db.query('SELECT * FROM items');
+    //res.json(rows);
+  //} catch (err) {
+   // console.error('Error fetching items', err);
+    //res.status(500).send('Server error');
+  //}
+//});

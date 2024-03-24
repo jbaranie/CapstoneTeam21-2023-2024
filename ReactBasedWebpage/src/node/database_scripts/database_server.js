@@ -1,5 +1,5 @@
 //database.js
-//This is Nodejs Custom Server. 
+//This is called by the node server
 //It talks to the Database Server that is hosted independelty from the react project
 //Jan Baraniecki
 
