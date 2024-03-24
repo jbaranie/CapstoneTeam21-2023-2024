@@ -5,9 +5,11 @@
 // Event Listener for Import GPX Button from the Main Menu
 
 import React, { useState } from 'react';
+import { parseGPX } from '../scripts/gpx_parser.js';
 
 const ImportGPXTab = () => {
     const [uploadStatus, setUploadStatus] = useState('');
+    const [labelContent, setLabelContent] = useState('');
     const port = 4000;
     const serverURL = `http://${window.location.hostname}:${port}/uploads`;
 
@@ -22,9 +24,29 @@ const ImportGPXTab = () => {
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
+            
+            //Converts File into a String
+            const reader = new FileReader();
+           
+            reader.onload = (e) => {
+            const fileContent = e.target.result;
+            
+            // Use the GPX parser to parse the file content
+            const parsedData = parseGPX(fileContent);
+            setLabelContent(JSON.stringify(parsedData, null, 2));
+            
+            //DEBUG
+            // Log the parsed data to the console
+            //console.log('Parsed GPX Data:', parsedData);
+            //setUploadStatus('Succes: ${parsedData}');
+            //console.log('Parsed GPX Data:', parsedData);
+            
+            //Talk To Node.js
+            //Warning Note broken code below
+            /*
             const formData = new FormData();
             formData.append('gpxFile', file);
-
+            
             fetch(serverURL, {
                 method: 'POST',
                 body: formData,
@@ -42,6 +64,9 @@ const ImportGPXTab = () => {
             .catch(error => {
                 setUploadStatus(`Error: ${error.message}`);
             });
+            */
+            };
+            reader.readAsText(file);
         }
     };
 
@@ -53,6 +78,11 @@ const ImportGPXTab = () => {
             <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} />
             <div id="uploadStatus">
                 {uploadStatus}
+            </div>
+            {/* Render the label with its content */}
+            <label id="fileContentLabel">File Contents:</label>
+            <div id="fileContents">
+                {labelContent}
             </div>
         </div>
     );
