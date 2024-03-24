@@ -46,7 +46,7 @@ const ImportGPXTab = () => {
     };
 
     return (
-        <div>
+        <div id="background">
             <h1>Import GPX File</h1>
             <p>This is the Import GPX File section content.</p>
             <button onClick={handleGPXProcessClick} className="button">Process GPX</button>

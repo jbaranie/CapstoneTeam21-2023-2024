@@ -27,7 +27,7 @@ const WaypointModal = ({ isVisible, onConfirm, onCancel, timeout = 10000 }) => {
       }).start(({ finished }) => {
         if (finished) {
           // Automatically confirm when the animation is complete
-          onConfirm(title || "Unnamed Waypoint", description || "No description");
+          onConfirm(title, description);
           resetState();
         }
       });
