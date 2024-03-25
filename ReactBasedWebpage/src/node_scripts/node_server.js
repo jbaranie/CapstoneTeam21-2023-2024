@@ -19,6 +19,7 @@ app.use(cors());
 
 const port = 4000;
 
+
 // Check if the os is Windows///////////////////////////////////////////////////////////////////////////////////
 const isWindows = process.platform === 'win32';
 // Set the base directory for file storage based on the os
@@ -93,14 +94,14 @@ app.get('/files', (req, res) => {
 app.use('/download', express.static(baseDirectory));
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Database Calls
-const db = require('./database_scripts/database_server.js');
+const { ensureDatabaseExists } = require('./database_scripts//database_startup_scripts');
 
-//app.get('/items', async (req, res) => {
-  //try {
-   // const { rows } = await db.query('SELECT * FROM items');
-    //res.json(rows);
-  //} catch (err) {
-   // console.error('Error fetching items', err);
-    //res.status(500).send('Server error');
-  //}
-//});
+
+//Tests and creates Database if it does not exist
+ensureDatabaseExists()
+  .catch(err => {
+    console.error('Failed to ensure database exists:', err);
+    console.log('Shutting down node server');
+    //process.exit(1);
+  });
+// Database calls would go here
