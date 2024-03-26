@@ -308,8 +308,8 @@ const GPXWaypoints = ({ navigation, route }) => {
             type: "info",
             duration: 2000
           });
+          setGpxNameModalVisible(true);
         }
-        setGpxNameModalVisible(true);
       } else {
         console.error('No GPX file path found when trying to stop route');
         showMessage({
@@ -892,8 +892,12 @@ const GPXWaypoints = ({ navigation, route }) => {
 //     }
     // Reset the lastPointRef
     lastPointRef.current = null;
+    const fileInfo = await FileSystem.getInfoAsync(currentGPXPath);
+    const currentExists = fileInfo.exists;
 
-    if (!currentGPXPath) {
+    //Check if there is a current GPX file and if it exists
+    if (!currentGPXPath || !currentExists) {
+      console.log('Creating a new GPX file');
       const newFilePath = await createNewGPXFile();
       setCurrentGPXPath(newFilePath);
 
@@ -912,6 +916,8 @@ const GPXWaypoints = ({ navigation, route }) => {
       } else {
         console.log('User location is not available.');
       }
+    } else {
+      console.log('currentGPX already exists:', currentGPXPath);
     }
 
     //Prevent the phone from sleeping while active
