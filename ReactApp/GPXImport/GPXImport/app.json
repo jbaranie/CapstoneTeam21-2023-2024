@@ -17,7 +17,7 @@
       "package": "com.capstone21.GPXImport",
       "config": {
         "googleMaps": {
-          "apiKey": "project.env.GOOGLE_API_ANDROID"
+          "apiKey": "process.env.GOOGLE_API_ANDROID"
         }
       }
     },
@@ -57,7 +57,7 @@
     "ios": {
       "bundleIdentifier": "com.capstone21.GPXImport",
       "config": {
-        "googleMapsApiKey": "project.env.GOOGLE_API_IOS"
+        "googleMapsApiKey": "process.env.GOOGLE_API_IOS"
       }
     },
     "owner": "capstoneteam21"
