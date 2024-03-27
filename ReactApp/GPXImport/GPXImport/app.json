@@ -14,7 +14,12 @@
         "android.permission.RECORD_AUDIO",
         "android.permission.CAMERA"
       ],
-      "package": "com.capstone21.GPXImport"
+      "package": "com.capstone21.GPXImport",
+      "config": {
+        "googleMaps": {
+          "apiKey": "project.env.GOOGLE_API_ANDROID"
+        }
+      }
     },
     "plugins": [
       [
@@ -50,7 +55,10 @@
       }
     },
     "ios": {
-      "bundleIdentifier": "com.capstone21.GPXImport"
+      "bundleIdentifier": "com.capstone21.GPXImport",
+      "config": {
+        "googleMapsApiKey": "project.env.GOOGLE_API_IOS"
+      }
     },
     "owner": "capstoneteam21"
   }
