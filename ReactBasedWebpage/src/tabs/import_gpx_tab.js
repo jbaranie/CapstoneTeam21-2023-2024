@@ -5,7 +5,7 @@
 // Event Listener for Import GPX Button from the Main Menu
 
 import React, { useState } from 'react';
-import { parseGPX } from '../scripts/gpx_parser.js';
+import { parseGPX } from '../react_scripts/gpx_parser.js';
 
 const ImportGPXTab = () => {
     const [uploadStatus, setUploadStatus] = useState('');
