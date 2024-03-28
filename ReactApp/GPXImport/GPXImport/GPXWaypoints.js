@@ -285,6 +285,7 @@ const GPXWaypoints = ({ navigation, route }) => {
         if (routes.length === 0 && waypoints.length === 0) {
           // No waypoints or routes to add, delete the file
           deleteFile(currentGPXPath);
+          setCurrentGPXPath('');
           //console.log('No waypoints or routes. File deleted.');
           
           showMessage({
@@ -892,11 +893,13 @@ const GPXWaypoints = ({ navigation, route }) => {
 //     }
     // Reset the lastPointRef
     lastPointRef.current = null;
-    const fileInfo = await FileSystem.getInfoAsync(currentGPXPath);
-    const currentExists = fileInfo.exists;
+
+    //This seems to cause issues on IOS
+    //const fileInfo = await FileSystem.getInfoAsync(currentGPXPath);
+    //const currentExists = fileInfo.exists;
 
     //Check if there is a current GPX file and if it exists
-    if (!currentGPXPath || !currentExists) {
+    if (!currentGPXPath) {
       console.log('Creating a new GPX file');
       const newFilePath = await createNewGPXFile();
       setCurrentGPXPath(newFilePath);
