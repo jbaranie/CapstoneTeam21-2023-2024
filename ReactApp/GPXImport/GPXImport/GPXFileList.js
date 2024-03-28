@@ -26,6 +26,60 @@ export const deleteFile = async (fileName) => {
   }
 };
 
+//Performs modifications on a GPX file to make it schema compliant
+//Only called before downloading/sharing the file, as it's not necessary without that impetus
+const schemaComplianceEdit = async ( uri ) => {
+  let fileData = await FileSystem.getInfoAsync(uri);
+  if (fileData.exists === true) {
+    //segment file contents into lines and manage accordingly
+    let fileContents = await FileSystem.readAsStringAsync(uri);
+    let fileData = fileContents.split(/[\r\n]+/).map((text) => {return text.trim();});
+    console.log(fileData);
+    let wptStarts = [], wptEnds = [], wptList = [], newContents = [];
+    var i;
+    for (i = 0; i < fileData.length; i++) {
+      if (fileData[i].startsWith("<wpt")) wptStarts.push(i);
+      if (fileData[i].startsWith("</wpt")) wptEnds.push(i);
+    }
+    let rteStart = fileData.length;
+    for (i = 0; i < fileData.length; i++) {
+      if (fileData[i].startsWith("<rte")) {
+        rteStart = i;
+        break;
+      }
+    }
+    if (wptStarts.length == 0) return;
+    let wptFirst = wptStarts[0];
+    while (wptStarts.length > 0 && wptEnds.length > 0) {
+      //add waypoint lines to another list
+      var a = wptStarts.pop(), b = wptEnds.pop();
+      for (i = a; i <= b; i++) {
+        wptList.push(fileData[i]);
+      }
+    }
+    //expected contents -> line by line
+    for (i = 0; i < rteStart; i++) {
+      newContents.push(fileData[i]);
+    }
+    for (i = 0; i < wptList.length; i++) {
+      newContents.push(wptList[i]);
+    }
+    for (i = rteStart; i < wptFirst; i++) {
+      newContents.push(fileData[i]);
+    }
+    newContents.push("</gpx>");
+    await FileSystem.writeAsStringAsync(uri, newContents.join("\n"));
+  } else {
+    //file does not exist; make it known
+    console.log("Share error; file not found.");
+    Alert.alert(
+      "Sharing Error",
+      "File not found issue; check file status.",
+      [{ text: "OK :(" }]
+    );
+  }
+}
+
 const iosShare = async (uri, utiType) => {
   try {
     /*
@@ -124,7 +178,6 @@ const GPXFileList = ({ navigation }) => {
       console.error('Error reading GPX files: ', error);
     }
   };
-    
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -199,8 +252,8 @@ const GPXFileList = ({ navigation }) => {
     }
   };
 
-   // Function that handles file download
-   const downloadFile = async (fileName) => {
+  // Function that handles file download
+  const downloadFile = async (fileName) => {
     // Request permissions to access the media library
     const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
     setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
@@ -208,6 +261,9 @@ const GPXFileList = ({ navigation }) => {
     //filepaths
     const localUri = `${FileSystem.documentDirectory}${fileName}`;
     const systemUri = `${FileSystem.cacheDirectory}${fileName}`;
+
+    //perform slight gpx edits to ensure schema compliance
+    //await schemaComplianceEdit(localUri); //commented out because formatting is incomplete
 
     if (Platform.OS === 'android') {//existing content; TODO fix Android issues
       try {
@@ -363,7 +419,7 @@ const GPXFileList = ({ navigation }) => {
           keyExtractor={item => item}
         />
         <Button title="Import GPX File" onPress={importGPXFile} />
-        <Button title="Import Image" onPress={pickImage} />
+        {/*<Button title="Import Image" onPress={pickImage} />*/}
         {gpxFiles.length >= 2 && (
           <Button title="Delete All" onPress={deleteAllFiles} />
         )}
