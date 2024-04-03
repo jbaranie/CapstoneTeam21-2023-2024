@@ -94,11 +94,11 @@ app.get('/files', (req, res) => {
 app.use('/download', express.static(baseDirectory));
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Database Calls
-const { ensureDatabaseExists } = require('./database_scripts//database_startup_scripts');
+const { init } = require('./database_scripts//database_startup_scripts');
 
 
 //Tests and creates Database if it does not exist
-ensureDatabaseExists()
+init()
   .catch(err => {
     console.error('Failed to ensure database exists:', err);
     console.log('Shutting down node server');

@@ -33,6 +33,7 @@ const ImportGPXTab = () => {
             
             // Use the GPX parser to parse the file content
             const parsedData = parseGPX(fileContent);
+            //Temp Can Remove Later
             setLabelContent(JSON.stringify(parsedData, null, 2));
             
             //DEBUG
@@ -42,7 +43,7 @@ const ImportGPXTab = () => {
             //console.log('Parsed GPX Data:', parsedData);
             
             //Talk To Node.js
-            //Warning Note broken code below
+            //Warning Node broken code below
             /*
             const formData = new FormData();
             formData.append('gpxFile', file);

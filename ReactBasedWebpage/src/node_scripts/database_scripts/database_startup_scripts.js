@@ -10,7 +10,7 @@ const { Client } = require('pg');
 //VALUES
 const dbName = "CustomRoutesDatabase";
 const schemaName = "RoutesSchema"; // Schema name
-const adminClient = new Client({
+let  adminClient = new Client({
   user: 'AsuAdmin',
   host: 'localhost',
   password: 'AsuPassword',
@@ -40,12 +40,25 @@ async function ensureDatabaseExists() {
     console.error('Error ensuring database exists:', err.stack);
     process.exit(1);
   }
+  finally {
+        await adminClient.end();
+  }
 }
 
 async function ensureSchemaExists() {
+  adminClient = new Client({
+    user: 'AsuAdmin',
+    host: 'localhost',
+    password: 'AsuPassword',
+    port: 5432,
+    database: dbName
+  });
+  
+  
+  
   try {
     // Reuse adminClient to ensure the schema
-    adminClient.database = dbName; // Switch to the new database for schema operations
+    
     await adminClient.connect(); // Reconnect to switch the database context
 
     // Check if the schema exists
@@ -60,11 +73,48 @@ async function ensureSchemaExists() {
       console.log(`Schema ${schemaName} does not exist, creating it...`);
       await adminClient.query(`CREATE SCHEMA "${schemaName}"`);
       console.log(`Schema ${schemaName} created successfully.`);
+      
+      console.log('Creating Tables...');
+      
+      // Create tracks table
+      console.log('Creating Tracks Table...');
+        await adminClient.query(`
+            CREATE TABLE IF NOT EXISTS "${schemaName}".tracks (
+                track_id SERIAL PRIMARY KEY,
+                name VARCHAR(255),
+                description TEXT
+            );
+        `);
+
+        // Create track_segments table
+         console.log('Creating Track Segments Table...');
+        await adminClient.query(`
+            CREATE TABLE IF NOT EXISTS "${schemaName}".track_segments (
+                segment_id SERIAL PRIMARY KEY,
+                track_id INT NOT NULL,
+                sequence INT,
+                FOREIGN KEY (track_id) REFERENCES "${schemaName}".tracks(track_id)
+            );
+        `);
+
+        // Create track_points table
+        console.log('Creating Track Points Table...');
+        await adminClient.query(`
+            CREATE TABLE IF NOT EXISTS "${schemaName}".track_points (
+                point_id SERIAL PRIMARY KEY,
+                segment_id INT NOT NULL,
+                latitude NUMERIC(10, 6),
+                longitude NUMERIC(10, 6),
+                sequence INT,
+                FOREIGN KEY (segment_id) REFERENCES "${schemaName}".track_segments(segment_id)
+            );
+        `);
+       console.log('Schema and Tables ensured successfully.');
     } else {
-      console.log(`Schema ${schemaName} already exists.`);
+      console.log(`Schema ${schemaName} and Tables already exists.`);
     }
   } catch (err) {
-    console.error('Error ensuring schema exists:', err.stack);
+    console.error('Error ensuring Schema and Tables exist:', err.stack);
   }
 }
 
