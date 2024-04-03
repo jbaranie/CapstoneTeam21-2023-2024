@@ -4,18 +4,16 @@
 //Coder: Jan Baraniecki
 import React, { useState } from 'react';
 import ReactGoogleMapAPI from '../scripts/react_google_map_api';
+import GPXParseLocal from '../scripts/gpx_parser_local.js';
 
 const HomeTab = () => {
     return (
-        <div>
-            <section id="main">
-                    <div id="background">
-                        <h1>A New Experimental Route App</h1>
-                        <p>Welcome to the Landing Page of our experimental route website. This area will be treated like a dashboard and getting started area.</p> 
-                         <ReactGoogleMapAPI />
-                    </div>
-            </section>
-           
+        <div id="background">
+            <p>Welcome to the Map Page of our experimental route website.</p>
+            <p>This area will be used to view route content and to plan routes using markers.</p> 
+            <GPXParseLocal />
+            <p></p>
+            <ReactGoogleMapAPI />
         </div>
     );
 };

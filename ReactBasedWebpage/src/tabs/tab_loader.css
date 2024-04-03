@@ -82,8 +82,8 @@
             background-color: #F5F4E9; /* Light gray background */
             color: #000; /* Black font color */
             padding: 20px;
-            overflow-y: scroll;
-            height: 100vh; /* Make it fill the viewport height */
+            overflow-y: visible;
+            height: 80vh; /*height: 100vh;*/ /* Make it fill the viewport height */
             width: 70%; /* Even narrower width */
             margin: 0 auto; /* Centered */
         }
