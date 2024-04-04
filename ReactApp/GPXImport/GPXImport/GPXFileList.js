@@ -247,13 +247,19 @@ const GPXFileList = ({ navigation }) => {
   };
 
    // Function that handles file download
-   const downloadFile = async (fileName) => {
+   const downloadFile = async (fileName, directory) => {
     // Request permissions to access the media library
     const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
     setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
 
     //filepaths
-    const localUri = `${FileSystem.documentDirectory}${fileName}`;
+    let localUri = `${FileSystem.documentDirectory}${fileName}`;
+    if(directory === 'created'){
+      localUri = `${createdGPXDirectory}${fileName}`;
+    } else {
+      localUri = `${importedGPXDirectory}${fileName}`;
+    }
+    
     const systemUri = `${FileSystem.cacheDirectory}${fileName}`;
 
     if (Platform.OS === 'android') {//existing content; TODO fix Android issues
@@ -364,7 +370,7 @@ const GPXFileList = ({ navigation }) => {
             <TouchableOpacity onPress={() => confirmDeleteFile(item, activeDirectory)}>
               <Text style={[styles.buttonText, styles.deleteButtonText]}>Delete</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => console.log('Download Pressed')}>
+            <TouchableOpacity onPress={() => downloadFile(item, activeDirectory)}>
               <Text style={styles.buttonText}>Download</Text>
             </TouchableOpacity>
           </View>
