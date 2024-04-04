@@ -15,9 +15,15 @@ export const importedGPXDirectory = `${FileSystem.documentDirectory}imported/`;
 export const createdGPXDirectory = `${FileSystem.documentDirectory}created/`;
 
 // Deletes a single file
-export const deleteFile = async (fileName) => {
+export const deleteFile = async (fileName, directory) => {
   try {
-    const fullPath = fileName.startsWith('file://') ? fileName : `${FileSystem.documentDirectory}${fileName}`;
+    let fullPath = '';
+    if(directory === 'created'){
+      fullPath = fileName.startsWith('file://') ? fileName : `${createdGPXDirectory}${fileName}`;
+    } else {
+      fullPath = fileName.startsWith('file://') ? fileName : `${importedGPXDirectory}${fileName}`;
+    }
+    
     
     await FileSystem.deleteAsync(fullPath);
     //refreshFileList(); // Refresh the list after deleting the file
@@ -192,7 +198,7 @@ const GPXFileList = ({ navigation }) => {
   };
 
   // Asks user to confirm deletion of a single file
-  const confirmDeleteFile = (fileName) => {
+  const confirmDeleteFile = (fileName, directory) => {
     Alert.alert(
       "Confirm Delete",
       `Are you sure you want to delete "${fileName}"?`,
@@ -203,7 +209,7 @@ const GPXFileList = ({ navigation }) => {
           style: "cancel"
         },
         { text: "Yes", onPress: () => {
-          deleteFile(fileName)
+          deleteFile(fileName, directory)
           refreshFileList();} 
         }
       ],
@@ -355,7 +361,7 @@ const GPXFileList = ({ navigation }) => {
             <TouchableOpacity onPress={() => handleUseFile(item)}>
               <Text style={styles.buttonText}>Use</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => console.log('Delete Pressed')}>
+            <TouchableOpacity onPress={() => confirmDeleteFile(item, activeDirectory)}>
               <Text style={[styles.buttonText, styles.deleteButtonText]}>Delete</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => console.log('Download Pressed')}>
