@@ -123,7 +123,7 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
   return result;
 };
 
-const GPXParseLocal = (saveDataHook) => {
+const GPXParseLocal = ( {saveDataHook }) => {
   const [routes, setRoutes] = useState([]);
   const [tracks, setTracks] = useState([]);
   const [waypoints, setWaypoints] = useState([]);
