@@ -123,7 +123,7 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
   return result;
 };
 
-const GPXParseLocal = () => {
+const GPXParseLocal = (saveDataHook) => {
   const [routes, setRoutes] = useState([]);
   const [tracks, setTracks] = useState([]);
   const [waypoints, setWaypoints] = useState([]);
@@ -137,22 +137,19 @@ const GPXParseLocal = () => {
       reader.onload = (e) => {
           const gpxData = e.target.result;
           const parseOutput = parseGPX(gpxData);
-          if (gpxData.error) {
+          if (gpxData.error === true) {
             console.log("Error reading gpx-xml data from file.");
             //TODO visual user alert
             return;
           } else {
-            setMetadata(parseOutput.metadata);
-            setRoutes(parseOutput.routes);
-            setTracks(parseOutput.tracks);
-            setWaypoints(parseOutput.waypoints);
+            saveDataHook(parseOutput);
           }
       };
       reader.readAsText(file);
     }
   };
 
-  return (<input type="file" onChange={handleFileChange} />);
+  return (<input id="secureButtons" type="file" accept=".gpx" onChange={handleFileChange}/>);
 };
 
 export default GPXParseLocal;

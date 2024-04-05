@@ -87,8 +87,22 @@
             width: 70%; /* Even narrower width */
             margin: 0 auto; /* Centered */
         }
-/*Style for the Google Map Size*/
+
+        /*Style for the Google Map Size*/
         #map {
           height: 800px;
           width: 100%;
+        }
+
+        /*Used for button rendered alongside map*/
+        #secureButtons {
+            height: 40px;
+            width: 100%;
+            background-color: #1d451b; /* Darker green */
+            color: #fff; /* White text color */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
         }
