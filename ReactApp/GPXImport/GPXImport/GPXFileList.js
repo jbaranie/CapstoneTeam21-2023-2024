@@ -463,7 +463,7 @@ const GPXFileList = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <View style={[
       styles.itemContainer,
-      expandedItem === item ? styles.expandedItemContainer : null // Apply expanded styling conditionally
+      expandedItem === item ? styles.expandedItemContainer : null
     ]}>
       <TouchableOpacity onPress={() => handleFilePress(item)}>
         <Text style={expandedItem === item ? styles.expandedItemTitle : styles.itemTitle}>{item}</Text>
@@ -471,14 +471,14 @@ const GPXFileList = ({ navigation }) => {
       {expandedItem === item && (
         <View style={styles.expandedArea}>
           <MapPreview fileName={item} directory={activeDirectory} />
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={() => handleUseFile(item)}>
+          <View style={styles.buttonContainerHorizontalRight}>
+            <TouchableOpacity onPress={() => handleUseFile(item)} style={styles.button}>
               <Text style={styles.buttonText}>Use</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => confirmDeleteFile(item, activeDirectory)}>
+            <TouchableOpacity onPress={() => confirmDeleteFile(item, activeDirectory)} style={styles.button}>
               <Text style={[styles.buttonText, styles.deleteButtonText]}>Delete</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => downloadFile(item, activeDirectory)}>
+            <TouchableOpacity onPress={() => downloadFile(item, activeDirectory)} style={styles.button}>
               <Text style={styles.buttonText}>Download</Text>
             </TouchableOpacity>
           </View>
@@ -551,8 +551,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10
   },
+  buttonContainerHorizontalRight: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end', 
+    width: '100%', 
+    marginTop: 10, 
+  },
   buttonText: {
     marginHorizontal: 5,
+    fontSize: 18,
     color: '#007aff', 
   },
   deleteButtonText: {
