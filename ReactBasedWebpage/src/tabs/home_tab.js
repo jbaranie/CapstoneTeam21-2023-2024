@@ -7,14 +7,27 @@ import ReactGoogleMapAPI from '../scripts/react_google_map_api';
 import GPXParseLocal from '../scripts/gpx_parser_local.js';
 
 const HomeTab = () => {
-    const [fileContents, setFileContents] = useState({});
+    const [fileContents, setFileContents] = useState();
+		/*{
+			"error": false,
+			"metadata": null,
+			"routes": [],
+			"tracks": [],
+			"waypoints": []
+		}*/
+
+		const saveDataHook = (gpxFileData) => {
+			//console.log(gpxFileData);
+			setFileContents(gpxFileData);
+		}
+
 		const gpxCategoryType = "ROUTE";
 		//TODO create enum constant for gpx category (route, track, waypoints)
     return (
         <div id="background">
             <p>Welcome to the Map Page of our experimental route website.</p>
             <p>This area will be used to view route content and to plan routes using markers.</p> 
-            <GPXParseLocal saveDataHook={setFileContents}/>
+            <GPXParseLocal saveDataHook={saveDataHook}/>
             <p></p>
             <ReactGoogleMapAPI
 							gpxData={fileContents}
