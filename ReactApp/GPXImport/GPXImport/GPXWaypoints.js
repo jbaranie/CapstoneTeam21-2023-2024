@@ -7,10 +7,12 @@ import FlashMessage from 'react-native-flash-message';
 import { showMessage } from 'react-native-flash-message';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
-import { useNavigation } from '@react-navigation/native';
+import * as ScreenOrient from 'expo-screen-orientation';
+import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
+import { runOnJS } from 'react-native-reanimated';
 
-import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addRouteToGPX, addRoutePointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos, createdGPXDirectory } from './GPXManager';
-import { deleteFile, photoWaypointsFile, photoLocalStore, iosShare } from './GPXFileList';
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addTrackToGPX, addTrackPointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos, createdGPXDirectory } from './GPXManager';
+import { deleteFile, photoWaypointsFile, photoLocalStore } from './GPXFileList';
 import { pickImage } from './ImageImport';
 import WaypointModal from './WaypointModal';
 import GPXNameModal from './GPXNameModal';
@@ -36,8 +38,10 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
   return d;
 };
 
-const GPXWaypoints = ({route}) => {
+const recordActiveDir = "locks";
+export const recordActiveFile = "locks/lock-record.txt";
 
+const GPXWaypoints = ({ navigation, route }) => {
   const handleGPXNameConfirm = async (fileName) => {
     // Rename the GPX file here using FileSystem from 'expo-file-system'
     const newPath = `${createdGPXDirectory}${fileName}.gpx`;
@@ -47,9 +51,6 @@ const GPXWaypoints = ({route}) => {
         to: newPath,
       });
       console.log(`GPX file renamed to: ${newPath}`);
-      setCurrentGPXPath(''); // Reset the current GPX file path
-      // Navigate away or refresh the list as needed
-      navigation.navigate('GPX Files', { refreshFileList: true });
     } catch (error) {
       console.error('Error renaming GPX file:', error);
       showMessage({
@@ -59,9 +60,18 @@ const GPXWaypoints = ({route}) => {
         type: "error",
         duration: 3000 
       });
+    } finally {
+      // Navigate and reset state after handling rename
+      setCurrentGPXPath(''); 
+      setGpxNameModalVisible(false); // Close the modal
+      // Navigate away or refresh the list as needed
+      navigation.navigate('GPX Files', { refreshFileList: true });
     }
-    setGpxNameModalVisible(false); // Close the modal
   };  
+
+  //Add a state variable to store the map rotation
+  const [mapRotation, setMapRotation] = useState(0);
+
 
   //Location and map state/refs
   const [waypoints, setWaypoints] = useState([]);
@@ -82,25 +92,54 @@ const GPXWaypoints = ({route}) => {
   //Waypoint Modal States
   const [modalVisible, setModalVisible] = useState(false);
   const [waypointRating, setWaypointRating] = useState(null);
+  const [waypointLat, setWaypointLat] = useState(0);
+  const [waypointLon, setWaypointLon] = useState(0);
+  const [waypointLink, setWaypointLink] = useState("");//TODO use to update modal description automatically when taking photo
 
   //Imorted GPX data
   const [importedWaypoints, setImportedWaypoints] = useState([]);
   const [importedRoutes, setImportedRoutes] = useState([]);
 
-  //Active route/nav state
+  //Active route state
   const [isCycling, setIsCycling] = useState(false);
-  const [elapsedTime, setElapsedTime] =useState(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
   const timerRef = useRef(null);
   const [currentGPXPath, setCurrentGPXPath] = useState('');
   const [photoGPXdata, setPhotoGPXdata] = useState([]);//deprecated, but may be useful so it's still here
-  const navigation = useNavigation();
-
+  
   //Permission states
   const [hasLocationPermission, setHasLocationPermission] = useState(null);
   const [isMapReady, setIsMapReady] = useState(false);
   
   //GPX name Modal states
   const [gpxNameModalVisible, setGpxNameModalVisible] = useState(false);
+
+  // // DECLARED TWICE FOR SOME REASON. COMMENTING OUT FOR NOW JUST IN CASE IT BREAKS SOMETHING. 
+  // // Modal activity at the end of route-recording.
+  // const handleGPXNameConfirm = async (fileName) => {
+  //   // Rename the GPX file here using FileSystem from 'expo-file-system'
+  //   const newPath = `${FileSystem.documentDirectory}${fileName}.gpx`;
+  //   try {
+  //     await FileSystem.moveAsync({
+  //       from: currentGPXPath,
+  //       to: newPath,
+  //     });
+  //     console.log(`GPX file renamed to: ${newPath}`);
+  //     setCurrentGPXPath(''); // Reset the current GPX file path
+  //     // Navigate away or refresh the list as needed
+  //     navigation.navigate('GPX Files', { refreshFileList: true });
+  //   } catch (error) {
+  //     console.error('Error renaming GPX file:', error);
+  //     showMessage({
+  //       message: "Error renaming GPX file",
+  //       description: "Please try again.",
+  //       hideOnPress: true,
+  //       type: "error",
+  //       duration: 3000 
+  //     });
+  //   }
+  //   setGpxNameModalVisible(false); // Close the modal
+  // };
 
   //Zoom States
   const zoomLevels = {
@@ -122,7 +161,20 @@ const GPXWaypoints = ({route}) => {
     if (route.params?.imported) {
         setImported(true);
     }
-}, [route.params?.imported]);
+  }, [route.params?.imported]);
+
+  // keeps the user centered on the map during route
+  useEffect(() => {
+    if (userLocation && mapRef.current && isCycling) {
+      const region = {
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+        latitudeDelta: 0.005, 
+        longitudeDelta: 0.005,
+      };
+      mapRef.current.animateToRegion(region, 1000); 
+    }
+  }, [userLocation, isCycling]); // Will re-run when userLocation or isCycling changes
 
   //Update the userLocRef
   useEffect(() => {
@@ -233,8 +285,9 @@ const GPXWaypoints = ({route}) => {
         if (routes.length === 0 && waypoints.length === 0) {
           // No waypoints or routes to add, delete the file
           deleteFile(currentGPXPath);
+          setCurrentGPXPath('');
           //console.log('No waypoints or routes. File deleted.');
-
+          
           showMessage({
             message: "Route Not Saved",
             description: "Route wasn't long enough to be saved. Try adding waypoints!",
@@ -250,21 +303,16 @@ const GPXWaypoints = ({route}) => {
           // const fileContent = await FileSystem.readAsStringAsync(currentGPXPath);
           // console.log('GPX File Content:', fileContent);
 
+          showMessage({
+            message: "Route has ended.",
+            hideOnPress: true,
+            type: "info",
+            duration: 2000
+          });
           setGpxNameModalVisible(true);
-
-          // showMessage({
-          //   message: "Route has ended.",
-          //   hideOnPress: true,
-          //   type: "info",
-          //   duration: 2000
-          // });
-          // Refresh the GPX file list to include the new file
-          // navigation.navigate('GPX Files', { refreshFileList: true });
         }
-        //setCurrentGPXPath(''); // Reset the current GPX file path
       } else {
         console.error('No GPX file path found when trying to stop route');
-
         showMessage({
           message: "Could not save created route to GPX File",
           hideOnPress: true,
@@ -278,53 +326,149 @@ const GPXWaypoints = ({route}) => {
   };
 
   //Effect to create the initial GPX file if it doesn't exist, and display its waypoints on the home screen upon loading.
+  //NOTE: question - why are we including the main gpx's waypoints all at the start? I've forgotten why - Larry
   useEffect(() => {
-    const loadWaypointsFromGPX = async () => {
+    const newGPXsetup = async () => {
       const gpxExists = await doesGPXFileExist();
       if (!gpxExists) {
         await createInitGPX();
-      } else {
-        await importGPXFileFromPath(GPX_FILE_PATH);
-        setImportedRoutes([]);
       }
+  //     /*else {
+  //       await importGPXFileFromPath(GPX_FILE_PATH);
+  //       setImportedRoutes([]);
+  //     }*/
+  //   };
+  // // useEffect(() => {
+  // //   const loadWaypointsFromGPX = async () => {
+  // //     const gpxExists = await doesGPXFileExist();
+  // //     if (!gpxExists) {
+  // //       await createInitGPX();
+  // //     } 
+  // //     // else {
+  // //     //   await importGPXFileFromPath(GPX_FILE_PATH);
+  // //     //   setImportedRoutes([]);
+  // //     // }
     };
-  
     if (isMapReady) {
-      loadWaypointsFromGPX();
+      newGPXsetup();
     }
   }, [isMapReady]);
 
-  // Update goodMarkerPress to show modal and set rating to 3
+  //Update goodMarkerPress to show modal and set rating to 3
   const goodMarkerPress = () => {
+    setWaypointLocationUser();
     setWaypointRating(3);
     setModalVisible(true); //Show Waypoint Modal
   };
-
   // Update badMarkerPress similarly, but set rating to 1
   const badMarkerPress = () => {
+    setWaypointLocationUser();
     setWaypointRating(1);
     setModalVisible(true); //Show Waypoint Modal
   };
+  //helper method setting the waypoint modal's coordinates to the user location
+  const setWaypointLocationUser = () => {
+    setWaypointLat(userLocation.latitude);
+    setWaypointLon(userLocation.longitude);
+  }
 
   // Function to handle modal confirm
-  const handleAddWaypoint = async (title, description) => {
+  const handleAddWaypoint = async (title, description, rating) => {
     const waypointId = Date.now().toString();
+    const waypointTitle = title.trim() !== '' ? title : 'Unnamed Waypoint'; // Default to 'Unnamed Waypoint' if title is left empty
+    const waypointDescription = description.trim() !== '' ? description : 'No Description'; // Default to 'No Description' if description is left empty
     try {
-      //title, description added. ID now in custom GPX tag. 
-      await addWaypointToGPX(currentGPXPath, userLocation.latitude, userLocation.longitude, waypointRating, waypointId, title, description);
+      //title, description added. ID now in custom GPX tag.
+      //previous coordinate items:
+        // userLocation.latitude
+        // userLocation.longitude
+      await addWaypointToGPX(currentGPXPath, waypointLat, waypointLon, waypointRating, waypointId, title, description);
+      await addWaypointToGPX(GPX_FILE_PATH, waypointLat, waypointLon, waypointRating, waypointId, title, description);
       setWaypoints(prevWaypoints => [...prevWaypoints, {
         id: waypointId,
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude,
+        latitude: waypointLat,
+        longitude: waypointLon,
         name: title,
         description: description,
         rating: waypointRating
       }]);
-      setModalVisible(false); // Close the modal
+      showMessage({
+        message: `${rating === 3 ? "Good" : "Bad"} Waypoint Added!`,
+        type: "success",
+        backgroundColor: "#2196f3", 
+        duration: 3000
+      });
     } catch (err) {
-      console.log(err); // Handle the error 
+      console.error(err);
+      showMessage({
+        message: "Could not add new waypoint",
+        description: err.message,
+        type: "error",
+        duration: 3000
+      });
+    } finally {
+      setModalVisible(false);
     }
   };
+  
+  //locks for recording route -> camera add to route
+  const lockDir = `${FileSystem.documentDirectory}${recordActiveDir}`;
+  const lockFile = `${FileSystem.documentDirectory}${recordActiveFile}`;
+  const addLock = async () => {
+    let lockData = currentGPXPath + " " + Date.now().toString(); //TODO add gpx target file
+    let lockDirCheck = await FileSystem.getInfoAsync(lockDir);
+    if (!lockDirCheck.exists) await FileSystem.makeDirectoryAsync(lockDir);
+    FileSystem.writeAsStringAsync(lockFile, lockData);
+  }
+  const clearLock = async () => {
+    let lockInfo = await FileSystem.getInfoAsync(lockFile);
+    if (lockInfo.exists) {
+      let lockContents = await FileSystem.readAsStringAsync(lockFile);
+      let lockData = "Route recording lock: lockContents\n" + lockContents;
+      console.log(lockData);
+      FileSystem.deleteAsync(lockFile);
+    } else {
+      console.log("Did not have to delete lock for recording route (app was not last closed while recording route)");
+    }
+  }
+  //clear lock file on app and ending route, in case app crashed while recording route
+  useEffect(() => {
+    if (isCycling) addLock();
+    else clearLock();
+  }, [isCycling]);
+
+  //function handling image data passed from camera
+  const extractWaypointFromNewPhoto = async (photo) => {
+    const waypointId = Date.now().toString();
+    let inLat = photo.LocationInfo.latitude;
+    let inLon = photo.LocationInfo.longitude;
+    //console.log(inLat);
+    //console.log(inLon);
+
+    setWaypointLat(inLat);
+    setWaypointLon(inLon);
+    setWaypointRating(2);
+    setModalVisible(true);
+    
+    // await addWaypointToGPX(currentGPXPath, inLat, inLon, 2, waypointId);
+    // setWaypoints(prevWaypoints => [...prevWaypoints, {
+    //   id: waypointId,
+    //   latitude: inLat,
+    //   longitude: inLon,
+    //   name: "Image Waypoint",
+    //   description: "Image Waypoint",
+    //   rating: 2
+    // }]);
+    navigation.setParams({ waypointPhoto: null, waypointDesc: null }); // Reset the parameter
+  };
+
+  //handle images passed from CaptureImageDrawer.js
+  useEffect(() => {
+    if (route.params?.waypointPhoto) {
+      //console.log(route.params.waypointPhoto)
+      extractWaypointFromNewPhoto(route.params.waypointPhoto);
+    }
+  }, [route.params?.waypointPhoto]);
  
   // const goodMarkerPress = async () => {
   //   const waypointId = Date.now().toString(); // Generate a unique ID for the waypoint
@@ -376,6 +520,30 @@ const GPXWaypoints = ({route}) => {
   //     console.log(err); // Handle the error 
   //   }
   // };
+
+  //gesture navigation items
+  const navigateUp = () => {
+    navigation.navigate("Camera Waypoint");
+  }
+  const navigateDown = () => {
+    if (!isCycling) navigation.navigate("User Info");
+  }
+  const navUp = Gesture.Fling()
+    .direction(Directions.UP)
+    .numberOfPointers(2)
+    .onEnd(() => {
+      console.log("NavUp");
+      runOnJS(navigateUp)();//NOTE: this method is needed to wrap all navigation actions if called by Gesture handlers
+    });
+  const navDown = Gesture.Fling()
+    .direction(Directions.DOWN)
+    .numberOfPointers(2)
+    .onEnd(() => {
+      console.log("NavDown");
+      runOnJS(navigateDown)();
+    });
+  const twoFlingNav = Gesture.Exclusive(navUp, navDown);
+  //NOTE: currently, the mapview's gesture controls override any attempt to wrap the system with usable controls
     
   //Importing the GPX File
   const importGPXFile = async () => {
@@ -463,15 +631,17 @@ const GPXWaypoints = ({route}) => {
       const fileContent = await FileSystem.readAsStringAsync(fullPath);
   
       // Extracting waypoints
-      const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)".*?<name>([^<]+)<\/name>(?:.*?<rating>(\d)<\/rating>)?/gs;
+      const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)".*?>\s*(?:<name>([^<]*)<\/name>)?\s*(?:<desc>([^<]*)<\/desc>)?\s*(?:<rating>(\d)<\/rating>)?\s*(?:<id>(\d+)<\/id>)?\s*<\/wpt>/gs;
       const matches = Array.from(fileContent.matchAll(waypointRegex));
       const newWaypoints = matches.map((match, index) => ({
-        id: index.toString(),
+        id: match[6] || index.toString(),
         latitude: parseFloat(match[1]),
         longitude: parseFloat(match[2]),
-        name: match[3] || 'Unnamed Waypoint',
-        rating: match[4] ? parseInt(match[4]) : 2
+        name: match[3] || '',
+        desc: match[4] || '',
+        rating: match[5] ? parseInt(match[5]) : undefined,
       }));
+    
   
       // Extracting routes
       const routeRegex = /<rtept[^>]*lat="([-.\d]+)"[^>]*lon="([-.\d]+)"[^>]*>/g;
@@ -480,6 +650,13 @@ const GPXWaypoints = ({route}) => {
         latitude: parseFloat(match[1]),
         longitude: parseFloat(match[2]),
       }));
+
+      /* To check if newWaypoints and newRoutes are extracted correctly and 
+        state setters like setImportedWaypoints and setImportedRoutes 
+        are called with the correct data.
+      */
+        // console.log("Extracted Waypoints: ", newWaypoints);
+        // console.log("Extracted Routes: ", newRoutes);
   
       setImportedWaypoints(newWaypoints);
       setImportedRoutes(newRoutes);
@@ -495,7 +672,7 @@ const GPXWaypoints = ({route}) => {
         });
       }
     } catch (error) {
-      //console.error('Error importing GPX file:', error);
+      console.error('Error importing GPX file:', error);
       showMessage({
         message: "Error importing GPX file",
         description: "Check the file you are trying to import, and try again.",
@@ -505,6 +682,11 @@ const GPXWaypoints = ({route}) => {
       });
     }
   };
+
+  //orientation lock
+  useEffect(() => {
+    ScreenOrient.lockAsync(ScreenOrient.OrientationLock.PORTRAIT_UP);
+  }, []);//TODO modify this setup to only lock on specific windows; this seems to activate it on the entire app
   
   //PHOTO WAYPOINTS FILE
   const photosFilename = `${FileSystem.documentDirectory}${photoWaypointsFile}`;
@@ -512,21 +694,21 @@ const GPXWaypoints = ({route}) => {
   
   //Startup of photos waypoint file from storage; create if it does not exist yet
   const photoWaypointsSetup = async () => {
-    //console.log("Setting up photos file places.");
     const fileInfo = await FileSystem.getInfoAsync(photosFilename);
-    const storageInfo = await FileSystem.getInfoAsync(photosDirectory);
     //console.log(fileInfo);
+    const storageInfo = await FileSystem.getInfoAsync(photosDirectory);
     //console.log(storageInfo);
 
-    if (!fileInfo.exists) {
-      console.log("GPX waypoints file missing; recreating.");
-      await clearPhotoWaypoints();
-      await deleteAllImportedPhotos();//useful DEBUG action of clearing photos folder on deleting photos file
-    }
     if (!storageInfo.exists) {
       console.log("Image storage folder missing; recreating.");
       //create folder for images
       await FileSystem.makeDirectoryAsync(photosDirectory, { intermediates : true });
+    }
+    if (!fileInfo.exists) {
+      console.log("GPX waypoints file missing; recreating.");
+      await clearPhotoWaypoints();
+      await deleteAllImportedPhotos();//useful DEBUG action of clearing photos folder on deleting the associated waypoints
+      //TODO ^ should not be present if images are associated with waypoints in routes; this is yet to be implemented
     }
 
     //below is deprecated due to not storing image import GPX data anymore, but may still be useful for future functions
@@ -548,32 +730,32 @@ const GPXWaypoints = ({route}) => {
   const addPhotoWaypointImport = async () => {
     let selectedImage = await pickImage();
     if (selectedImage != null) {
+      //check photos directory and create an appropriate name for the locally stored copy
       let photoList = await FileSystem.readDirectoryAsync(photosDirectory);
-      console.log(photoList);
-      //determine original image type and store as string
+      //console.log(photoList);
       let imageNameSplit = selectedImage.uri.split(".");
-      let imageType = imageNameSplit[imageNameSplit.length - 1];
       let photoNum = photoList.length;
-      let photoName = "importedImage" + photoNum + "." + imageType;
-      console.log(photoName);
+      let photoName = "importedImage" + photoNum + "." + imageNameSplit[imageNameSplit.length - 1];
+      //console.log(photoName);
       
-      //create copy of photo to app local storage
+      //copy photo to app local storage
       await FileSystem.copyAsync({
         from: selectedImage.uri,
         to: `${photosDirectory}${photoName}`,
       });
-      
-      let inLat = selectedImage.exif.GPSLatitude * (selectedImage.exif.GPSLatitudeRef=="N" ? 1 : -1);
-      let inLon = selectedImage.exif.GPSLongitude * (selectedImage.exif.GPSLongitudeRef=="E" ? 1 : -1);
-      await addWaypointToGPX(photosFilename, inLat, inLon, 2, Date.now().toString(), photoName);//TODO fix based upon merge in GPXManager.js
+
+      //save coordinate data to imported images GPX file
+      let inLat = selectedImage.exif.GPSLatitude *
+        (selectedImage.exif.GPSLatitudeRef=="S" ? -1 : 1);
+      let inLon = selectedImage.exif.GPSLongitude *
+        (selectedImage.exif.GPSLongitudeRef=="W" ? -1 : 1);
+      await addWaypointToGPX(photosFilename, inLat, inLon, 2, Date.now().toString(), photoName);
 
       //center map on location extracted from image
-      var newRegion = {
+      mapRef.current.animateToRegion({
         latitude: inLat,
         longitude: inLon
-      };
-      //console.log(newRegion);
-      mapRef.current.animateToRegion(newRegion, 1);
+      }, 1);
 
       //reset internal collection of waypoints
       photoWaypointsSetup();
@@ -601,53 +783,40 @@ const GPXWaypoints = ({route}) => {
   const shareWaypointPhoto = async () => {
     //TOOD figure out waypoint input selection
     //do FileShare API on photo in app local storage
+
+    //Note: see Task 225 for issues with saving waypoint photo data and examine carefully 
   }
 
   const startRoute = async () => {
-    //const gpxExists = await doesGPXFileExist();
-    //if (!gpxExists) {
-    //  await createInitGPX();
-    //}
+    // Check if a main GPX file exists; if not, create a new one.
+    const gpxExists = await doesGPXFileExist();
+    if (!gpxExists) {
+      await createInitGPX();
+    }
     setWaypoints([]);
-    
-    // Check if the user has location permissions
+  
+    // Ensure the user has granted location permissions.
     if (!hasLocationPermission) {
       Alert.alert(
         "Location Permission Required",
         "You do not have the proper location permissions set. Please check your settings.",
-        [{ text: "OK :(" }]
+        [{ text: "OK" }]
       );
       return;
     }
 
     // Check if there is an imported route
+    // If no route has been imported, confirm with the user to start a new route.
     if (!imported) {
-      // If there is no imported route, ask for confirmation to start without a route
       Alert.alert(
         'Start Route',
-        'Do you want to start Cycling without a route?',
+        'Do you want to start cycling without a route?',
         [
           {
             text: 'OK',
-            onPress: async () => { // Make sure this function is async
-              setIsCycling(true);
-
-              if (userLocation && mapRef.current) {
-                //Animate to user location with new zoom values
-                const zoomedInRegion = {
-                  ...userLocation,
-                  latitudeDelta: 0.001,
-                  longitudeDelta: 0.001, 
-                };
-                mapRef.current.animateToRegion(zoomedInRegion, 1000); 
-              }
-
-              startTimer();
-              if (!currentGPXPath) { 
-                const newFilePath = await createNewGPXFile();
-                setCurrentGPXPath(newFilePath);
-                setCurrentRoute(await addRouteToGPX(GPX_FILE_PATH));
-              }
+            onPress: async () => {
+              setIsCycling(true); // Start cycling  
+              await initiateRoute();           
             },
           },
           {
@@ -658,19 +827,35 @@ const GPXWaypoints = ({route}) => {
         { cancelable: true }
       );
     } else {
+      // If a route has been imported, use the existing logic to check the distance to the start point of the route
+      // and proceed with the confirmation to start the route
       const startPoint = importedRoutes[0];
-
+  
       // Ensure startPoint and userLocation are available
-      if (importedRoutes.length > 0 && userLocation) {
+      if (startPoint && userLocation) {
         const { latitude: userLat, longitude: userLon } = userLocation;
-
         const distance = getDistanceFromLatLonInMiles(userLat, userLon, startPoint.latitude, startPoint.longitude);
-        console.log('Distance', distance);
-
+  
         if (distance > 3) {
           Alert.alert("Too Far", "You are too far from the start of the route.");
-          return; 
+          return;
         }
+  
+        Alert.alert(
+          'Start Route',
+          'Would you like to begin Cycling?',
+          [
+            {
+              text: 'START',
+              onPress: () => initiateRoute(),
+            },
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+          ],
+          { cancelable: true }
+        );
       } else {
         showMessage({
           message: "No Valid Routes",
@@ -680,55 +865,74 @@ const GPXWaypoints = ({route}) => {
           duration: 5000
         });
       }
-      // Start route confirmation dialog
-      Alert.alert(
-        'Start Route',
-        'Would you like to begin Cycling?',
-        [
-          {
-            text: 'START',
-            onPress: () => initiateRoute(),
-          },
-          {
-            text: 'Cancel',
-            style: 'cancel',
-          },
-        ],
-        { cancelable: true }
-      );
     }
-};
+  };
 
-// Function to initiate the route
-const initiateRoute = async () => {
-  setIsCycling(true);
-  startTimer();
+  // Function to initiate the route
+  const initiateRoute = async () => {
+    setIsCycling(true);
+    startTimer();
 
-  //Clear any existing data
-  setRoutes([]);
-  setWaypoints([]);
+    //Clear any existing data
+    setRoutes([]);
+    setWaypoints([]);
 
-  if (!currentGPXPath) {
-    const newFilePath = await createNewGPXFile();
-    setCurrentGPXPath(newFilePath);
+// //183 previous; delete if debugging shows no issues
+//     if (!currentGPXPath) {
+//       const newFilePath = await createNewGPXFile();
+//       setCurrentGPXPath(newFilePath);
 
-    // Create a route in the global GPX file and the instance-based GPX file
-    const routeIdGlobal = await addRouteToGPX(GPX_FILE_PATH);
-    const routeIdInstance = await addRouteToGPX(newFilePath);
-    setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
-  }
+      // Create a route in the global GPX file and the instance-based GPX file
+      // const routeIdGlobal = await addTrackToGPX(GPX_FILE_PATH);//TODO US228
+      // const routeIdInstance = await addTrackToGPX(newFilePath);//TODO US228
+      // setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
+//       // Create a route in the global GPX file and the instance-based GPX file
+//       const routeIdGlobal = await addRouteToGPX(GPX_FILE_PATH);
+//       const routeIdInstance = await addRouteToGPX(newFilePath);
+//       setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
+//     }
+    // Reset the lastPointRef
+    lastPointRef.current = null;
 
-  //Prevent the phone from sleeping while active
-  activateKeepAwakeAsync();
+    //This seems to cause issues on IOS
+    //const fileInfo = await FileSystem.getInfoAsync(currentGPXPath);
+    //const currentExists = fileInfo.exists;
 
-  showMessage({
-    message: "Route Started!",
-    hideOnPress: true,
-    type: "info",
-    duration: 3000 
-  });
-};
-  
+    //Check if there is a current GPX file and if it exists
+    if (!currentGPXPath) {
+      console.log('Creating a new GPX file');
+      const newFilePath = await createNewGPXFile();
+      setCurrentGPXPath(newFilePath);
+
+      if (userLocation && userLocation.latitude && userLocation.longitude) {
+        // Create a route in the global GPX file and the instance-based GPX file
+        const routeIdGlobal = await addTrackToGPX(GPX_FILE_PATH, userLocation);
+        // log below clarifies which GPX file the ID belongs to.
+        //console.log(`Global Route ID: ${routeIdGlobal}`); 
+        if (!routeIdGlobal) {
+          console.error('Failed to create route in the main GPX file');
+        }
+        const routeIdInstance = await addTrackToGPX(newFilePath, userLocation);
+        //// log below clarifies which GPX file the ID belongs to.
+        //console.log(`Instance Route ID: ${routeIdInstance}`);
+        setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
+      } else {
+        console.log('User location is not available.');
+      }
+    } else {
+      console.log('currentGPX already exists:', currentGPXPath);
+    }
+
+    //Prevent the phone from sleeping while active
+    activateKeepAwakeAsync();
+
+    showMessage({
+      message: "Route Started!",
+      hideOnPress: true,
+      type: "info",
+      duration: 3000 
+    });
+  };
   
   useEffect(() => {
     return () => {
@@ -737,47 +941,82 @@ const initiateRoute = async () => {
     };
   }, []);
 
-  const addRoutePoint = async (routeIds) => {
+  // const addRoutePoint = async (routeIds) => {
+  //   const currentLocation = userLocationRef.current;
+  //   if (currentLocation) {
+  //     const point = {
+  //       latitude: currentLocation.latitude,
+  //       longitude: currentLocation.longitude,
+  //       name: new Date().toLocaleTimeString(),
+  //       dateTime: true
+  //     };  
+
+  //     const lastPoint = routes[routes.length - 1];
+  //     if(lastPoint){
+  //       /*console.log('POINT INFO \n--------------\n' 
+  //       + 'Last Point info: ' + '\nname: ' + lastPoint.name + '\nlat: ' + lastPoint.latitude + 'lon: ' + lastPoint.longitude 
+  //       + '\n\nCurrent Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude 
+  //       + '\n--------------\n');
+  //       */
+  //       //console.log('Last Point info: ' + '\nname: ' + lastPoint.name + '\nlat: ' + lastPoint.latitude + 'lon: ' + lastPoint.longitude);
+  //       //console.log('Current Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude);
+  //       //console.log('\n--------------\n');
+  //     }
+  //     console
+  //     if (lastPoint && lastPoint.latitude === point.latitude && lastPoint.longitude === point.longitude) {
+  //       //console.log('New route point is the same as the last one. Skipping addition.');
+  //       return; 
+  //     }
+    
+  //     try {
+  //       // Add route point to both GPX files
+  //       let globalAdd = await addTrackPointToGPX(GPX_FILE_PATH, routeIds.global, point);//TODO US228
+  //       let instanceAdd = await addTrackPointToGPX(currentGPXPath, routeIds.instance, point);//TODO US228
+  //       setRoutes(prevRoutes => [...prevRoutes, point]);
+  //       //console.log('Route Point added to both GPX files. Point info: ' + JSON.stringify(point));
+  //     } catch (error) {
+  //       console.error('Error adding route point to GPX:', error);
+  //     }
+
+  const lastPointRef = useRef();
+  const addRoutePoint = async () => {
     const currentLocation = userLocationRef.current;
     if (currentLocation) {
       const point = {
         latitude: currentLocation.latitude,
         longitude: currentLocation.longitude,
         name: new Date().toLocaleTimeString(),
-      };  
+        dateTime: true
+      };
 
-      const lastPoint = routes[routes.length - 1];
-      if(lastPoint){
-        /*console.log('POINT INFO \n--------------\n' 
-        + 'Last Point info: ' + '\nname: ' + lastPoint.name + '\nlat: ' + lastPoint.latitude + 'lon: ' + lastPoint.longitude 
-        + '\n\nCurrent Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude 
-        + '\n--------------\n');
-        */
-        //console.log('Last Point info: ' + '\nname: ' + lastPoint.name + '\nlat: ' + lastPoint.latitude + 'lon: ' + lastPoint.longitude);
-        //console.log('Current Point info: ' + '\nname: ' + point.name + '\nlat: ' + point.latitude + 'lon: ' + point.longitude);
-        //console.log('\n--------------\n');
-      }
-      console
+      const lastPoint = lastPointRef.current;
       if (lastPoint && lastPoint.latitude === point.latitude && lastPoint.longitude === point.longitude) {
         console.log('New route point is the same as the last one. Skipping addition.');
-        return; 
+        return;
       }
-    
+
+      lastPointRef.current = point; // Update the ref with the new point
+
       try {
-        // Add route point to both GPX files
-        await addRoutePointToGPX(GPX_FILE_PATH, routeIds.global, point);
-        await addRoutePointToGPX(currentGPXPath, routeIds.instance, point);
-        setRoutes(prevRoutes => [...prevRoutes, point]);
-        //console.log('Route Point added to both GPX files. Point info: ' + JSON.stringify(point));
+        if (typeof currentRoute === 'object' && currentRoute.global && currentRoute.instance) {
+          let globalAdd = await addTrackPointToGPX(GPX_FILE_PATH, currentRoute.global, point);
+          let instanceAdd = await addTrackPointToGPX(currentGPXPath, currentRoute.instance, point);
+          console.log(`Global trackpoint add: ${globalAdd}`);
+          console.log(`Instance trackpoint add: ${instanceAdd}`);
+          setRoutes(prevRoutes => [...prevRoutes, point]); // Update routes state
+        } else {
+          let instanceAdd = await addTrackPointToGPX(currentGPXPath, currentRoute, point);
+          console.log(`Instance trackpoint add: ${instanceAdd}`);
+        }
+        console.log('Track point added to both GPX files. Point info: ' + JSON.stringify(point));
       } catch (error) {
-        console.error('Error adding route point to GPX:', error);
-        
+        console.error('Error adding track point to GPX:', error);
         showMessage({
           message: "Error adding route point to GPX File",
           description: "There could be an issue with the GPX file.",
           hideOnPress: true,
           type: "error",
-          duration: 30000 
+          duration: 30000
         });
       }
     }
@@ -811,14 +1050,15 @@ const initiateRoute = async () => {
 
   useEffect(() => {
     let interval;
-    if (isCycling) {
+    if (isCycling && currentRoute) {
       interval = setInterval(() => {
-        const routeIds = currentRoute;
-        if (routeIds) {
-          addRoutePoint(routeIds);
-        } else {
-          console.log('UNEXPECTED: No route found to add point to!');
-        }
+        const point = {
+          latitude: userLocationRef.current.latitude,
+          longitude: userLocationRef.current.longitude,
+          name: new Date().toLocaleTimeString(),
+          dateTime: true
+        };
+        addRoutePoint();
       }, 3000);
     }
     return () => {
@@ -826,35 +1066,34 @@ const initiateRoute = async () => {
         clearInterval(interval);
       }
     };
-  }, [isCycling, currentGPXPath, routes, currentRoute]);
+  }, [isCycling, currentRoute, userLocationRef]);
   
-  
- //Clear imported route onPress function with confirmation
-const clearRoute = () => {
-  Alert.alert(
-    "Clear Map",
-    "Are you sure you want to clear the route?",
-    [
-      {
-        text: "Cancel",
-        style: "cancel"
-      },
-      { text: "Yes", onPress: () => handleClearRoute() }
-    ],
-    { cancelable: false }
-  );
-};
+  //Clear imported route onPress function with confirmation
+  const clearRoute = () => {
+    Alert.alert(
+      "Clear Map",
+      "Are you sure you want to clear the route?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        { text: "Yes", onPress: () => handleClearRoute() }
+      ],
+      { cancelable: false }
+    );
+  };
 
-// Actual function to clear the route
-const handleClearRoute = () => {
+  // Actual function to clear the route
+  const handleClearRoute = () => {
 
-  setRoutes([]);
-  setWaypoints([]);
+    setRoutes([]);
+    setWaypoints([]);
 
-  setImportedWaypoints([]); 
-  setImportedRoutes([]); 
-  setImported(false); 
-};
+    setImportedWaypoints([]); 
+    setImportedRoutes([]); 
+    setImported(false); 
+  };
 
   //Seperated Rendering Components --------------------------------
 
@@ -872,8 +1111,8 @@ const handleClearRoute = () => {
       <TouchableOpacity
         style={{
           position: 'absolute',
-          left: 10,
-          bottom: 10,
+          left: 15,
+          bottom: 35,
           backgroundColor: '#007aff',
           padding: 10,
           borderRadius: 5,
@@ -886,7 +1125,7 @@ const handleClearRoute = () => {
     );
   };
 
-  //Route Timer Component 
+  //Route Timer Component
   const TimerComponent = ({ isCycling, elapsedTime }) => {
     if (!isCycling) return null;
 
@@ -960,11 +1199,18 @@ const handleClearRoute = () => {
   };
 
   //Active Route View and Buttons
-  const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, stopRoute }) => {
+  const RouteActionsComponent = ({ isCycling, goodMarkerPress, badMarkerPress, stopRouteFunc, camNav }) => {
     if (!isCycling) return null;
 
     return (
       <View style={styles.actionContainer}>
+        <TouchableOpacity 
+          style={[styles.customButton, { alignSelf: 'right', marginTop: 10, width: '35%'}]} 
+          onPress={camNav} 
+        >
+          <Text style={styles.buttonText}>Camera</Text>
+        </TouchableOpacity>
+
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
           <TouchableOpacity
             style={[styles.customLargeButton, { backgroundColor: 'green', flex: 1, marginRight: 5 }]}
@@ -983,7 +1229,7 @@ const handleClearRoute = () => {
 
         <TouchableOpacity 
           style={[styles.customButton, { marginTop: 10, width: '100%'}]} 
-          onPress={confirmStopRoute} 
+          onPress={stopRouteFunc} 
         >
           <Text style={styles.buttonText}>Stop Route</Text>
         </TouchableOpacity>
@@ -1028,19 +1274,20 @@ const handleClearRoute = () => {
   }
   const IOSMapControlComponent = ({isCycling}) => {
     return (
-      <View style={[styles.actionContainer, {marginBottom: 5, alignItems:"left", position:"absolute"}]}>
-        {isCycling ? (<></>) : (
+      <View style={styles.iosControlContainer}>
+        {isCycling ? (null) : (
         <TouchableOpacity
-          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50  }]}
+          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50 }]}
           onPress={centerOnUserLocation}>
           <Text style={styles.buttonText}>C</Text>
         </TouchableOpacity>)}
         <TouchableOpacity
-          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50  }]}
+          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50 }]}
           onPress={iosZoomIn}>
           <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50 }]}
+        <TouchableOpacity
+          style={[styles.customButton, { backgroundColor: 'blue', flex: 1, marginLeft: 5, marginRight: 5, width: 50, height: 50 }]}
           onPress={iosZoomOut}>
           <Text style={styles.buttonText}>-</Text>
         </TouchableOpacity>
@@ -1050,11 +1297,11 @@ const handleClearRoute = () => {
 
   //Actual Rendering Function
   return (
-    <View style={styles.container}>
+    <GestureDetector gesture={twoFlingNav}><View style={styles.container}>
       <TimerComponent isCycling={isCycling} elapsedTime={elapsedTime} />
       <WaypointModal
         isVisible={modalVisible}
-        onConfirm={handleAddWaypoint}
+        onConfirm={(title, description) => handleAddWaypoint(title, description, waypointRating)}
         onCancel={() => setModalVisible(false)}
       />
       {/*Map Component. Could not be seperated due to constant refreshing issue*/}
@@ -1068,12 +1315,27 @@ const handleClearRoute = () => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        region={mapRegion}
-        onRegionChangeComplete={setMapRegion}
+        mapPitch={0}
+        mapRotation={mapRotation}
+        onRegionChangeComplete={(region) => {
+          setMapRegion(region);
+          setMapRotation(region.heading);
+        }}
         showsUserLocation={true}
         showsCompass={true}
         onMapReady={onMapReady}
+        pitchEnabled={false}
       >
+          {/* 
+          Outputs the current values of routes, importedRoutes, waypoints, and importedWaypoints 
+          right before they are passed to render the map elements
+
+          {console.log('Rendering Routes:', routes)}
+          {console.log('Rendering Imported Routes:', importedRoutes)}
+          {console.log('Rendering Waypoints:', waypoints)}
+          {console.log('Rendering Imported Waypoints:', importedWaypoints)}
+           */}
+
          {importedRoutes.length > 0 && (
           <Polyline
             coordinates={importedRoutes.map(route => ({
@@ -1155,38 +1417,38 @@ const handleClearRoute = () => {
       {/*End of Map Component.*/}
       {/*In-Route Zoom Toggle */}
       {isCycling && (
-  <TouchableOpacity
-    style={{
-      position: 'absolute',
-      right: 12, 
-      top: 60,
-      width: 40,
-      height: 40,
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      backgroundColor: '#007aff',
-      borderRadius: 30,
-      padding: 0,
-      zIndex: 2, // Make it above map
-    }}
-    onPress={() => {
-      setIsZoomedIn(!isZoomedIn); // Toggle the zoom state
-      const newZoom = isZoomedIn ? zoomLevels.zoomedOut : zoomLevels.zoomedIn; 
-      // Update map region 
-      const newRegion = {
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude,
-        ...newZoom,
-      };
-      mapRef.current.animateToRegion(newRegion, 1000);
-    }}
-  >
-    <Image 
-      source={isZoomedIn ? zoomOutIcon : zoomInIcon} 
-      style={{ width: 24, height: 24 }} 
-    />
-  </TouchableOpacity>
-)}
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            right: 12, 
+            top: 60,
+            width: 40,
+            height: 40,
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            backgroundColor: '#007aff',
+            borderRadius: 30,
+            padding: 0,
+            zIndex: 2, // Make it above map
+          }}
+          onPress={() => {
+            setIsZoomedIn(!isZoomedIn); // Toggle the zoom state
+            const newZoom = isZoomedIn ? zoomLevels.zoomedOut : zoomLevels.zoomedIn; 
+            // Update map region 
+            const newRegion = {
+              latitude: userLocation.latitude,
+              longitude: userLocation.longitude,
+              ...newZoom,
+            };
+            mapRef.current.animateToRegion(newRegion, 1000);
+          }}
+        >
+          <Image 
+            source={isZoomedIn ? zoomOutIcon : zoomInIcon} 
+            style={{ width: 24, height: 24 }} 
+          />
+        </TouchableOpacity>
+      )}
       {imported && !isCycling && <ClearRouteButton onPress={clearRoute} />}
       {(Platform.OS === 'ios') ? (<IOSMapControlComponent isCycling={isCycling}/>) : (<></>)}
       <SubMenuComponent
@@ -1200,7 +1462,8 @@ const handleClearRoute = () => {
         isCycling={isCycling}
         goodMarkerPress={goodMarkerPress}
         badMarkerPress={badMarkerPress}
-        stopRoute={stopRoute}
+        stopRouteFunc={confirmStopRoute}
+        camNav={navigateUp}
       />
       <GPXNameModal
         isVisible={gpxNameModalVisible}
@@ -1209,7 +1472,8 @@ const handleClearRoute = () => {
       />
 
       <FlashMessage position="top" />
-    </View>
+    </View></GestureDetector>
   );
-};
+}
+
 export default GPXWaypoints;
