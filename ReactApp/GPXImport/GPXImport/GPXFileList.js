@@ -6,6 +6,7 @@ import * as MediaLibrary from 'expo-media-library';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
 import { pickImage } from './ImageImport';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 
 //Filename constants
 export const photoWaypointsFile = "importedPhotos.gpx";
@@ -352,6 +353,113 @@ const GPXFileList = ({ navigation }) => {
     navigation.navigate('Home', { gpxFilePath: `${activeDirectory}/${fileName}`, imported: true });
   };
 
+  //Map Preview Logic
+  const MapPreview = ({ fileName, directory }) => {
+    const [route, setRoute] = useState([]);
+    const [waypoints, setWaypoints] = useState([]);
+    const [initialRegion, setInitialRegion] = useState(null);
+  
+    useEffect(() => {
+      const loadGPXData = async () => {
+        try {
+          let fullPath = `${FileSystem.documentDirectory}${directory}/${fileName}`;
+          const fileContent = await FileSystem.readAsStringAsync(fullPath);
+          //Will need to change this when tracks get added
+          const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)">\s*<name>([^<]+)<\/name>\s*<desc>([^<]+)<\/desc>\s*<rating>(\d+)<\/rating>\s*<id>\d+<\/id>\s*<\/wpt>/g;
+          const routeRegex = /<rtept lat="([-.\d]+)" lon="([-.\d]+)">\s*<name>([^<]+)<\/name>\s*<\/rtept>/g;
+          
+          const waypoints = [];
+          let match;
+          while ((match = waypointRegex.exec(fileContent)) !== null) {
+            waypoints.push({
+              latitude: parseFloat(match[1]),
+              longitude: parseFloat(match[2]),
+              name: match[3],
+              description: match[4],
+              rating: parseInt(match[5], 10),
+            });
+          }
+
+          let route = [];
+          let routeMatch;
+          while ((routeMatch = routeRegex.exec(fileContent)) !== null) {
+            route.push({
+              latitude: parseFloat(routeMatch[1]),
+              longitude: parseFloat(routeMatch[2]),
+            });
+          }
+
+          setWaypoints(waypoints);
+          setRoute(route);
+
+          if (waypoints.length > 0) {
+            const firstPoint = waypoints[0];
+            setInitialRegion({
+              latitude: firstPoint.latitude,
+              longitude: firstPoint.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            });
+          } else if (route.length > 0) {
+            const firstPoint = route[0];
+            setInitialRegion({
+              latitude: firstPoint.latitude,
+              longitude: firstPoint.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            });
+          } else {
+            // If there are no waypoints or
+            setInitialRegion({
+              latitude: 34.0522,
+              longitude: -118.2437,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            });
+          }
+
+          console.log(waypoints);
+          console.log(fullPath);
+          console.log(fileContent);
+        } catch (error) {
+          console.error('Error loading GPX data:', error);
+        }
+      };
+  
+      loadGPXData();
+    }, [fileName, directory]);
+    
+    //Don't render until map is initlized
+    if (!initialRegion) return null;
+
+    return (
+      <View style={{
+        width: '90%', 
+        height: 120, 
+        borderWidth: 1, 
+        borderColor: 'gray', 
+        borderRadius: 5, 
+        overflow: 'hidden', 
+      }}>
+        <MapView
+          style={{ flex: 1 }}
+          scrollEnabled={false}
+          zoomEnabled={false}
+          pitchEnabled={false}
+          rotateEnabled={false}
+          initialRegion={initialRegion}>
+          {waypoints.map((point, index) => (
+            <Marker key={index} coordinate={{ latitude: point.latitude, longitude: point.longitude }} title={point.title} />
+          ))}
+          {route.length > 1 && (
+            <Polyline coordinates={route} strokeColor="#000" strokeWidth={2} />
+          )}
+        </MapView>
+      </View>
+    );
+  };
+
+
   const renderItem = ({ item }) => (
     <View style={[
       styles.itemContainer,
@@ -362,7 +470,7 @@ const GPXFileList = ({ navigation }) => {
       </TouchableOpacity>
       {expandedItem === item && (
         <View style={styles.expandedArea}>
-          <View style={styles.boxOutline}></View>
+          <MapPreview fileName={item} directory={activeDirectory} />
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={() => handleUseFile(item)}>
               <Text style={styles.buttonText}>Use</Text>
@@ -425,10 +533,10 @@ const styles = StyleSheet.create({
     fontSize: 18, 
   },
   expandedArea: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
     padding: 10,
-    paddingTop: 20, 
+    paddingTop: 10, 
   },
   boxOutline: {
     width: '50%', 
@@ -439,8 +547,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    marginTop: 10
   },
   buttonText: {
     marginHorizontal: 5,
