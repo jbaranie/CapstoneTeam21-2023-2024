@@ -44,7 +44,7 @@ const schemaComplianceEdit = async ( uri ) => {
     //segment file contents into lines and manage accordingly
     let fileContents = await FileSystem.readAsStringAsync(uri);
     let fileData = fileContents.split(/[\r\n]+/).map((text) => {return text.trim();});
-    console.log(fileData);
+    //console.log(fileData);
     let wptStarts = [], wptEnds = [], wptList = [], newContents = [];
     var i;
     for (i = 0; i < fileData.length; i++) {
@@ -477,9 +477,9 @@ const GPXFileList = ({ navigation }) => {
             });
           }
 
-          console.log(waypoints);
-          console.log(fullPath);
-          console.log(fileContent);
+          //console.log(waypoints);
+          //console.log(fullPath);
+          //console.log(fileContent);
         } catch (error) {
           console.error('Error loading GPX data:', error);
         }
