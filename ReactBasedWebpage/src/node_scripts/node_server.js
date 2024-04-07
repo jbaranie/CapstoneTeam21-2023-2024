@@ -77,8 +77,8 @@ app.listen(port, () => {
 
 
 
-//Server Sends GPX Files to the Client/////////////////////////////////////////////////////////////////////////////////////
-// Endpoint to list all files in 'uploads' directory
+//Server List Links to All Files to the Client/////////////////////////////////////////////////////////////////////////////////////
+// Endpoint to list all files in 'user_uploads' directory
 app.get('/files', (req, res) => {
   fs.readdir(baseDirectory, (err, files) => {
     if (err) {
@@ -90,7 +90,6 @@ app.get('/files', (req, res) => {
 });
 
 // Serve static files from 'user_uploads' directory
-
 app.use('/download', express.static(baseDirectory));
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Database Calls
@@ -100,7 +99,7 @@ const { init } = require('./database_scripts//database_startup_scripts');
 //Tests and creates Database if it does not exist
 init()
   .catch(err => {
-    console.error('Failed to ensure database exists:', err);
+    console.error('Failed to initiate database...', err);
     console.log('Shutting down node server');
     //process.exit(1);
   });
