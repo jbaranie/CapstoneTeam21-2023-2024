@@ -1,5 +1,11 @@
 {
   "expo": {
+    "splash": {
+      "image": "./assets/splash/splash@2x.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#E5E7DC" 
+    },
+
     "name": "GPXImport",
     "slug": "GPXImport",
     "version": "1.0.5",
@@ -15,6 +21,7 @@
         "android.permission.CAMERA"
       ],
       "package": "com.capstone21.GPXImport",
+      "icon": "./assets/icons/ic_launcher.png",
       "config": {
         "googleMaps": {
           "apiKey": "process.env.GOOGLE_API_ANDROID"
@@ -56,6 +63,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.capstone21.GPXImport",
+      "icon": "./assets/icons/ic_launcher.png",
       "config": {
         "googleMapsApiKey": "process.env.GOOGLE_API_IOS"
       }

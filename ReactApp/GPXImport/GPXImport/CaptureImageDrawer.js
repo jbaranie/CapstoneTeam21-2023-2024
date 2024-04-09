@@ -5,12 +5,16 @@ import * as Location from 'expo-location';
 import * as MediaLibrary from 'expo-media-library';
 import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
+import * as FileSystem from 'expo-file-system';
+
+import { recordActiveFile } from './GPXWaypoints'; 
 
 const CaptureImageDrawer = ({ navigation }) => {
   //Camera state
   const [type, setType] = useState(CameraType.back);
   //Data state
   const [photo, setPhoto] = useState();
+  const [isRecording, setIsRecord] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
   //Permissions state
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -52,12 +56,23 @@ const CaptureImageDrawer = ({ navigation }) => {
     };
   }, []);
 
+  //state for recording
+  const getRecordState = async () => {
+    let lockInfo = await FileSystem.getInfoAsync(`${FileSystem.documentDirectory}${recordActiveFile}`);
+    setIsRecord(lockInfo.exists);
+    //console.log(lockInfo.exists);
+  }
+  useEffect(() => {
+    getRecordState();
+  }, [photo]);
+
   //gesture navigation items
   const navigateUp = () => {
     navigation.navigate("GPX Files");
   }
-  const navigateDown = () => {
-    navigation.navigate("Home");
+  const navigateDown = (passPhoto = undefined) => {
+    if (passPhoto !== undefined) navigation.navigate("Home", passPhoto);
+    else navigation.navigate("Home");
   }
   const navUp = Gesture.Fling()
     .direction(Directions.UP)
@@ -85,17 +100,34 @@ const CaptureImageDrawer = ({ navigation }) => {
         exif:true,
         additionalExif:{LocationInfo : userLocation}
       });
-      //console.log(image);
-      console.log(image.exif.LocationInfo);
+      console.log(image);
       setPhoto(image);
     }
   }
+  const saveWaypoint = async () => {
+    if (!photo) return;
+    let bundle = {waypointPhoto: photo.exif, waypointDesc: photo.uri};
+    //await savePhoto();
+    setPhoto(undefined);
+    //console.log(bundle);
+    runOnJS(navigateDown(bundle));
+  }
+
+  //Note: this function has been removed due to an issue where the photo does not keep location info when saved
   const savePhoto = async () => {
     if (!photo) return;
     MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
       setPhoto(undefined);
     });
   }
+
+  const saveButton = (onSave, saveTarget) => {
+    return (
+      <TouchableOpacity style={styles.button} onPress={onSave}>
+        <Text style={styles.text}>Save {saveTarget}</Text>
+      </TouchableOpacity>
+    );
+  };
 
   //render returns
   if (hasCameraPermission === undefined ||
@@ -119,16 +151,14 @@ const CaptureImageDrawer = ({ navigation }) => {
       </View>
     )
   } else if (photo) {
-    const saveButton = (
-      <TouchableOpacity style={styles.button} onPress={savePhoto}>
-        <Text style={styles.text}>Save Image</Text>
-      </TouchableOpacity>
-    );
+    const saveA = ((isRecording === true) ? saveButton(saveWaypoint, "Waypoint") : null);
+    //const saveB = saveButton(savePhoto, "Photo");
     return (
       <View style={styles.container}>
         <Image style={styles.preview} source={{ uri: photo.uri }} />
         <View style={styles.buttonContainer}>
-          {hasMediaLibraryPermission ? saveButton : null}
+          {saveA}
+          {/*saveB*/}
           <TouchableOpacity style={styles.button} onPress={() => setPhoto(undefined)}>
             <Text style={styles.text}>Discard Image</Text>
           </TouchableOpacity>
