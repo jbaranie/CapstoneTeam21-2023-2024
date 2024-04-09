@@ -21,7 +21,10 @@
         "android.permission.CAMERA"
       ], 
       "package": "com.capstone21.GPXImport",
-      "icon": "./assets/icons/ic_launcher.png"
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/appIcon.png",
+        "backgroundColor": "#E5E7DC"
+      }
     },
     "plugins": [
       [
@@ -58,7 +61,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.capstone21.GPXImport",
-      "icon": "./assets/icons/ic_launcher.png"
+      "icon": "./assets/icons/appIcon.png"
     },
     "owner": "capstoneteam21"
   }
