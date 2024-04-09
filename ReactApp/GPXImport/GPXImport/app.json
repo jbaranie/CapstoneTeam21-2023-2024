@@ -19,9 +19,14 @@
         "android.permission.ACCESS_MEDIA_LOCATION",
         "android.permission.RECORD_AUDIO",
         "android.permission.CAMERA"
-      ], 
+      ],
       "package": "com.capstone21.GPXImport",
-      "icon": "./assets/icons/ic_launcher.png"
+      "icon": "./assets/icons/ic_launcher.png",
+      "config": {
+        "googleMaps": {
+          "apiKey": "process.env.GOOGLE_API_ANDROID"
+        }
+      }
     },
     "plugins": [
       [
@@ -58,7 +63,10 @@
     },
     "ios": {
       "bundleIdentifier": "com.capstone21.GPXImport",
-      "icon": "./assets/icons/ic_launcher.png"
+      "icon": "./assets/icons/ic_launcher.png",
+      "config": {
+        "googleMapsApiKey": "process.env.GOOGLE_API_IOS"
+      }
     },
     "owner": "capstoneteam21"
   }
