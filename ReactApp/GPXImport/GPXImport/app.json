@@ -1,5 +1,11 @@
 {
   "expo": {
+    "splash": {
+      "image": "./assets/splash/splash@2x.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#E5E7DC" 
+    },
+
     "name": "GPXImport",
     "slug": "GPXImport",
     "version": "1.0.5",
@@ -13,8 +19,9 @@
         "android.permission.ACCESS_MEDIA_LOCATION",
         "android.permission.RECORD_AUDIO",
         "android.permission.CAMERA"
-      ],
-      "package": "com.capstone21.GPXImport"
+      ], 
+      "package": "com.capstone21.GPXImport",
+      "icon": "./assets/icons/ic_launcher.png"
     },
     "plugins": [
       [
@@ -50,7 +57,8 @@
       }
     },
     "ios": {
-      "bundleIdentifier": "com.capstone21.GPXImport"
+      "bundleIdentifier": "com.capstone21.GPXImport",
+      "icon": "./assets/icons/ic_launcher.png"
     },
     "owner": "capstoneteam21"
   }
