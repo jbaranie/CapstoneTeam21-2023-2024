@@ -1,7 +1,9 @@
-//CycleAppTab.js
-//This file contains code for the area in index.html when the user hits "Images"
-//It also cotains the code to import an jpeg file.
+//home_tab.js
+//This component is rendered as the home page, containing a map for route rendering and creation/editing
+//It also contains the code to import an GPX file for direct rendering.
 //Coder: Jan Baraniecki
+//Modified by: Larry Huang
+
 import React, { useState } from 'react';
 import ReactGoogleMapAPI from '../scripts/react_google_map_api';
 import GPXParseLocal from '../scripts/gpx_parser_local.js';

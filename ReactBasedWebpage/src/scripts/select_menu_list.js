@@ -1,5 +1,7 @@
+// select_menu_list.js
+// Provides toggle buttons for displaying different parts of a GPX file's data
 //
-//
+//Coder: Larry Huang
 //
 
 import { useState, useEffect } from 'react';

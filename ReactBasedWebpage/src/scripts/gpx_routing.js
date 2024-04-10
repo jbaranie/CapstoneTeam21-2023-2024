@@ -1,11 +1,20 @@
+// gpx_routing.js
+// Provides an object that acts on a sibling Map and parent APIProvider to render route navigation
 //
 //
+//Coder: Larry Huang
 //
 
 import React, { useEffect, useState } from 'react';
 import { useMapsLibrary, useMap } from '@vis.gl/react-google-maps';
 
-export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{}}) => {  
+/***
+ * Arguments passed to Routing component:
+ *  gpxData: JSONobj GPX file data
+ *  gpxCategory: JSONobj true/false of rendering
+ *  markerOutputCall: function called when route is rendered, to hook into displayed route point data
+ */
+export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{} }) => {  
   //Routes and tracks will rendered using different methods
     // A: routes will use the directionsService to display a bike-usable path
     // B: tracks can use their existing coordinate data due to the higher number of points and real-point data
@@ -26,7 +35,7 @@ export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{}}) => {
     var newPointList = [];
     //generate points from gpxData obj passed in [TODO figure out how to select route in multi-route gpx]
     if (gpxData.gpxData !== undefined) { //&& gpxData.gpxData.routes[0].points
-      console.log(gpxData);
+      //console.log(gpxData);
       for (var i = 0; i < gpxData.gpxData.routes[0].points.length; i = i + 1) {
         newPointList.push(gpxData.gpxData.routes[0].points[i].LatLng);
       }
@@ -51,7 +60,7 @@ export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{}}) => {
     if (!directionsService || !directionsRenderer) return;
     
     if (pointList.length < 2) {
-      console.log("There are not enough points to render a route.");
+      //console.log("There are not enough points to render a route.");
       return;
     }
 
@@ -99,6 +108,9 @@ export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{}}) => {
 }
 
 //Return list of renderable Markers to display on the map with the input route.
-export const RouteMarkers = ({ markerInput }) => {}
+export const RouteMarkers = ({ markerInput }) => {
+  console.log(markerInput);
+  return (<></>);
+}
 
 export default Routing;

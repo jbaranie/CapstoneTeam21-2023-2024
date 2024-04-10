@@ -1,4 +1,4 @@
-// ReactGoogleMapAPI.js
+// react_google_map_api.js
 // Loads the Google Map onto the webpage.
 //
 //Coder: Jan Baraniecki
@@ -17,7 +17,7 @@ const ReactGoogleMapAPI = (gpxData, gpxCategory) => {
       <Map
         id="reactGoogleMap" 
         defaultCenter={{lat: 35.1988, lng: -111.652}}
-        defaultZoom={15}
+        defaultZoom={14}
       >
         <RouteMarkers
           markerInput={markerList}
