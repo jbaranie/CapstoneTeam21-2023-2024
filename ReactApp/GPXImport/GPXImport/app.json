@@ -6,7 +6,7 @@
       "backgroundColor": "#E5E7DC" 
     },
 
-    "name": "GPXImport",
+    "name": "Treklin",
     "slug": "GPXImport",
     "version": "1.0.5",
     "assetBundlePatterns": [
@@ -21,7 +21,10 @@
         "android.permission.CAMERA"
       ],
       "package": "com.capstone21.GPXImport",
-      "icon": "./assets/icons/ic_launcher.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/appIcon.png",
+        "backgroundColor": "#E5E7DC"
+      },
       "config": {
         "googleMaps": {
           "apiKey": "process.env.GOOGLE_API_ANDROID"
@@ -63,7 +66,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.capstone21.GPXImport",
-      "icon": "./assets/icons/ic_launcher.png",
+      "icon": "./assets/icons/appIcon.png",
       "config": {
         "googleMapsApiKey": "process.env.GOOGLE_API_IOS"
       }
