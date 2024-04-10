@@ -244,9 +244,9 @@ const GPXFileList = ({ navigation }) => {
     This is currently disabled as the user does not need this. Might be useful again in 
     the future so I am just commenting it out. 
   */
-  const logGPXContent = async (fileName) => {
+  const logGPXContent = async (fileName, directory) => {
     try {
-      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
+      const fileUri = `${FileSystem.documentDirectory}${directory}/${fileName}`;
       const content = await FileSystem.readAsStringAsync(fileUri);
       console.log(content); 
     } catch (error) {
@@ -275,7 +275,7 @@ const GPXFileList = ({ navigation }) => {
   };
 
   // Asks user to confirm deletion of all files
-  const deleteAllFiles = async () => {
+  const deleteAllFiles = async (directory) => {
     Alert.alert(
       "Confirm Delete",
       "Are you sure you want to delete all GPX files?",
@@ -285,17 +285,17 @@ const GPXFileList = ({ navigation }) => {
           onPress: () => console.log("Deletion cancelled"),
           style: "cancel"
         },
-        { text: "Yes", onPress: () => deleteAllFilesConfirmed() }
+        { text: "Yes", onPress: () => deleteAllFilesConfirmed(directory) }
       ],
       { cancelable: false }
     );
   };
   
   // Deletes all files
-  const deleteAllFilesConfirmed = async () => {
+  const deleteAllFilesConfirmed = async (directory) => {
     try {
       for (const fileName of gpxFiles) {
-        await FileSystem.deleteAsync(`${FileSystem.documentDirectory}${fileName}`);
+        await FileSystem.deleteAsync(`${FileSystem.documentDirectory}${directory}/${fileName}`);
       }
       refreshFileList(); // Refresh the list after deleting all files
     } catch (error) {
@@ -416,17 +416,18 @@ const GPXFileList = ({ navigation }) => {
   const MapPreview = ({ fileName, directory }) => {
     const [route, setRoute] = useState([]);
     const [waypoints, setWaypoints] = useState([]);
+    const [tracks, setTracks] = useState([]);
     const [initialRegion, setInitialRegion] = useState(null);
-  
+
     useEffect(() => {
       const loadGPXData = async () => {
         try {
           let fullPath = `${FileSystem.documentDirectory}${directory}/${fileName}`;
           const fileContent = await FileSystem.readAsStringAsync(fullPath);
-          //Will need to change this when tracks get added
           const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)">\s*<name>([^<]+)<\/name>\s*<desc>([^<]+)<\/desc>\s*<rating>(\d+)<\/rating>\s*<id>\d+<\/id>\s*<\/wpt>/g;
           const routeRegex = /<rtept lat="([-.\d]+)" lon="([-.\d]+)">\s*<name>([^<]+)<\/name>\s*<\/rtept>/g;
-          
+          const trackRegex = /<trkpt lat="([-.\d]+)" lon="([-.\d]+)">/g;
+
           const waypoints = [];
           let match;
           while ((match = waypointRegex.exec(fileContent)) !== null) {
@@ -448,8 +449,18 @@ const GPXFileList = ({ navigation }) => {
             });
           }
 
+          let tracks = [];
+          let trackMatch;
+          while ((trackMatch = trackRegex.exec(fileContent)) !== null) {
+            tracks.push({
+              latitude: parseFloat(trackMatch[1]),
+              longitude: parseFloat(trackMatch[2]),
+            });
+          }
+
           setWaypoints(waypoints);
           setRoute(route);
+          setTracks(tracks);
 
           if (waypoints.length > 0) {
             const firstPoint = waypoints[0];
@@ -461,6 +472,14 @@ const GPXFileList = ({ navigation }) => {
             });
           } else if (route.length > 0) {
             const firstPoint = route[0];
+            setInitialRegion({
+              latitude: firstPoint.latitude,
+              longitude: firstPoint.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            });
+          } else if (tracks.length > 0) {
+            const firstPoint = tracks[0];
             setInitialRegion({
               latitude: firstPoint.latitude,
               longitude: firstPoint.longitude,
@@ -512,6 +531,9 @@ const GPXFileList = ({ navigation }) => {
           ))}
           {route.length > 1 && (
             <Polyline coordinates={route} strokeColor="#000" strokeWidth={2} />
+          )}
+          {tracks.length > 1 && (
+            <Polyline coordinates={tracks} strokeColor="blue" strokeWidth={2} />
           )}
         </MapView>
       </View>
@@ -591,7 +613,7 @@ const GPXFileList = ({ navigation }) => {
       <Button title="Import GPX File" onPress={importGPXFile} />
       <Button title="Import Image" onPress={pickImage} />
       {gpxFiles.length >= 2 && (
-        <Button title="Delete All" onPress={deleteAllFiles} />
+        <Button title="Delete All" onPress={() => deleteAllFiles(activeDirectory)} />
       )}
     </View> 
     //<GestureDetector gesture={twoFlingNav}>
