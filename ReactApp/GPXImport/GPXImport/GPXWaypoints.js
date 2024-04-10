@@ -5,7 +5,7 @@ import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
 import FlashMessage from 'react-native-flash-message';
 import { showMessage } from 'react-native-flash-message';
-import MapView, { Marker, Polyline } from 'react-native-maps';
+import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import * as ScreenOrient from 'expo-screen-orientation';
 import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
@@ -1315,6 +1315,8 @@ const GPXWaypoints = ({ navigation, route }) => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
+        provider={PROVIDER_GOOGLE}
+        scrollDuringRotateOrZoomEnabled={false}
         mapPitch={0}
         mapRotation={mapRotation}
         onRegionChangeComplete={(region) => {
