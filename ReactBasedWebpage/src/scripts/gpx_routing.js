@@ -25,25 +25,24 @@ export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{}}) => {
   useEffect(() => {
     var newPointList = [];
     //generate points from gpxData obj passed in [TODO figure out how to select route in multi-route gpx]
-    if (gpxData.gpxData) { //&& gpxData.gpxData.routes[0].points
-      //console.log(gpxData.gpxData.routes[0].points);
+    if (gpxData.gpxData !== undefined) { //&& gpxData.gpxData.routes[0].points
+      console.log(gpxData);
       for (var i = 0; i < gpxData.gpxData.routes[0].points.length; i = i + 1) {
         newPointList.push(gpxData.gpxData.routes[0].points[i].LatLng);
       }
     }
-    //TODO make decsion based upon gpxCategory to render or not render
-    if (gpxCategory === "ROUTE") {} else if (gpxCategory === "TRACK") {} else if (gpxCategory === "WAYPT") {} else {}
+    //console.log(gpxCategory);
     
     setPointList(newPointList);
     markerOutputCall(newPointList);
-  }, [gpxData, markerOutputCall, gpxCategory]);
+  }, [gpxData, markerOutputCall]);
 
   //target the current map object and add a route service and renderer
   useEffect(() => {
     if (!routesLibrary || !map) return;
     setDirectionsService(new routesLibrary.DirectionsService());
     let newRenderer = new routesLibrary.DirectionsRenderer({map});
-    newRenderer.setOptions({suppressMarkers: true});
+    //newRenderer.setOptions({suppressMarkers: true});
     setDirectionsRenderer(newRenderer);
   }, [routesLibrary, map]);
   
@@ -51,40 +50,44 @@ export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{}}) => {
   useEffect(() => {
     if (!directionsService || !directionsRenderer) return;
     
-    console.log(pointList);
-    
     if (pointList.length < 2) {
       console.log("There are not enough points to render a route.");
       return;
     }
 
-    var startPoint = pointList.shift();
-    var endPoint = pointList.pop();
-    var middlePointsList = [];
-    if (pointList.length > 2) {
-      for (var i = 0; i < pointList.length; i = i + 1) {
-        middlePointsList.push({location: pointList[i]});
-      }
-    }
-    
-    //demo a default route
-    directionsService
-      .route({
-        origin: startPoint,
-        destination: endPoint,
-        waypoints: middlePointsList,
-        optimizeWaypoints: true,
-        travelMode: "BICYCLING",
-        provideRouteAlternatives: false
-      })
-      .then(response => {
-        directionsRenderer.setDirections(response);
-        setRoutes(response.routes);
-        console.log("Set map route");
-      });
+    if (gpxData.gpxCategory.route) {//plot route
+      console.log("Render route = true;");
 
-    return () => directionsRenderer.setMap(null);
-  }, [directionsService, directionsRenderer, pointList]);
+      var startPoint = pointList.shift();
+      var endPoint = pointList.pop();
+      var middlePointsList = [];
+      if (pointList.length > 2) {
+        for (var i = 0; i < pointList.length; i = i + 1) {
+          middlePointsList.push({location: pointList[i]});
+        }
+      }
+    
+      directionsRenderer.setMap(map);
+      directionsService
+        .route({
+          origin: startPoint,
+          destination: endPoint,
+          waypoints: middlePointsList,
+          optimizeWaypoints: true,
+          travelMode: "BICYCLING",
+          provideRouteAlternatives: false
+        })
+        .then(response => {
+          directionsRenderer.setDirections(response);
+          setRoutes(response.routes);
+          console.log("Set map route; bugged if not visible.");
+        });
+  
+      return () => directionsRenderer.setMap(null);
+    } else {//don't plot route
+      console.log("Render route = false;");
+    }
+  }, [map, directionsService, directionsRenderer, pointList, gpxData.gpxCategory]);
 
   // Update direction route
   useEffect(() => {
