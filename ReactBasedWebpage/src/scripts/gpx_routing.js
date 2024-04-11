@@ -13,7 +13,7 @@ import { useMapsLibrary, useMap } from '@vis.gl/react-google-maps';
  *  gpxCategory: JSONobj true/false of rendering
  *  markerOutputCall: function called when route is rendered, to hook into displayed route point data
  */
-export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{} }) => {  
+export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) => {  
   //Routes and tracks will rendered using different methods
     // A: routes will use the directionsService to display a bike-usable path
     // B: tracks can use their existing coordinate data due to the higher number of points and real-point data
@@ -33,29 +33,34 @@ export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{} }) => {
   useEffect(() => {
     var newPointList = [];
     //generate points from gpxData obj passed in [TODO figure out how to select route in multi-route gpx]
-    if (gpxData.gpxData !== undefined) { //&& gpxData.gpxData.routes[0].points
-      //console.log(gpxData);
-      for (var i = 0; i < gpxData.gpxData.routes[0].points.length; i = i + 1) {
-        newPointList.push(gpxData.gpxData.routes[0].points[i].LatLng);
+    console.log(gpxData);
+    try {
+      for (var i = 0; i < gpxData.routes[0].points.length; i = i + 1) {
+        newPointList.push(gpxData.routes[0].points[i].LatLng);
       }
+      setPointList(newPointList);
+      markerOutputCall(newPointList);
+    } catch (error) {
+      //the above causes a startup error with the default object; try-catch was needed to isolate that error
+      console.log("Point lists were not updated or sent out.");
     }
-    //console.log(gpxCategory);
-    
-    setPointList(newPointList);
-    markerOutputCall(newPointList);
   }, [gpxData, markerOutputCall]);
 
   //target the current map object and add a route service and renderer
   useEffect(() => {
     if (!routesLibrary || !map) return;
     setDirectionsService(new routesLibrary.DirectionsService());
-    let newRenderer = new routesLibrary.DirectionsRenderer({map});
-    newRenderer.setOptions({
-      suppressMarkers: false,
-      draggable: true
-    });
-    setDirectionsRenderer(newRenderer);
+    setDirectionsRenderer(new routesLibrary.DirectionsRenderer({map}));
   }, [routesLibrary, map]);
+
+  //add a system to modify the directionRenderer based upon settings at top of screen
+  useEffect(() => {
+    if (!directionsRenderer) return;
+    directionsRenderer.setOptions({
+      suppressMarkers: false,
+      draggable: gpxCategory.routeDrag
+    });
+  }, [directionsRenderer, gpxCategory.routeDrag]);
 
   //add save listener on directions renderer for user changes
   useEffect(() => {
@@ -75,8 +80,8 @@ export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{} }) => {
       return;
     }
 
-    //TODO fix this I'm terrible with the nesting practices of passing properties
-    if (gpxData.gpxCategory.route) {//plot route
+    //plot points
+    if (gpxCategory.route) {//plot route
       console.log("Render route = true;");
 
       var startPoint = pointList.shift();
@@ -108,7 +113,7 @@ export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{} }) => {
     } else {//don't plot route
       console.log("Render route = false;");
     }
-  }, [map, directionsService, directionsRenderer, pointList, gpxData.gpxCategory.route]);
+  }, [map, directionsService, directionsRenderer, pointList, gpxCategory.route]);
 
   // Update direction route
   useEffect(() => {
@@ -120,12 +125,13 @@ export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{} }) => {
 }
 
 //Return list of renderable Markers to display on the map with the input route.
-export const RouteMarkers = (markerInput=[]) => {
+export const RouteMarkers = ({markerInput=[]}) => {
   const [markerMap, setMarkerMap] = useState([]);
   useEffect(() => {
-    console.log("Marker component has marker data.");
-    console.log(markerInput);
-    let newMarkerComponents = Array(markerInput).map(item=><></>);
+    if (markerInput && markerInput.length > 0) {
+      console.log("Marker component has marker data.");
+      console.log(markerInput);
+    }
   }, [markerInput]);
   return (<></>);
 }

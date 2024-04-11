@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 //Component used to select routes, tracks, or waypoints display on/off
 const SelectMenuComponent = ({ saveCall = undefined }) => {
   const [routeDisplay, setRouteDisplay] = useToggle(true);
+  const [routeDraggable, setDraggable] = useToggle(true);
   const [trackDisplay, setTrackDisplay] = useToggle(false);
   const [wayptDisplay, setWayptDisplay] = useToggle(false);
 
@@ -16,12 +17,13 @@ const SelectMenuComponent = ({ saveCall = undefined }) => {
     if (saveCall === undefined) return;
     let saveObj = {
       route: routeDisplay.valueOf(),
+      routeDrag: routeDraggable.valueOf(),
       track: trackDisplay.valueOf(),
       waypt: wayptDisplay.valueOf()
     };
-    console.log(saveObj);
+    //console.log(saveObj);
     saveCall(saveObj);
-  }, [routeDisplay, trackDisplay, wayptDisplay, saveCall]);
+  }, [routeDisplay, routeDraggable, trackDisplay, wayptDisplay, saveCall]);
 
   let toggleContents = [
     {
@@ -36,6 +38,15 @@ const SelectMenuComponent = ({ saveCall = undefined }) => {
     {
       id: 1,
       displayText: [
+        "Protect Displayed Route from Marker-Drag Editing",
+        "Enable Editing Route by Dragging Markers"
+      ],
+      val: routeDraggable,
+      func: setDraggable
+    },
+    {
+      id: 2,
+      displayText: [
         "Hide Track Lines",
         "Show Track Lines"
       ],
@@ -43,7 +54,7 @@ const SelectMenuComponent = ({ saveCall = undefined }) => {
       func: setTrackDisplay
     },
     {
-      id: 2,
+      id: 3,
       displayText: [
         "Hide Waypoints",
         "Show Waypoints"

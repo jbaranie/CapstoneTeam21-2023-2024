@@ -7,11 +7,14 @@ import { useEffect, useState } from "react";
 
 const EditRouteComponent = ({ markerList, saveDataHook }) => {
   const [currentModified, setModified] = useState(false);
-  
+
   useEffect(() => {
-    console.log("Editable component has marker data!");
-    console.log(markerList);
+    if (markerList && markerList.length > 0) {
+      console.log("Editable component has marker data!");
+      console.log(markerList);
+    }
   }, [markerList]);
+
   return (<></>);
 }
 

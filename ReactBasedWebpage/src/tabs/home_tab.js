@@ -13,6 +13,7 @@ import EditRouteComponent from '../scripts/edit_route_component.js';
 const HomeTab = () => {
   const [gpxCategoryObj, setGPXcategory] = useState({
     route: true,
+    routeDrag: false,
     track: false,
     waypt: false
   });

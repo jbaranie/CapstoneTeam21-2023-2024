@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 import { APIProvider, Map } from '@vis.gl/react-google-maps';
 import Routing, { RouteMarkers } from './gpx_routing';
 
-const ReactGoogleMapAPI = (gpxData, gpxCategory, markerList=[], setMarkers=(data)=>{console.log(data);}) => {
+const ReactGoogleMapAPI = ({gpxData, gpxCategory, markerList=[], setMarkers=(data)=>{console.log(data);}}) => {
   //hooks for things passed between routing component and map sub-components
   //const [markerList, setMarkers] = useState([]);
 
