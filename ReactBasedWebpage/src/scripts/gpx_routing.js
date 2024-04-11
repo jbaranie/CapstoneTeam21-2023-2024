@@ -1,7 +1,6 @@
 // gpx_routing.js
 // Provides an object that acts on a sibling Map and parent APIProvider to render route navigation
 //
-//
 //Coder: Larry Huang
 //
 
@@ -51,9 +50,21 @@ export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{} }) => {
     if (!routesLibrary || !map) return;
     setDirectionsService(new routesLibrary.DirectionsService());
     let newRenderer = new routesLibrary.DirectionsRenderer({map});
-    //newRenderer.setOptions({suppressMarkers: true});
+    newRenderer.setOptions({
+      suppressMarkers: false,
+      draggable: true
+    });
     setDirectionsRenderer(newRenderer);
   }, [routesLibrary, map]);
+
+  //add save listener on directions renderer for user changes
+  useEffect(() => {
+    if (!directionsRenderer) return;
+
+    directionsRenderer.addListener("directions_changed", ()=>{
+      console.log((directionsRenderer.getDirections()));
+    });
+  }, [directionsRenderer]);
   
   // on changes to the routing and/or rendering service objects, if both are present, acquire routing data from API (and return render-clearing cleanup)
   useEffect(() => {
@@ -64,6 +75,7 @@ export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{} }) => {
       return;
     }
 
+    //TODO fix this I'm terrible with the nesting practices of passing properties
     if (gpxData.gpxCategory.route) {//plot route
       console.log("Render route = true;");
 
@@ -96,7 +108,7 @@ export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{} }) => {
     } else {//don't plot route
       console.log("Render route = false;");
     }
-  }, [map, directionsService, directionsRenderer, pointList, gpxData.gpxCategory]);
+  }, [map, directionsService, directionsRenderer, pointList, gpxData.gpxCategory.route]);
 
   // Update direction route
   useEffect(() => {
@@ -108,8 +120,13 @@ export const Routing = ({ gpxData, gpxCategory, markerOutputCall=()=>{} }) => {
 }
 
 //Return list of renderable Markers to display on the map with the input route.
-export const RouteMarkers = ({ markerInput }) => {
-  console.log(markerInput);
+export const RouteMarkers = (markerInput=[]) => {
+  const [markerMap, setMarkerMap] = useState([]);
+  useEffect(() => {
+    console.log("Marker component has marker data.");
+    console.log(markerInput);
+    let newMarkerComponents = Array(markerInput).map(item=><></>);
+  }, [markerInput]);
   return (<></>);
 }
 

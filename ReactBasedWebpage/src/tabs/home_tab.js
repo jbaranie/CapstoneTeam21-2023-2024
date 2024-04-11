@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import ReactGoogleMapAPI from '../scripts/react_google_map_api';
 import GPXParseLocal from '../scripts/gpx_parser_local.js';
 import SelectMenuComponent from '../scripts/select_menu_list.js';
+import EditRouteComponent from '../scripts/edit_route_component.js';
 
 const HomeTab = () => {
   const [gpxCategoryObj, setGPXcategory] = useState({
@@ -23,6 +24,7 @@ const HomeTab = () => {
     "tracks": [],
     "waypoints": []
   }*/
+  const [markerList, setMarkers] = useState([]);
 
   const saveDataHook = (gpxFileData) => {
     //console.log(gpxFileData);
@@ -34,11 +36,21 @@ const HomeTab = () => {
         <p>Welcome to the Map Page of our experimental route website.</p>
         <p>This area will be used to view route content and to plan routes using markers.</p> 
         <GPXParseLocal saveDataHook={saveDataHook}/>
-        <SelectMenuComponent saveCall={setGPXcategory}/>
         <p></p>
+        <button>Save</button>
+        <p></p>
+        <button>Export GPX</button>
+        <p></p>
+        <SelectMenuComponent saveCall={setGPXcategory}/>
+        <EditRouteComponent
+          markerList={markerList}
+          saveDataHook={saveDataHook}
+        />
         <ReactGoogleMapAPI
           gpxData={fileContents}
           gpxCategory={gpxCategoryObj}
+          markerList={markerList}
+          setMarkers={setMarkers}
         />
     </div>
   );
