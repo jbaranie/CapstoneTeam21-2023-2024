@@ -109,6 +109,19 @@ async function ensureSchemaExists() {
                 FOREIGN KEY (segment_id) REFERENCES "${schemaName}".track_segments(segment_id)
             );
         `);
+        // Create waypoints table
+        console.log('Creating Waypoints Table...');
+        await adminClient.query(`
+            CREATE TABLE IF NOT EXISTS "${schemaName}".waypoints (
+                waypoint_id SERIAL PRIMARY KEY,
+                track_id INT NOT NULL,
+                name VARCHAR(255),
+                latitude NUMERIC(10, 6),
+                longitude NUMERIC(10, 6),
+                description TEXT,
+                FOREIGN KEY (track_id) REFERENCES "${schemaName}".tracks(track_id)
+            );
+        `);
        console.log('Schema and Tables ensured successfully.');
     } else {
       console.log(`Schema ${schemaName} and Tables already exists.`);
