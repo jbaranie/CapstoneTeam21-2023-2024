@@ -114,7 +114,7 @@ const GPXFileList = ({ navigation }) => {
   const importGPXFile = async () => {
     try {
       // Open the document picker for .gpx files
-      const result = await DocumentPicker.getDocumentAsync({ type: 'application/gpx+xml', copyToCacheDirectory: true }); // Change the type to 'application/gpx+xml' to only allow GPX files
+      const result = await DocumentPicker.getDocumentAsync({ type: '*/*', copyToCacheDirectory: true }); // Change the type to 'application/gpx+xml' to only allow GPX files
       //console.log('Document Picker Result:', result);
   
       // Check if a file was selected and not canceled
