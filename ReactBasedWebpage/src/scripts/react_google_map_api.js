@@ -4,14 +4,12 @@
 //Coder: Jan Baraniecki
 //Modified by: Larry Huang
 
-import React, { useState } from 'react';
+import React from 'react';
 import { APIProvider, Map } from '@vis.gl/react-google-maps';
-import Routing, { RouteMarkers } from './gpx_routing';
+import Routing from './gpx_routing';
 
-const ReactGoogleMapAPI = ({gpxData, gpxCategory, markerList=[], setMarkers=(data)=>{console.log(data);}}) => {
-  //hooks for things passed between routing component and map sub-components
-  //const [markerList, setMarkers] = useState([]);
-
+const ReactGoogleMapAPI = ({gpxData, gpxCategory, setMarkers=(data)=>{console.log(data);}}) => {
+  //Handles the API key from the web server's environment
   return (
     <APIProvider apiKey={process.env.REACT_APP_GOOGLEMAPS_KEY}>
       <Map
@@ -19,9 +17,6 @@ const ReactGoogleMapAPI = ({gpxData, gpxCategory, markerList=[], setMarkers=(dat
         defaultCenter={{lat: 35.1988, lng: -111.652}}
         defaultZoom={14}
       >
-        <RouteMarkers
-          markerInput={markerList}
-        />
       </Map>
       <Routing
         gpxData={gpxData}

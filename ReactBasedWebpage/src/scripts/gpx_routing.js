@@ -31,6 +31,7 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
 
   //modify point list to an appropriate setting when the data passed to the router
   useEffect(() => {
+    if (gpxCategory.routeDrag) return;
     var newPointList = [];
     //generate points from gpxData obj passed in [TODO figure out how to select route in multi-route gpx]
     console.log(gpxData);
@@ -68,20 +69,27 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
 
     directionsRenderer.addListener("directions_changed", ()=>{
       console.log((directionsRenderer.getDirections()));
+      if (gpxCategory.routeDrag) {
+        console.log("Edit was made by drag; propogating change to gpxData");
+      }
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [directionsRenderer]);
   
   // on changes to the routing and/or rendering service objects, if both are present, acquire routing data from API (and return render-clearing cleanup)
   useEffect(() => {
+    //avoid undefined error
     if (!directionsService || !directionsRenderer) return;
-    
+    //nothing to plot (no route)
     if (pointList.length < 2) {
       //console.log("There are not enough points to render a route.");
       return;
     }
+    //route data changes propogate from map, not gpxData, at this time
+    if (gpxCategory.routeDrag) return;
 
-    //plot points
-    if (gpxCategory.route) {//plot route
+    //plot route points from gpxData
+    if (gpxCategory.route) {
       console.log("Render route = true;");
 
       var startPoint = pointList.shift();
@@ -109,11 +117,11 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
           console.log("Set map route; bugged if not visible.");
         });
   
-      return () => directionsRenderer.setMap(null);
+      //return () => directionsRenderer.setMap(null);
     } else {//don't plot route
       console.log("Render route = false;");
     }
-  }, [map, directionsService, directionsRenderer, pointList, gpxCategory.route]);
+  }, [map, directionsService, directionsRenderer, pointList, gpxCategory.route, gpxCategory.routeDrag]);
 
   // Update direction route
   useEffect(() => {
@@ -121,18 +129,6 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
     directionsRenderer.setRouteIndex(routeIndex);
   }, [routeIndex, directionsRenderer]);
 
-  return (<></>);
-}
-
-//Return list of renderable Markers to display on the map with the input route.
-export const RouteMarkers = ({markerInput=[]}) => {
-  const [markerMap, setMarkerMap] = useState([]);
-  useEffect(() => {
-    if (markerInput && markerInput.length > 0) {
-      console.log("Marker component has marker data.");
-      console.log(markerInput);
-    }
-  }, [markerInput]);
   return (<></>);
 }
 

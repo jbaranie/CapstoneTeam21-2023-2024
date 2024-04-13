@@ -4,12 +4,13 @@
 //Coder: Larry Huang
 //
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import useToggle from './toggle_hook';
 
 //Component used to select routes, tracks, or waypoints display on/off
 const SelectMenuComponent = ({ saveCall = undefined }) => {
   const [routeDisplay, setRouteDisplay] = useToggle(true);
-  const [routeDraggable, setDraggable] = useToggle(true);
+  const [routeDraggable, setDraggable] = useToggle(false);
   const [trackDisplay, setTrackDisplay] = useToggle(false);
   const [wayptDisplay, setWayptDisplay] = useToggle(false);
 
@@ -65,21 +66,12 @@ const SelectMenuComponent = ({ saveCall = undefined }) => {
   ];
   const toggleComponents = toggleContents.map(({id, displayText, val, func}) => {
     let actualText = val ? displayText[0] : displayText[1];
-    return (<li key={id}>
+    return (<li key={id} id="selectMenuNode">
       <button id="selectMenuButton" onClick={func}>{actualText}</button>
     </li>); }
   );
 
   return (<ul id="selectMenu">{toggleComponents}</ul>);
 }
-
-//Toggle hook for swappable items on list
-const useToggle = (initial = false) => {
-  const [toggleValue, setToggleValue] = useState(initial);
-  const toggler = () => {
-    setToggleValue(!toggleValue);
-  };
-  return [toggleValue, toggler];
-};
 
 export default SelectMenuComponent;
