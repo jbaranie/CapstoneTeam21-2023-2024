@@ -18,6 +18,7 @@ import WaypointModal from './WaypointModal';
 import GPXNameModal from './GPXNameModal';
 import { styles } from './styles';
 import axios from 'axios';
+import { REACT_APP_GOOGLEMAPS_KEY } from '@env';
 //Icons Import
 import zoomInIcon from './assets/icons/zoomIn.png';
 import zoomOutIcon from './assets/icons/zoomOut.png';
@@ -113,6 +114,9 @@ const GPXWaypoints = ({ navigation, route }) => {
   
   //GPX name Modal states
   const [gpxNameModalVisible, setGpxNameModalVisible] = useState(false);
+
+  const [traversableRoutes, setTraversableRoutes] = useState([]);
+
 
   // // DECLARED TWICE FOR SOME REASON. COMMENTING OUT FOR NOW JUST IN CASE IT BREAKS SOMETHING. 
   // // Modal activity at the end of route-recording.
@@ -1496,7 +1500,7 @@ const GPXWaypoints = ({ navigation, route }) => {
   );
 }
 
-const GOOGLE_API_KEY = 'API_KEY';
+const GOOGLE_API_KEY = 'REACT_APP_GOOGLEMAPS_KEY;';
 
 // This function will make a call to the Google Directions API and return the route
 const fetchRouteFromGoogle = async (waypoints) => {
@@ -1518,6 +1522,12 @@ const fetchRouteFromGoogle = async (waypoints) => {
         mode: 'bicycling', // specify the mode of travel
       }
     });
+
+    // Check if there are no routes found in the response
+    if (response.data.routes.length === 0) {
+      console.error('No routes found. Check waypoints and API key.');
+      return [];
+    }
 
     const points = response.data.routes[0].overview_polyline.points;
     const steps = decodePolyline(points); // decode the polyline to an array of points
