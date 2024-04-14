@@ -10,6 +10,7 @@ import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import * as ScreenOrient from 'expo-screen-orientation';
 import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
+import { GOOGLE_API_ANDROID, GOOGLE_API_IOS } from '@env';
 
 import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addTrackToGPX, addTrackPointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos } from './GPXManager';
 import { deleteFile, photoWaypointsFile, photoLocalStore } from './GPXFileList';
@@ -18,7 +19,7 @@ import WaypointModal from './WaypointModal';
 import GPXNameModal from './GPXNameModal';
 import { styles } from './styles';
 import axios from 'axios';
-import { REACT_APP_GOOGLEMAPS_KEY } from '@env';
+import Constants from 'expo-constants';
 //Icons Import
 import zoomInIcon from './assets/icons/zoomIn.png';
 import zoomOutIcon from './assets/icons/zoomOut.png';
@@ -41,6 +42,7 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
 
 const recordActiveDir = "locks";
 export const recordActiveFile = "locks/lock-record.txt";
+
 
 const GPXWaypoints = ({ navigation, route }) => {
   const handleGPXNameConfirm = async (fileName) => {
@@ -1500,7 +1502,9 @@ const GPXWaypoints = ({ navigation, route }) => {
   );
 }
 
-const GOOGLE_API_KEY = 'REACT_APP_GOOGLEMAPS_KEY;';
+const GOOGLE_API_KEY = Platform.OS === 'android' ? GOOGLE_API_ANDROID : GOOGLE_API_IOS;
+  Constants.expoConfig.extra.androidGoogleMapsApiKey ; 
+  Constants.expoConfig.extra.iosGoogleMapsApiKey;
 
 // This function will make a call to the Google Directions API and return the route
 const fetchRouteFromGoogle = async (waypoints) => {
@@ -1522,6 +1526,7 @@ const fetchRouteFromGoogle = async (waypoints) => {
         mode: 'bicycling', // specify the mode of travel
       }
     });
+    console.log('Google Directions API Response:', response.data);
 
     // Check if there are no routes found in the response
     if (response.data.routes.length === 0) {
