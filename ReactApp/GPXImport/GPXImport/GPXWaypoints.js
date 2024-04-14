@@ -565,7 +565,7 @@ const GPXWaypoints = ({ navigation, route }) => {
   //Importing the GPX File
   const importGPXFile = async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({ type: 'application/gpx+xml' });
+      const result = await DocumentPicker.getDocumentAsync({ type: '*/*' }); // Use application/gpx+xml to filter for GPX files. 
       
       if (result.canceled) {
         //console.log('Document Picker operation was canceled');
