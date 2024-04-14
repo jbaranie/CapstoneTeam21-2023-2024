@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Alert, View, Text, TouchableOpacity, Platform, FlatList, PermissionsAndroid, StyleSheet} from 'react-native';
+import React, { useState, useEffect, useRef} from 'react';
+import { Alert, View, Text, TouchableOpacity, Platform, FlatList, PermissionsAndroid, StyleSheet, Image, Animated, Dimensions} from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
@@ -17,6 +17,7 @@ export const photoLocalStore = "ImportedPhotos/";
 
 export const importedGPXDirectory = `${FileSystem.documentDirectory}imported/`;
 export const createdGPXDirectory = `${FileSystem.documentDirectory}created/`;
+const screenWidth = Dimensions.get('window').width;
 
 // Deletes a single file
 export const deleteFile = async (fileName, directory) => {
@@ -115,6 +116,48 @@ const iosShare = async (uri, utiType) => {
   }
 }
 
+//GPXFileList cloud animation
+const CloudAnimation = ({ topPosition }) => {
+  const cloudPosition = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const runAnimation = () => {
+      cloudPosition.setValue(0);  
+
+      Animated.timing(cloudPosition, {
+        toValue: 1,
+        duration: 8000,
+        useNativeDriver: true
+      }).start(() => runAnimation());
+    };
+
+    runAnimation();
+    return () => cloudPosition.stopAnimation();
+  }, []);
+
+  return (
+    <Animated.Image
+      source={require('./assets/icons/cloud.png')}
+      style={{
+        position: 'absolute',
+        width: 100,
+        height: 100,
+        resizeMode: 'contain',
+        top: topPosition - 40,
+        zIndex: -1,
+        transform: [
+          {
+            translateX: cloudPosition.interpolate({
+              inputRange: [0, 1],
+              outputRange: [Dimensions.get('window').width, -200]  
+            })
+          }
+        ]
+      }}
+    />
+  );
+};
+
 const GPXFileList = ({ navigation }) => {
   //File action state
   const [gpxFiles, setGpxFiles] = useState([]);
@@ -122,6 +165,10 @@ const GPXFileList = ({ navigation }) => {
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
   const [activeDirectory, setActiveDirectory] = useState('created'); // 'created' or 'imported'
   const [expandedItem, setExpandedItem] = useState(null);
+
+  //Footer position for cloud animation
+  const [footerPosition, setFooterPosition] = useState(null);
+  const footerRef = useRef();
 
   const ensureDirectoryExists = async (directory) => {
     const dir = `${FileSystem.documentDirectory}${directory}/`;
@@ -277,15 +324,15 @@ const GPXFileList = ({ navigation }) => {
   // Asks user to confirm deletion of all files
   const deleteAllFiles = async (directory) => {
     Alert.alert(
-      "Confirm Delete",
-      "Are you sure you want to delete all GPX files?",
+      "Confirm Delete ALL",
+      "Are you sure you want to delete ALL GPX files?",
       [
         {
           text: "Cancel",
           onPress: () => console.log("Deletion cancelled"),
           style: "cancel"
         },
-        { text: "Yes", onPress: () => deleteAllFilesConfirmed(directory) }
+        { text: "Yes, Delete All", onPress: () => deleteAllFilesConfirmed(directory) }
       ],
       { cancelable: false }
     );
@@ -403,6 +450,15 @@ const GPXFileList = ({ navigation }) => {
   useEffect(() => {
     requestFileSystemPermissions();
   }, []);
+
+  //Handle 'tab' switching press
+  const changeDirectory = (newDirectory) => {
+    if (activeDirectory !== newDirectory) {
+      setActiveDirectory(newDirectory);
+      setExpandedItem(null); 
+      loadFilesFromDirectory(newDirectory); 
+    }
+  };
 
   const handleFilePress = (fileName) => {
     setExpandedItem(expandedItem === fileName ? null : fileName); // Toggle the expanded item
@@ -572,6 +628,47 @@ const GPXFileList = ({ navigation }) => {
     }).cancelsTouchesInView(true);
     const twoFlingNav = Gesture.Exclusive(navUp, navDown);
 
+    //Anchored buttons
+    const DeleteAllButton = ({ onPress, hasFiles }) => {
+      return (
+        <TouchableOpacity
+          style={[
+            styles.deleteAllButton,
+            hasFiles ? {} : { backgroundColor: 'gray' }  
+          ]}
+          onPress={onPress}
+          disabled={!hasFiles} 
+        >
+          <Image
+            source={require('./assets/icons/trash.png')}
+            style={styles.iconStyle}
+          />
+        </TouchableOpacity>
+      );
+    };
+    
+
+  const ImportGPXButton = ({ onPress }) => {
+    return (
+      <TouchableOpacity style={styles.importGPXButton} onPress={onPress}>
+        <Image
+          source={require('./assets/icons/plus.png')} 
+          style={styles.iconStyle}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const ImportImageButton = ({ onPress }) => {
+    return (
+      <TouchableOpacity style={styles.importImageButton} onPress={onPress}>
+        <Image
+          source={require('./assets/icons/addImage.png')} 
+          style={styles.iconStyle}
+        />
+      </TouchableOpacity>
+    );
+  };
 
   const renderItem = ({ item }) => (
     <View style={[
@@ -601,45 +698,54 @@ const GPXFileList = ({ navigation }) => {
   );
 
   return (
-    <View style={{ padding: 10 }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-        <Button
-          title="Created Files"
-          onPress={() => setActiveDirectory('created')}
-          color={activeDirectory === 'created' ? '#007aff' : 'gray'}
+    <View style={{ flex: 1, position: 'relative' }}> 
+      <View style={{ padding: 10 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+          <Button
+            title="Created Files"
+            onPress={() => changeDirectory('created')}
+            color={activeDirectory === 'created' ? '#007aff' : 'gray'}
+          />
+          <Button
+            title="Imported Files"
+            onPress={() => changeDirectory('imported')}
+            color={activeDirectory === 'imported' ? '#007aff' : 'gray'}
+          />
+        </View>
+        <FlatList
+          data={gpxFiles}
+          renderItem={renderItem}
+          keyExtractor={item => item}
         />
-        <Button
-          title="Imported Files"
-          onPress={() => setActiveDirectory('imported')}
-          color={activeDirectory === 'imported' ? '#007aff' : 'gray'}
-        />
+        <View
+          ref={footerRef}
+          onLayout={() => {
+            footerRef.current.measure((x, y, width, height, pageX, pageY) => {
+              setFooterPosition(pageY);  // Update the position state for cloud animation
+            });
+          }}
+          style={styles.footerContent}
+        ></View>
+        {footerPosition && <CloudAnimation topPosition={footerPosition} />}
+        <View style={styles.footerContent}>
+          <Text style={styles.footerText}>Nothing else to show here...</Text>
+          <Image
+            source={require('./assets/art/cyclistStanding.png')}
+            style={styles.footerImage}
+          />
+        </View>
       </View>
-      <FlatList
-        data={gpxFiles}
-        renderItem={renderItem}
-        keyExtractor={item => item}
+
+      <ImportGPXButton onPress={importGPXFile} />
+      <ImportImageButton onPress={pickImage} />
+
+      <DeleteAllButton
+        onPress={() => deleteAllFiles(activeDirectory)}
+        hasFiles={gpxFiles.length > 0}
       />
-      <Button title="Import GPX File" onPress={importGPXFile} />
-      <Button title="Import Image" onPress={pickImage} />
-      {gpxFiles.length >= 2 && (
-        <Button title="Delete All" onPress={() => deleteAllFiles(activeDirectory)} />
-      )}
-    </View> 
-    //<GestureDetector gesture={twoFlingNav}>
-    //  <View style={{ padding: 10 }}>
-    //    <FlatList
-    //      data={gpxFiles}
-    //      renderItem={renderItem}
-    //      keyExtractor={item => item}
-    //    />
-    //    <Button title="Import GPX File" onPress={importGPXFile} />
-    //    {/*<Button title="Import Image" onPress={pickImage} />*/}
-    //    {gpxFiles.length >= 2 && (
-    //      <Button title="Delete All" onPress={deleteAllFiles} />
-    //    )}
-    //  </View>
-    //</GestureDetector>
+    </View>
   );
+  
 };
 
 
@@ -657,40 +763,110 @@ const styles = StyleSheet.create({
   },
   expandedItemTitle: {
     padding: 10,
-    fontSize: 18, 
+    fontSize: 18,
   },
   expandedArea: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     padding: 10,
-    paddingTop: 10, 
-  },
-  boxOutline: {
-    width: '50%', 
-    height: 100, 
-    borderWidth: 1,
-    borderColor: '#000',
-    marginRight: 10,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginTop: 10
+    paddingTop: 10,
   },
   buttonContainerHorizontalRight: {
     flexDirection: 'row',
-    justifyContent: 'flex-end', 
-    width: '100%', 
-    marginTop: 10, 
+    justifyContent: 'flex-end',
+    width: '100%',
+    marginTop: 10,
   },
   buttonText: {
     marginHorizontal: 5,
     fontSize: 18,
-    color: '#007aff', 
+    color: '#007aff',
   },
   deleteButtonText: {
     color: 'red',
+  },
+  deleteAllButton: {
+    position: 'absolute',  
+    bottom: 20,            
+    right: 20,             
+    width: 50,             
+    height: 50,            
+    backgroundColor: 'red', 
+    justifyContent: 'center', 
+    alignItems: 'center',    
+    borderRadius: 10,        
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+  },
+  importGPXButton: {
+    position: 'absolute',
+    bottom: 20, 
+    right: 80, 
+    width: 50, 
+    height: 50,
+    backgroundColor: '#007aff', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+  },
+  importImageButton: {
+    position: 'absolute',
+    bottom: 20, 
+    right: 140, 
+    width: 50, 
+    height: 50,
+    backgroundColor: '#007aff', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+  },
+  iconStyle: {
+    width: 30, 
+    height: 30, 
+    resizeMode: 'contain'
+  },
+  floatingButtonContainer: {
+    position: 'absolute',
+    right: 10,
+    bottom: 10, 
+    width: 50,
+    height: 50
+  },
+  footerContent: {
+    marginTop: 35, 
+    alignItems: 'center', 
+  },
+  footerText: {
+    fontSize: 16, 
+    color: '#666', 
+  },
+  footerImage: {
+    marginTop: 0, 
+    width: 200, 
+    height: 200, 
+    resizeMode: 'contain', 
   },
 });
 
