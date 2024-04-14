@@ -409,7 +409,16 @@ const GPXFileList = ({ navigation }) => {
   };
 
   const handleUseFile = (fileName) => {
-    navigation.navigate('Home', { gpxFilePath: `${activeDirectory}/${fileName}`, imported: true });
+    //Reset the page's state
+
+    let tempFileName = fileName;
+    let tempActive = activeDirectory;
+
+    setGpxFiles([]);
+    setActiveDirectory('created');
+    setExpandedItem(null);
+
+    navigation.navigate('Home', { gpxFilePath: `${tempActive}/${tempFileName}`, imported: true });
   };
 
   //Map Preview Logic
