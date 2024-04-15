@@ -15,8 +15,6 @@ const app = express();
 app.use(express.static('public')); // Serve static files
 app.use(cors());
 
-
-
 const port = 4000;
 
 
@@ -24,48 +22,60 @@ const port = 4000;
 const isWindows = process.platform === 'win32';
 // Set the base directory for file storage based on the os
 const baseDirectory = isWindows ? '.\\user_uploads\\' : './user_uploads/';
-app.use('/uploads', express.static(baseDirectory));
+
+
+
+
 
 //Server Sets up Storage "Engine" and Recieve Files/////////////////////////////////////////////////////////////////
-const storage = multer.diskStorage({
+// Multer storage for GPX files
+const storageGPX = multer.diskStorage({
   destination: function (req, file, cb) {
-    // Specify the directory where uploaded files will be saved
-    cb(null, baseDirectory);
+    const gpxPath = path.join(baseDirectory, 'gpxfiles');
+    fs.mkdirSync(gpxPath, { recursive: true }); // Ensure directory exists
+    cb(null, gpxPath);
   },
   filename: function (req, file, cb) {
-    // Generate a unique filename for the uploaded file
     cb(null, file.originalname);
-  },
+  }
 });
-// Multer setup for GPX files
-const uploadGPX = multer({ storage: storage }).single('gpxFile');
-// Multer setup for image files
-const uploadImage = multer({ storage: storage }).single('jpegFile');
+const uploadGPX = multer({ storage: storageGPX }).single('gpxFile');
 
+// Multer storage for Image files
+const storageImages = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const imagePath = path.join(baseDirectory, 'images');
+    fs.mkdirSync(imagePath, { recursive: true }); // Ensure directory exists
+    cb(null, imagePath);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+const uploadImage = multer({ storage: storageImages }).single('jpegFile');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Client sends Server GPX File -route
-//Also Sends a post which tell the clients success or failure
-app.post('/uploads', uploadGPX, (req, res) => {
+// Route for uploading GPX files
+app.post('/uploads/gpx', uploadGPX, (req, res) => {
   if (!req.file) {
     return res.status(400).send('No GPX file uploaded.');
   }
-
-  // Successfully received and saved the file
-  res.status(200).send('File uploaded successfully.');
+  res.status(200).send('GPX file uploaded successfully.');
 });
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Client sends Server jpeg Files -route
-//Also Sends a post which tell the clients success or failure
-app.post('/image_uploads', uploadImage, (req, res) => {
-    if (!req.file) {
-        return res.status(400).send('No image file uploaded.');
-    }
-   const imageUrl = `${req.protocol}://${req.hostname}:${port}/uploads/${req.file.filename}`;
-   res.json({ message: 'File uploaded successfully.', imageUrl: imageUrl  });
+// Route for uploading Image files
+app.post('/uploads/images', uploadImage, (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No image file uploaded.');
+  }
+  const imageUrl = `${req.protocol}://${req.hostname}:${port}/uploads/images/${req.file.filename}`;
+  res.json({ message: 'Image uploaded successfully.', imageUrl: imageUrl });
 });
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Serve static files from GPX directory
+app.use('/uploads/gpx', express.static(path.join(baseDirectory, 'gpxfiles')));
+// Serve static files from Images directory
+app.use('/uploads/images', express.static(path.join(baseDirectory, 'images')));
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

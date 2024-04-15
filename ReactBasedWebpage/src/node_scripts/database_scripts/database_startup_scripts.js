@@ -10,6 +10,7 @@ const { Client } = require('pg');
 //VALUES
 const dbName = "CustomRoutesDatabase";
 const schemaName = "RoutesSchema"; // Schema name
+
 let  adminClient = new Client({
   user: 'AsuAdmin',
   host: 'localhost',
@@ -45,6 +46,7 @@ async function ensureDatabaseExists() {
   }
 }
 
+// Ensures that the schema and its tables exist
 async function ensureSchemaExists() {
   adminClient = new Client({
     user: 'AsuAdmin',
@@ -53,84 +55,105 @@ async function ensureSchemaExists() {
     port: 5432,
     database: dbName
   });
-  
-  
-  
-  try {
-    // Reuse adminClient to ensure the schema
-    
-    await adminClient.connect(); // Reconnect to switch the database context
 
-    // Check if the schema exists
-    const schemaRes = await adminClient.query(`
-      SELECT schema_name
-      FROM information_schema.schemata
-      WHERE schema_name = $1;
-    `, [schemaName]);
+  try {
+    await adminClient.connect();
+    const schemaRes = await adminClient.query(`SELECT schema_name FROM information_schema.schemata WHERE schema_name = $1;`, [schemaName]);
 
     if (schemaRes.rows.length === 0) {
-      // Schema does not exist, create it
       console.log(`Schema ${schemaName} does not exist, creating it...`);
       await adminClient.query(`CREATE SCHEMA "${schemaName}"`);
-      console.log(`Schema ${schemaName} created successfully.`);
-      
-      console.log('Creating Tables...');
-      
-      // Create tracks table
-      console.log('Creating Tracks Table...');
-        await adminClient.query(`
-            CREATE TABLE IF NOT EXISTS "${schemaName}".tracks (
-                track_id SERIAL PRIMARY KEY,
-                name VARCHAR(255),
-                description TEXT
-            );
-        `);
+      console.log(`Creating Tables...`);
 
-        // Create track_segments table
-         console.log('Creating Track Segments Table...');
-        await adminClient.query(`
-            CREATE TABLE IF NOT EXISTS "${schemaName}".track_segments (
-                segment_id SERIAL PRIMARY KEY,
-                track_id INT NOT NULL,
-                sequence INT,
-                FOREIGN KEY (track_id) REFERENCES "${schemaName}".tracks(track_id)
-            );
-        `);
+      await adminClient.query('BEGIN;');  // Start transaction for table creation
 
-        // Create track_points table
-        console.log('Creating Track Points Table...');
-        await adminClient.query(`
-            CREATE TABLE IF NOT EXISTS "${schemaName}".track_points (
-                point_id SERIAL PRIMARY KEY,
-                segment_id INT NOT NULL,
-                latitude NUMERIC(10, 6),
-                longitude NUMERIC(10, 6),
-                sequence INT,
-                FOREIGN KEY (segment_id) REFERENCES "${schemaName}".track_segments(segment_id)
-            );
-        `);
-        // Create waypoints table
-        console.log('Creating Waypoints Table...');
-        await adminClient.query(`
-            CREATE TABLE IF NOT EXISTS "${schemaName}".waypoints (
-                waypoint_id SERIAL PRIMARY KEY,
-                track_id INT NOT NULL,
-                name VARCHAR(255),
-                latitude NUMERIC(10, 6),
-                longitude NUMERIC(10, 6),
-                description TEXT,
-                FOREIGN KEY (track_id) REFERENCES "${schemaName}".tracks(track_id)
-            );
-        `);
-       console.log('Schema and Tables ensured successfully.');
+      // Creating all necessary tables
+      const queries = `
+        CREATE TABLE "${schemaName}".gpx_files (
+          gpx_id SERIAL PRIMARY KEY,
+          file_name VARCHAR(255) NOT NULL,
+          file_path VARCHAR(255) NOT NULL,
+          upload_time TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE TABLE "${schemaName}".tracks (
+          track_id SERIAL PRIMARY KEY,
+          name VARCHAR(255),
+          description TEXT,
+          gpx_id INT,
+          FOREIGN KEY (gpx_id) REFERENCES "${schemaName}".gpx_files(gpx_id)
+        );
+        CREATE TABLE "${schemaName}".routes (
+          route_id SERIAL PRIMARY KEY,
+          name VARCHAR(255),
+          description TEXT,
+          gpx_id INT,
+          FOREIGN KEY (gpx_id) REFERENCES "${schemaName}".gpx_files(gpx_id)
+        );
+        CREATE TABLE "${schemaName}".track_segments (
+          segment_id SERIAL PRIMARY KEY,
+          track_id INT NOT NULL,
+          sequence INT,
+          FOREIGN KEY (track_id) REFERENCES "${schemaName}".tracks(track_id)
+        );
+        CREATE TABLE "${schemaName}".track_points (
+          point_id SERIAL PRIMARY KEY,
+          segment_id INT NOT NULL,
+          latitude NUMERIC(10, 6),
+          longitude NUMERIC(10, 6),
+          elevation NUMERIC,
+          time TIMESTAMP WITHOUT TIME ZONE,
+          sequence INT,
+          image1 VARCHAR(255),
+          image2 VARCHAR(255),
+          image3 VARCHAR(255),
+          FOREIGN KEY (segment_id) REFERENCES "${schemaName}".track_segments(segment_id)
+        );
+        CREATE TABLE "${schemaName}".waypoints (
+          waypoint_id SERIAL PRIMARY KEY,
+          track_id INT,
+          route_id INT,
+          name VARCHAR(255),
+          latitude NUMERIC(10, 6),
+          longitude NUMERIC(10, 6),
+          elevation NUMERIC,
+          time TIMESTAMP WITHOUT TIME ZONE,
+          description TEXT,
+          image1 VARCHAR(255),
+          image2 VARCHAR(255),
+          image3 VARCHAR(255),
+          gpx_id INT,
+          FOREIGN KEY (track_id) REFERENCES "${schemaName}".tracks(track_id),
+          FOREIGN KEY (route_id) REFERENCES "${schemaName}".routes(route_id),
+          FOREIGN KEY (gpx_id) REFERENCES "${schemaName}".gpx_files(gpx_id)
+        );
+        CREATE TABLE "${schemaName}".route_points (
+          route_point_id SERIAL PRIMARY KEY,
+          route_id INT NOT NULL,
+          name VARCHAR(255),
+          latitude NUMERIC(10, 6),
+          longitude NUMERIC(10, 6),
+          elevation NUMERIC,
+          time TIMESTAMP WITHOUT TIME ZONE,
+          description TEXT,
+          image1 VARCHAR(255),
+          image2 VARCHAR(255),
+          image3 VARCHAR(255),
+          FOREIGN KEY (route_id) REFERENCES "${schemaName}".routes(route_id)
+        );
+      `;
+      await adminClient.query(queries);
+      await adminClient.query('COMMIT;');  // Committing all changes
+      console.log('Schema and Tables ensured successfully.');
     } else {
-      console.log(`Schema ${schemaName} and Tables already exists.`);
+      console.log(`Schema ${schemaName} already exists.`);
     }
   } catch (err) {
     console.error('Error ensuring Schema and Tables exist:', err.stack);
+    await adminClient.query('ROLLBACK;');  // Rollback in case of error
+  } finally {
+    adminClient.end();  // Always close the client
   }
 }
-
 // Call ensureDatabaseExists first, then ensureSchemaExists
 async function init() {
   await ensureDatabaseExists();
