@@ -382,8 +382,8 @@ const GPXWaypoints = ({ navigation, route }) => {
       //previous coordinate items:
         // userLocation.latitude
         // userLocation.longitude
-      await addWaypointToGPX(currentGPXPath, waypointLat, waypointLon, waypointRating, waypointId, title, description);
-      await addWaypointToGPX(GPX_FILE_PATH, waypointLat, waypointLon, waypointRating, waypointId, title, description);
+      await addWaypointToGPX(currentGPXPath, waypointLat, waypointLon, waypointRating, waypointId, waypointTitle, waypointDescription);
+      await addWaypointToGPX(GPX_FILE_PATH, waypointLat, waypointLon, waypointRating, waypointId, waypointTitle, waypointDescription);
       setWaypoints(prevWaypoints => [...prevWaypoints, {
         id: waypointId,
         latitude: waypointLat,
