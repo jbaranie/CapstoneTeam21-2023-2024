@@ -7,10 +7,13 @@ import CarouselGallery from '../gui_components/carousel_gallery.js';
 
 
 const ImageGalleryTab = () => {
-    const [uploadImageStatus, setUploadImageStatus] = useState('');
+    const [uploadImageStatus, setUploadImageStatus] = useState('Upload an Image to your Gallery');
     const [uploadedImageUrl, setUploadedImageUrl] = useState('');
+    const [refreshGallery, setRefreshGallery] = useState(0);
+     
     const port = 4000;
     const serverURL = `http://${window.location.hostname}:${port}/images`;
+
 
     const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -33,7 +36,8 @@ const ImageGalleryTab = () => {
                 const data = JSON.parse(text);
                 setUploadImageStatus('Success: File uploaded successfully.');
                 if (data.imageUrl) {
-                    setUploadedImageUrl(data.imageUrl);
+                    //setUploadedImageUrl(data.imageUrl);
+                    setRefreshGallery(old => old + 1);
                 }
                 else {
                     throw new Error('No image URL returned from server');
@@ -54,15 +58,16 @@ const ImageGalleryTab = () => {
 
     return (
         <div id="background">
+             <h2>Your Image Gallery</h2>
+             <CarouselGallery refreshTrigger={refreshGallery}/> {/* Pass the trigger */}
+             
+             <input type="file" id="fileImageInput" accept="image/jpeg" style={{ display: 'none' }} onChange={handleImageUpload} />
             <h1>Import Image File</h1>
-            <p>This is the Image section content.</p>
-            <input type="file" id="fileImageInput" accept="image/jpeg" style={{ display: 'none' }} onChange={handleImageUpload} />
             <button onClick={handleProcessImageClick} className="button">Process Image</button>
             <div id="uploadImageStatus">
                 {uploadImageStatus && <p style={{ color: uploadImageStatus.startsWith('Error') ? 'red' : 'green' }}>{uploadImageStatus}</p>}
                 {uploadedImageUrl && <img src={uploadedImageUrl} alt="Uploaded" />}
             </div>
-            <CarouselGallery/>
         </div>
     );
 };
