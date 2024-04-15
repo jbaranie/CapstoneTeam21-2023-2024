@@ -3,8 +3,9 @@
 //It also cotains the code to import an jpeg file.
 //Coder: Jan Baraniecki
 import React, { useState } from 'react';
-import ReactGoogleMapAPI from '../scripts/react_google_map_api';
-import GPXParseLocal from '../scripts/gpx_parser_local.js';
+import ReactGoogleMapAPI from '../react_scripts/react_google_map_api';
+import GPXParseLocal from '../react_scripts/gpx_parser_local.js';
+
 
 const HomeTab = () => {
     const [fileContents, setFileContents] = useState();
