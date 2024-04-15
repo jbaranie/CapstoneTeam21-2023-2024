@@ -117,7 +117,7 @@ const iosShare = async (uri, utiType) => {
 }
 
 //GPXFileList cloud animation
-const CloudAnimation = ({ topPosition }) => {
+const CloudAnimation = () => {
   const cloudPosition = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -143,8 +143,7 @@ const CloudAnimation = ({ topPosition }) => {
         width: 100,
         height: 100,
         resizeMode: 'contain',
-        top: topPosition - 40,
-        zIndex: -1,
+        bottom: 170, 
         transform: [
           {
             translateX: cloudPosition.interpolate({
@@ -701,7 +700,7 @@ const GPXFileList = ({ navigation }) => {
               <Text style={[styles.buttonText, styles.deleteButtonText]}>Delete</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => downloadFile(item, activeDirectory)} style={styles.button}>
-              <Text style={styles.buttonText}>Download</Text>
+              <Text style={styles.buttonText}>Export</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -728,24 +727,20 @@ const GPXFileList = ({ navigation }) => {
           data={gpxFiles}
           renderItem={renderItem}
           keyExtractor={item => item}
+          contentContainerStyle={{ paddingBottom: 100 }} 
+          ListFooterComponent={
+            <>
+              <CloudAnimation />
+              <View style={styles.footerContent}>
+                <Text style={styles.footerText}>Nothing else to show here...</Text>
+                <Image
+                  source={require('./assets/art/cyclistStanding.png')}
+                  style={styles.footerImage}
+                />
+              </View>
+            </>
+          }
         />
-        <View
-          ref={footerRef}
-          onLayout={() => {
-            footerRef.current.measure((x, y, width, height, pageX, pageY) => {
-              setFooterPosition(pageY);  // Update the position state for cloud animation
-            });
-          }}
-          style={styles.footerContent}
-        ></View>
-        {footerPosition && <CloudAnimation topPosition={footerPosition} />}
-        <View style={styles.footerContent}>
-          <Text style={styles.footerText}>Nothing else to show here...</Text>
-          <Image
-            source={require('./assets/art/cyclistStanding.png')}
-            style={styles.footerImage}
-          />
-        </View>
       </View>
 
       <ImportGPXButton onPress={importGPXFile} />
@@ -875,10 +870,11 @@ const styles = StyleSheet.create({
     color: '#666', 
   },
   footerImage: {
-    marginTop: 0, 
-    width: 200, 
-    height: 200, 
-    resizeMode: 'contain', 
+    marginTop: 30, 
+    width: screenWidth, 
+    height: 250, 
+    resizeMode: 'stretch', 
+
   },
 });
 
