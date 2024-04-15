@@ -483,9 +483,11 @@ const GPXFileList = ({ navigation }) => {
     const [waypoints, setWaypoints] = useState([]);
     const [tracks, setTracks] = useState([]);
     const [initialRegion, setInitialRegion] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
       const loadGPXData = async () => {
+        setIsLoading(true);
         try {
           let fullPath = `${FileSystem.documentDirectory}${directory}/${fileName}`;
           const fileContent = await FileSystem.readAsStringAsync(fullPath);
@@ -564,21 +566,31 @@ const GPXFileList = ({ navigation }) => {
           //console.log(waypoints);
           //console.log(fullPath);
           //console.log(fileContent);
+          setIsLoading(false);
         } catch (error) {
           console.error('Error loading GPX data:', error);
+          setIsLoading(false);
         }
       };
   
       loadGPXData();
     }, [fileName, directory]);
     
+    if (isLoading) {
+      return <View style={{ width: '90%', height: 120, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading...</Text>
+      </View>;
+    }
+
     //Don't render until map is initlized
     if (!initialRegion) return null;
+    
 
     return (
       <View style={{
         width: '90%', 
         height: 120, 
+        minHeight: 120,
         borderWidth: 1, 
         borderColor: 'gray', 
         borderRadius: 5, 
