@@ -11,7 +11,7 @@ const ImportGPXTab = () => {
     const [uploadStatus, setUploadStatus] = useState('');
     const [labelContent, setLabelContent] = useState('');
     const port = 4000;
-    const serverURL = `http://${window.location.hostname}:${port}/uploads`;
+    const serverURL = `http://${window.location.hostname}:${port}/gpx`;
 
     const handleGPXProcessClick = () => {
         // Clear error Screen

@@ -56,7 +56,7 @@ const uploadImage = multer({ storage: storageImages }).single('jpegFile');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Route for uploading GPX files
-app.post('/uploads/gpx', uploadGPX, (req, res) => {
+app.post('/gpx', uploadGPX, (req, res) => {
   if (!req.file) {
     return res.status(400).send('No GPX file uploaded.');
   }
@@ -64,7 +64,7 @@ app.post('/uploads/gpx', uploadGPX, (req, res) => {
 });
 
 // Route for uploading Image files
-app.post('/uploads/images', uploadImage, (req, res) => {
+app.post('/images', uploadImage, (req, res) => {
   if (!req.file) {
     return res.status(400).send('No image file uploaded.');
   }
@@ -76,6 +76,25 @@ app.post('/uploads/images', uploadImage, (req, res) => {
 app.use('/uploads/gpx', express.static(path.join(baseDirectory, 'gpxfiles')));
 // Serve static files from Images directory
 app.use('/uploads/images', express.static(path.join(baseDirectory, 'images')));
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Endpoint to list all images
+app.get('/api/images', (req, res) => {
+  const imagesDirectory = path.join(baseDirectory, 'images');
+  fs.readdir(imagesDirectory, (err, files) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send('Unable to list images');
+      return;
+    }
+    const images = files.map(file => ({
+      original: `${req.protocol}://${req.get('host')}/uploads/images/${file}`,
+      thumbnail: `${req.protocol}://${req.get('host')}/uploads/images/${file}`
+    }));
+    res.json(images);
+  });
+});
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

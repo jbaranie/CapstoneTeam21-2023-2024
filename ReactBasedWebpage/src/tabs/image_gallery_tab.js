@@ -10,7 +10,7 @@ const ImageGalleryTab = () => {
     const [uploadImageStatus, setUploadImageStatus] = useState('');
     const [uploadedImageUrl, setUploadedImageUrl] = useState('');
     const port = 4000;
-    const serverURL = `http://${window.location.hostname}:${port}/image_uploads`;
+    const serverURL = `http://${window.location.hostname}:${port}/images`;
 
     const handleImageUpload = (event) => {
     const file = event.target.files[0];
