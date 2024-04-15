@@ -91,8 +91,7 @@
  
         }
 
-        /*Style for the Google Map Size*/
-        /*DEPRECIATED*/
+       
        
 
         /*Used for button rendered alongside map*/
@@ -108,6 +107,7 @@
             cursor: pointer;
         }
         
+        /*The Google Map API Container*/
         .mapContainer {
           position: absolute;   
          top: 65%;

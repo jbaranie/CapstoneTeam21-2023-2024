@@ -17,6 +17,8 @@ const ReactGoogleMapAPI = (gpxData, gpxCategory) => {
 
   return (
     <APIProvider apiKey={process.env.REACT_APP_GOOGLEMAPS_KEY}>
+        
+        //Must be in a div container so we can set size. Check tab_loader.css
         <div className="mapContainer">  
           <Map
             id="reactGoogleMap" 
