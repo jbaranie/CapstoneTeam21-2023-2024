@@ -71,7 +71,9 @@ const SelectMenuComponent = ({ saveCall = undefined }) => {
     </li>); }
   );
 
-  return (<ul id="selectMenu">{toggleComponents}</ul>);
+  return (<div id="halfBlock">
+    <ul id="selectMenu">{toggleComponents}</ul>
+  </div>);
 }
 
 export default SelectMenuComponent;

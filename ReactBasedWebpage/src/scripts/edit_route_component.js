@@ -5,8 +5,7 @@
 
 import { useEffect, useState } from "react";
 
-const EditRouteComponent = ({ markerList, gpxCategory, gpxData, saveDataHook }) => {
-  //NOTES on parameters
+//PARAMETERS
   //markerList
     //when gpxData is passed to routing, it returns a list of marker coordinates to this
     //when drag-modified, we will update this component based upon the changes
@@ -15,6 +14,11 @@ const EditRouteComponent = ({ markerList, gpxCategory, gpxData, saveDataHook }) 
     //true means this component cannot edit the route, and changes propogate in through markerList
       //basically, don't allow the user to make changes when this is the value
     //false means you can edit the route using this component
+  //gpxData - an object representing a GPX file
+    //used as a prev-state when calling saveDataHook
+    //modify and save a copy of this using saveDataHook
+  //saveDataHook - repopulates GPX file data, modifying it based upon edits to this component when possible
+const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDataHook=()=>{} }) => {
   const [markerPrev, setMarkPrev] = useState([]); //TODO consider using to track changes
   const [markerComponents, setMarkerComponents] = useState([]);
 

@@ -143,3 +143,20 @@
             font-size: 1rem;
             cursor: pointer;
         }
+        #instructionListStyleFirst {
+            font-size: 1.5rem;
+            list-style-type: none;
+        }
+        #instructionListStyle {
+            text-align: left;
+        }
+
+        /*Used for better organizing the page*/
+        #horizontalBlock {
+            align-content: left;
+            display: flex;
+        }
+        #halfBlock {
+            padding-top: 10px;
+            width: 50%;
+        }    

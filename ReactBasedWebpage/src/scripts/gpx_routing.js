@@ -31,10 +31,11 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
 
   //modify point list to an appropriate setting when the data passed to the router
   useEffect(() => {
-    if (gpxCategory.routeDrag) return;
+    console.log(gpxData);
+    //if (gpxCategory.routeDrag) return;//TODO fix for issues when toggling gpxCategory.routeDrag
+
     var newPointList = [];
     //generate points from gpxData obj passed in [TODO figure out how to select route in multi-route gpx]
-    console.log(gpxData);
     try {
       for (var i = 0; i < gpxData.routes[0].points.length; i = i + 1) {
         newPointList.push(gpxData.routes[0].points[i].LatLng);
@@ -42,10 +43,10 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
       setPointList(newPointList);
       markerOutputCall(newPointList);
     } catch (error) {
-      //the above causes a startup error with the default object; try-catch was needed to isolate that error
-      console.log("Point lists were not updated or sent out.");
+      //the try-contained code causes a startup error with gpxData={}; this keeps it from crashing app
+      console.log("Point lists were not updated or sent out, or the gpxData has not been populated yet.");
     }
-  }, [gpxData, markerOutputCall]);
+  }, [gpxData, markerOutputCall]);//, gpxCategory.routeDrag
 
   //target the current map object and add a route service and renderer
   useEffect(() => {
@@ -86,18 +87,18 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
       return;
     }
     //route data changes propogate from map, not gpxData, at this time
-    if (gpxCategory.routeDrag) return;
+    //if (gpxCategory.routeDrag) return;//TODO fix render-clear on gpxCategory.routeDrag==true
 
     //plot route points from gpxData
     if (gpxCategory.route) {
       console.log("Render route = true;");
 
-      var startPoint = pointList.shift();
-      var endPoint = pointList.pop();
+      var startPoint = pointList[0];
+      var endPoint = pointList[pointList.length - 1];
       var middlePointsList = [];
       if (pointList.length > 2) {
-        for (var i = 0; i < pointList.length; i = i + 1) {
-          middlePointsList.push({location: pointList[i]});
+        for (var i = 1; i < pointList.length - 1; i = i + 1) {
+          middlePointsList.push({location: pointList[i], stopover: false});
         }
       }
     
@@ -121,7 +122,7 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
     } else {//don't plot route
       console.log("Render route = false;");
     }
-  }, [map, directionsService, directionsRenderer, pointList, gpxCategory.route, gpxCategory.routeDrag]);
+  }, [map, directionsService, directionsRenderer, pointList, gpxCategory.route]);//, gpxCategory.routeDrag
 
   // Update direction route
   useEffect(() => {

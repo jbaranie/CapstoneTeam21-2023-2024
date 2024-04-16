@@ -9,7 +9,9 @@ import ReactGoogleMapAPI from '../scripts/react_google_map_api';
 import GPXParseLocal from '../scripts/gpx_parser_local.js';
 import SelectMenuComponent from '../scripts/select_menu_list.js';
 import EditRouteComponent from '../scripts/edit_route_component.js';
+import InstructionsList from '../scripts/instructions_list.js';
 
+//default gpxCategory values
 const defaultGpxCategory = {
   route: true,
   routeDrag: false,
@@ -48,10 +50,9 @@ const HomeTab = () => {
 
   //functions called on specific page buttons
   const createRoute = () => {
-    console.log("Resetting to create new route!");
-    setGPXcategory(defaultGpxCategory);
-    setFileContents(null);
-    //TODO set up new start and end points at random
+    resetHomeTab();
+    console.log("Creating new route!");
+    //TODO set up new start and end points at random?
   }
   const downloadAttempt = () => {
     console.log("Download attempt!");
@@ -62,31 +63,42 @@ const HomeTab = () => {
     //TODO when database is working this should turn fileContents into a GPX file and send it off
     //console.log("Data saved to database!");
   }
+  const resetHomeTab = () => {
+    console.log("Resetting page!");
+    setGPXcategory(defaultGpxCategory);
+    setFileContents(null);
+  }
 
   //page DOM
   return (
     <div id="background">
         <p>Welcome to the Map Page of our experimental route website.</p>
-        <p>This area will be used to view route content and to plan routes using markers.</p> 
+        <p>This area will be used to view route content and to plan routes using markers.</p>
+        <p></p>
         <GPXParseLocal saveDataHook={saveDataHook}/>
+        <div id="horizontalBlock">
+          <InstructionsList />
+          <SelectMenuComponent saveCall={setGPXcategory}/>
+        </div>
+        <EditRouteComponent
+          markerList={markerList}
+          gpxCategory={gpxCategoryObj}
+          gpxData={fileContents}
+          saveDataHook={saveDataHook}
+        />
         <ReactGoogleMapAPI
           gpxData={fileContents}
           gpxCategory={gpxCategoryObj}
           setMarkers={setMarkers}
         />
         <div id="backgroundMenu">
-          <SelectMenuComponent saveCall={setGPXcategory}/>
-          <EditRouteComponent
-            markerList={markerList}
-            gpxCategory={gpxCategoryObj}
-            gpxData={fileContents}
-            saveDataHook={saveDataHook}
-          />
           <button id="actionMenuButton" onClick={createRoute}>Create New Route (New GPX File)</button>
           <p></p>
           <button id="actionMenuButton" onClick={downloadAttempt}>Download GPX File</button>
           <p></p>
           <button id="actionMenuButton" onClick={saveAttempt}>Save GPX File to Database</button>
+          <p></p>
+          <button id="actionMenuButton" onClick={resetHomeTab}>Reset Page (This Does Not Save!)</button>
         </div>
     </div>
   );
