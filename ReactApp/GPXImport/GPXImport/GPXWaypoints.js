@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect} from 'react';
-import { View, Platform, StyleSheet, Alert, TouchableOpacity, Text, ActivityIndicator, Image} from 'react-native';
+import { View, Platform, StyleSheet, Alert, TouchableOpacity, Text, ActivityIndicator, Image, Dimensions} from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
@@ -12,8 +12,8 @@ import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handl
 import { runOnJS } from 'react-native-reanimated';
 import { GOOGLE_API_ANDROID, GOOGLE_API_IOS } from '@env';
 
-import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addTrackToGPX, addTrackPointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos } from './GPXManager';
-import { deleteFile, photoWaypointsFile, photoLocalStore } from './GPXFileList';
+import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addTrackToGPX, addTrackPointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos, createdGPXDirectory } from './GPXManager';
+import { deleteFile, photoWaypointsFile, photoLocalStore } from './GPXFileList';  
 import { pickImage } from './ImageImport';
 import WaypointModal from './WaypointModal';
 import GPXNameModal from './GPXNameModal';
@@ -47,7 +47,7 @@ export const recordActiveFile = "locks/lock-record.txt";
 const GPXWaypoints = ({ navigation, route }) => {
   const handleGPXNameConfirm = async (fileName) => {
     // Rename the GPX file here using FileSystem from 'expo-file-system'
-    const newPath = `${FileSystem.documentDirectory}${fileName}.gpx`;
+    const newPath = `${createdGPXDirectory}${fileName}.gpx`;
     try {
       await FileSystem.moveAsync({
         from: currentGPXPath,
@@ -120,6 +120,7 @@ const GPXWaypoints = ({ navigation, route }) => {
   const [traversableRoutes, setTraversableRoutes] = useState([]);
 
 
+  const screenWidth = Dimensions.get('window').width;
   // // DECLARED TWICE FOR SOME REASON. COMMENTING OUT FOR NOW JUST IN CASE IT BREAKS SOMETHING. 
   // // Modal activity at the end of route-recording.
   // const handleGPXNameConfirm = async (fileName) => {
@@ -1160,11 +1161,12 @@ const GPXWaypoints = ({ navigation, route }) => {
         padding: 10,
         borderRadius: 10,
         zIndex: 1,
-        maxWidth: 150
+        width: screenWidth - 150
       }}>
         <Text style={{
           fontSize: 36,
-          color: 'white'
+          color: 'white',
+          textAlign: 'center'
         }}>
           {formattedTime}
         </Text>

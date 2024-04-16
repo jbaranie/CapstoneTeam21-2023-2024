@@ -17,15 +17,20 @@ const ReactGoogleMapAPI = (gpxData, gpxCategory) => {
 
   return (
     <APIProvider apiKey={process.env.REACT_APP_GOOGLEMAPS_KEY}>
-      <Map
-        id="reactGoogleMap" 
-        defaultCenter={samplePosition}
-        defaultZoom={15}
-      >
-        <RouteMarkers
-          markerInput={markerList}
-        />
-      </Map>
+        
+        //Must be in a div container so we can set size. Check tab_loader.css
+        <div className="mapContainer">  
+          <Map
+            id="reactGoogleMap" 
+            defaultCenter={samplePosition}
+            defaultZoom={15}
+            //style={{ width: '75%', height: '500px' }} // Set fixed width and height
+          >
+            <RouteMarkers
+              markerInput={markerList}
+            />
+          </Map>
+        </div>  
       <Routing
         gpxData={gpxData}
         gpxCategory={gpxCategory}

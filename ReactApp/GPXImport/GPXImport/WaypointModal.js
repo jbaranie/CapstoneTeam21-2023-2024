@@ -6,13 +6,46 @@ const WaypointModal = ({ isVisible, onConfirm, onCancel, timeout = 10000 }) => {
   const [description, setDescription] = useState('');
   const progressAnim = useRef(new Animated.Value(0)).current; // Initial progress is 0
   const [animationStarted, setAnimationStarted] = useState(false);
+  const interactionTimeoutRef = useRef(null);
 
   const resetState = () => {
     setTitle('');
     setDescription('');
     progressAnim.setValue(0); // Reset progress
-    setAnimationStarted(false);
+    if (interactionTimeoutRef.current) {
+      clearTimeout(interactionTimeoutRef.current);
+      interactionTimeoutRef.current = null;
+    }
   };
+
+  const restartTimeout = () => {
+    if (interactionTimeoutRef.current) {
+      clearTimeout(interactionTimeoutRef.current);
+    }
+    progressAnim.setValue(0);
+    startProgressAnimation();
+  };
+
+  const startProgressAnimation = () => {
+    // Animate progress bar
+    Animated.timing(progressAnim, {
+        toValue: 1,
+        duration: timeout,
+        useNativeDriver: false,
+    }).start(({ finished }) => {
+      if (finished) {
+        onConfirm(title, description);
+        resetState();
+      }
+    });
+
+    // Set the timeout to auto-trigger confirmation
+    interactionTimeoutRef.current = setTimeout(() => {
+      onConfirm(title, description);
+      resetState();
+    }, timeout);
+  };
+
 
   useEffect(() => {
     if (isVisible && !animationStarted) {
@@ -35,8 +68,9 @@ const WaypointModal = ({ isVisible, onConfirm, onCancel, timeout = 10000 }) => {
   }, [isVisible, animationStarted, onConfirm, title, description, progressAnim, timeout]);
 
   useEffect(() => {
-    // Reset state when modal is closed
-    if (!isVisible) {
+    if (isVisible) {
+      restartTimeout();
+    } else {
       resetState();
     }
   }, [isVisible]);
@@ -68,13 +102,13 @@ const WaypointModal = ({ isVisible, onConfirm, onCancel, timeout = 10000 }) => {
             placeholder="Title"
             style={styles.input}
             value={title}
-            onChangeText={setTitle}
+            onChangeText={(text) => { setTitle(text); restartTimeout(); }}
           />
           <TextInput
             placeholder="Description"
             style={[styles.input, styles.descriptionInput]}
             value={description}
-            onChangeText={setDescription}
+            onChangeText={(text) => { setDescription(text); restartTimeout(); }}
             multiline
           />
           <View style={styles.progressBarContainer}>
