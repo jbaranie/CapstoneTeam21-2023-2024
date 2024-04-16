@@ -118,7 +118,7 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
           console.log("Set map route; bugged if not visible.");
         });
   
-      //return () => directionsRenderer.setMap(null);
+      return () => directionsRenderer.setMap(null);
     } else {//don't plot route
       console.log("Render route = false;");
     }

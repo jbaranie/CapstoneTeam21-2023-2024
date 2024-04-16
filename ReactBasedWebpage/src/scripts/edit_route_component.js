@@ -27,12 +27,22 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
       console.log("Editable component has marker data!");
       console.log(markerList);
       //TODO create markerMap based upon markerList
-      let markerMap = markerList.map(({lat, lng}) => <li>{lat}, {lng}</li>);//when rendered add to li: id="selectMenuNode"
+      let keyVar = 0;
+      let markerMap = markerList.map(({lat, lng}) => {
+        return (<li id="selectMenuNode" key={keyVar}>
+          {++keyVar} --- LAT <input type="number" readOnly={gpxCategory.routeDrag} defaultValue={lat}></input> LON <input type="number" readOnly={gpxCategory.routeDrag} defaultValue={lng}></input>
+        </li>);
+      });//when rendered add to li: id="selectMenuNode"
       //TODO add 0-index item w/ different rules so that you can add to start of list correctly
       setMarkerComponents(markerMap);
     }
-  }, [markerList]);
+  }, [markerList, gpxCategory.routeDrag]);
 
+  const callPointsUpdate = () => {
+    //TODO use gpxData, saveDataHook, and the current state of the list's items to recollect waypoints
+  }
+
+  //TODO add movable controls to display elements
   return (
     <div>
       <ul>{markerComponents}</ul>

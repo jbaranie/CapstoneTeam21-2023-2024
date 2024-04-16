@@ -15,7 +15,7 @@ const ReactGoogleMapAPI = ({gpxData, gpxCategory, setMarkers=(data)=>{console.lo
       <Map
         id="reactGoogleMap" 
         defaultCenter={{lat: 35.1988, lng: -111.652}}
-        defaultZoom={14}
+        defaultZoom={17}
       >
       </Map>
       <Routing

@@ -25,12 +25,13 @@ const instructionTextList = [
   {
     id: 4,
     textVal: "Dragging the polyline may add a route point (small dot) to ensure the path is reproducible; dragging a route point may move the line much further."
-  },
-  {
-    id: 5,
-    textVal: ""
   }
 ];
+// ,
+//   {
+//     id: 5,
+//     textVal: ""
+//   }
 
 //nodes
 const InstructionsList = () => {
