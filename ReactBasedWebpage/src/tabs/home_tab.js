@@ -5,11 +5,11 @@
 //Modified by: Larry Huang
 
 import React, { useState } from 'react';
-import ReactGoogleMapAPI from '../scripts/react_google_map_api';
-import GPXParseLocal from '../scripts/gpx_parser_local.js';
-import SelectMenuComponent from '../scripts/select_menu_list.js';
-import EditRouteComponent from '../scripts/edit_route_component.js';
-import InstructionsList from '../scripts/instructions_list.js';
+import ReactGoogleMapAPI from '../react_scripts/react_google_map_api';
+import GPXParseLocal from '../react_scripts/gpx_parser_local.js';
+import SelectMenuComponent from '../react_scripts/select_menu_list.js';
+import EditRouteComponent from '../react_scripts/edit_route_component.js';
+import InstructionsList from '../react_scripts/instructions_list.js';
 
 //default gpxCategory values
 const defaultGpxCategory = {
@@ -17,7 +17,7 @@ const defaultGpxCategory = {
   routeDrag: false,
   track: false,
   waypt: false
-};
+}
 
 const HomeTab = () => {
   /**
