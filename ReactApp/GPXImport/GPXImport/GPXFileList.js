@@ -178,6 +178,23 @@ const GPXFileList = ({ navigation }) => {
     }
   };
 
+  const initializeState = async () => {
+    setActiveDirectory('created');
+    setExpandedItem(null);
+    await refreshFileList(); 
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('Component is focused, reinitializing state...');
+      initializeState();
+    });
+
+    // Component clean-up
+    return unsubscribe;
+  }, [navigation]);
+  
+
   const loadFilesFromDirectory = async (directory) => {
     try {
       await ensureDirectoryExists(directory);
