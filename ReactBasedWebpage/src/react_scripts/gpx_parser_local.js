@@ -24,7 +24,7 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
   var routes = [];
   var rteElements = xmlDoc.getElementsByTagName("rte");
   for (var i = 0; i < rteElements.length; i++) {
-    var route = {points: []};
+    var route = {points: [], id: rteElements[i].getAttribute("id")};
     var nameElement = rteElements[i].getElementsByTagName("name");
     var descElement = rteElements[i].getElementsByTagName("desc");
     if (nameElement.length > 0) {
@@ -58,7 +58,7 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
   var tracks = [];
   var trkElements = xmlDoc.getElementsByTagName("trk");
   for (i = 0; i < trkElements.length; i++) {
-    var track = { id: trkElements[i].getAttribute("id"), points: [] };//TODO check for not-present attribute value
+    var track = { id: trkElements[i].getAttribute("id"), points: [] };
     //Note: operates heavily on (paired w/ mobile app's design) 1 segment per track system
     var trksegElements = trkElements[i].getElementsByTagName("trkseg");
     for (j = 0; j < trksegElements.length; j++) {
@@ -80,6 +80,7 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
             track.points.push(point);
         }
     }
+    if (track.id === null) {
     tracks.push(track);
   }
 
@@ -87,6 +88,11 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
   var waypoints = [];
   var wptElements = xmlDoc.getElementsByTagName("wpt");
   for (i = 0; i < wptElements.length; i++) {
+    let ratingFound = wptElements[i].getElementsByTagName("rating");
+    let ratingNum = 0;
+    if (ratingFound.length > 0) {
+      ratingNum = parseInt(ratingFound[0].textContent);
+    }
     waypoints.push({
       LatLng: {
         lat: parseFloat(wptElements[i].getAttribute("lat")),
@@ -94,7 +100,7 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
       },
       name: wptElements[i].getElementsByTagName("name")[0].textContent,
       desc: wptElements[i].getElementsByTagName("desc")[0].textContent,
-      rating: parseInt(wptElements[i].getElementsByTagName("rating")[0])
+      rating: ratingNum
     });
   }
 
@@ -124,10 +130,13 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
 };
 
 const GPXParseLocal = ({ saveDataHook }) => {
-  const [routes, setRoutes] = useState([]);
-  const [tracks, setTracks] = useState([]);
-  const [waypoints, setWaypoints] = useState([]);
-  const [metadata, setMetadata] = useState({});
+  //State handling
+  const [displayVar, setDisplayVar] = useState(0);
+  const stateText = [
+    "No file selected.",
+    "Invalid file selected.",
+    "Local file selected."
+  ];
 
   //this component stores the input gpx file data in its three categories
   const handleFileChange = (event) => {
@@ -137,19 +146,27 @@ const GPXParseLocal = ({ saveDataHook }) => {
       reader.onload = (e) => {
           const gpxData = e.target.result;
           const parseOutput = parseGPX(gpxData);
-          if (gpxData.error === true) {
+          if (parseOutput.error === true) {
             console.log("Error reading gpx-xml data from file.");
-            //TODO visual user alert
+            setDisplayVar(1);
             return;
           } else {
             saveDataHook(parseOutput);
+            setDisplayVar(2);
           }
       };
       reader.readAsText(file);
+    } else {
+      setDisplayVar(0);
     }
   };
 
-  return (<input id="secureButtons" type="file" accept=".gpx" onChange={handleFileChange}/>);
+  return (
+    <div>
+      <input id="secureButtons" type="file" accept=".gpx" onChange={handleFileChange}/>
+      <p>{stateText[displayVar]}</p>
+    </div>
+  );
 };
 
 export default GPXParseLocal;
