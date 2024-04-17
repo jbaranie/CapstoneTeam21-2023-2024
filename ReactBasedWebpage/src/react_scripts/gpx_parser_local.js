@@ -81,7 +81,8 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
         }
     }
     if (track.id === null) {
-    tracks.push(track);
+      tracks.push(track);
+    }
   }
 
   //waypoint parsing
