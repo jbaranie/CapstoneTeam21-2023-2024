@@ -102,16 +102,17 @@ const HomeTab = () => {
     if (dbNameInput === false) {
       flipNameInput();
     } else {
-      //TODO database check for the name calls
+      //database check for the name calls
       console.log(`Checking name '${saveNameVal}' with the database...`);
-      //on successful save, hide this again using the following lines
-      let successful = true;
+      //TODO database call on name
+      let successful = false;
       if (successful) {
-        //console.log("Data saved to database!");
+        //on successful save, hide this again using the following lines
+        console.log("Data saved to database!");
         flipNameInput();//hide
         setSaveStatus(0);
       } else {
-        //console.log("Save not successful. Try another name.");
+        console.log("Save not successful. Try another name.");
         setSaveStatus(1);
       }
     }
