@@ -35,6 +35,8 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
       });//when rendered add to li: id="selectMenuNode"
       //TODO add 0-index item w/ different rules so that you can add to start of list correctly
       setMarkerComponents(markerMap);
+    } else {
+      setMarkerComponents([]);
     }
   }, [markerList, gpxCategory.routeDrag]);
 

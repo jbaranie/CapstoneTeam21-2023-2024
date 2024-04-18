@@ -28,21 +28,22 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
   const [directionsService, setDirectionsService] = useState();//<google.maps.DirectionsService>
   const [directionsRenderer, setDirectionsRenderer] = useState();//<google.maps.DirectionsRenderer>
   const [routes, setRoutes] = useState([]);//<google.maps.DirectionsRoute[]>
+  const [infoWindowInst, setInfoWindowInst] = useState(null);//google.maps.InfoWindow
   const [routeIndex, setRouteIndex] = useState(0);
   const [pointList, setPointList] = useState([]);//passed to route renderer
   const [trackContents, setTrackContents] = useState([]);
   const selected = routes[routeIndex];
   const leg = selected?.legs[0];
 
-  //modify point list to an appropriate setting when the data passed to the router
+  //modify route-point list to an appropriate setting when the data passed to the router
   useEffect(() => {
+    console.log("New file data!");
     console.log(gpxData);
-    var i, j;
 
     //route data
     try {
-      var routePointList = [];
-      for (i = 0; i < gpxData.routes[0].points.length; i = i + 1) {
+      let routePointList = [];
+      for (let i = 0; i < gpxData.routes[0].points.length; i = i + 1) {
         routePointList.push(gpxData.routes[0].points[i].LatLng);
       }
       //TODO add control to prevent propogation loop when editing
@@ -51,15 +52,17 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
     } catch (error) {
       //the try-contained code causes a startup error with gpxData={}; this keeps it from crashing app
       console.log("Point lists were not updated or sent out, or the gpxData has not been populated yet.");
+      setPointList([]);
+      markerOutputCall([]);
     }
 
     //tracks transformed into simple array-of-array-of-points (no editing)
     try {
-      var trackList = [];
-      for (i = 0; i < gpxData.tracks.length; i = i + 1) {
-        var currentTrack = [];
+      let trackList = [];
+      for (let i = 0; i < gpxData.tracks.length; i = i + 1) {
+        let currentTrack = [];
         //collect list of points from each track
-        for (j = 0; j < gpxData.tracks[i].points.length; j = j + 1) {
+        for (let j = 0; j < gpxData.tracks[i].points.length; j = j + 1) {
           currentTrack.push(gpxData.tracks[i].points[j].LatLng);
         }
         trackList.push(currentTrack);
@@ -67,6 +70,7 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
       setTrackContents(trackList);
     } catch (error) {
       console.log("error loading polylines for tracks");
+      setTrackContents([]);
     }
 
     //waypoints can be used as-is in gpxData
@@ -80,7 +84,7 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
     console.log("Tracks rendering...");
 
     let lineList = [];
-    for (var i = 0; i < trackContents.length; i = i + 1) {
+    for (let i = 0; i < trackContents.length; i = i + 1) {
       let newPoly = new coreLib.Polyline({
         path: trackContents[i],
         geodesic: true,
@@ -103,7 +107,9 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
     if (!map) return;
     if (gpxCategory.waypt === false) return;
 
-    const infoWindowInst = new streetLib.InfoWindow();
+    if (infoWindowInst === null) {
+      setInfoWindowInst(new streetLib.InfoWindow());
+    }
     
     //Constants for marker appearances & text display
     const ratingVal = ["Neutral", "Bad", "Photo Taken Here", "Good"];
@@ -212,17 +218,16 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
       console.log("Render route = true;");
 
       //separate start and end from other points for routing
-      var startPoint = pointList[0];
-      var endPoint = pointList[pointList.length - 1];
-      var middlePointsList = [];
+      let startPoint = pointList[0];
+      let endPoint = pointList[pointList.length - 1];
+      let middlePointsList = [];
       if (pointList.length > 2) {
-        for (var i = 1; i < pointList.length - 1; i = i + 1) {
+        for (let i = 1; i < pointList.length - 1; i = i + 1) {
           middlePointsList.push({location: pointList[i], stopover: false});
         }
       }
     
       //make API call and load the response into the renderer
-      directionsRenderer.setMap(map);
       directionsService
         .route({
           origin: startPoint,
@@ -233,6 +238,7 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
           provideRouteAlternatives: false
         })
         .then(response => {
+          directionsRenderer.setMap(map);
           directionsRenderer.setDirections(response);
           setRoutes(response.routes);
           console.log("Set map route; bugged if not visible.");
