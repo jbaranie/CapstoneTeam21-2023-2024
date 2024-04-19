@@ -58,7 +58,6 @@ const HomeTab = () => {
 
   //local renders and dbname state
   const [fileCreateInput, flipCreateInput] = useToggle(false);
-  const creationMessages = [];
   const [fileCreationStatus, setCreationStatus] = useState("");
   const [dbNameInput, flipNameInput] = useToggle(false);
   const [saveNameVal, setSaveNameVal] = useState("enterUniqueName");
@@ -80,6 +79,8 @@ const HomeTab = () => {
     flipCreateInput();
   }
   const createAction = () => {
+    //TODO request confirmation to ensure this is not an error
+
     //reset data on home page to new, empty GPX file
     resetHomeTab();
     //set new route with two points in creation dialog
