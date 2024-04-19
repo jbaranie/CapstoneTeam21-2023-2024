@@ -118,6 +118,8 @@ const GPXWaypoints = ({ navigation, route }) => {
   const [gpxNameModalVisible, setGpxNameModalVisible] = useState(false);
 
   const [traversableRoutes, setTraversableRoutes] = useState([]);
+  // track state 
+  const [trackPoints, setTrackPoints] = useState([]);
 
 
   const screenWidth = Dimensions.get('window').width;
@@ -595,6 +597,15 @@ const GPXWaypoints = ({ navigation, route }) => {
             name: match[3] || 'Unnamed Waypoint',
             rating: match[4] ? parseInt(match[4]) : 2
           }));
+        
+        // const trackRegex = /<trkpt lat="([-.\d]+)" lon="([-.\d]+)">/g;
+        // const trackMatches = Array.from(fileContent.matchAll(trackRegex));
+        // const newTrackPoints = trackMatches.map(match => ({
+        //     latitude: parseFloat(match[1]),
+        //     longitude: parseFloat(match[2]),
+        //   }));
+        
+        //   setTrackPoints(newTrackPoints); 
   
         // Extracting routes
         const routeRegex = /<rtept[^>]*lat="([-.\d]+)"[^>]*lon="([-.\d]+)"[^>]*>/g;
@@ -647,7 +658,17 @@ const GPXWaypoints = ({ navigation, route }) => {
   
       // Read the file content
       const fileContent = await FileSystem.readAsStringAsync(fullPath);
-  
+
+      // Extracting tracks
+      const trackRegex = /<trkpt lat="([^"]+)" lon="([^"]+)">/g;
+      const trackMatches = Array.from(fileContent.matchAll(trackRegex));
+      const newTrackPoints = trackMatches.map(match => ({
+          latitude: parseFloat(match[1]),
+          longitude: parseFloat(match[2]),
+        }));
+    
+        setTrackPoints(newTrackPoints); 
+
       // Extracting waypoints
       const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)".*?>\s*(?:<name>([^<]*)<\/name>)?\s*(?:<desc>([^<]*)<\/desc>)?\s*(?:<rating>(\d)<\/rating>)?\s*(?:<id>(\d+)<\/id>)?\s*<\/wpt>/gs;
       const matches = Array.from(fileContent.matchAll(waypointRegex));
@@ -660,7 +681,6 @@ const GPXWaypoints = ({ navigation, route }) => {
         rating: match[5] ? parseInt(match[5]) : undefined,
       }));
     
-  
       // Extracting routes
       const routeRegex = /<rtept[^>]*lat="([-.\d]+)"[^>]*lon="([-.\d]+)"[^>]*>/g;
       const routeMatches = Array.from(fileContent.matchAll(routeRegex));
@@ -1364,9 +1384,9 @@ const GPXWaypoints = ({ navigation, route }) => {
           {console.log('Rendering Imported Waypoints:', importedWaypoints)}
            */}
 
-         {importedRoutes.length > 0 && (
+         {trackPoints.length > 0 && (
           <Polyline
-            coordinates={importedRoutes.map(route => ({
+            coordinates={trackPoints.map(route => ({
               latitude: parseFloat(route.latitude),
               longitude: parseFloat(route.longitude),
             }))}
