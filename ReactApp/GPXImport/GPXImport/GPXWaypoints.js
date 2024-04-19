@@ -1421,23 +1421,27 @@ const GPXWaypoints = ({ navigation, route }) => {
                 />
             );
         })}
-            
-        {importedRoutes.length > 0 && (
-          <>
-            <Marker
-              coordinate={importedRoutes[0]}
-              title="Start"
-              pinColor="lightblue"
-            />
-            {imported && (
-              <Marker
-                coordinate={importedRoutes[importedRoutes.length - 1]}
-                title="End"
-                pinColor="lightblue"
-              />
-            )}
-          </>
-        )}
+
+{importedRoutes.map((rtept, index) => {
+  // For routepoints only - Determine the display name based on whether it's the first or last point, or a named routepoint
+  let title = "Routepoint"; // Default routepoint name
+  if (rtept.name) {
+    title = rtept.name; // Use the given name if available
+  } else if (index === 0) {
+    title = "Start"; // Special name for the start point
+  } else if (index === importedRoutes.length - 1) {
+    title = "End"; // Special name for the end point
+  }
+
+  return (
+    <Marker
+      key={`${rtept.latitude}-${rtept.longitude}`}
+      coordinate={{ latitude: rtept.latitude, longitude: rtept.longitude }}
+      title={title}
+      pinColor="blue"
+    />
+  );
+})}
       </MapView>
       ) : (
         <LoadingScreen />
