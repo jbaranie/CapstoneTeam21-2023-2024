@@ -1438,8 +1438,24 @@ const GPXWaypoints = ({ navigation, route }) => {
       key={`${rtept.latitude}-${rtept.longitude}`}
       coordinate={{ latitude: rtept.latitude, longitude: rtept.longitude }}
       title={title}
-      pinColor="blue"
-    />
+    >
+      <View style={{
+        height: 14, // slightly larger to accommodate border
+        width: 14, // slightly larger to accommodate border
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent' // Ensuring the background doesn't fill any outer space
+      }}>
+        <View style={{
+          height: 10,
+          width: 10,
+          backgroundColor: 'white', // inner circle is white
+          borderRadius: 5, // half of the height/width to make it a perfect circle
+          borderWidth: 2, // thickness of the black border
+          borderColor: 'black' // border color
+        }} />
+      </View>
+    </Marker>
   );
 })}
       </MapView>
