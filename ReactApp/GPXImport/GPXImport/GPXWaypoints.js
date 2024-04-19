@@ -700,15 +700,6 @@ const GPXWaypoints = ({ navigation, route }) => {
       setImportedRoutes(newRoutes);
       setImported(true);
 
-      if (newWaypoints.length > 0) {
-        mapRef.current.fitToCoordinates(newWaypoints.map(wp => ({
-          latitude: wp.latitude,
-          longitude: wp.longitude,
-        })), {
-          edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
-          animated: true,
-        });
-      }
     } catch (error) {
       console.error('Error importing GPX file:', error);
       showMessage({
@@ -721,6 +712,28 @@ const GPXWaypoints = ({ navigation, route }) => {
     }
   };
 
+  // Centers screen on file location using waypoints, trackpoints, and routepoints
+  useEffect(() => {
+    const coordinates = [];
+      
+    // Adds waypoints coordinates
+    importedWaypoints.forEach(wp => coordinates.push({ latitude: wp.latitude, longitude: wp.longitude }));
+      
+     // Adds trackpoints coordinates
+    trackPoints.forEach(tp => coordinates.push({ latitude: tp.latitude, longitude: tp.longitude }));
+      
+    // Optionally, add route points coordinates
+    importedRoutes.forEach(rp => coordinates.push({ latitude: rp.latitude, longitude: rp.longitude }));
+      
+    // Check if there are any coordinates to fit the map to
+    if (coordinates.length > 0) {
+      mapRef.current.fitToCoordinates(coordinates, {
+      edgePadding: { top: 75, right: 75, bottom: 75, left: 75 },
+        animated: true,
+      });
+    }
+  }, [importedWaypoints, trackPoints, importedRoutes]);
+      
   //orientation lock
   useEffect(() => {
     ScreenOrient.lockAsync(ScreenOrient.OrientationLock.PORTRAIT_UP);
@@ -1427,9 +1440,9 @@ const GPXWaypoints = ({ navigation, route }) => {
         })}
 
         {importedWaypoints.map((waypoint) => {
-            let pinColor = "linen";  
-            if (waypoint.rating === 1) pinColor = "red"; //
-            else if (waypoint.rating === 3) pinColor = "green";
+            let pinColor = "linen";  // Deafult pin color
+            if (waypoint.rating === 1) pinColor = "red"; // if its a bad waypoint
+            else if (waypoint.rating === 3) pinColor = "green"; //if its a good waypoint
 
             return (
                 <Marker
