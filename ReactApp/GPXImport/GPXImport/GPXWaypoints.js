@@ -1350,8 +1350,8 @@ const GPXWaypoints = ({ navigation, route }) => {
         {traversableRoutes.length > 0 && (
     <Polyline
       coordinates={traversableRoutes}
-      strokeColor="#0000FF" // blue color for visibility
-      strokeWidth={3}
+      strokeColor="#4a80f5" 
+      strokeWidth={4}
     />
        )}
           {/* 
@@ -1392,7 +1392,7 @@ const GPXWaypoints = ({ navigation, route }) => {
 
         {waypoints.map((waypoint) => {
             let pinColor = "linen";  
-            if (waypoint.rating === 1) pinColor = "red"; //
+            if (waypoint.rating === 1) pinColor = "red"; 
             else if (waypoint.rating === 3) pinColor = "green";
 
             return (
@@ -1440,19 +1440,19 @@ const GPXWaypoints = ({ navigation, route }) => {
       title={title}
     >
       <View style={{
-        height: 14, // slightly larger to accommodate border
-        width: 14, // slightly larger to accommodate border
+        height: 14, 
+        width: 14, 
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'transparent' // Ensuring the background doesn't fill any outer space
+        backgroundColor: 'transparent' 
       }}>
         <View style={{
           height: 10,
           width: 10,
-          backgroundColor: 'white', // inner circle is white
-          borderRadius: 5, // half of the height/width to make it a perfect circle
-          borderWidth: 2, // thickness of the black border
-          borderColor: 'black' // border color
+          backgroundColor: 'white', 
+          borderRadius: 5, 
+          borderWidth: 2, 
+          borderColor: 'black' 
         }} />
       </View>
     </Marker>
