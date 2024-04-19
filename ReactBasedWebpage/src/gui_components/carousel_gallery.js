@@ -32,7 +32,7 @@ const CarouselGallery = ({ refreshTrigger }) => {
   }, [refreshTrigger]);
 
   return (
-    <div className="App">
+    <div className="Carousel_App">
       <ImageGallery
         items={images}
         showPlayButton={true}
@@ -41,7 +41,6 @@ const CarouselGallery = ({ refreshTrigger }) => {
         slideOnThumbnailOver={true}
         showIndex={true}
         autoPlay={true}
-
       />
     </div>
   );

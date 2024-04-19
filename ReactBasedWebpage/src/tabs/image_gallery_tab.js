@@ -63,7 +63,7 @@ const ImageGalleryTab = () => {
              
              <input type="file" id="fileImageInput" accept="image/jpeg" style={{ display: 'none' }} onChange={handleImageUpload} />
             <h1>Import Image File</h1>
-            <button onClick={handleProcessImageClick} className="button">Process Image</button>
+            <button onClick={handleProcessImageClick} className="button">Upload Image</button>
             <div id="uploadImageStatus">
                 {uploadImageStatus && <p style={{ color: uploadImageStatus.startsWith('Error') ? 'red' : 'green' }}>{uploadImageStatus}</p>}
                 {uploadedImageUrl && <img src={uploadedImageUrl} alt="Uploaded" />}
