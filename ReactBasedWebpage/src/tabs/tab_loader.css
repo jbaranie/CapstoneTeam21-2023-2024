@@ -160,6 +160,10 @@
             padding-top: 10px;
             width: 50%;
         }
+
+        #pointEditButton {
+            padding: 4px;
+        }
         
         /*The Google Map API Container*/
         /*.mapContainer {

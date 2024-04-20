@@ -4,7 +4,6 @@
 //Coder: Larry Huang
 
 import { useEffect, useState } from "react";
-import useToggle from "./toggle_hook";
 
 //PARAMETERS
   //markerList
@@ -37,7 +36,7 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
       }));
       keyMove((keyVal + 1));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [markerList]);
 
   useEffect(() => {
@@ -55,6 +54,9 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
             key={keyVar}
             keyVar={keyVar}
             disable={gpxCategory.routeDrag}
+            moveFunc={() => {markerMove(keyVar)}}
+            newFunc={() => {markerAdd(keyVar)}}
+            deleteFunc={() => deletePoint(keyVar)}
           />
         );
       });
@@ -65,15 +67,6 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [markerDataSetup, gpxCategory.routeDrag]);
 
-  //TODO uses references in markerComponentRefs to reconstruct the edited data states
-  const getChangedCoordList = () => {
-    let newCoordList = [];
-    for (let i = 0; i < markerComponents.length; i = i + 1) {
-      newCoordList.push(markerComponents[i].props);
-    }
-    return newCoordList;
-  }
-
   //TODO functions that handle changes to markerComponents based upon route data changes
 
   //add to first item in list
@@ -81,28 +74,130 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
     event.preventDefault();//prevent reload; this is a form action
     let startPoint = Object.fromEntries(new FormData(event.target).entries());
     //console.log(startPoint);
-    let newPoints = [{lat: parseFloat(startPoint.startLat), lng: parseFloat(startPoint.startLng), keyVar: firstItemKey.valueOf()}, ...markerDataSetup];
+    let newPoints = [
+      {lat: parseFloat(startPoint.startLat), lng: parseFloat(startPoint.startLng), keyVar: firstItemKey.valueOf()},
+      ...markerDataSetup
+    ];
     keyMove(firstItemKey => firstItemKey + 1);
     setMarkerDataSetup(newPoints);
   }
 
-  //add to the list of markers at a specific keyVar
-  const markerAdd = (event) => {
+  //add to the list of markers right below the specific keyVar
+  const markerAdd = (keyVar) => {
+    //console.log(keyVar+"add");
+    //find index of keyVar marker
+    let found = false;
+    let keyIdx = 0;
+    for (; keyIdx < markerDataSetup.length; keyIdx = keyIdx + 1) {
+      if (markerDataSetup[keyIdx].keyVar === keyVar) {
+        found = true;
+        //console.log(keyIdx);
+        break;
+      }
+    }
+    //if found, add; if not found, alert issue and cancel
+    if (found) {
+      let newPoints = [...markerDataSetup];
+      //add new one right below targeted index
+      let newPoint = {lat: markerDataSetup[keyIdx].lat, lng:markerDataSetup[keyIdx].lng, keyVar: firstItemKey.valueOf()};
+      newPoints.splice(keyIdx + 1, 0, newPoint);
+      setMarkerDataSetup(newPoints);
+      console.log("Point replica added successfully...");
+      keyMove(firstItemKey => firstItemKey + 1);
+    } else {
+      alert("An error has occured in the editing component. Please export changes if you wish to try and recover data manually, or reset the page.");
+    }
+  }
+  
+  //swap this marker with the one above it if it is above the specific key
+  const markerMove = (keyVar) => {
+    //console.log(keyVar+"move");
+    //find index of keyVar marker
+    let found = false;
+    let keyIdx = 0;
+    for (; keyIdx < markerDataSetup.length; keyIdx = keyIdx + 1) {
+      if (markerDataSetup[keyIdx].keyVar === keyVar) {
+        found = true;
+        //console.log(keyIdx);
+        break;
+      }
+    }
+    if (found) {
+      if (keyIdx === 0) {
+        console.log("Cannot move start point above itself?");
+        return;
+      }
+      let newPoints = [...markerDataSetup];
+      [newPoints[keyIdx], newPoints[keyIdx - 1]] = [newPoints[keyIdx - 1], newPoints[keyIdx]];
+      setMarkerDataSetup(newPoints);
+    } else {
+      alert("An error has occured in the editing component. Please export changes if you wish to try and recover data manually, or reset the page.");
+    }
   }
 
   //"save" function
   const callPointsUpdate = (event) => {
+    //console.log(gpxData);
+    //console.log(markerList);
     event.preventDefault();
-    console.log(event);
+    //console.log(event);
     let saveData = Object.fromEntries(new FormData(event.target).entries());
-    console.log(saveData);
-    return;
-    console.log("Updating route points on map from edited data!");
-    //toggleUpdateAgain();
-    console.log(getChangedCoordList());
-    //TODO use gpxData, saveDataHook, and the current state of the list's items to recollect waypoints
+    //console.log(saveData);
+    let keyList = [];
+    for (let i = 0; i < markerDataSetup.length; i = i + 1) {
+      keyList.push(markerDataSetup[i].keyVar);
+    }
+    //console.log(keyList);
+  
+    //filter form data using the keyList above
+    let newPointList = [];
+    for (let i = 0; i < keyList.length; i = i + 1) {
+      let newLat = parseFloat(saveData[keyList[i]+"lat"]);
+      let newLng = parseFloat(saveData[keyList[i]+"lng"]);
+      if (isNaN(newLat) || isNaN(newLng)) continue;
+      newPointList.push({lat: newLat, lng: newLng});
+    }
+    if (newPointList.length > 1) {
+      let newGPXData = {
+        ...gpxData,
+        routes: [
+          ...gpxData.routes
+        ]
+      };
+      newGPXData.routes[0].points = newPointList.map(item =>({LatLng: item}));
+      //console.log(newGPXData);//new GPX file state
+      saveDataHook(newGPXData);
+    } else {
+      alert("There was an issue: not enough points to save these route contents.");
+    }
   }
 
+  //"delete" function
+  const deletePoint = (keyVar) => {
+    //console.log(keyVar+"move");
+    //find index of keyVar marker
+    let found = false;
+    let keyIdx = 0;
+    for (; keyIdx < markerDataSetup.length; keyIdx = keyIdx + 1) {
+      if (markerDataSetup[keyIdx].keyVar === keyVar) {
+        found = true;
+        //console.log(keyIdx);
+        break;
+      }
+    }
+    if (found) {
+      let newPoints = [...markerDataSetup];
+      //remove the point from newPoints
+      //TODO
+      if (newPoints.length > 2) {
+        //TODO save new state of list
+      } else {
+        alert("Cannot have a route with fewer than two points. Delete cancelled.");
+      }
+    }
+  }
+
+  //return function
   return ((markerDataSetup.length > 1) &&
     <div>
       <div id="selectMenuNode">
@@ -117,7 +212,11 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
             hidden={gpxCategory.routeDrag}
             readOnly={gpxCategory.routeDrag}
             name="startLng"
-          /> <button disabled={gpxCategory.routeDrag} type="submit">Add values as New Start Point</button>
+          /> <button
+            disabled={gpxCategory.routeDrag}
+            type="submit"
+            id="pointEditButton"
+          >Add values as New Start Point</button>
         </form>
       </div>
       <form method="post" onSubmit={callPointsUpdate}>
@@ -134,7 +233,7 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
   );
 }
 
-const EditListItem = ({keyVar, disable, lat, lng}) => {
+const EditListItem = ({keyVar, disable, lat, lng, moveFunc, newFunc, deleteFunc}) => {
   return (
     <li id="selectMenuNode" key={keyVar}>
       LAT <input
@@ -149,7 +248,19 @@ const EditListItem = ({keyVar, disable, lat, lng}) => {
         readOnly={disable}
         defaultValue={lng}
         name={keyVar + "lng"}
-      /> <button type="submit">Move Up</button> <button type="submit">Add New Point Below</button>
+      /> <button
+        id="pointEditButton"
+        type="button"
+        onClick={moveFunc}
+      >Move Up</button> <button
+        id="pointEditButton"
+        type="button"
+        onClick={newFunc}
+      >Add New Point Below</button> <button
+        id="pointEditButton"
+        type="button"
+        onClick={deleteFunc}
+      >Delete Route Point</button>
     </li>
   );
 }

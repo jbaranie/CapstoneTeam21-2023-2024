@@ -112,7 +112,7 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
     }
     
     //Constants for marker appearances & text display
-    const ratingVal = ["Neutral", "Bad", "Photo Taken Here", "Good"];
+    const ratingVal = ["Unknown", "Bad", "Neutral", "Good"];
     const MarkerAesthetics = [
       {
         borderColor: "#242124",
@@ -143,14 +143,20 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
     try {
       //create set of markers and store
       let wayptMarkers = [];
-      gpxData.waypoints.forEach(({name, desc, rating, LatLng}) => {
-        let markName = name + " - " + ratingVal[rating];
+      gpxData.waypoints.forEach(({name = "", desc = "", rating = 0, LatLng = {lat: 0.0, lng: 0.0}}) => {
+        let markName;
+        if (Number.isInteger(rating)) {
+          markName = name + " - " + ratingVal[rating];
+        } else {
+          markName = name;
+        }
         let newMarker = new mapMarkerLib.AdvancedMarkerElement({
           map,
           position: LatLng,
           title: markName,
           content: (new mapMarkerLib.PinElement(MarkerAesthetics[rating])).element
-        }); // ,
+        });
+        //additional info-display on clicking waypoint
         newMarker.addListener("click",  ({ domEvent }) => {
           //const { target } = domEvent;
           infoWindowInst.close();
