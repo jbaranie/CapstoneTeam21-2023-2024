@@ -433,7 +433,7 @@ const GPXFileList = ({ navigation }) => {
           PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
           {
             title: "File System Permission",
-            message: "App needs access to your file system",
+            message: "App needs access to read your file system",
             buttonNeutral: "Ask Me Later",
             buttonNegative: "Cancel",
             buttonPositive: "OK"
@@ -443,7 +443,7 @@ const GPXFileList = ({ navigation }) => {
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
           {
             title: "File System Permission",
-            message: "App needs access to your file system",
+            message: "App needs access to write to your file system",
             buttonNeutral: "Ask Me Later",
             buttonNegative: "Cancel",
             buttonPositive: "OK"
