@@ -11,6 +11,7 @@ import SelectMenuComponent from '../react_scripts/select_menu_list.js';
 import EditRouteComponent from '../react_scripts/edit_route_component.js';
 import InstructionsList from '../react_scripts/instructions_list.js';
 import useToggle from '../react_scripts/toggle_hook.js';
+import { convertToXMLtext } from '../react_scripts/save_gpx_calls.js';
 
 //default/new values for settings, gpx object, etc.
 const defaultGpxCategory = {
@@ -26,6 +27,7 @@ const emptyGpxObj = {
   "tracks": [],
   "waypoints": []
 };
+const gpxFileDefault = "modifiedGPXroute.gpx";
 
 const HomeTab = () => {
   /**
@@ -58,7 +60,6 @@ const HomeTab = () => {
 
   //local renders and dbname state
   const [fileCreateInput, flipCreateInput] = useToggle(false);
-  const [fileCreationStatus, setCreationStatus] = useState("");
   const [dbNameInput, flipNameInput] = useToggle(false);
   const [saveNameVal, setSaveNameVal] = useState("enterUniqueName");
   const statusMessages = [
@@ -72,15 +73,7 @@ const HomeTab = () => {
   const [newPointAy, setNewAy] = useState(0.0);
   const [newPointBx, setNewBx] = useState(0.0);
   const [newPointBy, setNewBy] = useState(0.0);
-
-  //functions called on specific page buttons
-  const createRoute = () => {
-    console.log("Creating new route!");
-    flipCreateInput();
-  }
   const createAction = () => {
-    //TODO request confirmation to ensure this is not an error
-
     //reset data on home page to new, empty GPX file
     resetHomeTab();
     //set new route with two points in creation dialog
@@ -94,9 +87,38 @@ const HomeTab = () => {
     console.log("New route started! See plotting for details.");
     flipCreateInput();
   }
+
+  //asynchronous save
+  const saveFile = async (blob) => {
+    try {
+      const handle = await window.showSaveFilePicker({
+        types: [{
+          accept: {
+            // Omitted to give user control; please be careful.
+          },
+        }],
+      });
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+      return handle;
+    } catch (err) {
+      console.error(err.name, err.message);
+    }
+  }
+
+  //functions called on specific page buttons
+  const createRoute = () => {
+    console.log("Creating new route!");
+    flipCreateInput();
+  }
   const downloadAttempt = () => {
     console.log("Download attempt!");
-    //TODO transform fileContents into XML object, extract string representation, send it to user as downloaded text file
+    let xmlTxt = convertToXMLtext(fileContents);
+    console.log(xmlTxt);
+    let blob = new Blob([xmlTxt]);
+    alert("File contents collected; see browser console if download does not appear.");
+    saveFile(blob);
   }
   const saveAttempt = () => {
     console.log("Save attempt!");
@@ -127,14 +149,11 @@ const HomeTab = () => {
   const FileCreationBlock = (
     <div>
       <p>Start Point Coordinates</p>
-      LAT <input type="number" max={90} min={-90} onChange={event => setNewAx(parseFloat(event.target.value))}></input>
-      <p></p>
-      LON <input type="number" max={180} min={-180} onChange={event => setNewAy(parseFloat(event.target.value))}></input>
+      LAT <input type="number" max={90} min={-90} onChange={event => setNewAx(parseFloat(event.target.value))}></input> LON <input type="number" max={180} min={-180} onChange={event => setNewAy(parseFloat(event.target.value))}></input>
       <p>End Point Coordinates</p>
-      LAT <input type="number" max={90} min={-90} onChange={event => setNewBx(parseFloat(event.target.value))}></input>
+      LAT <input type="number" max={90} min={-90} onChange={event => setNewBx(parseFloat(event.target.value))}></input> LON <input type="number" max={180} min={-180} onChange={event => setNewBy(parseFloat(event.target.value))}></input>
       <p></p>
-      LON <input type="number" max={180} min={-180} onChange={event => setNewBy(parseFloat(event.target.value))}></input>
-      <p>{fileCreationStatus}</p>
+      <p>WARNING: this will clear GPX data from the page! Export or Save first...</p>
       <button id="selectMenuButton" onClick={createAction}>Create new route with these coordinates.</button>
     </div>
     );
@@ -142,10 +161,10 @@ const HomeTab = () => {
   //page DOM
   return (
     <div id="background">
-        <p>Welcome to the Map Page of our experimental route website.</p>
-        <p>This area will be used to view route content and to plan routes using markers.</p>
-        <p></p>
+        <p id="infoText">Welcome to the Map Page.</p>
+        <p id="infoText">Here, you can view GPX contents (routes, tracks, & waypoints), and plan routes.</p>
         <GPXParseLocal saveDataHook={saveDataHook}/>
+        <p id="infoText">Warning: importing a new file will clear any previous GPX data present; export or save first if data is already present.</p>
         <div id="horizontalBlock">
           <InstructionsList />
           <SelectMenuComponent saveCall={setGPXcategory}/>

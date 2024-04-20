@@ -8,7 +8,7 @@
 
 import React, { useState } from 'react';
 
-export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMarker"></gpx>`) => {
+const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMarker"></gpx>`) => {
   //parser setup
   let parser = new DOMParser();
   let xmlDoc = parser.parseFromString(gpxData, "text/xml");
@@ -145,6 +145,7 @@ const GPXParseLocal = ({ saveDataHook }) => {
 
   //this component stores the input gpx file data in its three categories
   const handleFileChange = (event) => {
+    console.log(event);
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();

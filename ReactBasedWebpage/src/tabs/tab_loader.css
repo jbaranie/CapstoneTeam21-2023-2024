@@ -54,6 +54,10 @@
             padding: 20px;
         }
 
+        #infoText {
+            padding: 4px;
+            font-size: 1.15rem;
+        }
 
         /* Modern button style */
         .button {
