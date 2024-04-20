@@ -1397,17 +1397,49 @@ const GPXWaypoints = ({ navigation, route }) => {
           {console.log('Rendering Imported Waypoints:', importedWaypoints)}
            */}
 
-         {trackPoints.length > 0 && (
-          <Polyline
-            coordinates={trackPoints.map(route => ({
-              latitude: parseFloat(route.latitude),
-              longitude: parseFloat(route.longitude),
-            }))}
-            strokeColor="#808080" // Gray color
-            strokeWidth={5}
-            lineDashPattern={[2,5]} //Dash pattern
-          />
-        )}
+  {trackPoints.length > 0 && (
+    <>
+      <Polyline
+        coordinates={trackPoints.map(tp => ({
+          latitude: parseFloat(tp.latitude),
+          longitude: parseFloat(tp.longitude),
+        }))}
+      strokeColor="#808080" // Gray color
+      strokeWidth={5}
+      lineDashPattern={[2,5]} // Dash pattern for trackpoints
+    />
+    {/* Custom view marker for the first trackpoint */}
+    {trackPoints.length > 0 && (
+      <Marker
+        key={`start-${trackPoints[0].latitude}-${trackPoints[0].longitude}`}
+        coordinate={{ latitude: trackPoints[0].latitude, longitude: trackPoints[0].longitude }}
+        title="Start"
+      >
+        <View style={{
+          height: 10,
+          width: 10,
+          backgroundColor: 'lime', // Start point is lime green 
+          borderRadius: 5,
+        }} />
+      </Marker>
+    )}
+    {/* Custom view marker for the last trackpoint */}
+    {trackPoints.length > 0 && (
+      <Marker
+        key={`end-${trackPoints[trackPoints.length - 1].latitude}-${trackPoints[trackPoints.length - 1].longitude}`}
+        coordinate={{ latitude: trackPoints[trackPoints.length - 1].latitude, longitude: trackPoints[trackPoints.length - 1].longitude }}
+        title="End"
+      >
+        <View style={{
+          height: 10,
+          width: 10,
+          backgroundColor: 'red', // End point is red
+          borderRadius: 5, 
+        }} />
+      </Marker>
+    )}
+  </>
+  )}
 
         {routes.length > 0 && (
           <Polyline
