@@ -547,7 +547,7 @@ const GPXFileList = ({ navigation }) => {
           setRoutes(tempRoutes);
           setTracks(tempTracks);
 
-          const zoomPadding = 0.005; 
+          const zoomPadding = 0.003; 
           if (latitudes.length > 0 && longitudes.length > 0) {
             const minLat = Math.min(...latitudes);
             const maxLat = Math.max(...latitudes);
@@ -556,8 +556,8 @@ const GPXFileList = ({ navigation }) => {
   
             const midLat = (minLat + maxLat) / 2;
             const midLon = (minLon + maxLon) / 2;
-  const latDelta = (maxLat - minLat) + zoomPadding; // Closer zoom
-  const lonDelta = (maxLon - minLon) + zoomPadding; // Closer zoom
+            const latDelta = (maxLat - minLat) + zoomPadding; 
+            const lonDelta = (maxLon - minLon) + zoomPadding; 
   
             setInitialRegion({
               latitude: midLat,
@@ -596,10 +596,10 @@ const GPXFileList = ({ navigation }) => {
         >
           
           {routes.length > 0 && (
-            <Polyline coordinates={routes} strokeColor="#FF0000" strokeWidth={2} />
+            <Polyline coordinates={routes} strokeColor="#808080" strokeWidth={2} />
           )}
           {tracks.length > 0 && (
-            <Polyline coordinates={tracks} strokeColor="#0000FF" strokeWidth={2} />
+            <Polyline coordinates={tracks} strokeColor="#808080" strokeWidth={2} />
           )}
         </MapView>
       </View>
