@@ -10,8 +10,8 @@ import React, { useState } from 'react';
 
 export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMarker"></gpx>`) => {
   //parser setup
-  var parser = new DOMParser();
-  var xmlDoc = parser.parseFromString(gpxData, "text/xml");
+  let parser = new DOMParser();
+  let xmlDoc = parser.parseFromString(gpxData, "text/xml");
 
   //error handling on file issues
   const errorNode = xmlDoc.querySelector("parsererror");
@@ -21,21 +21,21 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
   }
 
   //route parsing
-  var routes = [];
-  var rteElements = xmlDoc.getElementsByTagName("rte");
-  for (var i = 0; i < rteElements.length; i++) {
-    var route = {points: []};
-    var nameElement = rteElements[i].getElementsByTagName("name");
-    var descElement = rteElements[i].getElementsByTagName("desc");
+  let routes = [];
+  let rteElements = xmlDoc.getElementsByTagName("rte");
+  for (let i = 0; i < rteElements.length; i++) {
+    let route = {points: [], id: rteElements[i].getAttribute("id")};
+    let nameElement = rteElements[i].getElementsByTagName("name");
+    let descElement = rteElements[i].getElementsByTagName("desc");
     if (nameElement.length > 0) {
       route.name = nameElement[0].textContent;
     }
     if (descElement.length > 0) {
       route.desc = descElement[0].textContent;
     }
-    var rteptElements = rteElements[i].getElementsByTagName("rtept");
-    for (var j = 0; j < rteptElements.length; j++) {
-      var rtept = {
+    let rteptElements = rteElements[i].getElementsByTagName("rtept");
+    for (let j = 0; j < rteptElements.length; j++) {
+      let rtept = {
         LatLng: {
           lat: parseFloat(rteptElements[j].getAttribute("lat")),
           lng: parseFloat(rteptElements[j].getAttribute("lon"))
@@ -51,42 +51,53 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
       }
       route.points.push(rtept);
     }
+    if (route.id === null) {
+      //TODO generate id-val
+    }
     routes.push(route);
   }
 
   //track parsing
-  var tracks = [];
-  var trkElements = xmlDoc.getElementsByTagName("trk");
-  for (i = 0; i < trkElements.length; i++) {
-    var track = { id: trkElements[i].getAttribute("id"), points: [] };//TODO check for not-present attribute value
+  let tracks = [];
+  let trkElements = xmlDoc.getElementsByTagName("trk");
+  for (let i = 0; i < trkElements.length; i++) {
+    let track = { id: trkElements[i].getAttribute("id"), points: [] };
     //Note: operates heavily on (paired w/ mobile app's design) 1 segment per track system
-    var trksegElements = trkElements[i].getElementsByTagName("trkseg");
-    for (j = 0; j < trksegElements.length; j++) {
-        var trkptElements = trksegElements[j].getElementsByTagName("trkpt");
-        for (var k = 0; k < trkptElements.length; k++) {
-            var lat = parseFloat(trkptElements[k].getAttribute("lat"));
-            var lon = parseFloat(trkptElements[k].getAttribute("lon"));
-            var point = {
+    let trksegElements = trkElements[i].getElementsByTagName("trkseg");
+    for (let j = 0; j < trksegElements.length; j++) {
+        let trkptElements = trksegElements[j].getElementsByTagName("trkpt");
+        for (let k = 0; k < trkptElements.length; k++) {
+            let lat = parseFloat(trkptElements[k].getAttribute("lat"));
+            let lon = parseFloat(trkptElements[k].getAttribute("lon"));
+            let point = {
               LatLng: {
                 lat: lat,
                 lng: lon
               },
               time: null
             };
-            var tData = trkptElements[k].getElementsByTagName("time");
+            let tData = trkptElements[k].getElementsByTagName("time");
             if (tData.length > 0) {
               point.time = tData[0].textContent;
             }
             track.points.push(point);
         }
     }
+    if (track.id === null) {
+      //TODO generate id-val
+    }
     tracks.push(track);
   }
 
   //waypoint parsing
-  var waypoints = [];
-  var wptElements = xmlDoc.getElementsByTagName("wpt");
-  for (i = 0; i < wptElements.length; i++) {
+  let waypoints = [];
+  let wptElements = xmlDoc.getElementsByTagName("wpt");
+  for (let i = 0; i < wptElements.length; i++) {
+    let ratingFound = wptElements[i].getElementsByTagName("rating");
+    let ratingNum = 0;
+    if (ratingFound.length > 0) {
+      ratingNum = parseInt(ratingFound[0].textContent);
+    }
     waypoints.push({
       LatLng: {
         lat: parseFloat(wptElements[i].getAttribute("lat")),
@@ -94,23 +105,23 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
       },
       name: wptElements[i].getElementsByTagName("name")[0].textContent,
       desc: wptElements[i].getElementsByTagName("desc")[0].textContent,
-      rating: parseInt(wptElements[i].getElementsByTagName("rating")[0])
+      rating: ratingNum
     });
   }
 
-  var result = {"error": false, "metadata": null, "routes": routes, "tracks": tracks, "waypoints": waypoints};
+  let result = {"error": false, "metadata": null, "routes": routes, "tracks": tracks, "waypoints": waypoints};
   //metadata parsing
-  var metaElement = xmlDoc.getElementsByTagName("metadata");
-  var metadataObj = {};
-  var metaDataInclude = false;
+  let metaElement = xmlDoc.getElementsByTagName("metadata");
+  let metadataObj = {};
+  let metaDataInclude = false;
   if (metaElement.length > 0) {
     //only one metadata node expected
-    nameElement = metaElement[0].getElementsByTagName("name");
+    let nameElement = metaElement[0].getElementsByTagName("name");
     if (nameElement.length > 0) {
       metaDataInclude = true;
       metadataObj.name = nameElement[0].textContent;
     }
-    descElement = metaElement[0].getElementsByTagName("desc");
+    let descElement = metaElement[0].getElementsByTagName("desc");
     if (descElement.length > 0) {
       metaDataInclude = true;
       metadataObj.desc = descElement[0].textContent;
@@ -124,10 +135,13 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
 };
 
 const GPXParseLocal = ({ saveDataHook }) => {
-  const [routes, setRoutes] = useState([]);
-  const [tracks, setTracks] = useState([]);
-  const [waypoints, setWaypoints] = useState([]);
-  const [metadata, setMetadata] = useState({});
+  //State handling
+  const [displayVar, setDisplayVar] = useState(0);
+  const stateText = [
+    "No file selected.",
+    "Invalid file selected.",
+    "Local file selected."
+  ];
 
   //this component stores the input gpx file data in its three categories
   const handleFileChange = (event) => {
@@ -137,19 +151,27 @@ const GPXParseLocal = ({ saveDataHook }) => {
       reader.onload = (e) => {
           const gpxData = e.target.result;
           const parseOutput = parseGPX(gpxData);
-          if (gpxData.error === true) {
+          if (parseOutput.error === true) {
             console.log("Error reading gpx-xml data from file.");
-            //TODO visual user alert
+            setDisplayVar(1);
             return;
           } else {
             saveDataHook(parseOutput);
+            setDisplayVar(2);
           }
       };
       reader.readAsText(file);
+    } else {
+      setDisplayVar(0);
     }
   };
 
-  return (<input id="secureButtons" type="file" accept=".gpx" onChange={handleFileChange}/>);
+  return (
+    <div>
+      <input id="secureButtons" type="file" accept=".gpx" onChange={handleFileChange}/>
+      <p>{stateText[displayVar]}</p>
+    </div>
+  );
 };
 
 export default GPXParseLocal;

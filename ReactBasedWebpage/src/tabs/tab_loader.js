@@ -26,7 +26,7 @@ const TabLoader = () => {
                 {/*Sets up the Main Menu Bar with Styles from styles.cc*/}
             
                 {/* Main Title In Webpage */}
-                <h2>The Experimental Route App</h2>
+                <h2>Treklyn</h2>
                 <ul>
                     <li onClick={() => changeTab('homeTab')}><a href="#Home">Home</a></li>
                     {/*<li onClick={() => changeTab('modify')}><a href="#modify">Modify GPX File</a></li>*/}
