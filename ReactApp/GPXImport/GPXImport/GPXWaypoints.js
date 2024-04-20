@@ -1600,7 +1600,7 @@ const GOOGLE_API_KEY = Platform.OS === 'android' ? GOOGLE_API_ANDROID : GOOGLE_A
   Constants.expoConfig.extra.iosGoogleMapsApiKey;
 
 // This function will make a call to the Google Directions API and return the route
-const fetchRouteFromGoogle = async (waypoints) => {
+export const fetchRouteFromGoogle = async (waypoints) => {
   const waypointsString = waypoints
     .map((point, index) => {
       if (index === 0 || index === waypoints.length - 1) return '';
@@ -1638,7 +1638,7 @@ const fetchRouteFromGoogle = async (waypoints) => {
 };
 
 // The decode function provided by Google's polyline utility
-function decodePolyline(encoded) {
+export function decodePolyline(encoded) {
   if (!encoded) {
     return [];
   }

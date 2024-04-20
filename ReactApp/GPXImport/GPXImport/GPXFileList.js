@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef} from 'react';
-import { Alert, View, Text, TouchableOpacity, Platform, FlatList, PermissionsAndroid, StyleSheet, Image, Animated, Dimensions} from 'react-native';
+import { Alert, View, Text, TouchableOpacity, Platform, FlatList, PermissionsAndroid, StyleSheet, Image, Animated, Dimensions, ActivityIndicator} from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
@@ -495,93 +495,77 @@ const GPXFileList = ({ navigation }) => {
 
   //Map Preview Logic
   const MapPreview = ({ fileName, directory }) => {
-    const [route, setRoute] = useState([]);
-    const [waypoints, setWaypoints] = useState([]);
-    const [tracks, setTracks] = useState([]);
     const [initialRegion, setInitialRegion] = useState(null);
+    const [routes, setRoutes] = useState([]);
+    const [tracks, setTracks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
+  
     useEffect(() => {
       const loadGPXData = async () => {
         setIsLoading(true);
         try {
           let fullPath = `${FileSystem.documentDirectory}${directory}/${fileName}`;
           const fileContent = await FileSystem.readAsStringAsync(fullPath);
-          const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)">\s*<name>([^<]+)<\/name>\s*<desc>([^<]+)<\/desc>\s*<rating>(\d+)<\/rating>\s*<id>\d+<\/id>\s*<\/wpt>/g;
-          const routeRegex = /<rtept lat="([-.\d]+)" lon="([-.\d]+)">\s*<name>([^<]+)<\/name>\s*<\/rtept>/g;
-          const trackRegex = /<trkpt lat="([-.\d]+)" lon="([-.\d]+)">/g;
-
-          const waypoints = [];
+  
+          let latitudes = [];
+          let longitudes = [];
+          
+          let tempRoutes = [];
+          let tempTracks = [];
+  
+          // Regex patterns to extract data
+          const waypointRegex = /<wpt lat="([^"]+)" lon="([^"]+)">/g;
+          const routeRegex = /<rtept lat="([^"]+)" lon="([^"]+)">/g;
+          const trackRegex = /<trkpt lat="([^"]+)" lon="([^"]+)">/g;
+  
           let match;
           while ((match = waypointRegex.exec(fileContent)) !== null) {
-            waypoints.push({
-              latitude: parseFloat(match[1]),
-              longitude: parseFloat(match[2]),
-              name: match[3],
-              description: match[4],
-              rating: parseInt(match[5], 10),
+            const latitude = parseFloat(match[1]);
+            const longitude = parseFloat(match[2]);
+            latitudes.push(latitude);
+            longitudes.push(longitude);
+            
+          }
+  
+          while ((match = routeRegex.exec(fileContent)) !== null) {
+            const latitude = parseFloat(match[1]);
+            const longitude = parseFloat(match[2]);
+            latitudes.push(latitude);
+            longitudes.push(longitude);
+            tempRoutes.push({ latitude, longitude });
+          }
+  
+          while ((match = trackRegex.exec(fileContent)) !== null) {
+            const latitude = parseFloat(match[1]);
+            const longitude = parseFloat(match[2]);
+            latitudes.push(latitude);
+            longitudes.push(longitude);
+            tempTracks.push({ latitude, longitude });
+          }
+  
+          
+          setRoutes(tempRoutes);
+          setTracks(tempTracks);
+
+          const zoomPadding = 0.005; 
+          if (latitudes.length > 0 && longitudes.length > 0) {
+            const minLat = Math.min(...latitudes);
+            const maxLat = Math.max(...latitudes);
+            const minLon = Math.min(...longitudes);
+            const maxLon = Math.max(...longitudes);
+  
+            const midLat = (minLat + maxLat) / 2;
+            const midLon = (minLon + maxLon) / 2;
+  const latDelta = (maxLat - minLat) + zoomPadding; // Closer zoom
+  const lonDelta = (maxLon - minLon) + zoomPadding; // Closer zoom
+  
+            setInitialRegion({
+              latitude: midLat,
+              longitude: midLon,
+              latitudeDelta: latDelta,
+              longitudeDelta: lonDelta,
             });
           }
-
-          let route = [];
-          let routeMatch;
-          while ((routeMatch = routeRegex.exec(fileContent)) !== null) {
-            route.push({
-              latitude: parseFloat(routeMatch[1]),
-              longitude: parseFloat(routeMatch[2]),
-            });
-          }
-
-          let tracks = [];
-          let trackMatch;
-          while ((trackMatch = trackRegex.exec(fileContent)) !== null) {
-            tracks.push({
-              latitude: parseFloat(trackMatch[1]),
-              longitude: parseFloat(trackMatch[2]),
-            });
-          }
-
-          setWaypoints(waypoints);
-          setRoute(route);
-          setTracks(tracks);
-
-          if (waypoints.length > 0) {
-            const firstPoint = waypoints[0];
-            setInitialRegion({
-              latitude: firstPoint.latitude,
-              longitude: firstPoint.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            });
-          } else if (route.length > 0) {
-            const firstPoint = route[0];
-            setInitialRegion({
-              latitude: firstPoint.latitude,
-              longitude: firstPoint.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            });
-          } else if (tracks.length > 0) {
-            const firstPoint = tracks[0];
-            setInitialRegion({
-              latitude: firstPoint.latitude,
-              longitude: firstPoint.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            });
-          } else {
-            // If there are no waypoints or
-            setInitialRegion({
-              latitude: 34.0522,
-              longitude: -118.2437,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            });
-          }
-
-          //console.log(waypoints);
-          //console.log(fullPath);
-          //console.log(fileContent);
           setIsLoading(false);
         } catch (error) {
           console.error('Error loading GPX data:', error);
@@ -591,42 +575,31 @@ const GPXFileList = ({ navigation }) => {
   
       loadGPXData();
     }, [fileName, directory]);
-    
+  
     if (isLoading) {
-      return <View style={{ width: '90%', height: 120, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Loading...</Text>
+      return <View style={{ width: '100%', height: 120, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
       </View>;
     }
-
-    //Don't render until map is initlized
+  
     if (!initialRegion) return null;
-    
-
+  
     return (
-      <View style={{
-        width: '90%', 
-        height: 120, 
-        minHeight: 120,
-        borderWidth: 1, 
-        borderColor: 'gray', 
-        borderRadius: 5, 
-        overflow: 'hidden', 
-      }}>
+      <View style={{ width: '100%', height: 120, borderWidth: 1, borderColor: 'gray', borderRadius: 5, overflow: 'hidden' }}>
         <MapView
           style={{ flex: 1 }}
           scrollEnabled={false}
           zoomEnabled={false}
           pitchEnabled={false}
           rotateEnabled={false}
-          initialRegion={initialRegion}>
-          {waypoints.map((point, index) => (
-            <Marker key={index} coordinate={{ latitude: point.latitude, longitude: point.longitude }} title={point.title} />
-          ))}
-          {route.length > 1 && (
-            <Polyline coordinates={route} strokeColor="#000" strokeWidth={2} />
+          initialRegion={initialRegion}
+        >
+          
+          {routes.length > 0 && (
+            <Polyline coordinates={routes} strokeColor="#FF0000" strokeWidth={2} />
           )}
-          {tracks.length > 1 && (
-            <Polyline coordinates={tracks} strokeColor="blue" strokeWidth={2} />
+          {tracks.length > 0 && (
+            <Polyline coordinates={tracks} strokeColor="#0000FF" strokeWidth={2} />
           )}
         </MapView>
       </View>
