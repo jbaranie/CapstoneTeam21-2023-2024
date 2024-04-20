@@ -1135,15 +1135,18 @@ const GPXWaypoints = ({ navigation, route }) => {
     );
   };
 
-  // Actual function to clear the route
+    // Actual function to clear the route
   const handleClearRoute = () => {
-
+    // Clear all routes, waypoints, and related states
     setRoutes([]);
     setWaypoints([]);
-
+    setTrackPoints([]); // Clear TrackPoints
     setImportedWaypoints([]); 
     setImportedRoutes([]); 
+    setTraversableRoutes([]); // Clear drawn routes on the map
     setImported(false); 
+    
+    // setCurrentRoute(''); // I need to test first to see if its necessary but this clears the current route.
   };
 
   //Seperated Rendering Components --------------------------------
