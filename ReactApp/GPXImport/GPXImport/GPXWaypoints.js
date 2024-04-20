@@ -1455,18 +1455,21 @@ const GPXWaypoints = ({ navigation, route }) => {
             );
         })}
 
-{importedRoutes.map((rtept, index) => {
-  // For routepoints only - Determine the display name based on whether it's the first or last point, or a named routepoint
-  let title = "Routepoint"; // Default routepoint name
-  if (rtept.name) {
-    title = rtept.name; // Use the given name if available
-  } else if (index === 0) {
-    title = "Start"; // Special name for the start point
-  } else if (index === importedRoutes.length - 1) {
-    title = "End"; // Special name for the end point
-  }
+  {importedRoutes.map((rtept, index) => {
+    // For routepoints only - Determine the display name based on whether it's the first or last point, or already named routepoint.
+    let title = "Routepoint"; // Default routepoint name
+    if (rtept.name) {
+      title = rtept.name; // Use the given name if available
+    } else if (index === 0) {
+      title = "Start"; // Special name for the start point
+    } else if (index === importedRoutes.length - 1) {
+      title = "End"; // Special name for the end point
+    }
 
-  return (
+    // Firs route point is green, last route point is red, all others are white  
+    const markerColor = index === 0 ? "lime" : (index === importedRoutes.length - 1 ? "red" : "white");
+
+    return (
     <Marker
       key={`${rtept.latitude}-${rtept.longitude}`}
       coordinate={{ latitude: rtept.latitude, longitude: rtept.longitude }}
@@ -1482,15 +1485,15 @@ const GPXWaypoints = ({ navigation, route }) => {
         <View style={{
           height: 10,
           width: 10,
-          backgroundColor: 'white', 
+          backgroundColor: markerColor, 
           borderRadius: 5, 
           borderWidth: 2, 
           borderColor: 'black' 
         }} />
       </View>
     </Marker>
-  );
-})}
+    );
+    })}
       </MapView>
       ) : (
         <LoadingScreen />
