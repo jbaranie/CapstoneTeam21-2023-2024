@@ -1062,7 +1062,7 @@ const GPXWaypoints = ({ navigation, route }) => {
     try {
       await deleteWaypointFromGPX(currentGPXPath, id);
       const newWaypoint = {
-        id: id, 
+        id: Date.now().toString(), 
         latitude: selectedWaypoint.latitude,
         longitude: selectedWaypoint.longitude,
         name: newTitle,
