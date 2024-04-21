@@ -1,7 +1,7 @@
 // gpx_routing.js
 // Provides an object that acts on a sibling Map and parent APIProvider to render route navigation
 //
-//Coder: Larry Huang
+// Coder: Larry Huang
 
 import { useEffect, useState } from "react";
 
@@ -21,8 +21,7 @@ import { useEffect, useState } from "react";
 const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDataHook=()=>{} }) => {
   const [markerDataSetup, setMarkerDataSetup] = useState([]); //use to preload list contents for components
   const [markerComponents, setMarkerComponents] = useState([]);
-  const [firstItemKey, keyMove] = useState(0);
-  const [updateAgainBlock, toggleUpdateAgain] = useState(false);
+  const [firstItemKey, keyMove] = useState(0); //used when repopulating list to avoid key overlap issues
 
   useEffect(() => {
     if (markerList && markerList.length > 0) {
@@ -40,10 +39,6 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
   }, [markerList]);
 
   useEffect(() => {
-    if (updateAgainBlock) {
-      toggleUpdateAgain();
-      return;
-    }
     if (markerDataSetup && markerDataSetup.length > 0) {
       //map contents of setup to components
       let markerMap = markerDataSetup.map(({keyVar, lat, lng}) => {

@@ -1,7 +1,8 @@
 // select_menu_list.js
 // Provides toggle buttons for displaying different parts of a GPX file's data
+// Button text changes with the state changes
 //
-//Coder: Larry Huang
+// Coder: Larry Huang
 //
 
 import { useEffect } from 'react';
@@ -26,6 +27,7 @@ const SelectMenuComponent = ({ saveCall = undefined }) => {
     saveCall(saveObj);
   }, [routeDisplay, routeDraggable, trackDisplay, wayptDisplay, saveCall]);
 
+  //data of hte buttons
   let toggleContents = [
     {
       id: 0,
@@ -64,6 +66,8 @@ const SelectMenuComponent = ({ saveCall = undefined }) => {
       func: setWayptDisplay
     }
   ];
+
+  //provides the buttons through a map of the data
   const toggleComponents = toggleContents.map(({id, displayText, val, func}) => {
     let actualText = val ? displayText[0] : displayText[1];
     return (<li key={id} id="selectMenuNode">

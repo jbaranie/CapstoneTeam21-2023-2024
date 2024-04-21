@@ -27,7 +27,6 @@ const emptyGpxObj = {
   "tracks": [],
   "waypoints": []
 };
-const gpxFileDefault = "modifiedGPXroute.gpx";
 
 const HomeTab = () => {
   /**
@@ -68,7 +67,7 @@ const HomeTab = () => {
   ];
   const [saveStatusMessage, setSaveStatus] = useState(0);
 
-  //used in creation flow
+  //used in new-GPX creation flow
   const [newPointAx, setNewAx] = useState(0.0);
   const [newPointAy, setNewAy] = useState(0.0);
   const [newPointBx, setNewBx] = useState(0.0);
@@ -88,7 +87,7 @@ const HomeTab = () => {
     flipCreateInput();
   }
 
-  //asynchronous save
+  //asynchronous save (opens save menu for user action)
   const saveFile = async (blob) => {
     try {
       const handle = await window.showSaveFilePicker({
@@ -109,9 +108,11 @@ const HomeTab = () => {
 
   //functions called on specific page buttons
   const createRoute = () => {
+    //instead of actually creating the route, this function opens the modal for starting input
     console.log("Creating new route!");
     flipCreateInput();
   }
+  //collects the current GPX contents being edited and tries to save it
   const downloadAttempt = () => {
     console.log("Download attempt!");
     let xmlTxt = convertToXMLtext(fileContents);
@@ -120,6 +121,7 @@ const HomeTab = () => {
     alert("File contents collected; see browser console if download does not appear.");
     saveFile(blob);
   }
+  //function called to save to database
   const saveAttempt = () => {
     console.log("Save attempt!");
     if (dbNameInput === false) {
@@ -140,12 +142,14 @@ const HomeTab = () => {
       }
     }
   }
+  //emergency reset called to reset the page to nothing
   const resetHomeTab = () => {
     console.log("Resetting page!");
     setGPXcategory({...defaultGpxCategory});
     setFileContents({...emptyGpxObj});
   }
 
+  //modal of editing a new GPX route
   const FileCreationBlock = (
     <div>
       <p>Start Point Coordinates</p>

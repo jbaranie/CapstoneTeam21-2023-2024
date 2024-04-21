@@ -2,7 +2,7 @@
 // Provides an object that acts on a sibling Map (key provided by parent APIProvider) to render route navigation
 // It also provides basic rendering for waypoints (as Markers) and tracks (as Polylines)
 //
-//Coder: Larry Huang
+// Coder: Larry Huang
 //
 
 import React, { useEffect, useState } from 'react';
@@ -19,19 +19,20 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
     // A: routes will use the directionsService to display a bike-usable path
     // B: tracks can use their existing coordinate data due to the higher number of points and real-point data
 
-  //core contents (code that runs to plot route)
+  //Libraries from google maps API
   const map = useMap("reactGoogleMap");
   const routesLibrary = useMapsLibrary('routes');
   const mapMarkerLib = useMapsLibrary('marker');
   const coreLib = useMapsLibrary('maps');
   const streetLib = useMapsLibrary('streetView');
+
+  //state variables
   const [directionsService, setDirectionsService] = useState();//<google.maps.DirectionsService>
   const [directionsRenderer, setDirectionsRenderer] = useState();//<google.maps.DirectionsRenderer>
   const [routes, setRoutes] = useState([]);//<google.maps.DirectionsRoute[]>
   const [infoWindowInst, setInfoWindowInst] = useState(null);//google.maps.InfoWindow
   const [routeIndex, setRouteIndex] = useState(0);
   const [pointList, setPointList] = useState([]);//passed to route renderer
-  //const [dragOutputList, setDragOutput] = useState([]);//output of DirectionsRenderer; used in saving drag-edit
   const [trackContents, setTrackContents] = useState([]);
   const selected = routes[routeIndex];
   const leg = selected?.legs[0];
@@ -48,7 +49,6 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
       for (let i = 0; i < gpxData.routes[0].points.length; i = i + 1) {
         routePointList.push(gpxData.routes[0].points[i].LatLng);
       }
-      //TODO add control to prevent propogation loop when editing
       setPointList(routePointList);
       markerOutputCall(routePointList);
     } catch (error) {
@@ -104,6 +104,36 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
   }, [trackContents, gpxCategory.track, map]);
 
   
+    
+  //Constants for marker appearances & text display
+  const ratingVal = ["Unknown", "Bad", "Neutral", "Good"];
+  const MarkerAesthetics = [
+    {
+      borderColor: "#242124",
+      background: "#696969",
+      glyph: "",
+      scale: 1.3
+    },
+    {
+      borderColor: "#242124",
+      background: "#ff4500",
+      glyph: "",
+      scale: 1.5
+    },
+    {
+      borderColor: "#242124",
+      background: "#696969",
+      glyph: "",
+      scale: 1.5
+    },
+    {
+      borderColor: "#242124",
+      background: "#2e8b57",
+      glyph: "",
+      scale: 1.5
+    }
+  ];
+
   //set contents of the waypoints
   useEffect(() => {
     if (!map) return;
@@ -112,35 +142,6 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
     if (infoWindowInst === null) {
       setInfoWindowInst(new streetLib.InfoWindow());
     }
-    
-    //Constants for marker appearances & text display
-    const ratingVal = ["Unknown", "Bad", "Neutral", "Good"];
-    const MarkerAesthetics = [
-      {
-        borderColor: "#242124",
-        background: "#696969",
-        glyph: "",
-        scale: 1.3
-      },
-      {
-        borderColor: "#242124",
-        background: "#ff4500",
-        glyph: "",
-        scale: 1.5
-      },
-      {
-        borderColor: "#242124",
-        background: "#696969",
-        glyph: "",
-        scale: 1.5
-      },
-      {
-        borderColor: "#242124",
-        background: "#2e8b57",
-        glyph: "",
-        scale: 1.5
-      }
-    ];
 
     try {
       //create set of markers and store
@@ -206,9 +207,6 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
       //console.log("There are not enough points to render a route.");
       return;
     }
-  
-    //route data changes propogate from map, not gpxData, at this time
-    //if (gpxCategory.routeDrag) return; //TODO fix render-clear on gpxCategory.routeDrag==true
 
     //plot route points from gpxData
     if (gpxCategory.route) {
@@ -328,6 +326,7 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gpxCategory.routeDrag]);
 
+  //No visual component for this object
   return (<></>);
 }
 

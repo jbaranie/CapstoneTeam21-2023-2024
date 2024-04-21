@@ -1,6 +1,7 @@
-//instructions_list.js
+// instructions_list.js
+// provides a list of instructions for the map page (can be hidden with the attached button)
 //
-//Coder: Larry Huang
+// Coder: Larry Huang
 
 import useToggle from "./toggle_hook";
 
@@ -35,11 +36,6 @@ const instructionTextList = [
     textVal: "WARNING: attempting to save before toggling drag-editing off may not collect the data appropriately."
   }
 ];
-// ,
-//   {
-//     id: 5,
-//     textVal: ""
-//   }
 
 //nodes
 const InstructionsList = () => {
