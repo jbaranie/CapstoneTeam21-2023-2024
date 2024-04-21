@@ -1061,6 +1061,9 @@ const GPXWaypoints = ({ navigation, route }) => {
   const updateWaypoint = async (id, newTitle, newDescription, newRating) => {
     try {
       await deleteWaypointFromGPX(currentGPXPath, id);
+      await deleteWaypointFromGPX(GPX_FILE_PATH, id);
+
+      setWaypoints(prevWaypoints => prevWaypoints.filter(wp => wp.id !== id));
       const newWaypoint = {
         id: Date.now().toString(), 
         latitude: selectedWaypoint.latitude,
@@ -1070,6 +1073,7 @@ const GPXWaypoints = ({ navigation, route }) => {
         rating: newRating
       };
       await addWaypointToGPX(currentGPXPath, newWaypoint.latitude, newWaypoint.longitude, newWaypoint.rating, newWaypoint.id, newTitle, newDescription);
+      await addWaypointToGPX(GPX_FILE_PATH, newWaypoint.latitude, newWaypoint.longitude, newWaypoint.rating, newWaypoint.id, newTitle, newDescription);
       
       const updatedWaypoints = waypoints.map(wp => wp.id === id ? newWaypoint : wp);
         setWaypoints(updatedWaypoints);
