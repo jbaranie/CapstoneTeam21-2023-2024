@@ -1,5 +1,15 @@
 import {StyleSheet} from 'react-native';
 
+export const colors = {
+  darkGreen: '#132A13',
+  calPolyGreen: '#255325',
+  fernGreen: '#48763A',
+  mossGreen: '#849C64',
+  sage: '#C0C28D',
+  pearl: '#D3D5B5',
+  alabaster: '#E5E7DC',
+};
+
 export const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -97,5 +107,23 @@ export const styles = StyleSheet.create({
       right: 100,
       marginBottom: 5,
       alignItems:"left"
-    }
+    },
+    drawerItem: {
+    },
+    drawerLabel: {
+      color: colors.alabaster,
+    },
+    drawerActiveItem: {
+      backgroundColor: colors.fernGreen,
+    },
+    drawerInactiveItem: {
+      backgroundColor: colors.calPolyGreen,
+    },
+    drawerStyle: {
+      backgroundColor: colors.calPolyGreen,
+    },
+    gpxListContainer: {
+      flex: 1,
+      backgroundColor: colors.calPolyGreen,  // Use the Cal Poly Green for the background
+    },
   });
