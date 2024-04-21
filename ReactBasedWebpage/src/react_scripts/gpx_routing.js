@@ -328,7 +328,7 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gpxCategory.routeDrag]);
 
-  return (<button id="absoluteButton" disabled={!gpxCategory.routeDrag} onClick={saveDraggedData}>Collect Drag Data</button>);
+  return (<></>);
 }
 
 export default Routing;

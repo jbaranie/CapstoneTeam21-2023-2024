@@ -29,6 +29,10 @@ const instructionTextList = [
   {
     id: 5,
     textVal: "Always protect the route from dragging (toggle it off) before attempting to save; this action repopulates the coordinate data for user-keypad editing."
+  },
+  {
+    id: 6,
+    textVal: "WARNING: attempting to save before toggling drag-editing off may not collect the data appropriately."
   }
 ];
 // ,
