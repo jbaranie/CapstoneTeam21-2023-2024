@@ -139,7 +139,7 @@
         }
         #selectMenuButton {
             height: 45px;
-            width: 600px;
+            width: 500px;
             background-color: #1d451b;
             color: #fff;
             border: none;
@@ -154,6 +154,7 @@
         #instructionListStyle {
             text-align: left;
         }
+        #absoluteButton {}
 
         /*Used for better organizing the page*/
         #horizontalBlock {

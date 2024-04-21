@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="CyclingRouteMarker">
+<gpx version="1.1" creator="Treklyn">
 <metadata>
 <name>Extended Flagstaff Route</name>
 <desc>An extended jagged route through Flagstaff, Arizona with additional waypoints.</desc>
 </metadata>
-<rte id="1234672">
-<name>Extended Flagstaff Route</name>
+<rte id="1234672" >
 <rtept lat="35.1987" lon="-111.6515" >
 <name>Start</name>
 <desc>Starting point of the route.</desc>
-</rtept>
+<rtept/>
 <rtept lat="35.1988" lon="-111.6525" />
-<rtept lat="35.1992" lon="-111.6540" />
+<rtept lat="35.1992" lon="-111.654" />
 <rtept lat="35.1998" lon="-111.6555" />
-<rtept lat="35.2000" lon="-111.6548" />
-<rtept lat="35.2005" lon="-111.6540" />
+<rtept lat="35.2" lon="-111.6548" />
+<rtept lat="35.2005" lon="-111.654" />
 <rtept lat="35.2009" lon="-111.6528" />
-<rtept lat="35.2012" lon="-111.6520" />
+<rtept lat="35.2012" lon="-111.652" />
 <rtept lat="35.2018" lon="-111.6505" />
 <rtept lat="35.2022" lon="-111.6498" />
-<rtept lat="35.2025" lon="-111.6490" />
-<rtept lat="35.2030" lon="-111.6485" />
+<rtept lat="35.2025" lon="-111.649" />
+<rtept lat="35.203" lon="-111.6485" />
 <rtept lat="35.2035" lon="-111.6478" />
-<rtept lat="35.2040" lon="-111.6470" >
+<rtept lat="35.204" lon="-111.647" >
 <name>Extended End</name>
 <desc>Extended ending point of the route.</desc>
-</rtept>
+<rtept/>
 </rte>
 <trk id="12837223" >
-<type>Cycling</type>
 <trkseg>
 <trkpt lat="46" lon="-111" >
 <time>2024-03-25T18:08:24</time>
@@ -43,7 +41,7 @@
 <desc>Baddd</desc>
 <rating>1</rating>
 </wpt>
-<wpt lat="35.2012" lon="-111.6520" >
+<wpt lat="35.2012" lon="-111.652" >
 <name>Good Spot</name>
 <desc>A Good Spot!</desc>
 <rating>3</rating>

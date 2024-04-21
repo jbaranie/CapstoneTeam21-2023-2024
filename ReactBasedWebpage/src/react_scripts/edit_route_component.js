@@ -53,7 +53,6 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
             lng={lng}
             key={keyVar}
             keyVar={keyVar}
-            disable={gpxCategory.routeDrag}
             moveFunc={() => {markerMove(keyVar)}}
             newFunc={() => {markerAdd(keyVar)}}
             deleteFunc={() => deletePoint(keyVar)}
@@ -67,7 +66,40 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [markerDataSetup, gpxCategory.routeDrag]);
 
-  //TODO functions that handle changes to markerComponents based upon route data changes
+  const EditListItem = ({keyVar, lat, lng, moveFunc, newFunc, deleteFunc}) => {
+    return (
+      <li id="selectMenuNode" key={keyVar}>
+        LAT <input
+          type="number"
+          step="0.00001"
+          disabled={gpxCategory.routeDrag}
+          defaultValue={lat}
+          name={keyVar + "lat"}
+        /> LON <input
+          type="number"
+          step="0.00001"
+          disabled={gpxCategory.routeDrag}
+          defaultValue={lng}
+          name={keyVar + "lng"}
+        /> <button
+          id="pointEditButton"
+          type="button"
+          onClick={moveFunc}
+          disabled={gpxCategory.routeDrag}
+        >Move Up</button> <button
+          id="pointEditButton"
+          type="button"
+          onClick={newFunc}
+          disabled={gpxCategory.routeDrag}
+        >Add New Point Below</button> <button
+          id="pointEditButton"
+          type="button"
+          onClick={deleteFunc}
+          disabled={gpxCategory.routeDrag}
+        >Delete Route Point</button>
+      </li>
+    );
+  }
 
   //add to first item in list
   const markerAddStart = (event) => {
@@ -204,12 +236,12 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
         <form method="post" onSubmit={markerAddStart}>
           Add to list start: LAT <input type="number"
             step="0.00001"
-            hidden={gpxCategory.routeDrag}
+            disabled={gpxCategory.routeDrag}
             readOnly={gpxCategory.routeDrag}
             name="startLat"
           /> LON <input type="number"
             step="0.00001"
-            hidden={gpxCategory.routeDrag}
+            disabled={gpxCategory.routeDrag}
             readOnly={gpxCategory.routeDrag}
             name="startLng"
           /> <button
@@ -230,38 +262,6 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
       </form>
       <p>Note: if you do not use this button before making a dragging edit, changes will be lost.</p>
     </div>
-  );
-}
-
-const EditListItem = ({keyVar, disable, lat, lng, moveFunc, newFunc, deleteFunc}) => {
-  return (
-    <li id="selectMenuNode" key={keyVar}>
-      LAT <input
-        type="number"
-        step="0.00001"
-        readOnly={disable}
-        defaultValue={lat}
-        name={keyVar + "lat"}
-      /> LON <input
-        type="number"
-        step="0.00001"
-        readOnly={disable}
-        defaultValue={lng}
-        name={keyVar + "lng"}
-      /> <button
-        id="pointEditButton"
-        type="button"
-        onClick={moveFunc}
-      >Move Up</button> <button
-        id="pointEditButton"
-        type="button"
-        onClick={newFunc}
-      >Add New Point Below</button> <button
-        id="pointEditButton"
-        type="button"
-        onClick={deleteFunc}
-      >Delete Route Point</button>
-    </li>
   );
 }
 
