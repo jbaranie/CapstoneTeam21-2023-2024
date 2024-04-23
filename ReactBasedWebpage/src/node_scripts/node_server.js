@@ -8,7 +8,8 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
-
+const GPXParser = require('./NodeParseData');
+const { insertGpxFile, insertWaypoint, insertTrack, insertSegment,insertTrackPoint, insertRoute, insertRoutePoint } = require('./database_scripts//database_runtime_scripts');
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -36,7 +37,10 @@ const storageGPX = multer.diskStorage({
     cb(null, gpxPath);
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    // Append a timestamp to the original file name
+    const timestamp = Date.now();
+    const newName = `${file.originalname.split('.')[0]}-${timestamp}.${file.originalname.split('.').pop()}`;
+    cb(null, newName);
   }
 });
 const uploadGPX = multer({ storage: storageGPX }).single('gpxFile');
@@ -56,12 +60,42 @@ const uploadImage = multer({ storage: storageImages }).single('jpegFile');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Route for uploading GPX files
-app.post('/gpx', uploadGPX, (req, res) => {
+app.post('/gpx', uploadGPX, async (req, res) => {
   if (!req.file) {
     return res.status(400).send('No GPX file uploaded.');
   }
-  res.status(200).send('GPX file uploaded successfully.');
+
+  const fileContent = fs.readFileSync(req.file.path, 'utf8');
+  try {
+    const gpxData = await GPXParser.parse(fileContent, req.file.filename);
+
+    const fileData = {
+      filename: req.file.filename,
+      filepath: req.file.path,
+      uploadTime: new Date()
+    };
+
+    const fileResult = await insertGpxFile(fileData);
+    const gpxId = fileResult.rows[0].gpx_id;
+
+    await Promise.all(gpxData.waypoints.map(waypoint => insertWaypoint({ ...waypoint, gpx_id: gpxId })));
+    await Promise.all(gpxData.tracks.map(async track => {
+      const trackResult = await insertTrack({ ...track, gpx_id: gpxId });
+      track.segments.forEach(segment => insertSegment(trackResult.rows[0].track_id, segment));
+    }));
+    await Promise.all(gpxData.routes.map(async route => {
+      const routeResult = await insertRoute({ ...route, gpx_id: gpxId });
+      route.points.forEach(point => insertRoutePoint(routeResult.rows[0].route_id, point));
+    }));
+
+    res.send('GPX file uploaded and data inserted successfully.');
+  } catch (err) {
+    console.error('Error processing GPX file:', err);
+    res.status(500).send('Failed to process GPX file.');
+  }
 });
+
+
 
 // Route for uploading Image files
 app.post('/images', uploadImage, (req, res) => {
@@ -71,6 +105,8 @@ app.post('/images', uploadImage, (req, res) => {
   const imageUrl = `${req.protocol}://${req.hostname}:${port}/uploads/images/${req.file.filename}`;
   res.json({ message: 'Image uploaded successfully.', imageUrl: imageUrl });
 });
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Serve static files from GPX directory
 app.use('/uploads/gpx', express.static(path.join(baseDirectory, 'gpxfiles')));
