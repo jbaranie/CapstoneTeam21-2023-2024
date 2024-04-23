@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
       alignItems: 'center',
     },
     menuButtonText: {
-      color: 'white',
+      color: '#f9f9f9',
       fontSize: 36,
       textAlign: 'center', 
       lineHeight: 50, 
@@ -55,7 +55,7 @@ export const styles = StyleSheet.create({
       backgroundColor: 'grey',
     },
     buttonText: {
-      color: 'white',
+      color: '#f9f9f9',
       textAlign: 'center'
     },
     buttonContainer: {
@@ -96,7 +96,7 @@ export const styles = StyleSheet.create({
       fontSize : 20,
       width: 300,
       alignSelf: 'center',
-      backgroundColor: 'white'
+      backgroundColor: '#f9f9f9',
     },
     iosControlContainer: {
       flexDirection: 'column',
@@ -126,4 +126,5 @@ export const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: colors.calPolyGreen,  // Use the Cal Poly Green for the background
     },
+    
   });

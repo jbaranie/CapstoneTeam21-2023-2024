@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 10,
     width: '100%',
-    backgroundColor: 'white'
+    backgroundColor: '#f9f9f9'
   },
   descriptionInput: {
     height: 100,
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#182914",
   },
   buttonText: {
-    color: 'white',
+    color: '#f9f9f9',
     fontWeight: 'bold',
   },
   editButtonContainer: {

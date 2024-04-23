@@ -1160,7 +1160,7 @@ const GPXWaypoints = ({ navigation, route }) => {
         }}
         onPress={onPress}
       >
-        <Text style={{ color: 'white' }}>Clear Route</Text>
+        <Text style={{ color: '#f9f9f9' }}>Clear Route</Text>
       </TouchableOpacity>
     );
   };
@@ -1187,7 +1187,7 @@ const GPXWaypoints = ({ navigation, route }) => {
       }}>
         <Text style={{
           fontSize: 36,
-          color: 'white',
+          color: '#f9f9f9',
           textAlign: 'center'
         }}>
           {formattedTime}

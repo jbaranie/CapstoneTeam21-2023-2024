@@ -711,14 +711,14 @@ const GPXFileList = ({ navigation }) => {
         <View style={styles.expandedArea}>
           <MapPreview fileName={item} directory={activeDirectory} />
           <View style={styles.buttonContainerHorizontalRight}>
-            <TouchableOpacity onPress={() => handleUseFile(item)} style={styles.button}>
-              <Text style={styles.buttonText}>Use</Text>
+            <TouchableOpacity onPress={() => confirmDeleteFile(item, activeDirectory)} style={styles.deleteButtonWithFrame}>
+              <Text style={styles.buttonTextWhite}>Delete</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => confirmDeleteFile(item, activeDirectory)} style={styles.button}>
-              <Text style={[styles.buttonText, styles.deleteButtonText]}>Delete</Text>
+            <TouchableOpacity onPress={() => downloadFile(item, activeDirectory)} style={styles.buttonWithFrame}>
+  <           Text style={styles.buttonTextWhite}>Share</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => downloadFile(item, activeDirectory)} style={styles.button}>
-              <Text style={styles.buttonText}>Export</Text>
+            <TouchableOpacity onPress={() => handleUseFile(item)} style={styles.buttonWithFrame}>
+              <Text style={styles.buttonTextWhite}>Use</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -760,14 +760,12 @@ const GPXFileList = ({ navigation }) => {
           }
         />
       </View>
-
-      <ImportGPXButton onPress={importGPXFile} />
-      <ImportImageButton onPress={pickImage} />
-
       <DeleteAllButton
         onPress={() => deleteAllFiles(activeDirectory)}
         hasFiles={gpxFiles.length > 0}
       />
+      <ImportImageButton onPress={pickImage} />
+      <ImportGPXButton onPress={importGPXFile} />
     </View>
   );
   
@@ -795,6 +793,7 @@ const styles = StyleSheet.create({
   expandedItemTitle: {
     padding: 10,
     fontSize: 18,
+    fontWeight: 'bold',
   },
   expandedArea: {
     flexDirection: 'column',
@@ -819,10 +818,10 @@ const styles = StyleSheet.create({
   deleteAllButton: {
     position: 'absolute',  
     bottom: 20,            
-    right: 20,             
+    right: 140,             
     width: 50,             
     height: 50,            
-    backgroundColor: 'red', 
+    backgroundColor: 'firebrick', 
     justifyContent: 'center', 
     alignItems: 'center',    
     borderRadius: 10,        
@@ -838,10 +837,10 @@ const styles = StyleSheet.create({
   importGPXButton: {
     position: 'absolute',
     bottom: 20, 
-    right: 80, 
+    right: 20, 
     width: 50, 
     height: 50,
-    backgroundColor: '#007aff', 
+    backgroundColor: colors.calPolyGreen, 
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -857,10 +856,10 @@ const styles = StyleSheet.create({
   importImageButton: {
     position: 'absolute',
     bottom: 20, 
-    right: 140, 
+    right: 80, 
     width: 50, 
     height: 50,
-    backgroundColor: '#007aff', 
+    backgroundColor: colors.calPolyGreen, 
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -898,7 +897,35 @@ const styles = StyleSheet.create({
     width: screenWidth, 
     height: 250, 
     resizeMode: 'stretch', 
-
+  },
+  buttonWithFrame: {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: colors.calPolyGreen, 
+    backgroundColor: colors.calPolyGreen, 
+    marginHorizontal: 5,
+    marginTop: 10,
+    color: '#f9f9f9',
+    justifyContent: 'center', 
+    alignItems: 'center',
+  },
+  buttonTextWhite: {
+    color: '#f9f9f9',
+    fontWeight: 'bold',
+  },
+  deleteButtonWithFrame: {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: 'firebrick', 
+    backgroundColor: 'firebrick',
+    marginHorizontal: 5,
+    marginTop: 10,
+    justifyContent: 'center', 
+    alignItems: 'center',
   },
 });
 
