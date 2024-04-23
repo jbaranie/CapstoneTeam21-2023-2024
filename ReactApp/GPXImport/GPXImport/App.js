@@ -30,7 +30,7 @@ export default function App() {
       <Drawer.Navigator initialRouteName="Home"
            screenOptions={{
             drawerActiveTintColor: colors.alabaster, // Text color for active item
-            drawerInactiveTintColor: colors.alabaster, // Text color for inactive items
+            drawerInactiveTintColor: '#f9f9f9', // Text color for inactive items
             drawerActiveBackgroundColor: colors.fernGreen, // Background color for active item
             drawerInactiveBackgroundColor: colors.calPolyGreen, // Background color for inactive items
             drawerStyle: {
@@ -40,7 +40,7 @@ export default function App() {
             headerStyle: {
               backgroundColor: colors.calPolyGreen, // Header background color
             },
-            headerTintColor: colors.alabaster, // Header text and icons color
+            headerTintColor: '#f9f9f9', // Header text and icons color
             drawerItemStyle: styles.drawerItem,
             drawerPressColor: colors.fernGreen,
           }}

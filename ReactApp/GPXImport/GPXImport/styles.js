@@ -111,7 +111,7 @@ export const styles = StyleSheet.create({
     drawerItem: {
     },
     drawerLabel: {
-      color: colors.alabaster,
+      color: '#f9f9f9',
     },
     drawerActiveItem: {
       backgroundColor: colors.fernGreen,

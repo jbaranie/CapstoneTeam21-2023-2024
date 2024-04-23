@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef} from 'react';
-import { Alert, View, Text, TouchableOpacity, Platform, FlatList, PermissionsAndroid, StyleSheet, Image, Animated, Dimensions} from 'react-native';
+import { Alert, View, ScrollView, Text, TouchableOpacity, Platform, FlatList, PermissionsAndroid, StyleSheet, Image, Animated, Dimensions} from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
@@ -7,9 +7,10 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
 import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
-
+import { colors } from './styles';
 import { pickImage } from './ImageImport';
 import MapView, { Marker, Polyline } from 'react-native-maps';
+import { Colors } from 'react-native';
 
 //Filename constants
 export const photoWaypointsFile = "importedPhotos.gpx";
@@ -149,7 +150,7 @@ const CloudAnimation = () => {
             translateX: cloudPosition.interpolate({
               inputRange: [0, 1],
               outputRange: [Dimensions.get('window').width, -200]  
-            })
+            }) 
           }
         ]
       }}
@@ -726,18 +727,18 @@ const GPXFileList = ({ navigation }) => {
   );
 
   return (
-    <View style={{ flex: 1, position: 'relative' }}> 
+    <View style={{ flex: 1, backgroundColor: colors.alabaster, position: 'relative' }}> 
       <View style={{ padding: 10 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
           <Button
             title="Created Files"
             onPress={() => changeDirectory('created')}
-            color={activeDirectory === 'created' ? '#007aff' : 'gray'}
+            color={activeDirectory === 'created' ? colors.calPolyGreen : 'silver'}
           />
           <Button
             title="Imported Files"
             onPress={() => changeDirectory('imported')}
-            color={activeDirectory === 'imported' ? '#007aff' : 'gray'}
+            color={activeDirectory === 'imported' ? colors.calPolyGreen : 'silver'}
           />
         </View>
         <FlatList
@@ -775,15 +776,21 @@ const GPXFileList = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   itemContainer: {
+    backgroundColor: '#f9f9f9',
     marginBottom: 5,
     borderWidth: 1,
     borderColor: '#ddd',
+    borderRadius: 10,
+    padding: 2,
   },
   expandedItemContainer: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#f9f9f9',
+    borderRadius: 10,
   },
   itemTitle: {
+    color: '#555555',
     padding: 10,
+    fontWeight: 'bold',
   },
   expandedItemTitle: {
     padding: 10,
