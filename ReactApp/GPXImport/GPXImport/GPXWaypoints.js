@@ -17,7 +17,7 @@ import { pickImage } from './ImageImport';
 import WaypointModal from './WaypointModal';
 import GPXNameModal from './GPXNameModal';
 import WaypointSelectionModal from './WaypointSelectionModal';
-import { styles } from './styles';
+import { styles, colors } from './styles';
 
 //Icons Import
 import zoomInIcon from './assets/icons/zoomIn.png';
@@ -1153,7 +1153,7 @@ const GPXWaypoints = ({ navigation, route }) => {
           position: 'absolute',
           left: 15,
           bottom: 35,
-          backgroundColor: '#007aff',
+          backgroundColor: colors.calPolyGreen,
           padding: 10,
           borderRadius: 5,
           zIndex: 1

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, Animated } from 'react-native';
-
+import { colors } from './styles';
 const WaypointModal = ({ isVisible, onConfirm, onCancel, timeout = 10000 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     width: '80%',
-    backgroundColor: "white",
+    backgroundColor: colors.alabaster,
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -170,9 +170,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     width: '100%', 
+    backgroundColor: '#f9f9f9'
   },
   descriptionInput: {
     height: 100, 
+    backgroundColor: '#f9f9f9'
   },
   buttonContainer: {
     flexDirection: 'row', 
@@ -180,7 +182,7 @@ const styles = StyleSheet.create({
     width: '100%', 
   },
   button: {
-    backgroundColor: "#2196F3",
+    backgroundColor: colors.calPolyGreen,
     padding: 10,
     borderRadius: 20,
     margin: 10,
@@ -188,7 +190,7 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
   },
   cancelButton: {
-    backgroundColor: "#f44336", 
+    backgroundColor: "firebrick", 
   },
   buttonText: {
     color: '#f9f9f9',

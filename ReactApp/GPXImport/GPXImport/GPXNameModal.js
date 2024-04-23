@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import {colors} from './styles';
 
 // Function to generate default file name
 const getDefaultFileName = () => {
@@ -33,7 +34,8 @@ const GPXNameModal = ({ isVisible, onConfirm }) => {
       animationType="slide"
       transparent={true}
       visible={isVisible}
-      onRequestClose={() => {}}>
+      onRequestClose={() => {}}
+      >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Text style={styles.modalText}>Name Your Route:</Text>
@@ -45,9 +47,10 @@ const GPXNameModal = ({ isVisible, onConfirm }) => {
             selectTextOnFocus={true} // Highlight text when input is focused
           />
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={handleConfirm} style={[styles.button, { width: '50%' }]}>
-              <Text style={styles.buttonText}>OK</Text>
-            </TouchableOpacity>
+          <TouchableOpacity onPress={handleConfirm} style={[styles.button, { backgroundColor: colors.calPolyGreen, width: '50%' }]}>
+            <Text style={styles.buttonText}>OK</Text>
+          </TouchableOpacity>
+
           </View>
         </View>
       </View>
@@ -65,7 +68,7 @@ const styles = StyleSheet.create({
     modalView: {
       margin: 20,
       width: '80%',
-      backgroundColor: "white",
+      backgroundColor: colors.alabaster,
       borderRadius: 20,
       padding: 35,
       alignItems: "flex-start", 
@@ -84,6 +87,7 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       padding: 10,
       width: '100%',
+      backgroundColor: '#f9f9f9'
     },
     buttonContainer: {
       flexDirection: 'row',
@@ -92,7 +96,7 @@ const styles = StyleSheet.create({
       marginTop: 8, 
     },
     button: {
-      backgroundColor: "#2196F3",
+      backgroundColor: "calPolyGreen",
       padding: 10,
       borderRadius: 20,
       alignSelf: 'center', 

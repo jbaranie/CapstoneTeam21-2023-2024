@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
       marginBottom: 10,
     },
     menuButton: {
-      backgroundColor: '#007aff',
+      backgroundColor: '#255325',
       width: 50,
       height: 50,
       borderRadius: 25,
@@ -38,14 +38,14 @@ export const styles = StyleSheet.create({
       lineHeight: 50, 
     },
     customButton: {
-      backgroundColor: '#007aff',
+      backgroundColor: '#255325',
       paddingVertical: 10,
       paddingHorizontal: 20,
       borderRadius: 5,
       marginBottom: 10,
     },
     customLargeButton: {
-      backgroundColor: '#007aff',
+      backgroundColor: '#255325',
       paddingVertical: 20,
       paddingHorizontal: 40,
       borderRadius: 5,
@@ -124,7 +124,7 @@ export const styles = StyleSheet.create({
     },
     gpxListContainer: {
       flex: 1,
-      backgroundColor: colors.calPolyGreen,  // Use the Cal Poly Green for the background
+      backgroundColor: colors.calPolyGreen,  
     },
     
   });
