@@ -16,6 +16,7 @@ import { deleteFile, photoWaypointsFile, photoLocalStore } from './GPXFileList';
 import { pickImage } from './ImageImport';
 import WaypointModal from './WaypointModal';
 import GPXNameModal from './GPXNameModal';
+import WaypointSelectionModal from './WaypointSelectionModal';
 import { styles } from './styles';
 
 //Icons Import
@@ -106,13 +107,14 @@ const GPXWaypoints = ({ navigation, route }) => {
   const timerRef = useRef(null);
   const [currentGPXPath, setCurrentGPXPath] = useState('');
   const [photoGPXdata, setPhotoGPXdata] = useState([]);//deprecated, but may be useful so it's still here
-  
   //Permission states
   const [hasLocationPermission, setHasLocationPermission] = useState(null);
   const [isMapReady, setIsMapReady] = useState(false);
-  
   //GPX name Modal states
   const [gpxNameModalVisible, setGpxNameModalVisible] = useState(false);
+  //Waypoint Selection Modal 
+  const [selectionModalVisible, setSelectionModalVisible] = useState(false);
+  const [selectedWaypoint, setSelectedWaypoint] = useState(null);
 
   const screenWidth = Dimensions.get('window').width;
   // // DECLARED TWICE FOR SOME REASON. COMMENTING OUT FOR NOW JUST IN CASE IT BREAKS SOMETHING. 
@@ -390,7 +392,7 @@ const GPXWaypoints = ({ navigation, route }) => {
         latitude: waypointLat,
         longitude: waypointLon,
         name: waypointTitle,
-        description: waypointDescription,
+        desc: waypointDescription,
         rating: waypointRating
       }]);
       showMessage({
@@ -1049,6 +1051,43 @@ const GPXWaypoints = ({ navigation, route }) => {
     );
   };
 
+  const handleWaypointPress = (waypoint) => {
+    if (waypoint) {
+      setSelectedWaypoint(waypoint);
+      setSelectionModalVisible(true);
+    }
+  };
+
+  const updateWaypoint = async (id, newTitle, newDescription, newRating) => {
+    try {
+      await deleteWaypointFromGPX(currentGPXPath, id);
+      await deleteWaypointFromGPX(GPX_FILE_PATH, id);
+
+      setWaypoints(prevWaypoints => prevWaypoints.filter(wp => wp.id !== id));
+      const newWaypoint = {
+        id: Date.now().toString(), 
+        latitude: selectedWaypoint.latitude,
+        longitude: selectedWaypoint.longitude,
+        name: newTitle,
+        desc: newDescription,
+        rating: newRating
+      };
+      await addWaypointToGPX(currentGPXPath, newWaypoint.latitude, newWaypoint.longitude, newWaypoint.rating, newWaypoint.id, newTitle, newDescription);
+      await addWaypointToGPX(GPX_FILE_PATH, newWaypoint.latitude, newWaypoint.longitude, newWaypoint.rating, newWaypoint.id, newTitle, newDescription);
+      
+      const updatedWaypoints = waypoints.map(wp => wp.id === id ? newWaypoint : wp);
+        setWaypoints(updatedWaypoints);
+    } catch (error) {
+      console.error('Failed to update waypoint:', error);
+      showMessage({
+        message: "Failed to update waypoint",
+        description: "Please try again.",
+        type: "error",
+        duration: 3000
+      });
+    }
+  };
+
   useEffect(() => {
     let interval;
     if (isCycling && currentRoute) {
@@ -1372,13 +1411,13 @@ const GPXWaypoints = ({ navigation, route }) => {
             else if (waypoint.rating === 3) pinColor = "green";
 
             return (
-                <Marker
-                    key={waypoint.id}
-                    coordinate={{ latitude: waypoint.latitude, longitude: waypoint.longitude }}
-                    title={waypoint.name}
-                    pinColor={pinColor}
-                    onPress={() => handleWaypointDelete(waypoint.id)}
-                />
+              <Marker
+                key={waypoint.id}
+                coordinate={{ latitude: waypoint.latitude, longitude: waypoint.longitude }}
+                title={waypoint.name}
+                pinColor={pinColor}
+                onPress={() => handleWaypointPress(waypoint)}
+              />
             );
         })}
 
@@ -1388,13 +1427,13 @@ const GPXWaypoints = ({ navigation, route }) => {
             else if (waypoint.rating === 3) pinColor = "green";
 
             return (
-                <Marker
-                    key={waypoint.id}
-                    coordinate={{ latitude: waypoint.latitude, longitude: waypoint.longitude }}
-                    title={waypoint.name}
-                    pinColor={pinColor}
-                    onPress={() => handleWaypointDelete(waypoint.id)}
-                />
+              <Marker
+                key={waypoint.id}
+                coordinate={{ latitude: waypoint.latitude, longitude: waypoint.longitude }}
+                title={waypoint.name}
+                pinColor={pinColor}
+                onPress={() => handleWaypointPress(waypoint)}
+              />
             );
         })}
             
@@ -1474,7 +1513,18 @@ const GPXWaypoints = ({ navigation, route }) => {
         onConfirm={handleGPXNameConfirm}
         onCancel={() => setGpxNameModalVisible(false)}
       />
-
+      <WaypointSelectionModal
+        isVisible={selectionModalVisible}
+        waypoint={selectedWaypoint}
+        onDelete={() => {
+            handleWaypointDelete(selectedWaypoint.id);
+            setSelectionModalVisible(false);
+        }}
+        onUpdate={updateWaypoint}
+        onConfirm={() => setSelectionModalVisible(false)}
+        onCancel={() => setSelectionModalVisible(false)}
+        imported={imported}
+      />
       <FlashMessage position="top" />
     </View></GestureDetector>
   );

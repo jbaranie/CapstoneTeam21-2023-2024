@@ -85,12 +85,14 @@ const createNewGPXFile = async () => {
 const deleteWaypointFromGPX = async (filePath, id) => {
   try {
     let fileContent = await FileSystem.readAsStringAsync(filePath);
-
-    const waypointRegex = new RegExp(`<wpt lat="[^"]+" lon="[^"]+">\\s*<name>[^<]+</name>\\s*<desc>${id}</desc>\\s*<rating>[^<]+</rating>\\s*</wpt>`, 'g');
+    //console.log(`File Before Deletion: \n ${fileContent}`);
+    const waypointRegex = new RegExp(`<wpt lat="[^"]+" lon="[^"]+">\\s*<name>[^<]*</name>\\s*<desc>[^<]*</desc>\\s*<rating>[^<]*</rating>\\s*<id>${id}</id>\\s*</wpt>`, 'g');
     fileContent = fileContent.replace(waypointRegex, '');
 
     await FileSystem.writeAsStringAsync(filePath, fileContent);
+    console.log(`FilePath: ${filePath} ID: ${id}`);
     console.log(`Waypoint with ID ${id} deleted from GPX file at: ${filePath}`);
+
   } catch (error) {
     console.error(`Error deleting waypoint from GPX file at ${filePath}:`, error);
   }
@@ -99,18 +101,17 @@ const deleteWaypointFromGPX = async (filePath, id) => {
 //TODO add list of useful rating values and descriptions
 const addWaypointToGPX = async (filePath, latitude, longitude, rating, id, title = "Waypoint", description = "No Description") => {
   //console.log(`Adding waypoint to GPX file: ${filePath}`);
-  console.log('WaypointID: ' + id);
   try {
     //console.log('addWaypointToGPX - filePath:', filePath); // Log the filePath
     let fileContent = await FileSystem.readAsStringAsync(filePath);
     //Default values for title, description. 
     const waypoint =
-`<wpt lat="${latitude}" lon="${longitude}">
-  <name>${title}</name>
-  <desc>${description}</desc>
-  <rating>${rating}</rating>
-  <id>${id}</id>
-</wpt>`;
+      `<wpt lat="${latitude}" lon="${longitude}">
+        <name>${title}</name>
+        <desc>${description}</desc>
+        <rating>${rating}</rating>
+        <id>${id}</id>
+      </wpt>`;
 
     fileContent = fileContent.replace("</gpx>", `${waypoint}\n</gpx>`);
     await FileSystem.writeAsStringAsync(filePath, fileContent);
