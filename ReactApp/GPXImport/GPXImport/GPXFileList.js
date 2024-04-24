@@ -729,18 +729,21 @@ const GPXFileList = ({ navigation }) => {
   return (
     <View style={{ flex: 1, backgroundColor: colors.alabaster, position: 'relative' }}> 
       <View style={{ padding: 10 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-          <Button
-            title="Created Files"
-            onPress={() => changeDirectory('created')}
-            color={activeDirectory === 'created' ? colors.calPolyGreen : 'silver'}
-          />
-          <Button
-            title="Imported Files"
-            onPress={() => changeDirectory('imported')}
-            color={activeDirectory === 'imported' ? colors.calPolyGreen : 'silver'}
-          />
-        </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+  <TouchableOpacity
+    onPress={() => changeDirectory('created')}
+    style={[styles.tabButton, activeDirectory === 'created' ? styles.tabButtonActive : {}]}
+  >
+    <Text style={styles.tabButtonText}>Created Files</Text>
+  </TouchableOpacity>
+  <TouchableOpacity
+    onPress={() => changeDirectory('imported')}
+    style={[styles.tabButton, activeDirectory === 'imported' ? styles.tabButtonActive : {}]}
+  >
+    <Text style={styles.tabButtonText}>Imported Files</Text>
+  </TouchableOpacity>
+</View>
+
         <FlatList
           data={gpxFiles}
           renderItem={renderItem}
@@ -927,6 +930,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center',
   },
+  tabButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0', // Light gray background
+    borderRadius: 5,
+    margin: 5,
+  },
+  tabButtonActive: {
+    backgroundColor: colors.calPolyGreen, // Cal Poly Green background for active state
+  },
+  tabButtonText: {
+    color: '#f9f9f9', // White text color
+    fontWeight: 'bold',
+  }
+  
 });
 
 export default GPXFileList;
