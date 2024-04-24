@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useRef} from 'react';
-<<<<<<< HEAD
-import { Alert, View, ScrollView, Text, TouchableOpacity, Platform, FlatList, PermissionsAndroid, StyleSheet, Image, Animated, Dimensions} from 'react-native';
-=======
-import { Alert, View, Text, TouchableOpacity, Platform, FlatList, PermissionsAndroid, StyleSheet, Image, Animated, Dimensions, ActivityIndicator} from 'react-native';
->>>>>>> dev
+import { Alert, View, Text, ScrollView, TouchableOpacity, Platform, FlatList, PermissionsAndroid, StyleSheet, Image, Animated, Dimensions, ActivityIndicator} from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
