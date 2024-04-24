@@ -373,9 +373,9 @@ const GPXFileList = ({ navigation }) => {
     const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
     setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
 
-    //filepaths
+    // Determine file paths based on directory
     let localUri = `${FileSystem.documentDirectory}${fileName}`;
-    if(directory === 'created'){
+    if (directory === 'created') {
       localUri = `${createdGPXDirectory}${fileName}`;
     } else {
       localUri = `${importedGPXDirectory}${fileName}`;
@@ -383,17 +383,12 @@ const GPXFileList = ({ navigation }) => {
     
     const systemUri = `${FileSystem.cacheDirectory}${fileName}`;
 
-    //perform slight gpx edits to ensure schema compliance
-    //await schemaComplianceEdit(localUri); //commented out because formatting is incomplete
-
-    if (Platform.OS === 'android') {//existing content; TODO fix Android issues
+    if (Platform.OS === 'android') {
       try {
         // Check permissions to access the media library
         if (!hasMediaLibraryPermission) {
           alert('You need to grant storage permissions to download files.');
           return;
-        } else {
-          console.log("File permissions active.");
         }
 
         // Copy the file from the local app storage to the system storage
@@ -403,7 +398,6 @@ const GPXFileList = ({ navigation }) => {
         });
     
         // Create an asset for the file in the media library
-        //NOTE: this doesn't work on iOS because on iOS MediaLibrary has strict datatypes filters
         const asset = await MediaLibrary.createAssetAsync(systemUri);
     
         // Get or create the album
@@ -415,17 +409,24 @@ const GPXFileList = ({ navigation }) => {
         }
     
         console.log(`File saved to ${systemUri} in the 'GPX Files' album`);
+
+        // Share the file using expo-sharing
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(systemUri);
+        } else {
+          alert('Sharing is not available on your device.');
+        }
+
         return systemUri;
       } catch (error) {
         console.error('Error saving file to system storage on Android: ', error.message);
       }
-    }
-
-    if (Platform.OS === 'ios') {
-      //console.log("iOS download attempt beginning...");
+    } else if (Platform.OS === 'ios') {
+      // Share on iOS
       await iosShare(localUri, 'public.item');
     }
-  };
+};
+
 
   const requestFileSystemPermissions = async () => {//specific to the android version
     if (Platform.OS === 'android') {
