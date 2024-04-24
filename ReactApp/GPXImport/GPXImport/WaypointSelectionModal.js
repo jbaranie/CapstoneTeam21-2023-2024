@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { colors } from './styles';
 
 const WaypointSelectionModal = ({ isVisible, waypoint, onDelete, onUpdate, onCancel, imported }) => {
   const [title, setTitle] = useState('');
@@ -31,7 +32,7 @@ const WaypointSelectionModal = ({ isVisible, waypoint, onDelete, onUpdate, onCan
   };
 
   const getButtonColor = (ratingValue) => {
-    return rating === ratingValue ? '#50753C' : '#B3C6A7';
+    return rating === ratingValue ? colors.calPolyGreen : '#B3C6A7';
   };
 
   return (
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     borderColor: '#50753C'  
   },
   largeButton: {
-    backgroundColor: "#50753C",
+    backgroundColor: colors.calPolyGreen, // previously #50753C, just in case we wanna revert
     padding: 12,
     borderRadius: 5,
     width: '80%',
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     width: '65%',
-    backgroundColor: "#182914",
+    backgroundColor: 'firebrick', // previously #182914, just in case we wanna revert later.
   },
   buttonText: {
     color: '#f9f9f9',
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#50753C',
+    backgroundColor: colors.calPolyGreen,
     borderRadius: 10,
     marginTop: 25
   },
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#182914',
+    backgroundColor: 'firebrick', // previously #182914, just in case we wanna revert later. 
     borderRadius: 10,
     marginTop: 25,
   },
