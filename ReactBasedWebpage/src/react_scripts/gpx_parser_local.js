@@ -1,14 +1,12 @@
 // gpx_parser_local.js
 // A basic gpx parser component, meant as a non-visible client-side gpx parser.
 // Use: include in maps API to extract data if file is added, or to serve as client-side 
-//Coders: Jan Baraniecki, Larry Huang
-
-//TODO set up parsing for routes and waypoints
-//TODO add functions for handling routes, waypoints, and tracks depending on state
+// Coders: Jan Baraniecki, Larry Huang
 
 import React, { useState } from 'react';
 
-export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMarker"></gpx>`) => {
+//parse function (takes in GPX file text)
+const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMarker"></gpx>`) => {
   //parser setup
   let parser = new DOMParser();
   let xmlDoc = parser.parseFromString(gpxData, "text/xml");
@@ -109,7 +107,9 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
     });
   }
 
+  //preliminary return object
   let result = {"error": false, "metadata": null, "routes": routes, "tracks": tracks, "waypoints": waypoints};
+
   //metadata parsing
   let metaElement = xmlDoc.getElementsByTagName("metadata");
   let metadataObj = {};
@@ -130,12 +130,15 @@ export const parseGPX = (gpxData = `<gpx version="1.1" creator="CyclingRouteMark
   if (metaDataInclude) {
     result.metadata = metadataObj;
   }
+
   //console.log(result);
   return result;
 };
 
+//The component function
+//  saveDataHook: function that should statefully store the GPX data object
 const GPXParseLocal = ({ saveDataHook }) => {
-  //State handling
+  //State handling (displays text info on specific actions)
   const [displayVar, setDisplayVar] = useState(0);
   const stateText = [
     "No file selected.",
@@ -143,8 +146,9 @@ const GPXParseLocal = ({ saveDataHook }) => {
     "Local file selected."
   ];
 
-  //this component stores the input gpx file data in its three categories
+  //on selecting a file on the input, calls the parser function
   const handleFileChange = (event) => {
+    console.log(event);
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -166,6 +170,7 @@ const GPXParseLocal = ({ saveDataHook }) => {
     }
   };
 
+  //component
   return (
     <div>
       <input id="secureButtons" type="file" accept=".gpx" onChange={handleFileChange}/>

@@ -1,8 +1,8 @@
 // react_google_map_api.js
 // Loads the Google Map onto the webpage.
 //
-//Coder: Jan Baraniecki
-//Modified by: Larry Huang
+// Coder: Jan Baraniecki
+// Modified by: Larry Huang
 
 import React from 'react';
 import { APIProvider, Map } from '@vis.gl/react-google-maps';
