@@ -54,6 +54,10 @@
             padding: 20px;
         }
 
+        #infoText {
+            padding: 4px;
+            font-size: 1.15rem;
+        }
 
         /* Modern button style */
         .button {
@@ -135,7 +139,7 @@
         }
         #selectMenuButton {
             height: 45px;
-            width: 600px;
+            width: 500px;
             background-color: #1d451b;
             color: #fff;
             border: none;
@@ -150,6 +154,7 @@
         #instructionListStyle {
             text-align: left;
         }
+        #absoluteButton {}
 
         /*Used for better organizing the page*/
         #horizontalBlock {
@@ -160,7 +165,7 @@
             padding-top: 10px;
             width: 50%;
         }
-          
+
         .Carousel_App {
             position: relative; /* Use relative for positioning within the div */
             width: 30%; /* Width can stay as 50% if that fits your design */
@@ -168,7 +173,23 @@
             z-index: 50;
             min-height: 525px;
             max-height: 525px;
+             
         }
+
+        #pointEditButton {
+            padding: 4px;
+            }
+      
+        
+        /*The Google Map API Container*/
+        /*.mapContainer {
+          position: absolute;   
+         top: 65%;
+         left: 50%;
+         transform: translate(-50%, -50%);  Adjusts the positioning to the exact center 
+         width: 40%;
+         height: 500px;*/
+
 
 
       

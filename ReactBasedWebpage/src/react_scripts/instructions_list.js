@@ -1,6 +1,7 @@
-//instructions_list.js
+// instructions_list.js
+// provides a list of instructions for the map page (can be hidden with the attached button)
 //
-//Coder: Larry Huang
+// Coder: Larry Huang
 
 import useToggle from "./toggle_hook";
 
@@ -25,13 +26,16 @@ const instructionTextList = [
   {
     id: 4,
     textVal: "Dragging the polyline may add a route point (small dot) to ensure the path is reproducible; dragging a route point may move the line much further."
+  },
+  {
+    id: 5,
+    textVal: "Always protect the route from dragging (toggle it off) before attempting to save; this action repopulates the coordinate data for user-keypad editing."
+  },
+  {
+    id: 6,
+    textVal: "WARNING: attempting to save before toggling drag-editing off may not collect the data appropriately."
   }
 ];
-// ,
-//   {
-//     id: 5,
-//     textVal: ""
-//   }
 
 //nodes
 const InstructionsList = () => {
