@@ -732,13 +732,21 @@ const GPXFileList = ({ navigation }) => {
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
   <TouchableOpacity
     onPress={() => changeDirectory('created')}
-    style={[styles.tabButton, activeDirectory === 'created' ? styles.tabButtonActive : {}]}
+    style={[
+      styles.tabButton,
+      activeDirectory === 'created' ? styles.tabButtonActive : {},
+      { borderRightWidth: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }
+    ]}
   >
     <Text style={styles.tabButtonText}>Created Files</Text>
   </TouchableOpacity>
   <TouchableOpacity
     onPress={() => changeDirectory('imported')}
-    style={[styles.tabButton, activeDirectory === 'imported' ? styles.tabButtonActive : {}]}
+    style={[
+      styles.tabButton,
+      activeDirectory === 'imported' ? styles.tabButtonActive : {},
+      { borderLeftWidth: 0, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }
+    ]}
   >
     <Text style={styles.tabButtonText}>Imported Files</Text>
   </TouchableOpacity>
@@ -773,8 +781,6 @@ const GPXFileList = ({ navigation }) => {
   );
   
 };
-
-
 const styles = StyleSheet.create({
   itemContainer: {
     backgroundColor: '#f9f9f9',
@@ -936,9 +942,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0', // Light gray background
+    backgroundColor: '#bfcbb6', 
     borderRadius: 5,
-    margin: 5,
   },
   tabButtonActive: {
     backgroundColor: colors.calPolyGreen, // Cal Poly Green background for active state
