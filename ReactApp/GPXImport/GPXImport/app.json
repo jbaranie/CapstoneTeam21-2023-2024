@@ -24,11 +24,6 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icons/appIcon.png",
         "backgroundColor": "#E5E7DC"
-      },
-      "config": {
-        "googleMaps": {
-          "apiKey": "process.env.GOOGLE_API_ANDROID"
-        }
       }
     },
     "plugins": [
@@ -60,16 +55,15 @@
       ]
     ],
     "extra": {
+      "androidGoogleMapsApiKey": "process.env.GOOGLE_API_ANDROID",
+      "iosGoogleMapsApiKey": "process.env.GOOGLE_API_IOS",
       "eas": {
         "projectId": "91f0be04-f2a7-433e-b2f9-3cdaefb99dab"
       }
     },
     "ios": {
       "bundleIdentifier": "com.capstone21.GPXImport",
-      "icon": "./assets/icons/appIconApple.png",
-      "config": {
-        "googleMapsApiKey": "process.env.GOOGLE_API_IOS"
-      }
+      "icon": "./assets/icons/appIconApple.png"
     },
     "owner": "capstoneteam21"
   }

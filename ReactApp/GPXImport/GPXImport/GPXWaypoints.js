@@ -10,6 +10,7 @@ import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import * as ScreenOrient from 'expo-screen-orientation';
 import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
+import { GOOGLE_API_ANDROID, GOOGLE_API_IOS } from '@env';
 
 import { doesGPXFileExist, createNewGPXFile, addWaypointToGPX, GPX_FILE_PATH, addTrackToGPX, addTrackPointToGPX, createInitGPX, deleteWaypointFromGPX, deleteAllImportedPhotos, createdGPXDirectory } from './GPXManager';
 import { deleteFile, photoWaypointsFile, photoLocalStore } from './GPXFileList';  
@@ -18,7 +19,8 @@ import WaypointModal from './WaypointModal';
 import GPXNameModal from './GPXNameModal';
 import WaypointSelectionModal from './WaypointSelectionModal';
 import { styles } from './styles';
-
+import axios from 'axios';
+import Constants from 'expo-constants';
 //Icons Import
 import zoomInIcon from './assets/icons/zoomIn.png';
 import zoomOutIcon from './assets/icons/zoomOut.png';
@@ -41,6 +43,7 @@ const getDistanceFromLatLonInMiles = (lat1, lon1, lat2, lon2) => {
 
 const recordActiveDir = "locks";
 export const recordActiveFile = "locks/lock-record.txt";
+
 
 const GPXWaypoints = ({ navigation, route }) => {
   const handleGPXNameConfirm = async (fileName) => {
@@ -116,6 +119,11 @@ const GPXWaypoints = ({ navigation, route }) => {
   const [selectionModalVisible, setSelectionModalVisible] = useState(false);
   const [selectedWaypoint, setSelectedWaypoint] = useState(null);
 
+  const [traversableRoutes, setTraversableRoutes] = useState([]);
+  // track state 
+  const [trackPoints, setTrackPoints] = useState([]);
+
+
   const screenWidth = Dimensions.get('window').width;
   // // DECLARED TWICE FOR SOME REASON. COMMENTING OUT FOR NOW JUST IN CASE IT BREAKS SOMETHING. 
   // // Modal activity at the end of route-recording.
@@ -151,6 +159,17 @@ const GPXWaypoints = ({ navigation, route }) => {
   };
   const [currentZoom, setCurrentZoom] = useState(zoomLevels.zoomedOut); 
   const [isZoomedIn, setIsZoomedIn] = useState(false);
+
+  useEffect(() => {
+    const getTraversableRoute = async () => {
+      if (importedRoutes.length > 1) {
+        const routeCoordinates = await fetchRouteFromGoogle(importedRoutes);
+        setTraversableRoutes(routeCoordinates);
+      }
+    };
+  
+    getTraversableRoute();
+  }, [importedRoutes]);
 
   useEffect(() => {
     if (route.params?.gpxFilePath) {
@@ -551,7 +570,7 @@ const GPXWaypoints = ({ navigation, route }) => {
   //Importing the GPX File
   const importGPXFile = async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({ type: 'application/gpx+xml' });
+      const result = await DocumentPicker.getDocumentAsync({ type: '*/*' }); // Use application/gpx+xml to filter for GPX files. 
       
       if (result.canceled) {
         //console.log('Document Picker operation was canceled');
@@ -580,6 +599,15 @@ const GPXWaypoints = ({ navigation, route }) => {
             name: match[3] || 'Unnamed Waypoint',
             rating: match[4] ? parseInt(match[4]) : 2
           }));
+        
+        // const trackRegex = /<trkpt lat="([-.\d]+)" lon="([-.\d]+)">/g;
+        // const trackMatches = Array.from(fileContent.matchAll(trackRegex));
+        // const newTrackPoints = trackMatches.map(match => ({
+        //     latitude: parseFloat(match[1]),
+        //     longitude: parseFloat(match[2]),
+        //   }));
+        
+        //   setTrackPoints(newTrackPoints); 
   
         // Extracting routes
         const routeRegex = /<rtept[^>]*lat="([-.\d]+)"[^>]*lon="([-.\d]+)"[^>]*>/g;
@@ -632,7 +660,17 @@ const GPXWaypoints = ({ navigation, route }) => {
   
       // Read the file content
       const fileContent = await FileSystem.readAsStringAsync(fullPath);
-  
+
+      // Extracting tracks
+      const trackRegex = /<trkpt lat="([^"]+)" lon="([^"]+)">/g;
+      const trackMatches = Array.from(fileContent.matchAll(trackRegex));
+      const newTrackPoints = trackMatches.map(match => ({
+          latitude: parseFloat(match[1]),
+          longitude: parseFloat(match[2]),
+        }));
+    
+        setTrackPoints(newTrackPoints); 
+
       // Extracting waypoints
       const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)".*?>\s*(?:<name>([^<]*)<\/name>)?\s*(?:<desc>([^<]*)<\/desc>)?\s*(?:<rating>(\d)<\/rating>)?\s*(?:<id>(\d+)<\/id>)?\s*<\/wpt>/gs;
       const matches = Array.from(fileContent.matchAll(waypointRegex));
@@ -645,7 +683,6 @@ const GPXWaypoints = ({ navigation, route }) => {
         rating: match[5] ? parseInt(match[5]) : undefined,
       }));
     
-  
       // Extracting routes
       const routeRegex = /<rtept[^>]*lat="([-.\d]+)"[^>]*lon="([-.\d]+)"[^>]*>/g;
       const routeMatches = Array.from(fileContent.matchAll(routeRegex));
@@ -665,15 +702,6 @@ const GPXWaypoints = ({ navigation, route }) => {
       setImportedRoutes(newRoutes);
       setImported(true);
 
-      if (newWaypoints.length > 0) {
-        mapRef.current.fitToCoordinates(newWaypoints.map(wp => ({
-          latitude: wp.latitude,
-          longitude: wp.longitude,
-        })), {
-          edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
-          animated: true,
-        });
-      }
     } catch (error) {
       console.error('Error importing GPX file:', error);
       showMessage({
@@ -686,6 +714,28 @@ const GPXWaypoints = ({ navigation, route }) => {
     }
   };
 
+  // Centers screen on file location using waypoints, trackpoints, and routepoints
+  useEffect(() => {
+    const coordinates = [];
+      
+    // Adds waypoints coordinates
+    importedWaypoints.forEach(wp => coordinates.push({ latitude: wp.latitude, longitude: wp.longitude }));
+      
+     // Adds trackpoints coordinates
+    trackPoints.forEach(tp => coordinates.push({ latitude: tp.latitude, longitude: tp.longitude }));
+      
+    // Optionally, add route points coordinates
+    importedRoutes.forEach(rp => coordinates.push({ latitude: rp.latitude, longitude: rp.longitude }));
+      
+    // Check if there are any coordinates to fit the map to
+    if (coordinates.length > 0) {
+      mapRef.current.fitToCoordinates(coordinates, {
+      edgePadding: { top: 75, right: 75, bottom: 75, left: 75 },
+        animated: true,
+      });
+    }
+  }, [importedWaypoints, trackPoints, importedRoutes]);
+      
   //orientation lock
   useEffect(() => {
     ScreenOrient.lockAsync(ScreenOrient.OrientationLock.PORTRAIT_UP);
@@ -776,9 +826,9 @@ const GPXWaypoints = ({ navigation, route }) => {
 
   const clearPhotoWaypoints = async () => {
     const initialContent =
-`<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="CyclingMarker">
-</gpx>`;
+  `<?xml version="1.0" encoding="UTF-8"?>
+  <gpx version="1.1" creator="CyclingMarker">
+  </gpx>`;
     //create new GPX contents in local storage and save it
     await FileSystem.writeAsStringAsync(photosFilename, initialContent);
   }
@@ -880,20 +930,20 @@ const GPXWaypoints = ({ navigation, route }) => {
     setRoutes([]);
     setWaypoints([]);
 
-// //183 previous; delete if debugging shows no issues
-//     if (!currentGPXPath) {
-//       const newFilePath = await createNewGPXFile();
-//       setCurrentGPXPath(newFilePath);
+  // //183 previous; delete if debugging shows no issues
+  //     if (!currentGPXPath) {
+  //       const newFilePath = await createNewGPXFile();
+  //       setCurrentGPXPath(newFilePath);
 
       // Create a route in the global GPX file and the instance-based GPX file
       // const routeIdGlobal = await addTrackToGPX(GPX_FILE_PATH);//TODO US228
       // const routeIdInstance = await addTrackToGPX(newFilePath);//TODO US228
       // setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
-//       // Create a route in the global GPX file and the instance-based GPX file
-//       const routeIdGlobal = await addRouteToGPX(GPX_FILE_PATH);
-//       const routeIdInstance = await addRouteToGPX(newFilePath);
-//       setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
-//     }
+  //       // Create a route in the global GPX file and the instance-based GPX file
+  //       const routeIdGlobal = await addRouteToGPX(GPX_FILE_PATH);
+  //       const routeIdInstance = await addRouteToGPX(newFilePath);
+  //       setCurrentRoute({global: routeIdGlobal, instance: routeIdInstance});
+  //     }
     // Reset the lastPointRef
     lastPointRef.current = null;
 
@@ -1124,15 +1174,18 @@ const GPXWaypoints = ({ navigation, route }) => {
     );
   };
 
-  // Actual function to clear the route
+    // Actual function to clear the route
   const handleClearRoute = () => {
-
+    // Clear all routes, waypoints, and related states
     setRoutes([]);
     setWaypoints([]);
-
+    setTrackPoints([]); // Clear TrackPoints
     setImportedWaypoints([]); 
     setImportedRoutes([]); 
+    setTraversableRoutes([]); // Clear drawn routes on the map
     setImported(false); 
+    
+    // setCurrentRoute(''); // I need to test first to see if its necessary but this clears the current route.
   };
 
   //Seperated Rendering Components --------------------------------
@@ -1369,6 +1422,13 @@ const GPXWaypoints = ({ navigation, route }) => {
         onMapReady={onMapReady}
         pitchEnabled={false}
       >
+        {traversableRoutes.length > 0 && (
+    <Polyline
+      coordinates={traversableRoutes}
+      strokeColor="#4a80f5" 
+      strokeWidth={4}
+    />
+       )}
           {/* 
           Outputs the current values of routes, importedRoutes, waypoints, and importedWaypoints 
           right before they are passed to render the map elements
@@ -1379,17 +1439,49 @@ const GPXWaypoints = ({ navigation, route }) => {
           {console.log('Rendering Imported Waypoints:', importedWaypoints)}
            */}
 
-         {importedRoutes.length > 0 && (
-          <Polyline
-            coordinates={importedRoutes.map(route => ({
-              latitude: parseFloat(route.latitude),
-              longitude: parseFloat(route.longitude),
-            }))}
-            strokeColor="#808080" // Gray color
-            strokeWidth={5}
-            lineDashPattern={[2,5]} //Dash pattern
-          />
-        )}
+  {trackPoints.length > 0 && (
+    <>
+      <Polyline
+        coordinates={trackPoints.map(tp => ({
+          latitude: parseFloat(tp.latitude),
+          longitude: parseFloat(tp.longitude),
+        }))}
+      strokeColor="#808080" // Gray color
+      strokeWidth={5}
+      lineDashPattern={[2,5]} // Dash pattern for trackpoints
+    />
+    {/* Custom view marker for the first trackpoint */}
+    {trackPoints.length > 0 && (
+      <Marker
+        key={`start-${trackPoints[0].latitude}-${trackPoints[0].longitude}`}
+        coordinate={{ latitude: trackPoints[0].latitude, longitude: trackPoints[0].longitude }}
+        title="Start"
+      >
+        <View style={{
+          height: 10,
+          width: 10,
+          backgroundColor: 'lime', // Start point is lime green 
+          borderRadius: 5,
+        }} />
+      </Marker>
+    )}
+    {/* Custom view marker for the last trackpoint */}
+    {trackPoints.length > 0 && (
+      <Marker
+        key={`end-${trackPoints[trackPoints.length - 1].latitude}-${trackPoints[trackPoints.length - 1].longitude}`}
+        coordinate={{ latitude: trackPoints[trackPoints.length - 1].latitude, longitude: trackPoints[trackPoints.length - 1].longitude }}
+        title="End"
+      >
+        <View style={{
+          height: 10,
+          width: 10,
+          backgroundColor: 'red', // End point is red
+          borderRadius: 5, 
+        }} />
+      </Marker>
+    )}
+  </>
+  )}
 
         {routes.length > 0 && (
           <Polyline
@@ -1407,7 +1499,7 @@ const GPXWaypoints = ({ navigation, route }) => {
 
         {waypoints.map((waypoint) => {
             let pinColor = "linen";  
-            if (waypoint.rating === 1) pinColor = "red"; //
+            if (waypoint.rating === 1) pinColor = "red"; 
             else if (waypoint.rating === 3) pinColor = "green";
 
             return (
@@ -1422,9 +1514,9 @@ const GPXWaypoints = ({ navigation, route }) => {
         })}
 
         {importedWaypoints.map((waypoint) => {
-            let pinColor = "linen";  
-            if (waypoint.rating === 1) pinColor = "red"; //
-            else if (waypoint.rating === 3) pinColor = "green";
+            let pinColor = "linen";  // Deafult pin color
+            if (waypoint.rating === 1) pinColor = "red"; // if its a bad waypoint
+            else if (waypoint.rating === 3) pinColor = "green"; //if its a good waypoint
 
             return (
               <Marker
@@ -1436,23 +1528,46 @@ const GPXWaypoints = ({ navigation, route }) => {
               />
             );
         })}
-            
-        {importedRoutes.length > 0 && (
-          <>
-            <Marker
-              coordinate={importedRoutes[0]}
-              title="Start"
-              pinColor="lightblue"
-            />
-            {imported && (
-              <Marker
-                coordinate={importedRoutes[importedRoutes.length - 1]}
-                title="End"
-                pinColor="lightblue"
-              />
-            )}
-          </>
-        )}
+
+  {importedRoutes.map((rtept, index) => {
+    // For routepoints only - Determine the display name based on whether it's the first or last point, or already named routepoint.
+    let title = "Routepoint"; // Default routepoint name
+    if (rtept.name) {
+      title = rtept.name; // Use the given name if available
+    } else if (index === 0) {
+      title = "Start"; // Special name for the start point
+    } else if (index === importedRoutes.length - 1) {
+      title = "End"; // Special name for the end point
+    }
+
+    // Firs route point is green, last route point is red, all others are white  
+    const markerColor = index === 0 ? "lime" : (index === importedRoutes.length - 1 ? "red" : "white");
+
+    return (
+    <Marker
+      key={`${rtept.latitude}-${rtept.longitude}`}
+      coordinate={{ latitude: rtept.latitude, longitude: rtept.longitude }}
+      title={title}
+    >
+      <View style={{
+        height: 14, 
+        width: 14, 
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent' 
+      }}>
+        <View style={{
+          height: 10,
+          width: 10,
+          backgroundColor: markerColor, 
+          borderRadius: 5, 
+          borderWidth: 2, 
+          borderColor: 'black' 
+        }} />
+      </View>
+    </Marker>
+    );
+    })}
       </MapView>
       ) : (
         <LoadingScreen />
@@ -1528,6 +1643,84 @@ const GPXWaypoints = ({ navigation, route }) => {
       <FlashMessage position="top" />
     </View></GestureDetector>
   );
+}
+
+const GOOGLE_API_KEY = Platform.OS === 'android' ? GOOGLE_API_ANDROID : GOOGLE_API_IOS;
+  Constants.expoConfig.extra.androidGoogleMapsApiKey ; 
+  Constants.expoConfig.extra.iosGoogleMapsApiKey;
+
+// This function will make a call to the Google Directions API and return the route
+export const fetchRouteFromGoogle = async (waypoints) => {
+  const waypointsString = waypoints
+    .map((point, index) => {
+      if (index === 0 || index === waypoints.length - 1) return '';
+      return `via:${point.latitude},${point.longitude}`;
+    })
+    .filter(Boolean)
+    .join('|');
+
+  try {
+    const response = await axios.get(`https://maps.googleapis.com/maps/api/directions/json`, {
+      params: {
+        origin: `${waypoints[0].latitude},${waypoints[0].longitude}`,
+        destination: `${waypoints[waypoints.length - 1].latitude},${waypoints[waypoints.length - 1].longitude}`,
+        waypoints: waypointsString,
+        key: GOOGLE_API_KEY,
+        mode: 'bicycling', // specify the mode of travel
+      }
+    });
+    console.log('Google Directions API Response:', response.data);
+
+    // Check if there are no routes found in the response
+    if (response.data.routes.length === 0) {
+      console.error('No routes found. Check waypoints and API key.');
+      return [];
+    }
+
+    const points = response.data.routes[0].overview_polyline.points;
+    const steps = decodePolyline(points); // decode the polyline to an array of points
+
+    return steps;
+  } catch (error) {
+    console.error('fetchRouteFromGoogle error:', error);
+    return [];
+  }
+};
+
+// The decode function provided by Google's polyline utility
+export function decodePolyline(encoded) {
+  if (!encoded) {
+    return [];
+  }
+  const poly = [];
+  let index = 0, len = encoded.length;
+  let lat = 0, lng = 0;
+  while (index < len) {
+    let b, shift = 0, result = 0;
+    do {
+      b = encoded.charCodeAt(index++) - 63;
+      result |= (b & 0x1f) << shift;
+      shift += 5;
+    } while (b >= 0x20);
+    let dlat = ((result & 1) ? ~(result >> 1) : (result >> 1));
+    lat += dlat;
+    shift = 0;
+    result = 0;
+    do {
+      b = encoded.charCodeAt(index++) - 63;
+      result |= (b & 0x1f) << shift;
+      shift += 5;
+    } while (b >= 0x20);
+    let dlng = ((result & 1) ? ~(result >> 1) : (result >> 1));
+    lng += dlng;
+
+    const p = {
+      latitude: (lat / 1E5),
+      longitude: (lng / 1E5),
+    };
+    poly.push(p);
+  }
+  return poly;
 }
 
 export default GPXWaypoints;
