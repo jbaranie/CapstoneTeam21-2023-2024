@@ -34,6 +34,8 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
         return newItem;
       }));
       keyMove((keyVal + 1));
+    } else {
+      setMarkerDataSetup([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [markerList]);
@@ -215,9 +217,10 @@ const EditRouteComponent = ({ markerList=[], gpxCategory={}, gpxData={}, saveDat
     if (found) {
       let newPoints = [...markerDataSetup];
       //remove the point from newPoints
-      //TODO
       if (newPoints.length > 2) {
-        //TODO save new state of list
+        let removed = newPoints.splice(keyIdx, 1);
+        console.log(removed);
+        setMarkerDataSetup(newPoints);
       } else {
         alert("Cannot have a route with fewer than two points. Delete cancelled.");
       }

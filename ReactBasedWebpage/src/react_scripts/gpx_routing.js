@@ -139,10 +139,6 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
     if (!map) return;
     if (gpxCategory.waypt === false) return;
 
-    if (infoWindowInst === null) {
-      setInfoWindowInst(new streetLib.InfoWindow());
-    }
-
     try {
       //create set of markers and store
       let wayptMarkers = [];
@@ -162,9 +158,16 @@ export const Routing = ({ gpxData = {}, gpxCategory, markerOutputCall=()=>{} }) 
         //additional info-display on clicking waypoint
         newMarker.addListener("click",  ({ domEvent }) => {
           //const { target } = domEvent;
-          infoWindowInst.close();
-          infoWindowInst.setContent(desc);
-          infoWindowInst.open(newMarker.map, newMarker);
+          if (infoWindowInst) {
+            infoWindowInst.close();
+            infoWindowInst.setContent(desc);
+            infoWindowInst.open(newMarker.map, newMarker);
+          } else {
+            let newInfo = new streetLib.InfoWindow();
+            newInfo.setContent(desc);
+            newInfo.open(newMarker.map, newMarker);
+            setInfoWindowInst(newInfo);
+          }
         });
         wayptMarkers.push(newMarker);
       });
