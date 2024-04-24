@@ -1,5 +1,15 @@
 import {StyleSheet} from 'react-native';
 
+export const colors = {
+  darkGreen: '#132A13',
+  calPolyGreen: '#255325',
+  fernGreen: '#48763A',
+  mossGreen: '#849C64',
+  sage: '#C0C28D',
+  pearl: '#D3D5B5',
+  alabaster: '#E5E7DC',
+};
+
 export const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -14,7 +24,7 @@ export const styles = StyleSheet.create({
       marginBottom: 10,
     },
     menuButton: {
-      backgroundColor: '#007aff',
+      backgroundColor: '#255325',
       width: 50,
       height: 50,
       borderRadius: 25,
@@ -22,20 +32,20 @@ export const styles = StyleSheet.create({
       alignItems: 'center',
     },
     menuButtonText: {
-      color: 'white',
+      color: '#f9f9f9',
       fontSize: 36,
       textAlign: 'center', 
       lineHeight: 50, 
     },
     customButton: {
-      backgroundColor: '#007aff',
+      backgroundColor: '#255325',
       paddingVertical: 10,
       paddingHorizontal: 20,
       borderRadius: 5,
       marginBottom: 10,
     },
     customLargeButton: {
-      backgroundColor: '#007aff',
+      backgroundColor: '#255325',
       paddingVertical: 20,
       paddingHorizontal: 40,
       borderRadius: 5,
@@ -45,7 +55,7 @@ export const styles = StyleSheet.create({
       backgroundColor: 'grey',
     },
     buttonText: {
-      color: 'white',
+      color: '#f9f9f9',
       textAlign: 'center'
     },
     buttonContainer: {
@@ -86,7 +96,7 @@ export const styles = StyleSheet.create({
       fontSize : 20,
       width: 300,
       alignSelf: 'center',
-      backgroundColor: 'white'
+      backgroundColor: '#f9f9f9',
     },
     iosControlContainer: {
       flexDirection: 'column',
@@ -97,5 +107,25 @@ export const styles = StyleSheet.create({
       right: 100,
       marginBottom: 5,
       alignItems:"left"
-    }
+    },
+    drawerItem: {
+    },
+    drawerLabel: {
+      color: '#f9f9f9',
+    },
+    drawerActiveItem: {
+      backgroundColor: colors.fernGreen,
+    },
+    drawerInactiveItem: {
+      backgroundColor: colors.calPolyGreen,
+    },
+    drawerStyle: {
+      backgroundColor: colors.calPolyGreen,
+    },
+    gpxListContainer: {
+      flex: 1,
+      backgroundColor: colors.calPolyGreen,  
+    },
+    
+    
   });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef} from 'react';
-import { Alert, View, Text, TouchableOpacity, Platform, FlatList, PermissionsAndroid, StyleSheet, Image, Animated, Dimensions} from 'react-native';
+import { Alert, View, Text, ScrollView, TouchableOpacity, Platform, FlatList, PermissionsAndroid, StyleSheet, Image, Animated, Dimensions, ActivityIndicator} from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library'; 
@@ -7,9 +7,10 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
 import { Gesture, GestureDetector, Directions } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
-
+import { colors } from './styles';
 import { pickImage } from './ImageImport';
 import MapView, { Marker, Polyline } from 'react-native-maps';
+import { Colors } from 'react-native';
 
 //Filename constants
 export const photoWaypointsFile = "importedPhotos.gpx";
@@ -149,7 +150,7 @@ const CloudAnimation = () => {
             translateX: cloudPosition.interpolate({
               inputRange: [0, 1],
               outputRange: [Dimensions.get('window').width, -200]  
-            })
+            }) 
           }
         ]
       }}
@@ -217,7 +218,7 @@ const GPXFileList = ({ navigation }) => {
   const importGPXFile = async () => {
     try {
       // Open the document picker for .gpx files
-      const result = await DocumentPicker.getDocumentAsync({ type: 'application/gpx+xml', copyToCacheDirectory: true }); // Change the type to 'application/gpx+xml' to only allow GPX files
+      const result = await DocumentPicker.getDocumentAsync({ type: '*/*', copyToCacheDirectory: true }); // Change the type to 'application/gpx+xml' to only allow GPX files
       //console.log('Document Picker Result:', result);
   
       // Check if a file was selected and not canceled
@@ -433,7 +434,7 @@ const GPXFileList = ({ navigation }) => {
           PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
           {
             title: "File System Permission",
-            message: "App needs access to your file system",
+            message: "App needs access to read your file system",
             buttonNeutral: "Ask Me Later",
             buttonNegative: "Cancel",
             buttonPositive: "OK"
@@ -443,7 +444,7 @@ const GPXFileList = ({ navigation }) => {
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
           {
             title: "File System Permission",
-            message: "App needs access to your file system",
+            message: "App needs access to write to your file system",
             buttonNeutral: "Ask Me Later",
             buttonNegative: "Cancel",
             buttonPositive: "OK"
@@ -495,93 +496,77 @@ const GPXFileList = ({ navigation }) => {
 
   //Map Preview Logic
   const MapPreview = ({ fileName, directory }) => {
-    const [route, setRoute] = useState([]);
-    const [waypoints, setWaypoints] = useState([]);
-    const [tracks, setTracks] = useState([]);
     const [initialRegion, setInitialRegion] = useState(null);
+    const [routes, setRoutes] = useState([]);
+    const [tracks, setTracks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
+  
     useEffect(() => {
       const loadGPXData = async () => {
         setIsLoading(true);
         try {
           let fullPath = `${FileSystem.documentDirectory}${directory}/${fileName}`;
           const fileContent = await FileSystem.readAsStringAsync(fullPath);
-          const waypointRegex = /<wpt lat="([-.\d]+)" lon="([-.\d]+)">\s*<name>([^<]+)<\/name>\s*<desc>([^<]+)<\/desc>\s*<rating>(\d+)<\/rating>\s*<id>\d+<\/id>\s*<\/wpt>/g;
-          const routeRegex = /<rtept lat="([-.\d]+)" lon="([-.\d]+)">\s*<name>([^<]+)<\/name>\s*<\/rtept>/g;
-          const trackRegex = /<trkpt lat="([-.\d]+)" lon="([-.\d]+)">/g;
-
-          const waypoints = [];
+  
+          let latitudes = [];
+          let longitudes = [];
+          
+          let tempRoutes = [];
+          let tempTracks = [];
+  
+          // Regex patterns to extract data
+          const waypointRegex = /<wpt lat="([^"]+)" lon="([^"]+)">/g;
+          const routeRegex = /<rtept lat="([^"]+)" lon="([^"]+)">/g;
+          const trackRegex = /<trkpt lat="([^"]+)" lon="([^"]+)">/g;
+  
           let match;
           while ((match = waypointRegex.exec(fileContent)) !== null) {
-            waypoints.push({
-              latitude: parseFloat(match[1]),
-              longitude: parseFloat(match[2]),
-              name: match[3],
-              desc: match[4],
-              rating: parseInt(match[5], 10),
+            const latitude = parseFloat(match[1]);
+            const longitude = parseFloat(match[2]);
+            latitudes.push(latitude);
+            longitudes.push(longitude);
+            
+          }
+  
+          while ((match = routeRegex.exec(fileContent)) !== null) {
+            const latitude = parseFloat(match[1]);
+            const longitude = parseFloat(match[2]);
+            latitudes.push(latitude);
+            longitudes.push(longitude);
+            tempRoutes.push({ latitude, longitude });
+          }
+  
+          while ((match = trackRegex.exec(fileContent)) !== null) {
+            const latitude = parseFloat(match[1]);
+            const longitude = parseFloat(match[2]);
+            latitudes.push(latitude);
+            longitudes.push(longitude);
+            tempTracks.push({ latitude, longitude });
+          }
+  
+          
+          setRoutes(tempRoutes);
+          setTracks(tempTracks);
+
+          const zoomPadding = 0.003; 
+          if (latitudes.length > 0 && longitudes.length > 0) {
+            const minLat = Math.min(...latitudes);
+            const maxLat = Math.max(...latitudes);
+            const minLon = Math.min(...longitudes);
+            const maxLon = Math.max(...longitudes);
+  
+            const midLat = (minLat + maxLat) / 2;
+            const midLon = (minLon + maxLon) / 2;
+            const latDelta = (maxLat - minLat) + zoomPadding; 
+            const lonDelta = (maxLon - minLon) + zoomPadding; 
+  
+            setInitialRegion({
+              latitude: midLat,
+              longitude: midLon,
+              latitudeDelta: latDelta,
+              longitudeDelta: lonDelta,
             });
           }
-
-          let route = [];
-          let routeMatch;
-          while ((routeMatch = routeRegex.exec(fileContent)) !== null) {
-            route.push({
-              latitude: parseFloat(routeMatch[1]),
-              longitude: parseFloat(routeMatch[2]),
-            });
-          }
-
-          let tracks = [];
-          let trackMatch;
-          while ((trackMatch = trackRegex.exec(fileContent)) !== null) {
-            tracks.push({
-              latitude: parseFloat(trackMatch[1]),
-              longitude: parseFloat(trackMatch[2]),
-            });
-          }
-
-          setWaypoints(waypoints);
-          setRoute(route);
-          setTracks(tracks);
-
-          if (waypoints.length > 0) {
-            const firstPoint = waypoints[0];
-            setInitialRegion({
-              latitude: firstPoint.latitude,
-              longitude: firstPoint.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            });
-          } else if (route.length > 0) {
-            const firstPoint = route[0];
-            setInitialRegion({
-              latitude: firstPoint.latitude,
-              longitude: firstPoint.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            });
-          } else if (tracks.length > 0) {
-            const firstPoint = tracks[0];
-            setInitialRegion({
-              latitude: firstPoint.latitude,
-              longitude: firstPoint.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            });
-          } else {
-            // If there are no waypoints or
-            setInitialRegion({
-              latitude: 34.0522,
-              longitude: -118.2437,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            });
-          }
-
-          //console.log(waypoints);
-          //console.log(fullPath);
-          //console.log(fileContent);
           setIsLoading(false);
         } catch (error) {
           console.error('Error loading GPX data:', error);
@@ -591,42 +576,31 @@ const GPXFileList = ({ navigation }) => {
   
       loadGPXData();
     }, [fileName, directory]);
-    
+  
     if (isLoading) {
-      return <View style={{ width: '90%', height: 120, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Loading...</Text>
+      return <View style={{ width: '100%', height: 120, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
       </View>;
     }
-
-    //Don't render until map is initlized
+  
     if (!initialRegion) return null;
-    
-
+  
     return (
-      <View style={{
-        width: '90%', 
-        height: 120, 
-        minHeight: 120,
-        borderWidth: 1, 
-        borderColor: 'gray', 
-        borderRadius: 5, 
-        overflow: 'hidden', 
-      }}>
+      <View style={{ width: '100%', height: 120, borderWidth: 1, borderColor: 'gray', borderRadius: 5, overflow: 'hidden' }}>
         <MapView
           style={{ flex: 1 }}
           scrollEnabled={false}
           zoomEnabled={false}
           pitchEnabled={false}
           rotateEnabled={false}
-          initialRegion={initialRegion}>
-          {waypoints.map((point, index) => (
-            <Marker key={index} coordinate={{ latitude: point.latitude, longitude: point.longitude }} title={point.title} />
-          ))}
-          {route.length > 1 && (
-            <Polyline coordinates={route} strokeColor="#000" strokeWidth={2} />
+          initialRegion={initialRegion}
+        >
+          
+          {routes.length > 0 && (
+            <Polyline coordinates={routes} strokeColor="#808080" strokeWidth={2} />
           )}
-          {tracks.length > 1 && (
-            <Polyline coordinates={tracks} strokeColor="blue" strokeWidth={2} />
+          {tracks.length > 0 && (
+            <Polyline coordinates={tracks} strokeColor="#808080" strokeWidth={2} />
           )}
         </MapView>
       </View>
@@ -710,15 +684,18 @@ const GPXFileList = ({ navigation }) => {
         <View style={styles.expandedArea}>
           <MapPreview fileName={item} directory={activeDirectory} />
           <View style={styles.buttonContainerHorizontalRight}>
-            <TouchableOpacity onPress={() => handleUseFile(item)} style={styles.button}>
-              <Text style={styles.buttonText}>Use</Text>
+            <TouchableOpacity onPress={() => confirmDeleteFile(item, activeDirectory)} style={styles.deleteButtonWithFrame}>
+              <Text style={styles.buttonTextWhite}>Delete</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => confirmDeleteFile(item, activeDirectory)} style={styles.button}>
-              <Text style={[styles.buttonText, styles.deleteButtonText]}>Delete</Text>
+            <TouchableOpacity onPress={() => downloadFile(item, activeDirectory)} style={styles.buttonWithFrame}>
+  <           Text style={styles.buttonTextWhite}>Share</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => downloadFile(item, activeDirectory)} style={styles.button}>
-              <Text style={styles.buttonText}>Export</Text>
+            <TouchableOpacity onPress={() => handleUseFile(item)} style={styles.buttonWithFrame}>
+              <Text style={styles.buttonTextWhite}>Use</Text>
             </TouchableOpacity>
+            {/* <TouchableOpacity onPress={() => logGPXContent(item, activeDirectory)} style={styles.button}>
+            <Text style={styles.buttonText}>Log gpx</Text>
+            </TouchableOpacity> */}
           </View>
         </View>
       )}
@@ -726,20 +703,31 @@ const GPXFileList = ({ navigation }) => {
   );
 
   return (
-    <View style={{ flex: 1, position: 'relative' }}> 
+    <View style={{ flex: 1, backgroundColor: colors.alabaster, position: 'relative' }}> 
       <View style={{ padding: 10 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-          <Button
-            title="Created Files"
-            onPress={() => changeDirectory('created')}
-            color={activeDirectory === 'created' ? '#007aff' : 'gray'}
-          />
-          <Button
-            title="Imported Files"
-            onPress={() => changeDirectory('imported')}
-            color={activeDirectory === 'imported' ? '#007aff' : 'gray'}
-          />
-        </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+  <TouchableOpacity
+    onPress={() => changeDirectory('created')}
+    style={[
+      styles.tabButton,
+      activeDirectory === 'created' ? styles.tabButtonActive : {},
+      { borderRightWidth: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }
+    ]}
+  >
+    <Text style={styles.tabButtonText}>Created Files</Text>
+  </TouchableOpacity>
+  <TouchableOpacity
+    onPress={() => changeDirectory('imported')}
+    style={[
+      styles.tabButton,
+      activeDirectory === 'imported' ? styles.tabButtonActive : {},
+      { borderLeftWidth: 0, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }
+    ]}
+  >
+    <Text style={styles.tabButtonText}>Imported Files</Text>
+  </TouchableOpacity>
+</View>
+
         <FlatList
           data={gpxFiles}
           renderItem={renderItem}
@@ -759,35 +747,38 @@ const GPXFileList = ({ navigation }) => {
           }
         />
       </View>
-
-      <ImportGPXButton onPress={importGPXFile} />
-      <ImportImageButton onPress={pickImage} />
-
       <DeleteAllButton
         onPress={() => deleteAllFiles(activeDirectory)}
         hasFiles={gpxFiles.length > 0}
       />
+      <ImportImageButton onPress={pickImage} />
+      <ImportGPXButton onPress={importGPXFile} />
     </View>
   );
   
 };
-
-
 const styles = StyleSheet.create({
   itemContainer: {
+    backgroundColor: '#f9f9f9',
     marginBottom: 5,
     borderWidth: 1,
     borderColor: '#ddd',
+    borderRadius: 10,
+    padding: 2,
   },
   expandedItemContainer: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#f9f9f9',
+    borderRadius: 10,
   },
   itemTitle: {
+    color: '#555555',
     padding: 10,
+    fontWeight: 'bold',
   },
   expandedItemTitle: {
     padding: 10,
     fontSize: 18,
+    fontWeight: 'bold',
   },
   expandedArea: {
     flexDirection: 'column',
@@ -812,10 +803,10 @@ const styles = StyleSheet.create({
   deleteAllButton: {
     position: 'absolute',  
     bottom: 20,            
-    right: 20,             
+    right: 140,             
     width: 50,             
     height: 50,            
-    backgroundColor: 'red', 
+    backgroundColor: 'firebrick', 
     justifyContent: 'center', 
     alignItems: 'center',    
     borderRadius: 10,        
@@ -831,10 +822,10 @@ const styles = StyleSheet.create({
   importGPXButton: {
     position: 'absolute',
     bottom: 20, 
-    right: 80, 
+    right: 20, 
     width: 50, 
     height: 50,
-    backgroundColor: '#007aff', 
+    backgroundColor: colors.calPolyGreen, 
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -850,10 +841,10 @@ const styles = StyleSheet.create({
   importImageButton: {
     position: 'absolute',
     bottom: 20, 
-    right: 140, 
+    right: 80, 
     width: 50, 
     height: 50,
-    backgroundColor: '#007aff', 
+    backgroundColor: colors.calPolyGreen, 
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -891,8 +882,53 @@ const styles = StyleSheet.create({
     width: screenWidth, 
     height: 250, 
     resizeMode: 'stretch', 
-
   },
+  buttonWithFrame: {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: colors.calPolyGreen, 
+    backgroundColor: colors.calPolyGreen, 
+    marginHorizontal: 5,
+    marginTop: 10,
+    color: '#f9f9f9',
+    justifyContent: 'center', 
+    alignItems: 'center',
+  },
+  buttonTextWhite: {
+    color: '#f9f9f9',
+    fontWeight: 'bold',
+  },
+  deleteButtonWithFrame: {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: 'firebrick', 
+    backgroundColor: 'firebrick',
+    marginHorizontal: 5,
+    marginTop: 10,
+    justifyContent: 'center', 
+    alignItems: 'center',
+  },
+  tabButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#bfcbb6', 
+    borderRadius: 5,
+  },
+  tabButtonActive: {
+    backgroundColor: colors.calPolyGreen, // Cal Poly Green background for active state
+  },
+  tabButtonText: {
+    color: '#f9f9f9', // White text color
+    fontWeight: 'bold',
+  }
+  
 });
 
 export default GPXFileList;
