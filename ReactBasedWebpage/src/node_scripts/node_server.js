@@ -13,10 +13,24 @@ const { insertGpxFile, insertWaypoint, insertTrack, insertSegment,insertTrackPoi
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const { Pool } = require('pg');
+
 app.use(express.static('public')); // Serve static files
 app.use(cors());
 
 const port = 4000;
+
+// Database pool setup
+const pool = new Pool({
+    user: 'AsuAdmin',
+    host: 'localhost',
+    database: 'CustomRoutesDatabase',
+    password: 'AsuPassword',
+    port: 5432,
+    schema: 'RoutesSchema' 
+});
+
+
 
 
 // Check if the os is Windows///////////////////////////////////////////////////////////////////////////////////
@@ -144,7 +158,10 @@ app.listen(port, () => {
 
 //Server List Links to All Files to the Client/////////////////////////////////////////////////////////////////////////////////////
 // Endpoint to list all files in 'user_uploads' directory
-app.get('/files', (req, res) => {
+app.get('/files', async (req, res) => {
+
+  
+ 
   fs.readdir(baseDirectory, (err, files) => {
     if (err) {
       res.status(500).send('Error reading files.');
@@ -152,10 +169,73 @@ app.get('/files', (req, res) => {
       res.status(200).json(files);
     }
   });
+ 
 });
 
 // Serve static files from 'user_uploads' directory
 app.use('/download', express.static(baseDirectory));
+
+
+// Node.js server code to list all GPX files at the /gpxfiles endpoint
+app.get('/gpxfiles', async (req, res) => {
+    try {
+        // Assuming "RoutesSchema" is the correct schema and gpx_files is the correct table name
+        const result = await pool.query('SELECT file_name, file_path FROM "RoutesSchema".gpx_files;');
+        // Mapping the result to a suitable JSON format to return to the client
+        res.json(result.rows.map(row => ({ filename: row.file_name, filepath: row.file_path })));
+    } catch (err) {
+        console.error('Database query error', err);
+        res.status(500).send('Failed to fetch GPX files.');
+    }
+});
+
+// Endpoint for downloading original GPX files
+app.get('/download/:filename', async (req, res) => {
+    const { filename } = req.params;
+    try {
+        const result = await pool.query(`SELECT file_path FROM "RoutesSchema".gpx_files WHERE file_name = $1;`, [filename]);
+        if (result.rows.length > 0) {
+             const relativePath = result.rows[0].file_path.replace('user_uploads\\', '');
+             const filePath = path.resolve(baseDirectory, relativePath);
+            res.sendFile(filePath);
+        } else {
+            res.status(404).send('File not found.');
+        }
+    } catch (err) {
+        console.error('Database query error', err);
+        res.status(500).send('Failed to download file.');
+    }
+});
+
+// Endpoint to get reconstructed GPX content
+app.get('/file-contents/:filename', async (req, res) => {
+    const { filename } = req.params; // Ensure this is correctly capturing the filename from the URL
+    try {
+        // Example query that needs a parameter for filename
+        const waypointsQuery = `SELECT * FROM "RoutesSchema".waypoints WHERE gpx_id IN (SELECT gpx_id FROM "RoutesSchema".gpx_files WHERE file_name = $1);`;
+        const waypoints = await pool.query(waypointsQuery, [filename]); // Make sure the filename is passed as parameter
+
+        const tracksQuery = `SELECT * FROM "RoutesSchema".tracks WHERE gpx_id IN (SELECT gpx_id FROM "RoutesSchema".gpx_files WHERE file_name = $1);`;
+        const tracks = await pool.query(tracksQuery, [filename]); // Make sure the filename is passed as parameter
+
+        // Assuming reconstruction of GPX content here
+        const gpxContent = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1">
+  <metadata>
+    <name>${filename}</name>
+  </metadata>
+  ${waypoints.rows.map(wp => `<wpt lat="${wp.latitude}" lon="${wp.longitude}"><name>${wp.name}</name></wpt>`).join('')}
+  ${tracks.rows.map(track => `<trk><name>${track.name}</name></trk>`).join('')}
+</gpx>`;
+
+        res.send(gpxContent);
+    } catch (err) {
+        console.error('Database query error', err);
+        res.status(500).send('Failed to fetch GPX content.');
+    }
+});
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Database Calls
 const { init } = require('./database_scripts//database_startup_scripts');
