@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   topText:{
-    color: 'white',
+    color: '#f9f9f9',
     textAlign: 'left',
     position: 'absolute',
     top: 10,

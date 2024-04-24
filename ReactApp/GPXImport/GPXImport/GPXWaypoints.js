@@ -18,7 +18,7 @@ import { pickImage } from './ImageImport';
 import WaypointModal from './WaypointModal';
 import GPXNameModal from './GPXNameModal';
 import WaypointSelectionModal from './WaypointSelectionModal';
-import { styles } from './styles';
+import { styles, colors } from './styles';
 import axios from 'axios';
 import Constants from 'expo-constants';
 //Icons Import
@@ -326,9 +326,10 @@ const GPXWaypoints = ({ navigation, route }) => {
           // console.log('GPX File Content:', fileContent);
 
           showMessage({
-            message: "Route has ended.",
+            message: "Route has ended!",
+            type: "success",
+            backgroundColor: `rgba(37, 83, 37, 0.75)`, // calPolyGreen with 75% opacity
             hideOnPress: true,
-            type: "info",
             duration: 2000
           });
           setGpxNameModalVisible(true);
@@ -417,7 +418,8 @@ const GPXWaypoints = ({ navigation, route }) => {
       showMessage({
         message: `${rating === 3 ? "Good" : "Bad"} Waypoint Added!`,
         type: "success",
-        backgroundColor: "#2196f3", 
+        backgroundColor: `rgba(229, 231, 220, 1)`,
+        color: '#000000',
         duration: 3000
       });
     } catch (err) {
@@ -426,6 +428,7 @@ const GPXWaypoints = ({ navigation, route }) => {
         message: "Could not add new waypoint",
         description: err.message,
         type: "error",
+        backgroundColor: `rgba(178, 34, 34, 0.75)`,
         duration: 3000
       });
     } finally {
@@ -981,9 +984,10 @@ const GPXWaypoints = ({ navigation, route }) => {
 
     showMessage({
       message: "Route Started!",
+      type: "success",
+      backgroundColor: `rgba(37, 83, 37, 0.75)`, // calPolyGreen with 75% opacity
       hideOnPress: true,
-      type: "info",
-      duration: 3000 
+      duration: 3000
     });
   };
   
@@ -1206,14 +1210,14 @@ const GPXWaypoints = ({ navigation, route }) => {
           position: 'absolute',
           left: 15,
           bottom: 35,
-          backgroundColor: '#007aff',
+          backgroundColor: colors.calPolyGreen,
           padding: 10,
           borderRadius: 5,
           zIndex: 1
         }}
         onPress={onPress}
       >
-        <Text style={{ color: 'white' }}>Clear Route</Text>
+        <Text style={{ color: '#f9f9f9' }}>Clear Route</Text>
       </TouchableOpacity>
     );
   };
@@ -1240,7 +1244,7 @@ const GPXWaypoints = ({ navigation, route }) => {
       }}>
         <Text style={{
           fontSize: 36,
-          color: 'white',
+          color: '#f9f9f9',
           textAlign: 'center'
         }}>
           {formattedTime}
@@ -1299,7 +1303,7 @@ const GPXWaypoints = ({ navigation, route }) => {
     return (
       <View style={styles.actionContainer}>
         <TouchableOpacity 
-          style={[styles.customButton, { alignSelf: 'right', marginTop: 10, width: '35%'}]} 
+          style={[styles.customButton, { backgroundColor: '#186dee', alignSelf: 'right', marginTop: 10, width: '35%'}]} 
           onPress={camNav} 
         >
           <Text style={styles.buttonText}>Camera</Text>
@@ -1322,7 +1326,7 @@ const GPXWaypoints = ({ navigation, route }) => {
         </View>
 
         <TouchableOpacity 
-          style={[styles.customButton, { marginTop: 10, width: '100%'}]} 
+          style={[styles.customButton, { backgroundColor: '#186dee', marginTop: 10, width: '100%'}]} 
           onPress={stopRouteFunc} 
         >
           <Text style={styles.buttonText}>Stop Route</Text>
