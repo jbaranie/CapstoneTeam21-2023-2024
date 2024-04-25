@@ -8,6 +8,7 @@ import React from 'react';
 import { APIProvider, Map } from '@vis.gl/react-google-maps';
 import Routing from './gpx_routing';
 
+
 const ReactGoogleMapAPI = ({gpxData, gpxCategory, setMarkers=(data)=>{console.log(data);}}) => {
   //Handles the API key from the web server's environment
   return (

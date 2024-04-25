@@ -166,9 +166,20 @@
             width: 50%;
         }
 
+        .Carousel_App {
+            position: relative; /* Use relative for positioning within the div */
+            width: 30%; /* Width can stay as 50% if that fits your design */
+            margin: 0 auto; /* This centers the div horizontally */
+            z-index: 50;
+            min-height: 525px;
+            max-height: 525px;
+             
+        }
+
         #pointEditButton {
             padding: 4px;
-        }
+            }
+      
         
         /*The Google Map API Container*/
         /*.mapContainer {
@@ -177,6 +188,9 @@
          left: 50%;
          transform: translate(-50%, -50%);  Adjusts the positioning to the exact center 
          width: 40%;
-         height: 500px;
-        }
-        */
+         height: 500px;*/
+
+
+
+      
+
