@@ -56,7 +56,7 @@ This enhances the practicality of route planning and tracking, providing users w
 - **Route Recording**: As users travel, they can record their route in real time with flexibility on what data is to be included in the GPX file. 
 
 - **Good/Bad location Markers**: While recording a route, the user can add waypoints to mark locations as "good" or "bad" with a simple tap. See below.  
-<img src="ReactApp\GPXImport\GPXImport\assets\README gifs\Gif2.gif" height="300" title="Route Record/Add Waypoint Demo">
+    <img src="ReactApp\GPXImport\GPXImport\assets\README gifs\Gif2.gif" height="300" title="Route Record/Add Waypoint Demo">
 
 - **File List Tabs**: Two tabs with listed GPX files are available. One named "Created" for GPX files recorded on the mobile app, and another named "Imported" for GPX files created elsewhere that is not the app, like the web app, for example. 
 
